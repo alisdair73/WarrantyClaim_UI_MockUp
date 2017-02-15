@@ -1,12 +1,32 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.uxap" xmlns:m="sap.m" xmlns:block="WarrantyClaim_MockUp.block">
-	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.uxap" xmlns:m="sap.m" xmlns:block="WarrantyClaim_MockUp.block" xmlns:layout="sap.ui.layout">
+	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" showTitleInHeaderContent="true" showHeaderContent="true">
 		<headerTitle>
-			<ObjectPageHeader objectTitle="AnchorBar sample"/>
-		</headerTitle>
+
+			<ObjectPageHeader id="warrantyPageHeader"
+							  objectTitle="Warranty Claim"
+							  headerDesign="Light"
+							  objectImageShape="Square"
+							  objectImageURI="sap-icon://sales-quote"
+							  isActionAreaAlwaysVisible="true"
+							  isObjectIconAlwaysVisible="false"
+							  isObjectTitleAlwaysVisible="false"
+							  isObjectSubtitleAlwaysVisible="false"
+							  showPlaceholder="true">				
+				<actions>
+					<ObjectPageHeaderActionButton icon="sap-icon://edit" text="edit" importance="Medium"/>
+					<ObjectPageHeaderActionButton icon="sap-icon://save" text="save" visible="true"/>
+					<ObjectPageHeaderActionButton icon="sap-icon://refresh" text="{buttons>/text}"/>
+				</actions>
+			</ObjectPageHeader>
+		</headerTitle>		
 		<headerContent>
-			<m:ObjectAttribute title="" text="This example explains how the Anchor Bar is built based on page content"/>
+					<layout:VerticalLayout >
+						<m:ObjectAttribute title="Claim Number" text="1020344566"/>
+						<m:ObjectAttribute title="Claim Type" text="Recall"/>
+						<m:ObjectNumber number="450" unit="AUD"/>
+						<m:ObjectStatus text="Paid" state="Success" icon="sap-icon://paid-leave" />
+					</layout:VerticalLayout>
 		</headerContent>
-		
 		<sections>
 			<ObjectPageSection id="vehicleDetails" title="VEHICLE">
 				<subSections>

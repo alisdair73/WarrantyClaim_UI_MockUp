@@ -1,0 +1,31 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.uxap" xmlns:m="sap.m" xmlns:block="WarrantyClaim_MockUp.block">
+	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false">
+		<headerTitle>
+			<ObjectPageHeader objectTitle="AnchorBar sample"/>
+		</headerTitle>
+		<headerContent>
+			<m:ObjectAttribute title="" text="This example explains how the Anchor Bar is built based on page content"/>
+		</headerContent>
+		
+		<sections>
+			<ObjectPageSection id="vehicleDetails" title="VEHICLE">
+				<subSections>
+					<ObjectPageSubSection id="vehicleDetails_sub1" title=" ">
+						<blocks>
+							<block:VehicleDetailsBlock id="vehicleDetailsBlock"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection id="claimDetails" title="CLAIM">
+				<subSections>
+					<ObjectPageSubSection id="claimDetails_sub1" title=" ">
+						<blocks>
+							<block:ClaimDetailsBlock id="claimDetailsBlock"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>			
+		</sections>
+    </ObjectPageLayout>
+</mvc:View>

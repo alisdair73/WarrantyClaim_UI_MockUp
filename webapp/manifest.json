@@ -8,8 +8,8 @@
 		"applicationVersion": {
 			"version": "1.0.0"
 		},
-		"title": "",
-		"description": "",
+		"title": "Warranty Claim",
+		"description": "Warranty Claim Maintenance",
 		"resources": "resources.json",
 		"ach": "ach",
 		"sourceTemplate": {
@@ -48,7 +48,7 @@
 	"sap.ui5": {
 		"_version": "1.1.0",
 		"rootView": {
-			"viewName": "WarrantyClaim_MockUp.view.View1",
+			"viewName": "WarrantyClaim_MockUp.view.WarrantyClaimObjectPage",
 			"type": "XML"
 		},
 		"dependencies": {

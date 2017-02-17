@@ -45,6 +45,15 @@
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection id="customerConcern" title="CONCERN">
+				<subSections>
+					<ObjectPageSubSection id="customerConcern_sub1" title="CONCERN" mode="Expanded">
+						<blocks>
+							<claimBlocks:CustomerConcernBlock/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
 			</ObjectPageSection>			
 		</sections>
     </ObjectPageLayout>

@@ -1,0 +1,58 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form0">
+		<sap.ui.layout.form:formContainers>
+			<sap.ui.layout.form:FormContainer title="Claim Details" id="__container0">
+				<sap.ui.layout.form:formElements>
+					<sap.ui.layout.form:FormElement label="RO No." id="__element0">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input0"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+					<sap.ui.layout.form:FormElement label="Date of Repair" id="__element1">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input1"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+					<sap.ui.layout.form:FormElement label="Date of Failure" id="__element2">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input2"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+					<sap.ui.layout.form:FormElement label="Failure KM" id="__element3">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input3"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+					<sap.ui.layout.form:FormElement label="MCPN" id="__element4">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input4"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+					<sap.ui.layout.form:FormElement label="MIL ON" id="__element5">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input5"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+					<sap.ui.layout.form:FormElement label="MCPN Qty." id="__element6">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input6"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+					<sap.ui.layout.form:FormElement label="Technician" id="__element7">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input7"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+					<sap.ui.layout.form:FormElement label="Ser. Advisor" id="__element8">
+						<sap.ui.layout.form:fields>
+							<Input width="100%" id="__input8"/>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+				</sap.ui.layout.form:formElements>
+			</sap.ui.layout.form:FormContainer>
+		</sap.ui.layout.form:formContainers>
+		<sap.ui.layout.form:layout>
+			<sap.ui.layout.form:ResponsiveGridLayout id="__layout0"/>
+		</sap.ui.layout.form:layout>
+	</sap.ui.layout.form:Form>
+</mvc:View>

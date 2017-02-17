@@ -43,7 +43,10 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": ["sap_hcb", "sap_bluecrystal"]
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_bluecrystal"
+		]
 	},
 	"sap.ui5": {
 		"_version": "1.1.0",
@@ -56,7 +59,8 @@
 			"libs": {
 				"sap.ui.core": {},
 				"sap.m": {},
-				"sap.ui.layout": {}
+				"sap.ui.layout": {},
+				"sap.uxap": {}
 			}
 		},
 		"contentDensities": {
@@ -75,9 +79,15 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		}
+	},
+	"sap.platform.abap": {
+		"uri": "/sap/bc/ui5_ui5/sap/zwty_claim_demo/webapp",
+		"_version": "1.1.0"
 	}
 }

@@ -1,43 +1,45 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
-	<sap.ui.layout.form:Form editable="true" xmlns:sap.ui.layout.form="sap.ui.layout.form" id="__form0">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout">
+	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form0">
+		<sap.ui.layout.form:layout>
+	    	<sap.ui.layout.form:ResponsiveGridLayout/>
+	    </sap.ui.layout.form:layout>
 		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer title="Vehicle Details" id="__container0">
+			<sap.ui.layout.form:FormContainer id="__container0" title="Vehicle Details">
 				<sap.ui.layout.form:formElements>
-					<sap.ui.layout.form:FormElement label="Contact" id="__element0">
+					<sap.ui.layout.form:FormElement id="__element0">
 						<sap.ui.layout.form:fields>
-							<Input width="100%" id="__input0"/>
-						</sap.ui.layout.form:fields>
-					</sap.ui.layout.form:FormElement>
-					<sap.ui.layout.form:FormElement label="PWA No." id="__element1">
-						<sap.ui.layout.form:fields>
-							<Input width="100%" id="__input1"/>
-						</sap.ui.layout.form:fields>
-					</sap.ui.layout.form:FormElement>
-					<sap.ui.layout.form:FormElement label="Sub. Date" id="__element2">
-						<sap.ui.layout.form:fields>
-							<Input width="100%" id="__input2"/>
-						</sap.ui.layout.form:fields>
-					</sap.ui.layout.form:FormElement>
-					<sap.ui.layout.form:FormElement label="VIN" id="__element3">
-						<sap.ui.layout.form:fields>
-							<Input width="100%" id="__input3"/>
-						</sap.ui.layout.form:fields>
-					</sap.ui.layout.form:FormElement>
-					<sap.ui.layout.form:FormElement label="Engine No." id="__element4">
-						<sap.ui.layout.form:fields>
-							<Input width="100%" id="__input4"/>
-						</sap.ui.layout.form:fields>
-					</sap.ui.layout.form:FormElement>
-					<sap.ui.layout.form:FormElement label="Recall No." id="__element5">
-						<sap.ui.layout.form:fields>
-							<Input width="100%" id="__input5"/>
+							<l:Grid defaultSpan="L4 M6 S6">
+								<l:content>
+								<l:VerticalLayout width="100%">
+									<Label text="Contact"/>
+									<Input width="100%" id="__input0"/>
+								</l:VerticalLayout>
+								<l:VerticalLayout width="100%">
+									<Label text="Sub. Date"/>
+									<Input width="100%" id="__input2"/>
+								</l:VerticalLayout>					
+								<l:VerticalLayout width="100%">
+									<Label text="Engine No."/>
+									<Input width="100%" id="__input4"/>
+								</l:VerticalLayout>	
+								<l:VerticalLayout width="100%">
+									<Label text="PWA Number"/>
+									<Input width="100%" id="__input1"/>
+								</l:VerticalLayout>
+								<l:VerticalLayout width="100%">
+									<Label text="VIN"/>
+									<Input width="100%" id="__input3"/>
+								</l:VerticalLayout>					
+								<l:VerticalLayout width="100%">
+									<Label text="Recall No."/>
+									<Input width="100%" id="__input5"/>
+								</l:VerticalLayout>	
+								</l:content>
+							</l:Grid>
 						</sap.ui.layout.form:fields>
 					</sap.ui.layout.form:FormElement>
 				</sap.ui.layout.form:formElements>
 			</sap.ui.layout.form:FormContainer>
 		</sap.ui.layout.form:formContainers>
-		<sap.ui.layout.form:layout>
-			<sap.ui.layout.form:ResponsiveGridLayout id="__layout0"/>
-		</sap.ui.layout.form:layout>
 	</sap.ui.layout.form:Form>
-</mvc:View>
+</mvc:View>										

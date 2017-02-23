@@ -1,0 +1,23 @@
+{ "ClaimTypes" :[
+	{
+		"Code": "NOR",
+		"Text": "Normal Claim",
+		"Icon": "sap-icon://customer-order-entry"
+		
+	},
+	{
+		"Code": "REC",
+		"Text": "Recall Claim",
+		"Icon": "sap-icon://supplier"
+	},
+	{
+		"Code": "GOW",
+		"Text": "Goodwill Claim",
+		"Icon": "sap-icon://product"
+	},
+	{
+		"Code": "PAR",
+		"Text": "Parts Claim",
+		"Icon": "sap-icon://action-settings"
+	}
+]}

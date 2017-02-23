@@ -1,0 +1,17 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="Select Claim Type">
+		<content>
+			<List id="claimTypeList"
+			    mode="SingleSelectMaster"
+			    select="handleListSelect"
+				items="{
+					path: 'ClaimTypes>/ClaimTypes'
+				}">
+				<StandardListItem title="{ClaimTypes>Text}" icon="{ClaimTypes>Icon}"/>
+			</List>	
+		</content>
+		<buttons>
+			<Button text="Cancel" press="handleClose" icon="sap-icon://sys-cancel"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

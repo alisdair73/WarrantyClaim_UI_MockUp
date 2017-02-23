@@ -1,5 +1,7 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.uxap" 
-			xmlns:m="sap.m" xmlns:claimBlocks="WarrantyClaim_MockUp.block" xmlns:layout="sap.ui.layout">
+			xmlns:m="sap.m" xmlns:claimBlocks="WarrantyClaim_MockUp.block" xmlns:layout="sap.ui.layout"
+			controllerName="WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage"
+			xmlns:chart="sap.suite.ui.microchart">
 	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" showTitleInHeaderContent="true" showHeaderContent="true">
 		<headerTitle>
 			<ObjectPageHeader id="warrantyPageHeader"
@@ -20,11 +22,27 @@
 			</ObjectPageHeader>
 		</headerTitle>		
 		<headerContent>
-			<layout:VerticalLayout >
+			<layout:VerticalLayout width="100%">
 				<m:ObjectAttribute title="Claim Number" text="1020344566"/>
 				<m:ObjectAttribute title="Claim Type" text="Recall"/>
 				<m:ObjectNumber number="450" unit="AUD" emphasized="true"/>
 				<m:ObjectStatus text="Paid" state="Success" icon="sap-icon://paid-leave" />
+			</layout:VerticalLayout>
+			<layout:VerticalLayout>
+				<chart:ComparisonMicroChart size="M" class="sapUiSmallMargin" press="press">
+					<chart:data>
+						<chart:ComparisonMicroChartData	title="From Claimant" value="143.80" color="Good"/>
+						<chart:ComparisonMicroChartData	title="To Claimant" value="143.80" color="Good"/>
+						<chart:ComparisonMicroChartData	title="To Reimburser" value="68.70 " color="Good"/>
+					</chart:data>
+				</chart:ComparisonMicroChart>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout>
+				<m:FlexBox width="6.25rem" height="6.25rem">
+					<m:items>
+						<chart:RadialMicroChart size="Responsive" percentage="79"/>
+					</m:items>
+				</m:FlexBox>
 			</layout:VerticalLayout>
 		</headerContent>
 		<sections>

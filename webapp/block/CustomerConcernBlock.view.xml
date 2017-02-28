@@ -1,8 +1,7 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
-	<sap.ui.layout.form:Form xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-		xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form1">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="WarrantyClaim_MockUp.block.CustomerConcernBlockController">
+	<sap.ui.layout.form:Form xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form1">
 		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer title="Customer Concern" id="__container1"></sap.ui.layout.form:FormContainer>
+			<sap.ui.layout.form:FormContainer title="Customer Concern" id="__container1"/>
 		</sap.ui.layout.form:formContainers>
 		<sap.ui.layout.form:layout>
 			<sap.ui.layout.form:ResponsiveGridLayout id="__layout1"/>
@@ -11,26 +10,16 @@
 	<sap.ui.layout:Grid xmlns:sap.ui.layout="sap.ui.layout" id="__grid1" defaultSpan="XL6 L6 M6 S12">
 		<sap.ui.layout:content>
 			<TextArea xmlns="sap.m" id="__area0" rows="10" cols="120" placeholder="Enter Details of Customer Concern"/>
-			<Table xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-				noDataText="Drop column list items here and columns in the area above" id="__table0">
+			<Table xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" noDataText="Drop column list items here and columns in the area above" id="__table0">
 				<items>
 					<ColumnListItem id="__item0">
 						<cells>
-							<Select xmlns:sap.ui.core="sap.ui.core" selectedItem="Element sap.ui.core.ListItem#__item2" selectedKey="item1" selectedItemId="__item2"
-								id="__select0">
-								<items>
-									<sap.ui.core:ListItem text="Symptom 1" key="item1" id="__item2"/>
-									<sap.ui.core:ListItem text="Symptom 2" key="item2" id="__item3"/>
-									<sap.ui.core:ListItem text="Symptom 3" key="item3" id="__item4"/>
-								</items>
-							</Select>
+							<Input ariaLabelledBy="__xmlview0--__label0" width="100%" id="__input0" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="showSymptomsSelector"/>
 						</cells>
 					</ColumnListItem>
 					<ColumnListItem id="__item1">
 						<cells>
-							<Select xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m"
-								xmlns:sap.ui.core="sap.ui.core" selectedItem="Element sap.ui.core.ListItem#__item3_copy" selectedKey="item2" selectedItemId="__item3_copy"
-								id="__select0_copy">
+							<Select xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" xmlns:sap.ui.core="sap.ui.core" selectedItem="Element sap.ui.core.ListItem#__item3_copy" selectedKey="item2" selectedItemId="__item3_copy" id="__select0_copy">
 								<items>
 									<sap.ui.core:ListItem text="Symptom 1" key="item1" id="__item2_copy"/>
 									<sap.ui.core:ListItem text="Symptom 2" key="item2" id="__item3_copy"/>

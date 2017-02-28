@@ -1,0 +1,31 @@
+{ "SymptomCodes" :
+[
+	{
+		"Code": "01",
+		"Name": "Engine",
+		"children": [
+			{
+				"Code": "01-01",
+				"Name": "Idling",
+				"children": [
+					{
+						"Code": "01-01-09103",
+						"Name": "Unstable Idling"	
+					},
+					{
+						"Code": "01-01-09108",
+						"Name": "Engine run-on (dieseling)"	
+					},
+					{
+						"Code": "01-01-09102",
+						"Name": "Idle speed too low"	
+					},
+					{
+						"Code": "01-01-09101",
+						"Name": "Idle Speed too high"	
+					}
+				]
+			}
+		]
+	}
+]}

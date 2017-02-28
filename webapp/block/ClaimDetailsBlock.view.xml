@@ -4,15 +4,15 @@
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
 	    </sap.ui.layout.form:layout>	
 		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer id="__container0" title="Claim Details">
+			<sap.ui.layout.form:FormContainer id="__container0" title="Claim Details" >
 				<sap.ui.layout.form:formElements>
-					<sap.ui.layout.form:FormElement id="__element0">
+					<sap.ui.layout.form:FormElement id="__element0" >
 						<sap.ui.layout.form:fields>
 							<l:Grid defaultSpan="L4 M6 S6">
 								<l:content>							
 									<l:VerticalLayout width="100%">
 										<Label text="RO No."/>
-										<Input width="100%" id="__input0"/>
+										<Input width="100%" id="__input0" editable="false"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Repair"/>

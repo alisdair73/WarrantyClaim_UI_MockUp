@@ -5,7 +5,7 @@ sap.ui.define([
 		'sap/ui/core/mvc/Controller',
 		'sap/ui/model/json/JSONModel',
 		'sap/ui/model/Filter'
-	], function( jQuery, MessageToast, Fragment, Controller, JSONModel, Filter) {
+	], function( jQuery, MessageToast, Fragment, Controller, JSONModel) {
 	"use strict";
  
  	return Controller.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -22,7 +22,7 @@ sap.ui.define([
 		
 		openClaimSelectDialog: function() {
 			if (! this._oDialog) {
-				this._oDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.CopyOfClaimTypeSelection", this);
+				this._oDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.ClaimTypeSelection", this);
 			}
 			
 			var modulePath = jQuery.sap.getModulePath("WarrantyClaim_MockUp");
@@ -40,7 +40,7 @@ sap.ui.define([
 			this._oDialog.close();
 		},
 
-		handleClose: function(oEvent) {
+		handleClose: function(oEvent){
 			
 			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
 			oCrossAppNavigator.toExternal({

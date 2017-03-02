@@ -25,6 +25,7 @@
 			<layout:VerticalLayout width="100%">
 				<m:ObjectAttribute title="Claim Number" text="1020344566"/>
 				<m:ObjectAttribute title="Claim Type" text="Recall"/>
+				<m:ObjectAttribute title="Submitted Date" text="22/10/2016"/>
 				<m:ObjectNumber number="450" unit="AUD" emphasized="true"/>
 				<m:ObjectStatus text="Paid" state="Success" icon="sap-icon://paid-leave" />
 			</layout:VerticalLayout>
@@ -69,6 +70,24 @@
 					<ObjectPageSubSection id="customerConcern_sub1" title="CONCERN" mode="Expanded">
 						<blocks>
 							<claimBlocks:CustomerConcernBlock/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection id="dealerComments" title="DEALER">
+				<subSections>
+					<ObjectPageSubSection id="dealerComments_sub1" title="DEALER" mode="Expanded">
+						<blocks>
+							<claimBlocks:DealerCommentsBlock/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>				
+			<ObjectPageSection id="hondaAssessmentResults" title="RESULTS">
+				<subSections>
+					<ObjectPageSubSection id="hondaAssessmentResults_sub1" title="RESULTS" mode="Expanded">
+						<blocks>
+							<claimBlocks:HondaAssessmentBlock/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>

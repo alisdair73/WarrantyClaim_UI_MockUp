@@ -4,7 +4,7 @@
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
 	    </sap.ui.layout.form:layout>	
 		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer id="__container0" title="Customer Concern" >
+			<sap.ui.layout.form:FormContainer id="__container0" title="Honda Assessment Results" >
 				<sap.ui.layout.form:formElements>
 					<sap.ui.layout.form:FormElement id="__element0" >
 						<sap.ui.layout.form:fields>
@@ -12,16 +12,17 @@
 								<l:content>							
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
-											<l:GridData span="L10"/>
+											<l:GridData span="L6"/>
 										</l:layoutData>
-										<TextArea xmlns="sap.m" id="__area0" rows="10" cols="120" placeholder="Enter Details of Customer Concern"/>
+										<Label text="Assessment Comments"/>
+										<TextArea xmlns="sap.m" id="assessmentComments" rows="10" cols="120" placeholder=""/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
-											<l:GridData span="L2"/>
-										</l:layoutData>										
-										<Label text="Symptom"/>
-										<Input ariaLabelledBy="__xmlview0--__label0" id="__input0" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="showSymptomsSelector"/>
+											<l:GridData span="L6"/>
+										</l:layoutData>
+										<Label text="Assessment Codes"/>
+										<TextArea xmlns="sap.m" id="assessmentCodes" rows="10" cols="120" placeholder=""/>
 									</l:VerticalLayout>
 								</l:content>	
 							</l:Grid>

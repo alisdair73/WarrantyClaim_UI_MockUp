@@ -11,13 +11,13 @@
 							<l:Grid defaultSpan="L4 M6 S6">
 								<l:content>
 								<l:VerticalLayout width="100%">
-									<Label text="Contact"/>
-									<Input width="100%" id="__input0"/>
+									<Label text="Contact" labelFor="__input0"/>
+									<Input width="100%" id="__input0" placeholder="Dealer Contact Person"/>
 								</l:VerticalLayout>
-								<l:VerticalLayout width="100%">
-									<Label text="Sub. Date"/>
-									<Input width="100%" id="__input2"/>
-								</l:VerticalLayout>					
+								<!--<l:VerticalLayout width="100%">-->
+								<!--	<Label text="Submission Date"/>-->
+								<!--	<DatePicker id="submissionDate" valueFormat="yyyyMMdd" displayFormat="long"/>-->
+								<!--</l:VerticalLayout>					-->
 								<l:VerticalLayout width="100%">
 									<Label text="Engine No."/>
 									<Input width="100%" id="__input4"/>
@@ -42,4 +42,4 @@
 			</sap.ui.layout.form:FormContainer>
 		</sap.ui.layout.form:formContainers>
 	</sap.ui.layout.form:Form>
-</mvc:View>										
+</mvc:View>

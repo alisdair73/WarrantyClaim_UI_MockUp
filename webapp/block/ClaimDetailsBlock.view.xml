@@ -11,39 +11,46 @@
 							<l:Grid defaultSpan="L4 M6 S6">
 								<l:content>							
 									<l:VerticalLayout width="100%">
-										<Label text="RO No."/>
-										<Input width="100%" id="__input0" editable="false"/>
+										<Label text="Repair Order No."/>
+										<Input width="100%" id="__input0" editable="true"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Repair"/>
-										<Input width="100%" id="__input1"/>
+										<DatePicker id="repairDate" valueFormat="yyyyMMdd" displayFormat="long"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Failure"/>
-										<Input width="100%" id="__input2"/>
+										<DatePicker id="failureDate" valueFormat="yyyyMMdd" displayFormat="long"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Failure KM"/>
 										<Input width="100%" id="__input3"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
-										<Label text="MCPN"/>
+										<Label text="Main Causal Part Number (MCPN)"/>
 										<Input width="100%" id="__input4"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
-										<Label text="MIL ON"/>
-										<Input width="100%" id="__input5"/>
-									</l:VerticalLayout>									
-									<l:VerticalLayout width="100%">
-										<Label text="MCPN Qty."/>
+										<Label text="MCPN Quantity"/>
 										<Input width="100%" id="__input6"/>
-									</l:VerticalLayout>
+									</l:VerticalLayout>									
+									<l:VerticalLayout withd="100%">
+										<Label text="MIL ON"/>
+										<FlexBox>
+											<items>
+												<CheckBox class="sapUiSmallMarginEnd"/>
+												<Input id="DTC1" width="95%" placeholder="DTC1" />
+												<Input id="DTC2" width="95%" placeholder="DTC2" />
+												<Input id="DTC3" placeholder="DTC3"/>
+											</items>
+										</FlexBox>
+									</l:VerticalLayout>									
 									<l:VerticalLayout width="100%">
 										<Label text="Technician"/>
 										<Input width="100%" id="__input7"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
-										<Label text="Ser. Advisor"/>
+										<Label text="Service Advisor"/>
 										<Input width="100%" id="__input8"/>
 									</l:VerticalLayout>		
 								</l:content>	

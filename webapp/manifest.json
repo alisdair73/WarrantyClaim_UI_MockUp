@@ -17,13 +17,13 @@
 			"version": "0.0.0"
 		},
 		"dataSources": {
-			"mainService": {
+			"ZWTY_WARRANTY_CLAIMS_SRV": {
+				"uri": "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0",
-					"localUri": "localService/metadata.xml"
-				},
-				"uri": "localService/metadata.xml"
+					"localUri": "localService/ZWTY_WARRANTY_CLAIMS_SRV/metadata.xml"
+				}
 			}
 		}
 	},
@@ -43,16 +43,14 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_bluecrystal"
-		]
+		"supportedThemes": ["sap_hcb", "sap_bluecrystal"]
 	},
 	"sap.ui5": {
 		"_version": "1.1.0",
 		"rootView": {
-			"viewName": "WarrantyClaim_MockUp.view.WarrantyClaimObjectPage",
-			"type": "XML"
+			"viewName": "WarrantyClaim_MockUp.view.App",
+			"type": "XML",
+			"id": "app"
 		},
 		"dependencies": {
 			"minUI5Version": "1.30.0",
@@ -75,15 +73,46 @@
 				}
 			},
 			"": {
-				"dataSource": "mainService"
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"settings": {
+					"defaultOperationMode": "Server",
+					"defaultBindingMode": "TwoWay",
+					"defaultCountMode": "Request"
+				},
+				"dataSource": "ZWTY_WARRANTY_CLAIMS_SRV",
+				"preload": true
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
+			"css": [{
+				"uri": "css/style.css"
+			}]
+		},
+		"routing": {
+			"config": {
+				"viewPath": "WarrantyClaim_MockUp.view",
+				"controlId": "app",
+				"viewType": "XML",
+				"controlAggregation": "pages",
+				"viewLevel": 1
+			},
+			"routes": [{
+				"name": "warrantyCreate",
+				"pattern": "",
+				"target": ["warrantyMain"]
+			}, {
+				"name": "warrantyMaintain",
+				"pattern": "Claim/{warrantyClaimNumber}",
+				"target": ["warrantyMain"]
+			}],
+			"targets": {
+				"warrantyMain": {
+					"viewName": "WarrantyClaimObjectPage",
+					"viewId": "warrantyMain",
+					"viewLevel": 1,
+					"transition": "show"
 				}
-			]
+			}
 		}
 	},
 	"sap.platform.abap": {

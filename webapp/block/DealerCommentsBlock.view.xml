@@ -12,16 +12,17 @@
 								<l:content>							
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
-											<l:GridData span="L10"/>
+											<l:GridData span="L12"/>
 										</l:layoutData>
-										<TextArea xmlns="sap.m" id="__area0" rows="10" cols="120" placeholder=""/>
+										<TextArea xmlns="sap.m" id="__area0" rows="10" cols="120" placeholder="" value="{DealerComments}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
-											<l:GridData span="L2"/>
+											<l:GridData span="L4"/>
 										</l:layoutData>										
 										<Label text="Defect"/>
-										<Input ariaLabelledBy="__xmlview0--__label0" id="__input0" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="showSymptomsSelector"/>
+										<Input ariaLabelledBy="__xmlview0--__label0" id="__input0" showValueHelp="true" 
+												valueHelpOnly="true" valueHelpRequest="showSymptomsSelector" value="{DefectCode}"/>
 									</l:VerticalLayout>
 								</l:content>	
 							</l:Grid>

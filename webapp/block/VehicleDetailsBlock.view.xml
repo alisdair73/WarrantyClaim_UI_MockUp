@@ -11,28 +11,24 @@
 							<l:Grid defaultSpan="L4 M6 S6">
 								<l:content>
 								<l:VerticalLayout width="100%">
-									<Label text="Contact" labelFor="__input0"/>
-									<Input width="100%" id="__input0" placeholder="Dealer Contact Person"/>
+									<Label text="Dealer Contact" labelFor="__input0"/>
+									<Input id="dealerContact" value="{DealerContact}"/>
 								</l:VerticalLayout>
-								<!--<l:VerticalLayout width="100%">-->
-								<!--	<Label text="Submission Date"/>-->
-								<!--	<DatePicker id="submissionDate" valueFormat="yyyyMMdd" displayFormat="long"/>-->
-								<!--</l:VerticalLayout>					-->
 								<l:VerticalLayout width="100%">
-									<Label text="Engine No."/>
-									<Input width="100%" id="__input4"/>
+									<Label text="Engine Number"/>
+									<Input  id="engineNumber" value="{EngineNumber}"/>
 								</l:VerticalLayout>	
 								<l:VerticalLayout width="100%">
 									<Label text="PWA Number"/>
-									<Input width="100%" id="__input1"/>
+									<Input  id="PWANumber" value="{AuthorisationNumber}"/>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="VIN"/>
-									<Input width="100%" id="__input3"/>
+									<Input  id="VIN" value="{VIN}"/>
 								</l:VerticalLayout>					
 								<l:VerticalLayout width="100%">
-									<Label text="Recall No."/>
-									<Input width="100%" id="__input5"/>
+									<Label text="Recall Number"/>
+									<Input  id="recallNumber" value="{RecallNumber}"/>
 								</l:VerticalLayout>	
 								</l:content>
 							</l:Grid>

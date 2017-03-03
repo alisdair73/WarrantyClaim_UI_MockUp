@@ -1,5 +1,7 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout">
-	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form0">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" 
+	xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.ClaimDetailsBlockController">
+	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" 
+		editable="true" id="__form0">
 		<sap.ui.layout.form:layout>
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
 	    </sap.ui.layout.form:layout>	
@@ -11,47 +13,48 @@
 							<l:Grid defaultSpan="L4 M6 S6">
 								<l:content>							
 									<l:VerticalLayout width="100%">
-										<Label text="Repair Order No."/>
-										<Input width="100%" id="__input0" editable="true"/>
+										<Label text="Repair Order Number"/>
+										<Input id="repairOrderNumber" editable="true" value="{RepairOrderNumber}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Repair"/>
-										<DatePicker id="repairDate" valueFormat="yyyyMMdd" displayFormat="long"/>
+										<DatePicker id="dateOfRepair" valueFormat="yyyyMMdd" displayFormat="long" value="{DateOfRepair}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Failure"/>
-										<DatePicker id="failureDate" valueFormat="yyyyMMdd" displayFormat="long"/>
+										<DatePicker id="dateOfFailure" valueFormat="yyyyMMdd" displayFormat="long" value="{DateOfFailure}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Failure KM"/>
-										<Input width="100%" id="__input3"/>
+										<Input id="failureKM" value="{FailureMeasure}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Main Causal Part Number (MCPN)"/>
-										<Input width="100%" id="__input4"/>
+										<Input id="MCPN" value="{}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="MCPN Quantity"/>
-										<Input width="100%" id="__input6"/>
+										<Input id="MCPNQuantity" value="{}"/>
 									</l:VerticalLayout>									
 									<l:VerticalLayout withd="100%">
 										<Label text="MIL ON"/>
 										<FlexBox>
 											<items>
-												<CheckBox class="sapUiSmallMarginEnd"/>
-												<Input id="DTC1" width="95%" placeholder="DTC1" />
-												<Input id="DTC2" width="95%" placeholder="DTC2" />
-												<Input id="DTC3" placeholder="DTC3"/>
+												<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{MilIndicator}" select="onMILSelected"/>
+												<Input id="DTC1" width="95%" placeholder="DTC1" value="{DTC1}" 
+												visible="{= ${MilIndicator} === 'X' }"/>
+												<Input id="DTC2" width="95%" placeholder="DTC2" value="{DTC2}" visible="{= ${MilIndicator} === 'X' }"/>
+												<Input id="DTC3" placeholder="DTC3" value="{DTC3}" visible="{= ${MilIndicator} === 'X' }"/>
 											</items>
 										</FlexBox>
 									</l:VerticalLayout>									
 									<l:VerticalLayout width="100%">
 										<Label text="Technician"/>
-										<Input width="100%" id="__input7"/>
+										<Input id="technician" value="{Technician}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Service Advisor"/>
-										<Input width="100%" id="__input8"/>
+										<Input id="serviceAdvisor" value="{ServiceAdvisor}"/>
 									</l:VerticalLayout>		
 								</l:content>	
 							</l:Grid>

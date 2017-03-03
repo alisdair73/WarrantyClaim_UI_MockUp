@@ -10,6 +10,17 @@ sap.ui.define([
 			var oModel = new JSONModel(Device);
 			oModel.setDefaultBindingMode("OneWay");
 			return oModel;
+		},
+		
+		createNewWarrantyClaimModel: function(){
+			
+			return new JSONModel({
+				"ClaimNumber": "NEW CLAIM",
+				"ClaimType": "",
+				"SubmittedOn": "",
+				"TotalCostOfClaim":0
+			});
+			
 		}
 
 	};

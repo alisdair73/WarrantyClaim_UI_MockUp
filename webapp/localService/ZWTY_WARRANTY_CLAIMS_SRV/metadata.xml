@@ -1,0 +1,56 @@
+<edmx:Edmx
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZWTY_WARRANTY_CLAIMS_SRV" xml:lang="en" sap:schema-version="1">
+            <EntityType Name="WarrantyClaim" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ClaimNumber"/>
+                </Key>
+                <Property Name="ClaimNumber" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="Claim" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ClaimType" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="ClaimType" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ProcessingStatus" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Processing Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="VIN" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="VIN" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SerialNumber" Type="Edm.String" Nullable="false" MaxLength="18" sap:label="Serial Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RepairOrderNumber" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Repair Order number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TotalCostOfClaim" Type="Edm.Decimal" Nullable="false" Precision="23" Scale="4" sap:label="Currency amount" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ClaimCurrency" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Condition Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="SubmittedOn" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Submitted On" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AuthorisationNumber" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="Authorization" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RecallNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Recall number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="EngineNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Engine Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DealerContact" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Dealer Contact Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DateOfRepair" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Date of Repair" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DateOfFailure" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Date of Failure" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="FailureMeasure" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Failed Distance" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MilIndicator" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="MIL Indicator" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DTC1" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="DTC 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DTC2" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="DTC 2" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DTC3" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="DTC 3" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Technician" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Technician name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ServiceAdvisor" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Service Advisor" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="OldSerialNumber" Type="Edm.String" Nullable="false" MaxLength="18" sap:label="Serial Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="NewSerialNumber" Type="Edm.String" Nullable="false" MaxLength="18" sap:label="Serial Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PartsInstallDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Parts Install Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PartsInstallLm" Type="Edm.String" Nullable="false" MaxLength="6" sap:label="Installation km’s" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="OriginalInvoiceNumber" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Parts Invoice Number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CustomerConcern" Type="Edm.String" Nullable="false" MaxLength="200" sap:label="Customer Concern" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SymptomCode" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Symptom Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DealerComments" Type="Edm.String" Nullable="false" MaxLength="500" sap:label="Dealer Comment" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DefectCode" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Defect Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PartsInstalledByDealer" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Installed By Dealer" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AssessmentComments" Type="Edm.String" Nullable="false" sap:label="Assessment Comments" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AssessmentResults" Type="Edm.String" Nullable="false" sap:label="Assessment Results" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityContainer Name="ZWTY_WARRANTY_CLAIMS_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="WarrantyClaimSet" EntityType="ZWTY_WARRANTY_CLAIMS_SRV.WarrantyClaim" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <atom:link
+                xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="./sap/ZWTY_WARRANTY_CLAIMS_SRV/$metadata"/>
+                <atom:link
+                    xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version" href="./sap/ZWTY_WARRANTY_CLAIMS_SRV/$metadata"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>

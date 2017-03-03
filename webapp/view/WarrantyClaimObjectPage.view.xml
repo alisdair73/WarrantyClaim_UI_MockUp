@@ -2,7 +2,8 @@
 			xmlns:m="sap.m" xmlns:claimBlocks="WarrantyClaim_MockUp.block" xmlns:layout="sap.ui.layout"
 			controllerName="WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage"
 			xmlns:chart="sap.suite.ui.microchart">
-	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" showTitleInHeaderContent="true" showHeaderContent="true">
+	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" showTitleInHeaderContent="true" 
+		showHeaderContent="true" busy="{WarrantClaimObjectPageView>/busy}" busyIndicatorDelay="{WarrantClaimObjectPageView>/delay}">
 		<headerTitle>
 			<ObjectPageHeader id="warrantyPageHeader"
 							  objectTitle="Warranty Claim"
@@ -23,10 +24,10 @@
 		</headerTitle>		
 		<headerContent>
 			<layout:VerticalLayout width="100%">
-				<m:ObjectAttribute title="Claim Number" text="1020344566"/>
-				<m:ObjectAttribute title="Claim Type" text="Recall"/>
-				<m:ObjectAttribute title="Submitted Date" text="22/10/2016"/>
-				<m:ObjectNumber number="450" unit="AUD" emphasized="true"/>
+				<m:ObjectAttribute title="Claim Number" text="{ClaimNumber}"/>
+				<m:ObjectAttribute title="Claim Type" text="{ClaimType}"/>
+				<m:ObjectAttribute title="Submitted Date" text="{SubmittedOn}"/>
+				<m:ObjectNumber number="{TotalCostOfClaim}" unit="AUD" emphasized="true"/>
 				<m:ObjectStatus text="Paid" state="Success" icon="sap-icon://paid-leave" />
 			</layout:VerticalLayout>
 			<layout:VerticalLayout>

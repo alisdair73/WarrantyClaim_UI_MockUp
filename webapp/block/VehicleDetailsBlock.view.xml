@@ -24,7 +24,7 @@
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="VIN"/>
-									<Input  id="VIN" value="{VIN}"/>
+									<Input  id="VIN" value="{VIN}" editable="{= !${ClaimNumber}}"/>
 								</l:VerticalLayout>					
 								<l:VerticalLayout width="100%">
 									<Label text="Recall Number"/>

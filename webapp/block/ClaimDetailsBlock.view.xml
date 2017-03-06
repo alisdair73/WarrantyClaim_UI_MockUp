@@ -18,11 +18,13 @@
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Repair"/>
-										<DatePicker id="dateOfRepair" valueFormat="yyyyMMdd" displayFormat="long" value="{DateOfRepair}"/>
+										<DatePicker id="dateOfRepair" change="onChangeDatePicker"
+											displayFormat="medium" dateValue="{DateOfRepair}" editable="{= !${ClaimNumber}}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Failure"/>
-										<DatePicker id="dateOfFailure" valueFormat="yyyyMMdd" displayFormat="long" value="{DateOfFailure}"/>
+										<DatePicker id="dateOfFailure" change="onChangeDatePicker"
+											displayFormat="medium" dateValue="{DateOfFailure}" editable="{= !${ClaimNumber}}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Failure KM"/>
@@ -30,11 +32,11 @@
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Main Causal Part Number (MCPN)"/>
-										<Input id="MCPN" value="{}"/>
+										<Input id="MCPN" value="FIRST ROW FROM OTHER PARTS"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="MCPN Quantity"/>
-										<Input id="MCPNQuantity" value="{}"/>
+										<Input id="MCPNQuantity" value="FIRST ROW FROM OTHER PARTS"/>
 									</l:VerticalLayout>									
 									<l:VerticalLayout withd="100%">
 										<Label text="MIL ON"/>

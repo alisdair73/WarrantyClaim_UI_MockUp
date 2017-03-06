@@ -1,0 +1,54 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout">
+	<Table noDataText="Drop column list items here and columns in the area above" id="__table0">
+		<headerToolbar>
+			<Toolbar>
+				<Title text="Sublet Details" level="H2"/>
+				<ToolbarSpacer/>
+				<Button text="Add Sublet" icon="sap-icon://add" press="addPart"/>
+			</Toolbar>
+		</headerToolbar>
+	    <items>
+	        <ColumnListItem id="__item0">
+	            <cells>
+	                <Text text="Sublet A" id="__text5"/>
+	                <Text text="A07YY633" id="__text7"/>
+	                <Text text="Freddys Tyres" id="__text8"/>
+	                <Text text="456.80" id="__text9"/>
+	                <Text text="Description" id="__text6"/>
+	                <l:HorizontalLayout>
+	                	<Button icon="sap-icon://edit"/>
+	                	<Button icon="sap-icon://delete"/>
+	                </l:HorizontalLayout>
+	            </cells>
+	        </ColumnListItem>
+	    </items>
+	    <columns>
+	        <Column id="__column0" width="15em">
+	            <header>
+	                <Label text="Code" id="__label0"/>
+	            </header>
+	        </Column>
+	        <Column id="__column1" width="10em">
+	            <header>
+	                <Label text="Invoice" id="__label1"/>
+	            </header>
+	        </Column>
+	        <Column id="__column2" width="15em">
+	            <header>
+	                <Label text="Business Name" id="__label2"/>
+	            </header>
+	        </Column>
+	        <Column id="__column3" width="5em">
+	            <header>
+	                <Label text="Costs" id="__label3"/>
+	            </header>
+	        </Column>
+	        <Column id="__column4" width="15em">
+	            <header>
+	                <Label text="Description" id="__label4"/>
+	            </header>
+	        </Column>
+	        <Column id="__column5" width="7em" hAlign="End"/>
+	     </columns>
+	 </Table>
+</mvc:View>

@@ -50,13 +50,14 @@ sap.ui.define([
 			this.getModel("WarrantClaimObjectPageView").setProperty("/claimStateText", "New Claim");
 			this.getModel("WarrantClaimObjectPageView").setProperty("/claimStateIcon", "sap-icon://write-new-document");
 		
-			jQuery.sap.require("sap.ui.core.format.DateFormat");
-			var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd/MM/yyyy"});
+//			jQuery.sap.require("sap.ui.core.format.DateFormat");
+//			var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd/MM/yyyy"});
 		
 			var oContext = this.getModel().createEntry("/WarrantyClaimSet",
 				{ "properties": 
 					{	"ClaimType":claimType,
-						"SubmittedOn": oDateFormat.format(new Date()),
+//						"SubmittedOn": oDateFormat.format(new Date()),
+					 	"SubmittedOn": new Date(),
 						"TotalCostOfClaim" : "0"
 					}
 				} 
@@ -103,7 +104,7 @@ sap.ui.define([
 				claimNumber = this.getComponentData().startupParameters.WarrantyClaim[0];
 			}
 
-		//	claimNumber = '100000000567';
+//			claimNumber = '100000000567';
 			
 			this.getModel().metadataLoaded().then(function() {
 				var entityPath = "";

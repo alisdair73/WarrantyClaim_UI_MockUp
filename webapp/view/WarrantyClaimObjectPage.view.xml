@@ -15,11 +15,6 @@
 							  isObjectTitleAlwaysVisible="false"
 							  isObjectSubtitleAlwaysVisible="false"
 							  showPlaceholder="true">				
-				<actions>
-					<ObjectPageHeaderActionButton icon="sap-icon://edit" text="edit" importance="Medium"/>
-					<ObjectPageHeaderActionButton icon="sap-icon://save" text="save" visible="true"/>
-					<ObjectPageHeaderActionButton icon="sap-icon://refresh" text="{buttons>/text}"/>
-				</actions>
 			</ObjectPageHeader>
 		</headerTitle>		
 		<headerContent>
@@ -70,6 +65,33 @@
 					</ObjectPageSubSection>
 				</subSections>
 			</ObjectPageSection>
+			<ObjectPageSection id="otherParts" title="PARTS">
+				<subSections>
+					<ObjectPageSubSection id="otherParts_sub1" title="PARTS" mode="Expanded">
+						<blocks>
+							<claimBlocks:OtherPartsDetailsBlock/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection id="LON" title="LABOUR">
+				<subSections>
+					<ObjectPageSubSection id="LON_sub1" title="LABOUR" mode="Expanded">
+						<blocks>
+							<claimBlocks:LONDetailsBlock/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection id="sublet" title="SUBLET">
+				<subSections>
+					<ObjectPageSubSection id="sublet_sub1" title="SUBLET" mode="Expanded">
+						<blocks>
+							<claimBlocks:SubletDetailsBlock/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
 			<ObjectPageSection id="customerConcern" title="CONCERN">
 				<subSections>
 					<ObjectPageSubSection id="customerConcern_sub1" title="CONCERN" mode="Expanded">
@@ -101,8 +123,10 @@
 		<footer>
 			<m:OverflowToolbar>
 				<m:ToolbarSpacer/>
-				<m:Button text="Save" press="onSave" type="Emphasized"/>
+				<m:Button text="Save Draft" press="onSave"/>
 				<m:Button text="Cancel" press="onCancel"/>
+				<m:Button text="Validate" press="onValidate"/>
+				<m:Button text="Submit" press="onSubmit" type="Emphasized"/>
 			</m:OverflowToolbar>
 		</footer>
     </ObjectPageLayout>

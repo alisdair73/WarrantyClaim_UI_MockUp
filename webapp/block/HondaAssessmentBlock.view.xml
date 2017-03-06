@@ -15,14 +15,14 @@
 											<l:GridData span="L6"/>
 										</l:layoutData>
 										<Label text="Assessment Comments"/>
-										<TextArea xmlns="sap.m" id="assessmentComments" rows="10" cols="120" placeholder=""/>
+										<TextArea xmlns="sap.m" id="assessmentComments" rows="10" cols="120" placeholder="" editable="false"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
 											<l:GridData span="L6"/>
 										</l:layoutData>
 										<Label text="Assessment Codes"/>
-										<TextArea xmlns="sap.m" id="assessmentCodes" rows="10" cols="120" placeholder=""/>
+										<TextArea xmlns="sap.m" id="assessmentCodes" rows="10" cols="120" placeholder="" editable="false"/>
 									</l:VerticalLayout>
 								</l:content>	
 							</l:Grid>

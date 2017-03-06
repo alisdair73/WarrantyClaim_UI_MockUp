@@ -1,6 +1,7 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function(Controller) {
+	"sap/ui/core/mvc/Controller",
+	"sap/ui/core/format/DateFormat"
+], function(Controller, DateFormat) {
 	"use strict";
 
 	return Controller.extend("hnd.otc.ordercreate.controller.BaseController", {
@@ -41,6 +42,25 @@ sap.ui.define([
 		 */
 		getResourceBundle: function() {
 			return this.getOwnerComponent().getModel("i18n").getResourceBundle();
+		},
+		
+		onChangeDatePicker: function(oEvent) {
+			// Format date to remove UTC issue
+			var oDatePicker = oEvent.getSource();
+			var oNewDate = oDatePicker.getDateValue();
+			if (oNewDate) {
+				oDatePicker.setDateValue(this.convertDateTimeToDateOnly(oNewDate));
+			}
+		},
+		
+		convertDateTimeToDateOnly: function(oDateTime) {
+			var oFormatDate = DateFormat.getDateTimeInstance({
+				pattern: "yyyy-MM-ddTKK:mm:ss"
+			});
+			var oDate = oFormatDate.format(oDateTime);
+			oDate = oDate.split("T");
+			var oDateActual = oDate[0];
+			return new Date(oDateActual);
 		},
 		
 		/**

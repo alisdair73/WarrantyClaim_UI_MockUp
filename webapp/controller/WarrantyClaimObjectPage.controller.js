@@ -17,44 +17,12 @@ sap.ui.define([
 				delay: 0
 			});
 			this.setModel(oViewModel, "WarrantClaimObjectPageView");
+			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
 			
 			//var oViewModel = this.getModel("detailView");
 			//If the view was not bound yet its not busy, only if the binding requests data it is set to busy again
 			//oViewModel.setProperty("/busy", false);
-
-			var claimNumber = "";
-			if (this.getOwnerComponent().getComponentData() &&
-				this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim &&
-				this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim[0]) {
-				
-				//Get the Claim from the backend
-				claimNumber = this.getComponentData().startupParameters.WarrantyClaim[0];
-			}
-			claimNumber = '100000000567';
-			this.getView().bindElement({
-				path: "/WarrantyClaimSet('" + claimNumber + "')",
-/*				parameters: {
-					expand: "BusinessRoles,ProcessRoles,Privileges"
-				}, */
-				events: {
-				//	change: this._onBindingChange.bind(this),
-					dataRequested: function() {
-						oViewModel.setProperty("/busy", true);
-					},
-					dataReceived: function() {
-						oViewModel.setProperty("/busy", false);
-					}
-				}
-			});	
-		},
-		
-		onAfterRendering: function(oEvent) {
-			
-			var oWarrantyClaimModel = this.getOwnerComponent().getModel();
-			if (oWarrantyClaimModel.getProperty("/ClaimNumber") === "NEW CLAIM"){
-				this.openClaimSelectDialog( );	
-			}
 		},
 
 		onExit : function () {
@@ -68,30 +36,105 @@ sap.ui.define([
 				this._oDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.ClaimTypeSelection", this);
 			}
 			
-			var modulePath = jQuery.sap.getModulePath("WarrantyClaim_MockUp");
-			var oClaimTypeModel = new JSONModel(modulePath + "/model/ClaimTypes.json");
-		
-            this._oDialog.setModel(oClaimTypeModel,"ClaimTypes");
+            this._oDialog.setModel(this.getModel());
 			this._oDialog.open();
 		},
  
 		handleListSelect: function(oEvent){
 			
-			var claimType = oEvent.getParameter("listItem").getBindingContext("ClaimTypes").getObject().Text;
-			var warrantyClaimModel = this.getOwnerComponent().getModel();
-			warrantyClaimModel.setProperty("/ClaimType",claimType);
-			warrantyClaimModel.setProperty("/SubmittedOn", new Date());
+			var claimType = oEvent.getParameter("listItem").getBindingContext().getObject().Code;
+			var claimTypeDescription = oEvent.getParameter("listItem").getBindingContext().getObject().Description;
+			
+			this.getModel("WarrantClaimObjectPageView").setProperty("/claimTypeText", claimTypeDescription);
+			this.getModel("WarrantClaimObjectPageView").setProperty("/claimState", "None");
+			this.getModel("WarrantClaimObjectPageView").setProperty("/claimStateText", "New Claim");
+			this.getModel("WarrantClaimObjectPageView").setProperty("/claimStateIcon", "sap-icon://write-new-document");
+		
+			jQuery.sap.require("sap.ui.core.format.DateFormat");
+			var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd/MM/yyyy"});
+		
+			var oContext = this.getModel().createEntry("/WarrantyClaimSet",
+				{ "properties": 
+					{	"ClaimType":claimType,
+						"SubmittedOn": oDateFormat.format(new Date()),
+						"TotalCostOfClaim" : "0"
+					}
+				} 
+			);	
+			this.getView().setBindingContext(oContext);
+			var oViewModel = this.getModel("WarrantClaimObjectPageView");
+			oViewModel.setProperty("/busy", false);
 			this._oDialog.close();
 		},
 
 		handleClose: function(oEvent){
 			
-			var oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
-			oCrossAppNavigator.toExternal({
-        		target: { semanticObject : "#"}
-            });
-			
+			this.navigateToLaunchpad();
 			this._oDialog.close();
+		},
+		
+		onSave: function(){
+			var warrantyClaimModel = this.getOwnerComponent().getModel();
+			warrantyClaimModel.submitChanges({success: this._onSaveSuccess, error: this._onSaveError});
+		},
+		
+		_onSaveSuccess: function(result){
+		},
+		
+		_onSaveError: function(error){
+			
+		},
+		
+		onCancel: function(){
+			this.navigateToLaunchpad();
+		},
+		
+		_onCreateWarrantyMatched: function(oEvent) {
+			/* 
+			 * Manage the case where routing is not used but Warranty Claim number is passed	
+			 * in the Startup Parameters  
+			 */
+			var claimNumber = "";
+			if (this.getOwnerComponent().getComponentData() &&
+				this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim &&
+				this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim[0]) {
+				
+				//Get the Claim from the backend
+				claimNumber = this.getComponentData().startupParameters.WarrantyClaim[0];
+			}
+
+		//	claimNumber = '100000000567';
+			
+			this.getModel().metadataLoaded().then(function() {
+				var entityPath = "";
+				if (claimNumber){
+					entityPath = "/WarrantyClaimSet('" + claimNumber + "')";
+					this._bindView(entityPath);
+				}else{
+					this.openClaimSelectDialog( );
+				}
+			}.bind(this));				
+			
+		},
+		
+		_bindView: function(entityPath) {
+			// Set busy indicator during view binding
+			var oViewModel = this.getModel("WarrantClaimObjectPageView");
+
+			// If the view was not bound yet its not busy, only if the binding requests data it is set to busy again
+			oViewModel.setProperty("/busy", false);
+
+			this.getView().bindElement({
+				path: entityPath,
+				events: {
+					dataRequested: function() {
+						oViewModel.setProperty("/busy", true);
+					},
+					dataReceived: function() {
+						oViewModel.setProperty("/busy", false);
+					}
+				}
+			});
 		},
 		
 		_onMetadataLoaded: function() {

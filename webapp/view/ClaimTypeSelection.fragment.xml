@@ -5,9 +5,14 @@
 			    mode="SingleSelectMaster"
 			    select="handleListSelect"
 				items="{
-					path: 'ClaimTypes>/ClaimTypes'
-				}">
-				<StandardListItem title="{ClaimTypes>Text}" icon="{ClaimTypes>Icon}"/>
+					path: '/ClaimTypeSet',
+					sorter: { path: 'Description' },
+					filters : [
+            			{ path : 'SalesOrg', operator : 'EQ', value1 : '1000'}
+        			]
+				}"
+				>
+				<StandardListItem title="{Description}" icon="{Icon}" />
 			</List>	
 		</content>
 		<buttons>

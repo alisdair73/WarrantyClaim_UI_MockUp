@@ -97,11 +97,11 @@
 				"viewLevel": 1
 			},
 			"routes": [{
-				"name": "warrantyCreate",
+				"name": "createWarranty",
 				"pattern": "",
 				"target": ["warrantyMain"]
 			}, {
-				"name": "warrantyMaintain",
+				"name": "maintainWarranty",
 				"pattern": "Claim/{warrantyClaimNumber}",
 				"target": ["warrantyMain"]
 			}],

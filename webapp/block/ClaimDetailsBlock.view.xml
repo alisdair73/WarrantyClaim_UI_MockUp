@@ -41,10 +41,9 @@
 										<FlexBox>
 											<items>
 												<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{MilIndicator}" select="onMILSelected"/>
-												<Input id="DTC1" width="95%" placeholder="DTC1" value="{DTC1}" 
-												visible="{= ${MilIndicator} === 'X' }"/>
-												<Input id="DTC2" width="95%" placeholder="DTC2" value="{DTC2}" visible="{= ${MilIndicator} === 'X' }"/>
-												<Input id="DTC3" placeholder="DTC3" value="{DTC3}" visible="{= ${MilIndicator} === 'X' }"/>
+												<Input id="DTC1" width="95%" placeholder="DTC1" value="{DTC1}" visible="{= ${MilIndicator} === true }"/>
+												<Input id="DTC2" width="95%" placeholder="DTC2" value="{DTC2}" visible="{= ${MilIndicator} === true }"/>
+												<Input id="DTC3" placeholder="DTC3" value="{DTC3}" visible="{= ${MilIndicator} === true }"/>
 											</items>
 										</FlexBox>
 									</l:VerticalLayout>									

@@ -1,8 +1,8 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.uxap" 
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.uxap" xmlns:core="sap.ui.core"
 			xmlns:m="sap.m" xmlns:claimBlocks="WarrantyClaim_MockUp.block" xmlns:layout="sap.ui.layout"
 			controllerName="WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage"
 			xmlns:chart="sap.suite.ui.microchart">
-	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" showTitleInHeaderContent="true" 
+	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" showTitleInHeaderContent="true" showFooter="true"
 		showHeaderContent="true" busy="{WarrantClaimObjectPageView>/busy}" busyIndicatorDelay="{WarrantClaimObjectPageView>/delay}">
 		<headerTitle>
 			<ObjectPageHeader id="warrantyPageHeader"
@@ -25,10 +25,14 @@
 		<headerContent>
 			<layout:VerticalLayout width="100%">
 				<m:ObjectAttribute title="Claim Number" text="{ClaimNumber}"/>
-				<m:ObjectAttribute title="Claim Type" text="{ClaimType}"/>
+				<m:ObjectAttribute title="Claim Type" text="{WarrantClaimObjectPageView>/claimTypeText}"/>
 				<m:ObjectAttribute title="Submitted Date" text="{SubmittedOn}"/>
 				<m:ObjectNumber number="{TotalCostOfClaim}" unit="AUD" emphasized="true"/>
-				<m:ObjectStatus text="Paid" state="Success" icon="sap-icon://paid-leave" />
+				<m:ObjectStatus 
+					state="{WarrantClaimObjectPageView>/claimState}"
+					text="{WarrantClaimObjectPageView>/claimStateText}" 
+					icon="{WarrantClaimObjectPageView>/claimStateIcon}" 
+				/>
 			</layout:VerticalLayout>
 			<layout:VerticalLayout>
 				<chart:ComparisonMicroChart size="M" class="sapUiSmallMargin" press="press">
@@ -94,5 +98,12 @@
 				</subSections>
 			</ObjectPageSection>			
 		</sections>
+		<footer>
+			<m:OverflowToolbar>
+				<m:ToolbarSpacer/>
+				<m:Button text="Save" press="onSave" type="Emphasized"/>
+				<m:Button text="Cancel" press="onCancel"/>
+			</m:OverflowToolbar>
+		</footer>
     </ObjectPageLayout>
 </mvc:View>

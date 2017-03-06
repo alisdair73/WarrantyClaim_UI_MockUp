@@ -29,8 +29,8 @@
   },
   "dataBinding": {},
   "mockpreview": {
-    "mockUri": "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV",
-    "metadataFilePath": "localService/metadata.xml",
+    "mockUri": "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/",
+    "metadataFilePath": "localService/ZWTY_WARRANTY_CLAIMS_SRV/metadata.xml",
     "loadJSONFiles": true,
     "loadCustomRequests": false,
     "mockRequestsFilePath": ""

@@ -13,8 +13,8 @@
 		"resources": "resources.json",
 		"ach": "ach",
 		"sourceTemplate": {
-			"id": "servicecatalog.connectivityComponent",
-			"version": "0.0.0"
+			"id": "com.sap.webide.annotationmodeller.CreateAnnotationTemplate",
+			"version": "1.0.0"
 		},
 		"dataSources": {
 			"ZWTY_WARRANTY_CLAIMS_SRV": {
@@ -22,7 +22,17 @@
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0",
-					"localUri": "localService/ZWTY_WARRANTY_CLAIMS_SRV/metadata.xml"
+					"localUri": "localService/ZWTY_WARRANTY_CLAIMS_SRV/metadata.xml",
+					"annotations": [
+						"annotation0"
+					]
+				}
+			},
+			"annotation0": {
+				"uri": "annotation0.xml",
+				"type": "ODataAnnotation",
+				"settings": {
+					"localUri": "annotation0.xml"
 				}
 			}
 		}

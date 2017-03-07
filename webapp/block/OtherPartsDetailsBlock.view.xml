@@ -1,5 +1,7 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout">
-	<Table noDataText="Drop column list items here and columns in the area above" id="__table0">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" 
+xmlns:smartField="sap.ui.comp.smartfield"
+	xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController">
+	<Table items="{parts>/}" id="__table0">
 		<headerToolbar>
 			<Toolbar>
 				<Title text="Other Parts" level="H2"/>
@@ -8,20 +10,6 @@
 				<Button text="Check LON" icon="sap-icon://task" press="checkLON"/>
 			</Toolbar>
 		</headerToolbar>
-	    <items>
-	        <ColumnListItem id="__item0">
-	            <cells>
-	                <Text text="Part No 1." id="__text5"/>
-	                <Text text="Part Description" id="__text6"/>
-	                <Text text="23" id="__text7"/>
-	                <Text text="" id="__text8"/>
-	                <l:HorizontalLayout>
-	                	<Button icon="sap-icon://edit"/>
-	                	<Button icon="sap-icon://delete"/>
-	                </l:HorizontalLayout>
-	            </cells>
-	        </ColumnListItem>
-	    </items>
 	    <columns>
 	        <Column id="__column0" width="25em">
 	            <header>
@@ -45,6 +33,21 @@
 	        </Column>
 	        <Column id="__column4" width="7em" hAlign="End"/>
 	     </columns>
+	    <items>
+	        <ColumnListItem id="__item0">
+	            <cells>
+	            	<Text text="{parts>PartNumber}"/>
+	                <Text text="{Description}" id="__text6"/>
+	                <Text text="{Quantity}" id="__text7"/>
+	                <Text text="{PartRequested}" id="__text8"/>
+	                <l:HorizontalLayout>
+	                	<Button icon="sap-icon://edit" press="addPart"/>
+	                	<Button icon="sap-icon://delete"/>
+	                </l:HorizontalLayout>
+	            </cells>
+	        </ColumnListItem>
+	    </items>
+
 	 </Table>
 	 <CheckBox text="Installed by dealer?"/>
 </mvc:View>

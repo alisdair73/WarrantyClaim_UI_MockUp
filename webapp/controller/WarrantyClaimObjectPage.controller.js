@@ -34,9 +34,8 @@ sap.ui.define([
 		openClaimSelectDialog: function() {
 			if (! this._oDialog) {
 				this._oDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.ClaimTypeSelection", this);
+				this.getView().addDependent(this._oDialog);
 			}
-			
-            this._oDialog.setModel(this.getModel());
 			this._oDialog.open();
 		},
  
@@ -75,14 +74,17 @@ sap.ui.define([
 		},
 		
 		onSave: function(){
+			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", true);
 			var warrantyClaimModel = this.getOwnerComponent().getModel();
-			warrantyClaimModel.submitChanges({success: this._onSaveSuccess, error: this._onSaveError});
+			warrantyClaimModel.submitChanges({success: this._onSaveSuccess.bind(this), error: this._onSaveError.bind(this)});
 		},
 		
 		_onSaveSuccess: function(result){
+			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", false);
 		},
 		
 		_onSaveError: function(error){
+			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", false);
 			
 		},
 		
@@ -101,10 +103,10 @@ sap.ui.define([
 				this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim[0]) {
 				
 				//Get the Claim from the backend
-				claimNumber = this.getComponentData().startupParameters.WarrantyClaim[0];
+				claimNumber = this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim[0];
 			}
 
-//			claimNumber = '100000000567';
+			claimNumber = '100000000567';
 			
 			this.getModel().metadataLoaded().then(function() {
 				var entityPath = "";
@@ -127,6 +129,9 @@ sap.ui.define([
 
 			this.getView().bindElement({
 				path: entityPath,
+				parameters: {
+					expand: "WarrantyClaimItemSet"
+				},
 				events: {
 					dataRequested: function() {
 						oViewModel.setProperty("/busy", true);

@@ -69,7 +69,9 @@
 				<subSections>
 					<ObjectPageSubSection id="otherParts_sub1" title="PARTS" mode="Expanded">
 						<blocks>
-							<claimBlocks:OtherPartsDetailsBlock/>
+							<claimBlocks:OtherPartsDetailsBlock>
+								<ModelMapping externalModelName="WarrantClaimObjectPageView" externalPath="/" internalModelName="parts"/>
+							</claimBlocks:OtherPartsDetailsBlock>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>

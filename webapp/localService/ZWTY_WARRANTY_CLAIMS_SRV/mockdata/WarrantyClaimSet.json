@@ -1,6 +1,7 @@
 [{
 	"ClaimNumber":"100000000567",
 	"ClaimType" : "MOCK",
+	"EngineNumber": "1234DDD",
 	"MilIndicator" : true
 }
 ]

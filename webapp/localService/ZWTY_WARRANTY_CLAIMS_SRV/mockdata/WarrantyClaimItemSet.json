@@ -1,0 +1,16 @@
+[
+	{
+		"ClaimNumber": "100000000567",
+		"ItemNumber" : "0001",
+		"PartNumber" : "0001",
+		"Description": "Part 1",
+		"Quantity": 2
+	},
+	{
+		"ClaimNumber": "100000000567",
+		"ItemNumber" : "0002",
+		"PartNumber" : "0002",
+		"Description": "Part 2",
+		"Quantity": 5
+	}
+]

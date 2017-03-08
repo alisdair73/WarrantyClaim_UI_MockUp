@@ -5,7 +5,8 @@ sap.ui.define([
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController", {
-		addPart: function(){
+		
+		addItem: function(){
 			
 			// Create the dialog if it isn't already
 			if (!this._partsDialog) {
@@ -17,6 +18,18 @@ sap.ui.define([
 			this._partsDialog.open();
 		},
 		
+		deleteItem: function(event) {
+
+			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/WarrantyClaimItems");
+
+			// get the data for the deleted row
+			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
+
+			// delete the line using the path to work out the index
+			warrantyItems.splice(path.substring(1), 1);
+			this.getView().getModel("WarrantyClaim").setProperty("/WarrantyClaimItems", warrantyItems);
+
+		},		
 		onValueHelpSearch: function(event) {
 			
 			var searchValue = event.getParameter("value");
@@ -30,6 +43,28 @@ sap.ui.define([
 				sap.ui.model.FilterOperator.Contains, searchValue
 			));
 			event.getSource().getBinding("items").filter(filters);
+		},
+		
+		onPartSelected: function(event){
+
+			var selectedContexts = event.getParameter("selectedContexts");
+			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/WarrantyClaimItems");
+
+			// add the parts that were selected (to the top) and update the model
+			// we default the requestedDeliveryDate to today
+			for (var i = 0; i < selectedContexts.length; i++) {
+				var item = selectedContexts[i].getModel().getProperty(selectedContexts[i].getPath());
+				// add the new part
+				warrantyItems.push({
+					"PartNumber": item.PartNumber, 
+	                "Description" : item.Description,
+	                "Quantity": 3,
+	                "PartRequested": false
+				});
+			}
+
+			// update the model
+			this.getView().getModel("WarrantyClaim").setProperty("/WarrantyClaimItems", warrantyItems);
 		}
 	});
 

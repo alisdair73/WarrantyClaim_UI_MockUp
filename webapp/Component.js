@@ -2,8 +2,9 @@ sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
 	"WarrantyClaim_MockUp/model/models",
-	"sap/ui/model/json/JSONModel"
-], function(UIComponent, Device, models, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"WarrantyClaim_MockUp/model/WarrantyClaim"
+], function(UIComponent, Device, models, JSONModel, WarrantyClaim) {
 	"use strict";
 
 	return UIComponent.extend("WarrantyClaim_MockUp.Component", {
@@ -25,30 +26,12 @@ sap.ui.define([
 			this.setModel(models.createDeviceModel(), "device");
 			
 			//set the initial Warranty Model
-			//this.setModel(models.createNewWarrantyClaimModel(),"WarrantyClaim");
+			this.setModel(WarrantyClaim.createWarrantyClaimModel(),"WarrantyClaim");
 			
-			this.getRouter().initialize();
-			
-			// Determine the Warranty Claim Number
-//			var claimNumber = "";
-			if (this.getComponentData() &&
-				this.getComponentData().startupParameters.WarrantyClaim &&
-				this.getComponentData().startupParameters.WarrantyClaim[0]) {
+			// call the base component's init function and create the App view
+			UIComponent.prototype.init.apply(this, arguments);
 				
-				//Get the Claim from the backend
-/*				claimNumber = this.getComponentData().startupParameters.WarrantyClaim[0];
-				this.getRouter().navTo("warrantyMaintain", {"warrantyClaimNumber" : claimNumber}, true);*/
-			}
-			
-/*			this.getModel().read(
-				"/WarrantyClaimSet('" + claimNumber + "')", {
-					context: null,
-					success: function(oData) {
-						this.setModel(new JSONModel(oData),"WarrantyClaim");
-					}.bind(this),
-						error: function() {}.bind(this)
-				}
-			);*/
+			this.getRouter().initialize();
 		}
 	});
 

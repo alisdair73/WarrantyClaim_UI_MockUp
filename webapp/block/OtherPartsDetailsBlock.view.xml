@@ -1,15 +1,28 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" 
-xmlns:smartField="sap.ui.comp.smartfield"
-	xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController">
-	<Table items="{parts>/}" id="__table0">
+ xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController">
+	<Table items="{WarrantyClaim>/WarrantyClaimItems}" id="__table0">
 		<headerToolbar>
 			<Toolbar>
 				<Title text="Other Parts" level="H2"/>
 				<ToolbarSpacer/>
-				<Button text="Add more parts" icon="sap-icon://add" press="addPart"/>
+				<Button text="Add more parts" icon="sap-icon://add" press="addItem"/>
 				<Button text="Check LON" icon="sap-icon://task" press="checkLON"/>
 			</Toolbar>
 		</headerToolbar>
+	    <items>
+	        <ColumnListItem id="__item0">
+	            <cells>
+	            	<Text text="{WarrantyClaim>PartNumber}"/>
+	                <Text text="{WarrantyClaim>Description}" id="__text6"/>
+	                <StepInput value="{WarrantyClaim>Quantity}" min="0" max="999" change="onChange"/>
+	                <Switch state="{WarrantyClaim>PartRequested}" type="AcceptReject" enabled="false" customTextOn="Yes" customTextOff="No"/>
+	                <l:HorizontalLayout>
+	                	<Button icon="sap-icon://edit" press="editItem"/>
+	                	<Button icon="sap-icon://delete" press="deleteItem"/>
+	                </l:HorizontalLayout>
+	            </cells>
+	        </ColumnListItem>
+	    </items>		
 	    <columns>
 	        <Column id="__column0" width="25em">
 	            <header>
@@ -33,21 +46,6 @@ xmlns:smartField="sap.ui.comp.smartfield"
 	        </Column>
 	        <Column id="__column4" width="7em" hAlign="End"/>
 	     </columns>
-	    <items>
-	        <ColumnListItem id="__item0">
-	            <cells>
-	            	<Text text="{parts>PartNumber}"/>
-	                <Text text="{Description}" id="__text6"/>
-	                <Text text="{Quantity}" id="__text7"/>
-	                <Text text="{PartRequested}" id="__text8"/>
-	                <l:HorizontalLayout>
-	                	<Button icon="sap-icon://edit" press="addPart"/>
-	                	<Button icon="sap-icon://delete"/>
-	                </l:HorizontalLayout>
-	            </cells>
-	        </ColumnListItem>
-	    </items>
-
 	 </Table>
 	 <CheckBox text="Installed by dealer?"/>
 </mvc:View>

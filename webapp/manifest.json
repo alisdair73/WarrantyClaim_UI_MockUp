@@ -60,11 +60,7 @@
 	},
 	"sap.ui5": {
 		"_version": "1.1.0",
-		"rootView": {
-			"viewName": "WarrantyClaim_MockUp.view.App",
-			"type": "XML",
-			"id": "app"
-		},
+		"rootView": "WarrantyClaim_MockUp.view.App",
 		"dependencies": {
 			"minUI5Version": "1.30.0",
 			"libs": {

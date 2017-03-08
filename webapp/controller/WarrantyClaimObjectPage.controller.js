@@ -4,8 +4,8 @@ sap.ui.define([
 		'sap/ui/core/Fragment',
 		"WarrantyClaim_MockUp/controller/BaseController",
 		'sap/ui/model/json/JSONModel',
-		'sap/ui/model/Filter'
-	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel) {
+        "WarrantyClaim_MockUp/model/WarrantyClaim"		
+	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -14,7 +14,7 @@ sap.ui.define([
 
 			var oViewModel = new JSONModel({
 				busy: false,
-				delay: 0
+				delay: 30
 			});
 			this.setModel(oViewModel, "WarrantClaimObjectPageView");
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
@@ -130,9 +130,10 @@ sap.ui.define([
 			this.getView().bindElement({
 				path: entityPath,
 				parameters: {
-					expand: "WarrantyClaimItemSet"
+					expand: "WarrantyClaimItems"
 				},
 				events: {
+					change: this._onBindingChange.bind(this),
 					dataRequested: function() {
 						oViewModel.setProperty("/busy", true);
 					},
@@ -142,6 +143,11 @@ sap.ui.define([
 				}
 			});
 		},
+		
+		_onBindingChange: function(oData) {
+			//Check if there is any data first
+			WarrantyClaim.updateWarrantyClaimFromOdata(oData);
+		},		
 		
 		_onMetadataLoaded: function() {
 			// Store original busy indicator delay for the detail view

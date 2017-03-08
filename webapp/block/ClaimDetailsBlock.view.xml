@@ -32,7 +32,7 @@
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Main Causal Part Number (MCPN)"/>
-										<Input id="MCPN" value="{/WarrantyClaimItemSet/0/PartNumber}"/>
+										<Input id="MCPN" value="{}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="MCPN Quantity"/>

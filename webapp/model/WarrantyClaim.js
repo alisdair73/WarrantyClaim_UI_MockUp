@@ -12,7 +12,9 @@ sap.ui.define([
 			this.warrantyClaim = {
 				"ClaimNumber": "",
 				"ClaimType": "",
-				"WarrantyClaimItems": [],
+				"Parts": [],
+				"Labour": [],
+				"Sublet":[],
 				"changed": false
 			};
 			
@@ -33,10 +35,43 @@ sap.ui.define([
 			var oWarrantyClaimItems = oODataModel.getObject(sPath + "/WarrantyClaimItems");
 			for (var i = 0; i < oWarrantyClaimItems.length; i++) {
 				var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
-				this.warrantyClaim.WarrantyClaimItems.push(oWarrantyClaimItem);
+				switch(oWarrantyClaimItem.ItemType) {
+    				case "MAT":
+    					this.warrantyClaim.Parts.push(oWarrantyClaimItem);
+				        break;
+				    case "FR":
+				    	this.warrantyClaim.Labour.push(oWarrantyClaimItem);
+				        break;
+				    case "SUBL":
+				    	this.warrantyClaim.Sublet.push(oWarrantyClaimItem);
+				        break;
+				}
 			}
 
 			this.resetChanges();
+		},
+		
+		convertToODataForUpdate: function() {
+			var warrantyClaim = {
+				"ClaimNumber": "",
+				"ClaimType": "",
+				"WarrantyClaimItems" : []
+			};
+			warrantyClaim.ClaimNumber = this.warrantyClaim.ClaimNumber;
+			warrantyClaim.ClaimType = this.warrantyClaim.ClaimType;
+			
+			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
+				warrantyClaim.WarrantyClaimItems.push(this.warrantyClaim.Parts[i]);
+			}
+
+			for (var i = 0; i < this.warrantyClaim.Labour.length; i++) {
+				warrantyClaim.WarrantyClaimItems.push(this.warrantyClaim.Labour[i]);
+			}
+			
+			for (var i = 0; i < this.warrantyClaim.Sublet.length; i++) {
+				warrantyClaim.WarrantyClaimItems.push(this.warrantyClaim.Sublet[i]);
+			}
+			return warrantyClaim;
 		},
 		
 		resetChanges: function() {

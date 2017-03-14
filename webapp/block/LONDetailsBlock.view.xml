@@ -1,5 +1,5 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout">
-	<Table noDataText="Drop column list items here and columns in the area above" id="__table0">
+	<Table items="{WarrantyClaim>/Labour}" id="__table0">
 		<headerToolbar>
 			<Toolbar>
 				<Title text="Labour Operation Numbers" level="H2"/>
@@ -8,9 +8,9 @@
 	    <items>
 	        <ColumnListItem id="__item0">
 	            <cells>
-	                <Text text="ABC123" id="__text5"/>
-	                <Text text="Cutting and Sanding" id="__text6"/>
-	                <Text text="7:00" id="__text7"/>
+	                <Text text="{WarrantyClaim>PartNumber}" id="__text5"/>
+	                <Text text="{WarrantyClaim>Description}" id="__text6"/>
+	                <Text text="{WarrantyClaim>Quantity}" id="__text7"/>
 	                <Button icon="sap-icon://delete"/>
 	            </cells>
 	        </ColumnListItem>

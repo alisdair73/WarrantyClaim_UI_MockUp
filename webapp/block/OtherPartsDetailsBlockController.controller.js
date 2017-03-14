@@ -20,14 +20,16 @@ sap.ui.define([
 		
 		deleteItem: function(event) {
 
-			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/WarrantyClaimItems");
+			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 
 			// get the data for the deleted row
 			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
 
+            var itemIndex = path.split("/")[2];
+
 			// delete the line using the path to work out the index
-			warrantyItems.splice(path.substring(1), 1);
-			this.getView().getModel("WarrantyClaim").setProperty("/WarrantyClaimItems", warrantyItems);
+			warrantyItems.splice(itemIndex, 1);
+			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
 
 		},		
 		onValueHelpSearch: function(event) {
@@ -48,7 +50,7 @@ sap.ui.define([
 		onPartSelected: function(event){
 
 			var selectedContexts = event.getParameter("selectedContexts");
-			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/WarrantyClaimItems");
+			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 
 			// add the parts that were selected (to the top) and update the model
 			// we default the requestedDeliveryDate to today
@@ -58,13 +60,12 @@ sap.ui.define([
 				warrantyItems.push({
 					"PartNumber": item.PartNumber, 
 	                "Description" : item.Description,
-	                "Quantity": 3,
-	                "PartRequested": false
+	                "PartRequested": ""
 				});
 			}
 
 			// update the model
-			this.getView().getModel("WarrantyClaim").setProperty("/WarrantyClaimItems", warrantyItems);
+			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
 		}
 	});
 

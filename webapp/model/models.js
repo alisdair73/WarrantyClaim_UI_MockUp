@@ -21,8 +21,19 @@ sap.ui.define([
 				"TotalCostOfClaim":0
 			});
 			
+		},
+		
+		createNewWarrantyItem: function(itemType){
+			return new JSONModel({
+				"ItemType":itemType,
+				"PartNumber":"",
+	            "Invoice":"",
+	            "BusinessName":"",
+	            "Description":"",
+	            "Quantity": 0
+			});
 		}
-
+	
 	};
 
 });

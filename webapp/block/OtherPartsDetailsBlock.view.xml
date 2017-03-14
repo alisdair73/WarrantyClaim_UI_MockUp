@@ -1,6 +1,6 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" 
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core"
  xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController">
-	<Table items="{WarrantyClaim>/WarrantyClaimItems}" id="__table0">
+	<Table items="{WarrantyClaim>/Parts}" id="__table0">
 		<headerToolbar>
 			<Toolbar>
 				<Title text="Other Parts" level="H2"/>
@@ -15,7 +15,16 @@
 	            	<Text text="{WarrantyClaim>PartNumber}"/>
 	                <Text text="{WarrantyClaim>Description}" id="__text6"/>
 	                <StepInput value="{WarrantyClaim>Quantity}" min="0" max="999" change="onChange"/>
-	                <Switch state="{WarrantyClaim>PartRequested}" type="AcceptReject" enabled="false" customTextOn="Yes" customTextOff="No"/>
+	               <ComboBox id="partSelected" selectedKey="{WarrantyClaim>PartRequested}">
+
+	            	 <items>
+	            	 	<core:ListItem text="" key="" id="__item5"/>
+	            		<core:ListItem text="Part Requested 0" key="0" id="__item4"/>
+	            		<core:ListItem text="Part Requested 1" key="1" id="__item1"/>
+	            		<core:ListItem text="Part Requested 2" key="2" id="__item2"/>
+	            		<core:ListItem text="Part Requested 3" key="3" id="__item3"/>
+	            	 </items><!-- sap.ui.core.Item -->
+	               </ComboBox>
 	                <l:HorizontalLayout>
 	                	<Button icon="sap-icon://edit" press="editItem"/>
 	                	<Button icon="sap-icon://delete" press="deleteItem"/>

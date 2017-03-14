@@ -75,8 +75,16 @@ sap.ui.define([
 		
 		onSave: function(){
 			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", true);
+			
 			var warrantyClaimModel = this.getOwnerComponent().getModel();
-			warrantyClaimModel.submitChanges({success: this._onSaveSuccess.bind(this), error: this._onSaveError.bind(this)});
+
+			warrantyClaimModel.create("/WarrantyClaimSet",
+				WarrantyClaim.convertToODataForUpdate(), {
+					"success": this._onSaveSuccess.bind(this), 
+					"error": this._onSaveError.bind(this),
+					async: true
+				}
+			);
 		},
 		
 		_onSaveSuccess: function(result){
@@ -106,7 +114,7 @@ sap.ui.define([
 				claimNumber = this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim[0];
 			}
 
-			claimNumber = '100000000567';
+			claimNumber = '2016110067';
 			
 			this.getModel().metadataLoaded().then(function() {
 				var entityPath = "";

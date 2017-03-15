@@ -6,7 +6,7 @@ sap.ui.define([
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.CustomerConcernBlockController", {
-
+/*
     showSymptomsSelector: function(){
     	
 		if (! this._oSymptomsSelector) {
@@ -28,7 +28,7 @@ sap.ui.define([
     	}
     	
 		this._oSymptomsSelector.close();
-    }
+    }*/
     
 	});
 

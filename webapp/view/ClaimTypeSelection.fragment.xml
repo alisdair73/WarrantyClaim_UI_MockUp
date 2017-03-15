@@ -1,19 +1,46 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<Dialog title="Select Claim Type">
 		<content>
-			<List id="claimTypeList"
-			    mode="SingleSelectMaster"
-			    select="handleListSelect"
-				items="{
-					path: '/ClaimTypeSet',
-					sorter: { path: 'Description' },
-					filters : [
-            			{ path : 'SalesOrg', operator : 'EQ', value1 : '1000'}
-        			]
-				}"
-				>
-				<StandardListItem title="{Description}" icon="{Icon}" />
-			</List>	
+			<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form2" objectBindings="{SubletItem>/}">
+		    	<sap.ui.layout.form:formContainers>
+		        	<sap.ui.layout.form:FormContainer id="__container2">
+		            	<sap.ui.layout.form:formElements>
+		                	<sap.ui.layout.form:FormElement label="Sales Organisation" id="__element2">
+		                    	<sap.ui.layout.form:fields>			
+									<ComboBox 
+										showSecondaryValues= "false"
+										required = "true"
+										items="{
+											path: 'SalesAreas>/',
+											sorter: { path: 'SalesAreas>CompanyCode' }
+										}"
+										selectedKey="{WarrantyClaim>/CompanyCode}"
+										selectionChange="companyCodeSelected"
+										width="100%">
+										<core:ListItem key="{SalesAreas>CompanyCode}" text="{SalesAreas>CompanyCodeName}"/>
+									</ComboBox>	
+								</sap.ui.layout.form:fields>
+							</sap.ui.layout.form:FormElement>	
+							<sap.ui.layout.form:FormElement label="Claim Type" id="__element3">
+								<sap.ui.layout.form:fields>
+									<List id="claimTypeList"
+			    						mode="SingleSelectMaster"
+			    						select="handleListSelect"
+										items="{
+											path: '/ClaimTypeSet',
+											sorter: { path: 'Description' }
+										}">
+										<StandardListItem title="{Description}" icon="{Icon}" />
+									</List>	
+								</sap.ui.layout.form:fields>
+							</sap.ui.layout.form:FormElement>
+						</sap.ui.layout.form:formElements>							
+					</sap.ui.layout.form:FormContainer>
+		    	</sap.ui.layout.form:formContainers>
+		    	<sap.ui.layout.form:layout>
+		        	<sap.ui.layout.form:ResponsiveGridLayout/>
+		    	</sap.ui.layout.form:layout>
+		    </sap.ui.layout.form:Form>
 		</content>
 		<buttons>
 			<Button text="Cancel" press="handleClose" icon="sap-icon://sys-cancel"/>

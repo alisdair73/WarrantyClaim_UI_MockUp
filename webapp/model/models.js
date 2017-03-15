@@ -12,25 +12,17 @@ sap.ui.define([
 			return oModel;
 		},
 		
-		createNewWarrantyClaimModel: function(){
-			
-			return new JSONModel({
-				"ClaimNumber": "NEW CLAIM",
-				"ClaimType": "",
-				"SubmittedOn": "",
-				"TotalCostOfClaim":0
-			});
-			
-		},
-		
 		createNewWarrantyItem: function(itemType){
 			return new JSONModel({
 				"ItemType":itemType,
+				"ItemNo":"",
 				"PartNumber":"",
-	            "Invoice":"",
-	            "BusinessName":"",
+				"ItemKey":"",
+	            "Quantity": 0,
+	            "PartRequested":"",
 	            "Description":"",
-	            "Quantity": 0
+	            "Invoice":"",
+	            "BusinessName":""
 			});
 		}
 	

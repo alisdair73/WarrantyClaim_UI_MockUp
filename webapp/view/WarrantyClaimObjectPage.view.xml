@@ -45,6 +45,17 @@
 					</m:items>
 				</m:FlexBox>
 			</layout:VerticalLayout>
+			<layout:VerticalLayout class="sapUiContentPadding" width="100%">
+			<layout:content>
+			<m:MessageStrip
+				text="Error with default icon and close button:"
+				type="Error"
+				showIcon="true"
+				showCloseButton="true"
+				class="sapUiMediumMarginBottom">
+			</m:MessageStrip>
+		</layout:content>
+	</layout:VerticalLayout>			
 		</headerContent>
 		<sections>
 			<ObjectPageSection id="vehicleDetails" title="VEHICLE">

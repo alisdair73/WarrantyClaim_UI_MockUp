@@ -15,10 +15,13 @@ sap.ui.define([
 
 			var oViewModel = new JSONModel({
 				busy: false,
-				delay: 30
+				delay: 0,
+				readOnly: "false"
 			});
 			this.setModel(oViewModel, "WarrantClaimObjectPageView");
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
+			
+			//???
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
 			
 			//var oViewModel = this.getModel("detailView");
@@ -32,39 +35,14 @@ sap.ui.define([
 			}
 		},
 		
-		openClaimSelectDialog: function() {
-			//Need to determine the Sales Organisations being used and filter Claim Types
-			this.getOwnerComponent().getModel().read(
-				"/DealerSalesAreaSet", {
-					context: null,
-					success: function(oData) {
-							//this._busyDialog.close();
-							if (!oData.results.length) {
-								//this._showNoDealershipDialog();
-							} else {
-								if (! this._claimTypeSelection) {
-									this._claimTypeSelection = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.ClaimTypeSelection", this);
-									this.getView().setModel(new JSONModel(this._buildSalesOrgList(oData)),"SalesAreas");
-									this.getView().addDependent(this._claimTypeSelection);
-								}
-								this._claimTypeSelection.open();
-								this._filterClaimType(this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation"));
-							}
-						}.bind(this),
-						error: function() {
-							//this._busyDialog.close();
-							//this._showNoDealershipDialog();
-						}.bind(this)
-					}
-				);
-		},
- 
 		handleListSelect: function(oEvent){
 			
 			var claimType = oEvent.getParameter("listItem").getBindingContext().getObject().Code;
 			var claimTypeDescription = oEvent.getParameter("listItem").getBindingContext().getObject().Description;
 			
+			this.getModel("WarrantyClaim").setProperty("/ClaimType",claimType);
 			this.getModel("WarrantClaimObjectPageView").setProperty("/claimTypeText", claimTypeDescription);
+			
 			this.getModel("WarrantClaimObjectPageView").setProperty("/claimState", "None");
 			this.getModel("WarrantClaimObjectPageView").setProperty("/claimStateText", "New Claim");
 			this.getModel("WarrantClaimObjectPageView").setProperty("/claimStateIcon", "sap-icon://write-new-document");
@@ -72,7 +50,7 @@ sap.ui.define([
 //			jQuery.sap.require("sap.ui.core.format.DateFormat");
 //			var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd/MM/yyyy"});
 		
-			var oContext = this.getModel().createEntry("/WarrantyClaimSet",
+/*			var oContext = this.getModel().createEntry("/WarrantyClaimSet",
 				{ "properties": 
 					{	"ClaimType":claimType,
 //						"SubmittedOn": oDateFormat.format(new Date()),
@@ -81,9 +59,9 @@ sap.ui.define([
 					}
 				} 
 			);	
-			this.getView().setBindingContext(oContext);
-			var oViewModel = this.getModel("WarrantClaimObjectPageView");
-			oViewModel.setProperty("/busy", false);
+			this.getView().setBindingContext(oContext);*/
+			
+			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", false);
 			this._claimTypeSelection.close();
 		},
 
@@ -138,10 +116,37 @@ sap.ui.define([
 					distinctCompanyCodes.push(salesArea.CompCode);
 				}
 			}
-			//
+			// Set the default as the first entry in the list
 			this.getView().getModel("WarrantyClaim").setProperty("/CompanyCode",salesOrganisations[0].CompanyCode);
 			this.getView().getModel("WarrantyClaim").setProperty("/SalesOrganisation",salesOrganisations[0].SalesOrg);
 			return salesOrganisations;
+		},
+		
+		_openClaimTypeSelectDialog: function() {
+			//Need to determine the Sales Organisations being used and filter Claim Types
+			this.getOwnerComponent().getModel().read(
+				"/DealerSalesAreaSet", {
+					context: null,
+					success: function(oData) {
+							//this._busyDialog.close();
+							if (!oData.results.length) {
+								//this._showNoDealershipDialog();
+							} else {
+								if (! this._claimTypeSelection) {
+									this._claimTypeSelection = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.ClaimTypeSelection", this);
+									this.getView().setModel(new JSONModel(this._buildSalesOrgList(oData)),"SalesAreas");
+									this.getView().addDependent(this._claimTypeSelection);
+								}
+								this._claimTypeSelection.open();
+								this._filterClaimType(this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation"));
+							}
+						}.bind(this),
+						error: function() {
+							//this._busyDialog.close();
+							//this._showNoDealershipDialog();
+						}.bind(this)
+					}
+				);
 		},
 		
 		_onSaveSuccess: function(result){
@@ -204,7 +209,7 @@ sap.ui.define([
 				entityPath = "/WarrantyClaimSet('" + claimNumber + "')";
 				this._bindView(entityPath);
 			}else{
-				this.openClaimSelectDialog( );
+				this._openClaimTypeSelectDialog( );
 			}
 		},
 		

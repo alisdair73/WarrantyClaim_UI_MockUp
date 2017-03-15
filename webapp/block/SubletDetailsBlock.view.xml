@@ -11,7 +11,7 @@
 	    <items>
 	        <ColumnListItem id="__item0">
 	            <cells>
-	                <Text text="{WarrantyClaim>PartNumber}" id="__text5"/>
+	                <Text text="{WarrantyClaim>ItemKey}" id="__text5"/>
 	                <Text text="{WarrantyClaim>Invoice}" id="__text7"/>
 	                <Text text="{WarrantyClaim>BusinessName}" id="__text8"/>
 	                <Text text="{WarrantyClaim>Quantity}" id="__text9"/>

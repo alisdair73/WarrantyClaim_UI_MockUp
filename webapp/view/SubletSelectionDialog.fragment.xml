@@ -1,11 +1,11 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<Dialog title="Add Sublet">
 		<content>
-			<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form2" objectBindings="{SubletItem>/}">
+			<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" objectBindings="{SubletItem>/}">
 		    	<sap.ui.layout.form:formContainers>
-		        	<sap.ui.layout.form:FormContainer title="Title" id="__container2">
+		        	<sap.ui.layout.form:FormContainer title="Title">
 		            	<sap.ui.layout.form:formElements>
-		                	<sap.ui.layout.form:FormElement label="Sublet" id="__element2">
+		                	<sap.ui.layout.form:FormElement label="Sublet">
 		                    	<sap.ui.layout.form:fields>
 		                    		<ComboBox 
 										showSecondaryValues= "true"
@@ -16,32 +16,32 @@
             									{ path : 'Code', operator : 'EQ', value1 : 'WTY3'}
         									]
 										}"
-										selectedKey="{SubletItem>PartNumber}"
+										selectedKey="{SubletItem>ItemKey}"
 										selectionChange="subletCodeSelected">
 										<core:ListItem key="{Number}" text="{Text}" additionalText = "[{Number}]"/>
 									</ComboBox>		
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
-		                	<sap.ui.layout.form:FormElement label="Invoice" id="__element0">
+		                	<sap.ui.layout.form:FormElement label="Invoice">
 		                    	<sap.ui.layout.form:fields>
-		                        	<Input width="100%" id="__input1" value="{SubletItem>Invoice}"/>
+		                        	<Input width="100%" id="Invoice" value="{SubletItem>Invoice}"/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
-		                	<sap.ui.layout.form:FormElement label="Business Name" id="__element3">
+		                	<sap.ui.layout.form:FormElement label="Business Name">
 		                    	<sap.ui.layout.form:fields>
-		                        	<Input width="100%" id="__input2" value="{SubletItem>BusinessName}"/>
+		                        	<Input width="100%" id="BusinessName" value="{SubletItem>BusinessName}"/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
-		                	<sap.ui.layout.form:FormElement label="Cost" id="__element4">
+		                	<sap.ui.layout.form:FormElement label="Cost">
 		                    	<sap.ui.layout.form:fields>
-		                        	<Input width="100%" id="__input8" value="{SubletItem>Quantity}"/>
+		                        	<Input width="100%" id="Quantity" value="{SubletItem>Quantity}"/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
 		            	</sap.ui.layout.form:formElements>
 		        	</sap.ui.layout.form:FormContainer>
 		    	</sap.ui.layout.form:formContainers>
 		    	<sap.ui.layout.form:layout>
-		        	<sap.ui.layout.form:ResponsiveGridLayout id="__layout239"/>
+		        	<sap.ui.layout.form:ResponsiveGridLayout/>
 		    	</sap.ui.layout.form:layout>
 		    </sap.ui.layout.form:Form>
 		</content>

@@ -1,5 +1,5 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout">
-	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form0">
+	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form0" objectBindings="{WarrantyClaim>/}">
 		<sap.ui.layout.form:layout>
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
 	    </sap.ui.layout.form:layout>
@@ -12,23 +12,23 @@
 								<l:content>
 								<l:VerticalLayout width="100%">
 									<Label text="Dealer Contact" labelFor="__input0"/>
-									<Input id="dealerContact" value="{DealerContact}"/>
+									<Input id="dealerContact" value="{WarrantyClaim>DealerContact}"/>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="Engine Number"/>
-									<Input  id="engineNumber" value="{EngineNumber}"/>
+									<Input  id="engineNumber" value="{WarrantyClaim>EngineNumber}"/>
 								</l:VerticalLayout>	
 								<l:VerticalLayout width="100%">
 									<Label text="PWA Number"/>
-									<Input  id="PWANumber" value="{AuthorisationNumber}"/>
+									<Input  id="PWANumber" value="{WarrantyClaim>AuthorisationNumber}"/>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="VIN"/>
-									<Input  id="VIN" value="{VIN}" editable="{= !${ClaimNumber}}"/>
+									<Input  id="VIN" value="{WarrantyClaim>VIN}" editable="{= !${WarrantyClaim>ClaimNumber}}"/>
 								</l:VerticalLayout>					
 								<l:VerticalLayout width="100%">
 									<Label text="Recall Number"/>
-									<Input  id="recallNumber" value="{RecallNumber}"/>
+									<Input  id="recallNumber" value="{WarrantyClaim>RecallNumber}"/>
 								</l:VerticalLayout>	
 								</l:content>
 							</l:Grid>

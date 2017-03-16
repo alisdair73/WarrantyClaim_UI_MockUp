@@ -14,11 +14,12 @@ sap.ui.define([
 		
 		createNewWarrantyItem: function(itemType){
 			return new JSONModel({
+				"ClaimNumber":"",
 				"ItemType":itemType,
 				"ItemNo":"",
 				"PartNumber":"",
 				"ItemKey":"",
-	            "Quantity": 0,
+	            "Quantity": "0",
 	            "PartRequested":"",
 	            "Description":"",
 	            "Invoice":"",

@@ -14,11 +14,15 @@ sap.ui.define([
 		onInit: function() {
 
 			var oViewModel = new JSONModel({
-				busy: false,
-				delay: 0,
-				readOnly: "false"
+				"busy": false,
+				"delay": 0,
+				"readOnly": false,
+				"warrantyUI": {
+					"dealerName":"",
+					"dealerDescription":""
+				}
 			});
-			this.setModel(oViewModel, "WarrantClaimObjectPageView");
+			this.setModel(oViewModel, "ViewHelper");
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
 			
 			//???
@@ -41,11 +45,11 @@ sap.ui.define([
 			var claimTypeDescription = oEvent.getParameter("listItem").getBindingContext().getObject().Description;
 			
 			this.getModel("WarrantyClaim").setProperty("/ClaimType",claimType);
-			this.getModel("WarrantClaimObjectPageView").setProperty("/claimTypeText", claimTypeDescription);
+			this.getModel("ViewHelper").setProperty("/claimTypeText", claimTypeDescription);
 			
-			this.getModel("WarrantClaimObjectPageView").setProperty("/claimState", "None");
-			this.getModel("WarrantClaimObjectPageView").setProperty("/claimStateText", "New Claim");
-			this.getModel("WarrantClaimObjectPageView").setProperty("/claimStateIcon", "sap-icon://write-new-document");
+			this.getModel("ViewHelper").setProperty("/claimState", "None");
+			this.getModel("ViewHelper").setProperty("/claimStateText", "New Claim");
+			this.getModel("ViewHelper").setProperty("/claimStateIcon", "sap-icon://write-new-document");
 		
 //			jQuery.sap.require("sap.ui.core.format.DateFormat");
 //			var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd/MM/yyyy"});
@@ -61,7 +65,7 @@ sap.ui.define([
 			);	
 			this.getView().setBindingContext(oContext);*/
 			
-			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", false);
+			this.getModel("ViewHelper").setProperty("/busy", false);
 			this._claimTypeSelection.close();
 		},
 
@@ -72,7 +76,7 @@ sap.ui.define([
 		},
 		
 		onSave: function(){
-			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", true);
+			this.getModel("ViewHelper").setProperty("/busy", true);
 			
 			var warrantyClaimModel = this.getOwnerComponent().getModel();
 
@@ -150,11 +154,27 @@ sap.ui.define([
 		},
 		
 		_onSaveSuccess: function(result){
-			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", false);
+			
+			var message = "";
+			
+			if(this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber")){
+			  	message = "Warranty Claim number " + result.ClaimNumber + " was updated.";
+			} else {
+				message = "Warranty Claim number " + result.ClaimNumber + " was created.";
+			}
+			
+			MessageToast.show(message);
+			this.getView().getModel("WarrantyClaim").setProperty("/ClaimNumber",result.ClaimNumber);
+			this.getView().getModel("WarrantyClaim").setProperty("/OVTotal",result.OVTotal);
+			this.getView().getModel("WarrantyClaim").setProperty("/OCTotal",result.OCTotal);
+			this.getView().getModel("WarrantyClaim").setProperty("/ICTotal",result.ICTotal);
+			this.getView().getModel("WarrantyClaim").setProperty("/IVTotal",result.IVTotal);
+			this.getView().getModel("WarrantyClaim").setProperty("/TotalCostOfClaim",result.TotalCostOfClaim);
+			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
 		
 		_onSaveError: function(error){
-			this.getModel("WarrantClaimObjectPageView").setProperty("/busy", false);
+			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
 		
 		onCancel: function(){
@@ -171,15 +191,15 @@ sap.ui.define([
 					"/DealershipSet?$filter=active eq true", {
 						context: null,
 						success: function(oData) {
-							//this._busyDialog.close();
 							if (!oData.results.length) {
 								this._showNoDealershipDialog();
 							} else {
+								var dealerDescription = oData.results[0].dealerName + ", " + oData.results[0].description;
+								this.getModel("ViewHelper").setProperty("/warrantyUI/dealerDescription", dealerDescription);
 								this._openWarrantyMaintenance();
 							}
 						}.bind(this),
 						error: function() {
-							//this._busyDialog.close();
 							this._showNoDealershipDialog();
 						}.bind(this)
 					}
@@ -227,7 +247,7 @@ sap.ui.define([
 		
 		_bindView: function(entityPath) {
 			// Set busy indicator during view binding
-			var oViewModel = this.getModel("WarrantClaimObjectPageView");
+			var oViewModel = this.getModel("ViewHelper");
 
 			// If the view was not bound yet its not busy, only if the binding requests data it is set to busy again
 			//oViewModel.setProperty("/busy", false);
@@ -269,7 +289,7 @@ sap.ui.define([
 		
 		_onMetadataLoaded: function() {
 			// Store original busy indicator delay for the detail view
-			var oViewModel = this.getModel("WarrantClaimObjectPageView");
+			var oViewModel = this.getModel("ViewHelper");
 			// Binding the view will set it to not busy - so the view is always busy if it is not bound
 			oViewModel.setProperty("/busy", true);
 		}

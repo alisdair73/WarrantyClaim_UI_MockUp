@@ -12,12 +12,15 @@ sap.ui.define([
 			this.warrantyClaim = {
 				"ClaimNumber": "",
 				"ClaimType": "",
+				"Dealer":"",
 				"DealerContact": "",
 				"EngineNumber": "",
 				"AuthorisationNumber": "",
 				"VIN": "",
 				"RecallNumber": "",
 				"RepairOrderNumber": "",
+				"TotalCostOfClaim":"0",
+				"ClaimCurrency":"",
 				"DateOfRepair": null,
 				"DateOfFailure": null,
 				"FailureMeasure": "",
@@ -31,6 +34,12 @@ sap.ui.define([
 				"DefectCode":"",
 				"CustomerConcern":"",
 				"SymptomCode":"",
+				"CurrentVersionNumber":"0001",
+				"CurrentVersionCategory":"IC",
+				"OCTotal":"0",
+				"OVTotal":"0",
+				"ICTotal":"0",
+				"IVTotal":"0",
 				"Parts": [],
 				"Labour": [],
 				"Sublet":[],
@@ -56,6 +65,8 @@ sap.ui.define([
 			this.warrantyClaim.VIN = oWarrantyClaim.VIN;
 			this.warrantyClaim.RecallNumber = oWarrantyClaim.RecallNumber;
 			this.warrantyClaim.RepairOrderNumber = oWarrantyClaim.RepairOrderNumber;
+			this.warrantyClaim.TotalCostOfClaim = parseFloat(oWarrantyClaim.TotalCostOfClaim).toFixed(2);
+			this.warrantyClaim.ClaimCurrency = oWarrantyClaim.ClaimCurrency;
 			this.warrantyClaim.DateOfRepair = oWarrantyClaim.DateOfRepair;
 			this.warrantyClaim.DateOfFailure = oWarrantyClaim.DateOfFailure;
 			this.warrantyClaim.FailureMeasure = oWarrantyClaim.FailureMeasure;
@@ -69,7 +80,13 @@ sap.ui.define([
 			this.warrantyClaim.DefectCode = oWarrantyClaim.DefectCode;
 			this.warrantyClaim.CustomerConcern = oWarrantyClaim.CustomerConcern;
 			this.warrantyClaim.SymptomCode = oWarrantyClaim.SymptomCode;
-			
+			this.warrantyClaim.CurrentVersionNumber = oWarrantyClaim.CurrentVersionNumber;
+			this.warrantyClaim.CurrentVersionCategory = oWarrantyClaim.CurrentVersionCategory;
+			this.warrantyClaim.OCTotal = parseFloat(oWarrantyClaim.OCTotal);
+			this.warrantyClaim.OVTotal = parseFloat(oWarrantyClaim.OVTotal);
+			this.warrantyClaim.ICTotal = parseFloat(oWarrantyClaim.ICTotal);
+			this.warrantyClaim.IVTotal = parseFloat(oWarrantyClaim.IVTotal);
+				
 			var oWarrantyClaimItems = oODataModel.getObject(sPath + "/WarrantyClaimItems");
 			for (var i = 0; i < oWarrantyClaimItems.length; i++) {
 				var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
@@ -91,8 +108,6 @@ sap.ui.define([
 		
 		convertToODataForUpdate: function() {
 			var warrantyClaim = {
-				"ClaimNumber": "",
-				"ClaimType": "",
 				"WarrantyClaimItems" : []
 			};
 			warrantyClaim.ClaimNumber = this.warrantyClaim.ClaimNumber;
@@ -118,6 +133,7 @@ sap.ui.define([
 			warrantyClaim.SymptomCode = this.warrantyClaim.SymptomCode;
 			
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
+				this.warrantyClaim.Parts[i].Quantity = this.warrantyClaim.Parts[i].Quantity.toString();
 				warrantyClaim.WarrantyClaimItems.push(this.warrantyClaim.Parts[i]);
 			}
 

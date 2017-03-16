@@ -1,7 +1,8 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/model/Filter"
-], function(Controller, Filter) {
+	"sap/ui/model/Filter",
+	"WarrantyClaim_MockUp/model/models"
+], function(Controller, Filter, Models) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController", {
@@ -56,12 +57,12 @@ sap.ui.define([
 			// we default the requestedDeliveryDate to today
 			for (var i = 0; i < selectedContexts.length; i++) {
 				var item = selectedContexts[i].getModel().getProperty(selectedContexts[i].getPath());
+				
 				// add the new part
-				warrantyItems.push({
-					"PartNumber": item.PartNumber, 
-	                "Description" : item.Description,
-	                "PartRequested": ""
-				});
+				var warrantyItem = Models.createNewWarrantyItem("MAT");
+				warrantyItem.setProperty("/PartNumber", item.PartNumber);
+				warrantyItem.setProperty("/Description", item.Description);
+				warrantyItems.push(warrantyItem.getProperty("/"));
 			}
 
 			// update the model

@@ -15,8 +15,8 @@
 	            	<Text text="{WarrantyClaim>PartNumber}"/>
 	                <Text text="{WarrantyClaim>Description}" id="__text6"/>
 	                <StepInput value="{WarrantyClaim>Quantity}" min="0" max="999" change="onChange"/>
-	               <ComboBox id="partSelected" selectedKey="{WarrantyClaim>PartRequested}">
-
+	                
+	                <ComboBox id="partSelected" selectedKey="{WarrantyClaim>PartRequested}">
 	            	 <items>
 	            	 	<core:ListItem text="" key="" id="__item5"/>
 	            		<core:ListItem text="Part Requested 0" key="0" id="__item4"/>
@@ -25,6 +25,7 @@
 	            		<core:ListItem text="Part Requested 3" key="3" id="__item3"/>
 	            	 </items><!-- sap.ui.core.Item -->
 	               </ComboBox>
+	               
 	                <l:HorizontalLayout>
 	                	<Button icon="sap-icon://edit" press="editItem"/>
 	                	<Button icon="sap-icon://delete" press="deleteItem"/>

@@ -1,6 +1,7 @@
 sap.ui.define([
-	"sap/ui/model/json/JSONModel"
-], function(JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/core/format/NumberFormat"
+], function(JSONModel,NumberFormat) {
 	"use strict";
 
 	return {
@@ -40,6 +41,10 @@ sap.ui.define([
 				"OVTotal":"0",
 				"ICTotal":"0",
 				"IVTotal":"0",
+				"StatusDescription":"New Claim",
+				"StatusIcon":"sap-icon://write-new-document",
+				"CanEdit":true,
+				"VersionIdentifier":null,
 				"Parts": [],
 				"Labour": [],
 				"Sublet":[],
@@ -52,11 +57,18 @@ sap.ui.define([
 		},
 		
 		updateWarrantyClaimFromOdata: function(oServerOData) {
+			
 			var oSource = oServerOData.getSource ? oServerOData.getSource() : oServerOData;
 			var oODataModel = oSource.getModel();
 			var sPath = oSource.getPath();
 			var oWarrantyClaim = oODataModel.getObject(sPath);
 			
+			var formatOptions = {
+				minFractionDigits: 2,
+				maxFractionDigits: 2
+			};
+			var costFormat = NumberFormat.getFloatInstance(formatOptions);
+
 			this.warrantyClaim.ClaimNumber = oWarrantyClaim.ClaimNumber;
 			this.warrantyClaim.ClaimType = oWarrantyClaim.ClaimType;
 			this.warrantyClaim.DealerContact = oWarrantyClaim.DealerContact;
@@ -65,7 +77,7 @@ sap.ui.define([
 			this.warrantyClaim.VIN = oWarrantyClaim.VIN;
 			this.warrantyClaim.RecallNumber = oWarrantyClaim.RecallNumber;
 			this.warrantyClaim.RepairOrderNumber = oWarrantyClaim.RepairOrderNumber;
-			this.warrantyClaim.TotalCostOfClaim = parseFloat(oWarrantyClaim.TotalCostOfClaim).toFixed(2);
+			this.warrantyClaim.TotalCostOfClaim = costFormat.format(oWarrantyClaim.TotalCostOfClaim);
 			this.warrantyClaim.ClaimCurrency = oWarrantyClaim.ClaimCurrency;
 			this.warrantyClaim.DateOfRepair = oWarrantyClaim.DateOfRepair;
 			this.warrantyClaim.DateOfFailure = oWarrantyClaim.DateOfFailure;
@@ -86,23 +98,28 @@ sap.ui.define([
 			this.warrantyClaim.OVTotal = parseFloat(oWarrantyClaim.OVTotal);
 			this.warrantyClaim.ICTotal = parseFloat(oWarrantyClaim.ICTotal);
 			this.warrantyClaim.IVTotal = parseFloat(oWarrantyClaim.IVTotal);
-				
+			this.warrantyClaim.StatusDescription = oWarrantyClaim.StatusDescription;
+			this.warrantyClaim.StatusIcon = oWarrantyClaim.StatusIcon;
+			this.warrantyClaim.CanEdit = oWarrantyClaim.CanEdit;
+			
 			var oWarrantyClaimItems = oODataModel.getObject(sPath + "/WarrantyClaimItems");
-			for (var i = 0; i < oWarrantyClaimItems.length; i++) {
-				var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
-				switch(oWarrantyClaimItem.ItemType) {
-    				case "MAT":
-    					this.warrantyClaim.Parts.push(oWarrantyClaimItem);
-				        break;
-				    case "FR":
-				    	this.warrantyClaim.Labour.push(oWarrantyClaimItem);
-				        break;
-				    case "SUBL":
-				    	this.warrantyClaim.Sublet.push(oWarrantyClaimItem);
-				        break;
-				}
+			if (oWarrantyClaimItems){
+				for (var i = 0; i < oWarrantyClaimItems.length; i++) {
+					var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
+					switch(oWarrantyClaimItem.ItemType) {
+    					case "MAT":
+    						this.warrantyClaim.Parts.push(oWarrantyClaimItem);
+				        	break;
+				    	case "FR":
+				    		this.warrantyClaim.Labour.push(oWarrantyClaimItem);
+				    	  break;
+				    	case "SUBL":
+				    		this.warrantyClaim.Sublet.push(oWarrantyClaimItem);
+				    	 break;
+					}
+				} 
 			}
-
+			
 			this.resetChanges();
 		},
 		
@@ -131,6 +148,7 @@ sap.ui.define([
 			warrantyClaim.DefectCode = this.warrantyClaim.DefectCode;
 			warrantyClaim.CustomerConcern = this.warrantyClaim.CustomerConcern;
 			warrantyClaim.SymptomCode = this.warrantyClaim.SymptomCode;
+			warrantyClaim.VersionIdentifier = this.warrantyClaim.VersionIdentifier;
 			
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
 				this.warrantyClaim.Parts[i].Quantity = this.warrantyClaim.Parts[i].Quantity.toString();

@@ -15,7 +15,11 @@
 										<l:layoutData>
 											<l:GridData span="L12"/>
 										</l:layoutData>
-										<TextArea xmlns="sap.m" id="__area0" rows="10" cols="120" placeholder="Enter Details of Customer Concern" value="{WarrantyClaim>CustomerConcern}"/>
+										<TextArea xmlns="sap.m" id="__area0" rows="10" cols="120" 
+											placeholder="Enter Details of Customer Concern" 
+											value="{WarrantyClaim>CustomerConcern}"
+											editable="{WarrantyClaim>CanEdit}"
+										/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
@@ -24,6 +28,7 @@
 										<Label text="Symptom"/>
 										<ComboBox 
 											showSecondaryValues= "true"
+											editable="{WarrantyClaim>CanEdit}"
 											items="{
 												path: '/CatalogSet',
 												sorter: { path: 'Number' },

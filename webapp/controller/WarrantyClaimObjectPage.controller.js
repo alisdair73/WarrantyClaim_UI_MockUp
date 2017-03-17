@@ -5,8 +5,9 @@ sap.ui.define([
 		"WarrantyClaim_MockUp/controller/BaseController",
 		'sap/ui/model/json/JSONModel',
         "WarrantyClaim_MockUp/model/WarrantyClaim",
-        "sap/ui/model/Filter"
-	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter) {
+        "sap/ui/model/Filter",
+        "sap/ui/core/format/NumberFormat"
+	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, NumberFormat) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -47,9 +48,6 @@ sap.ui.define([
 			this.getModel("WarrantyClaim").setProperty("/ClaimType",claimType);
 			this.getModel("ViewHelper").setProperty("/claimTypeText", claimTypeDescription);
 			
-			this.getModel("ViewHelper").setProperty("/claimState", "None");
-			this.getModel("ViewHelper").setProperty("/claimStateText", "New Claim");
-			this.getModel("ViewHelper").setProperty("/claimStateIcon", "sap-icon://write-new-document");
 		
 //			jQuery.sap.require("sap.ui.core.format.DateFormat");
 //			var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd/MM/yyyy"});
@@ -87,6 +85,14 @@ sap.ui.define([
 					async: true
 				}
 			);
+		},
+		
+		onSubmit: function(){
+			this._executeAction("Submit");
+		},
+		
+		onValidate: function(){
+			this._executeAction("Validate");
 		},
 		
 		viewMyDealerships: function() {
@@ -153,6 +159,27 @@ sap.ui.define([
 				);
 		},
 		
+		_executeAction: function(actionName){
+			
+			this.getModel("ViewHelper").setProperty("/busy", true);
+			this.getOwnerComponent().getModel().callFunction(
+				"/ExecuteAction",
+				{ 
+					"method": "POST", 
+					"urlParameters" :	{	
+											"ActionName": actionName, 
+											"ClaimNumber": this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber") 
+										},
+					"success": function(oData, response) { 
+									this.getModel("ViewHelper").setProperty("/busy", false);
+					},
+					"error": function(oError){
+									this.getModel("ViewHelper").setProperty("/busy", false); 
+					}
+				}
+			); 
+		},
+		
 		_onSaveSuccess: function(result){
 			
 			var message = "";
@@ -164,12 +191,43 @@ sap.ui.define([
 			}
 			
 			MessageToast.show(message);
+			
+			//THIS NEEDS WORK ****
 			this.getView().getModel("WarrantyClaim").setProperty("/ClaimNumber",result.ClaimNumber);
-			this.getView().getModel("WarrantyClaim").setProperty("/OVTotal",result.OVTotal);
-			this.getView().getModel("WarrantyClaim").setProperty("/OCTotal",result.OCTotal);
-			this.getView().getModel("WarrantyClaim").setProperty("/ICTotal",result.ICTotal);
-			this.getView().getModel("WarrantyClaim").setProperty("/IVTotal",result.IVTotal);
+			this.getView().getModel("WarrantyClaim").setProperty("/OVTotal",parseFloat(result.OVTotal));
+			this.getView().getModel("WarrantyClaim").setProperty("/OCTotal",parseFloat(result.OCTotal));
+			this.getView().getModel("WarrantyClaim").setProperty("/ICTotal",parseFloat(result.ICTotal));
+			this.getView().getModel("WarrantyClaim").setProperty("/IVTotal",parseFloat(result.IVTotal));
 			this.getView().getModel("WarrantyClaim").setProperty("/TotalCostOfClaim",result.TotalCostOfClaim);
+			this.getView().getModel("WarrantyClaim").setProperty("/StatusDescription",result.StatusDescription);
+			this.getView().getModel("WarrantyClaim").setProperty("/StatusIcon",result.StatusIcon);
+			this.getView().getModel("WarrantyClaim").setProperty("/CanEdit",result.CanEdit);
+			this.getView().getModel("WarrantyClaim").setProperty("/VersionIdentifier",result.VersionIdentifier);
+			
+			var parts = [];
+			var labour = [];
+			var sublet = [];
+			
+			for (var i = 0; i < result.WarrantyClaimItems.results.length; i++) {
+				var warrantyClaimItem = result.WarrantyClaimItems.results[i];
+				switch(warrantyClaimItem.ItemType) {
+    				case "MAT":
+    					parts.push(warrantyClaimItem);
+				        break;
+				    case "FR":
+				   		labour.push(warrantyClaimItem);
+				   	  break;
+				   	case "SUBL":
+				   		sublet.push(warrantyClaimItem);
+			    	 break;
+				}
+			} 			
+			
+			this.getView().getModel("WarrantyClaim").setProperty("/Parts",parts);
+			this.getView().getModel("WarrantyClaim").setProperty("/Labour",labour);
+			this.getView().getModel("WarrantyClaim").setProperty("/Sublet",sublet);
+			//  ******
+			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
 		
@@ -222,7 +280,8 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = '2016110067';				
+			//claimNumber = '2016110067';	
+			claimNumber = '100000000621';
 				
 			var entityPath = "";
 			if (claimNumber){

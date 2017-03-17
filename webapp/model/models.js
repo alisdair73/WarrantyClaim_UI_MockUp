@@ -23,7 +23,9 @@ sap.ui.define([
 	            "PartRequested":"",
 	            "Description":"",
 	            "Invoice":"",
-	            "BusinessName":""
+	            "BusinessName":"",
+	            "Deleted":false,
+	            "ItemIdentifier":null
 			});
 		}
 	

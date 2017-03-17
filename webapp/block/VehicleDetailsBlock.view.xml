@@ -12,23 +12,23 @@
 								<l:content>
 								<l:VerticalLayout width="100%">
 									<Label text="Dealer Contact" labelFor="__input0"/>
-									<Input id="dealerContact" value="{WarrantyClaim>DealerContact}"/>
+									<Input id="dealerContact" value="{WarrantyClaim>DealerContact}" editable="{WarrantyClaim>CanEdit}"/>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="Engine Number"/>
-									<Input  id="engineNumber" value="{WarrantyClaim>EngineNumber}"/>
+									<Input  id="engineNumber" value="{WarrantyClaim>EngineNumber}" editable="{WarrantyClaim>CanEdit}"/>
 								</l:VerticalLayout>	
 								<l:VerticalLayout width="100%">
 									<Label text="PWA Number"/>
-									<Input  id="PWANumber" value="{WarrantyClaim>AuthorisationNumber}"/>
+									<Input  id="PWANumber" value="{WarrantyClaim>AuthorisationNumber}" editable="{WarrantyClaim>CanEdit}"/>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="VIN"/>
-									<Input  id="VIN" value="{WarrantyClaim>VIN}" editable="{= !${WarrantyClaim>ClaimNumber}}"/>
+									<Input  id="VIN" value="{WarrantyClaim>VIN}" editable="{WarrantyClaim>CanEdit}"/>
 								</l:VerticalLayout>					
 								<l:VerticalLayout width="100%">
 									<Label text="Recall Number"/>
-									<Input  id="recallNumber" value="{WarrantyClaim>RecallNumber}"/>
+									<Input  id="recallNumber" value="{WarrantyClaim>RecallNumber}" editable="{WarrantyClaim>CanEdit}"/>
 								</l:VerticalLayout>	
 								</l:content>
 							</l:Grid>

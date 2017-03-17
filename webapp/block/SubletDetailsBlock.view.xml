@@ -5,7 +5,7 @@
 			<Toolbar>
 				<Title text="Sublet Details" level="H2"/>
 				<ToolbarSpacer/>
-				<Button text="Add Sublet" icon="sap-icon://add" press="addSublet"/>
+				<Button text="Add Sublet" icon="sap-icon://add" press="addSublet" visible="{WarrantyClaim>/CanEdit}"/>
 			</Toolbar>
 		</headerToolbar>
 	    <items>
@@ -17,8 +17,8 @@
 	                <Text text="{WarrantyClaim>Quantity}" id="__text9"/>
 	                <Text text="{WarrantyClaim>Description}" id="__text6"/>
 	                <l:HorizontalLayout>
-	                	<Button icon="sap-icon://edit" press="editSublet"/>
-	                	<Button icon="sap-icon://delete" press="deleteSublet"/>
+	                	<Button icon="sap-icon://edit" press="editSublet" visible="{WarrantyClaim>/CanEdit}"/>
+	                	<Button icon="sap-icon://delete" press="deleteSublet" visible="{WarrantyClaim>/CanEdit}"/>
 	                </l:HorizontalLayout>
 	            </cells>
 	        </ColumnListItem>

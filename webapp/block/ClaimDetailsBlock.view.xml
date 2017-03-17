@@ -1,7 +1,6 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" 
 	xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.ClaimDetailsBlockController">
-	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" 
-		editable="true" id="__form0" objectBindings="{WarrantyClaim>/}">
+	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" id="__form0" objectBindings="{WarrantyClaim>/}">
 		<sap.ui.layout.form:layout>
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
 	    </sap.ui.layout.form:layout>	
@@ -14,48 +13,48 @@
 								<l:content>							
 									<l:VerticalLayout width="100%">
 										<Label text="Repair Order Number"/>
-										<Input id="repairOrderNumber" editable="true" value="{WarrantyClaim>RepairOrderNumber}"/>
+										<Input id="repairOrderNumber" value="{WarrantyClaim>RepairOrderNumber}" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Repair"/>
 										<DatePicker id="dateOfRepair" change="onChangeDatePicker"
-											displayFormat="medium" dateValue="{WarrantyClaim>DateOfRepair}" editable="{= !${WarrantyClaim>ClaimNumber}}"/>
+											displayFormat="medium" dateValue="{WarrantyClaim>DateOfRepair}" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Date of Failure"/>
 										<DatePicker id="dateOfFailure" change="onChangeDatePicker"
-											displayFormat="medium" dateValue="{WarrantyClaim>DateOfFailure}" editable="{= !${WarrantyClaim>ClaimNumber}}"/>
+											displayFormat="medium" dateValue="{WarrantyClaim>DateOfFailure}" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Failure KM"/>
-										<Input id="failureKM" value="{WarrantyClaim>FailureMeasure}"/>
+										<Input id="failureKM" value="{WarrantyClaim>FailureMeasure}" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Main Causal Part Number (MCPN)"/>
-										<Input id="MCPN" value="{}"/>
+										<Input id="MCPN" value="{}" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="MCPN Quantity"/>
-										<Input id="MCPNQuantity" value="FIRST ROW FROM OTHER PARTS"/>
+										<Input id="MCPNQuantity" value="FIRST ROW FROM OTHER PARTS" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>									
 									<l:VerticalLayout withd="100%">
 										<Label text="MIL ON"/>
 										<FlexBox>
 											<items>
-												<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{WarrantyClaim>MilIndicator}" select="onMILSelected"/>
-												<Input id="DTC1" width="95%" placeholder="DTC1" value="{WarrantyClaim>DTC1}" visible="{= ${MilIndicator} === true }"/>
-												<Input id="DTC2" width="95%" placeholder="DTC2" value="{WarrantyClaim>DTC2}" visible="{= ${MilIndicator} === true }"/>
-												<Input id="DTC3" placeholder="DTC3" value="{WarrantyClaim>DTC3}" visible="{= ${MilIndicator} === true }"/>
+												<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{WarrantyClaim>MilIndicator}" select="onMILSelected" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC1" width="95%" placeholder="DTC1" value="{WarrantyClaim>DTC1}" visible="{= ${MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC2" width="95%" placeholder="DTC2" value="{WarrantyClaim>DTC2}" visible="{= ${MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC3" placeholder="DTC3" value="{WarrantyClaim>DTC3}" visible="{= ${MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 											</items>
 										</FlexBox>
 									</l:VerticalLayout>									
 									<l:VerticalLayout width="100%">
 										<Label text="Technician"/>
-										<Input id="technician" value="{WarrantyClaim>Technician}"/>
+										<Input id="technician" value="{WarrantyClaim>Technician}" editable="{WarrantyClaim>CanEdit}" />
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Service Advisor"/>
-										<Input id="serviceAdvisor" value="{WarrantyClaim>ServiceAdvisor}"/>
+										<Input id="serviceAdvisor" value="{WarrantyClaim>ServiceAdvisor}" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>		
 								</l:content>	
 							</l:Grid>

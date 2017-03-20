@@ -6,8 +6,10 @@ sap.ui.define([
 		'sap/ui/model/json/JSONModel',
         "WarrantyClaim_MockUp/model/WarrantyClaim",
         "sap/ui/model/Filter",
-        "sap/ui/core/format/NumberFormat"
-	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, NumberFormat) {
+        "sap/ui/core/format/NumberFormat",
+        "sap/m/MessageStrip",
+        'sap/m/MessageBox'
+	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, NumberFormat, MessageStrip, MessageBox) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -73,26 +75,16 @@ sap.ui.define([
 			this._claimTypeSelection.close();
 		},
 		
-		onSave: function(){
-			this.getModel("ViewHelper").setProperty("/busy", true);
-			
-			var warrantyClaimModel = this.getOwnerComponent().getModel();
-
-			warrantyClaimModel.create("/WarrantyClaimSet",
-				WarrantyClaim.convertToODataForUpdate(), {
-					"success": this._onSaveSuccess.bind(this), 
-					"error": this._onSaveError.bind(this),
-					async: true
-				}
-			);
+		onDraft: function(){
+			this._doWarrantyAction("SaveWarranty");
 		},
 		
 		onSubmit: function(){
-			this._executeAction("Submit");
+			this._doWarrantyAction("SubmitWarranty");
 		},
 		
 		onValidate: function(){
-			this._executeAction("Validate");
+			this._doWarrantyAction("ValidateWarranty");
 		},
 		
 		viewMyDealerships: function() {
@@ -109,6 +101,23 @@ sap.ui.define([
 		
 		companyCodeSelected:function(event){
 			this._filterClaimType(event.getParameter("selectedItem").getBindingContext("SalesAreas").getObject().SalesOrg);
+		},
+		
+		_doWarrantyAction: function(actionName){
+			this.getModel("ViewHelper").setProperty("/busy", true);
+			this._clearHeaderMessages();
+			
+			var warrantyClaimModel = this.getOwnerComponent().getModel();
+
+			warrantyClaimModel.create("/WarrantyClaimSet",
+				WarrantyClaim.convertToODataForUpdate(), 
+				{
+					"success": this._onActionSuccess.bind(this), 
+					"error": this._onActionError.bind(this),
+					"headers" : { "warrantyaction": actionName },
+					async: true
+				}
+			);
 		},
 		
 		_buildSalesOrgList: function(oSalesAreas){
@@ -159,28 +168,72 @@ sap.ui.define([
 				);
 		},
 		
-		_executeAction: function(actionName){
+/*		_executeAction: function(actionName){
 			
 			this.getModel("ViewHelper").setProperty("/busy", true);
-			this.getOwnerComponent().getModel().callFunction(
+			
+			
+			this.getModel("ViewHelper").setProperty("/busy", false);
+			
+			
+			//Batch up "Create" and Function Call so function can be applied to current data
+			//In case of Validate, data is not saved. For Submit, if data is valid then
+			//the claim is saved...
+			
+			var warrantyClaimModel = this.getOwnerComponent().getModel();
+			
+			
+			warrantyClaimModel.create("/WarrantyClaimSet",
+				WarrantyClaim.convertToODataForUpdate(), {
+					"success": this._onSaveSuccess.bind(this), 
+					"error": this._onSaveError.bind(this),
+					"groupId":"Action",
+					"changeSetId":"Change1",
+					async: true
+					
+				}
+			);
+			
+			warrantyClaimModel.callFunction(
 				"/ExecuteAction",
 				{ 
 					"method": "POST", 
-					"urlParameters" :	{	
-											"ActionName": actionName, 
-											"ClaimNumber": this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber") 
-										},
+					"groupId":"Action",
+					"changeSetId":"Change1",
+					"urlParameters" :	
+						{	
+							"ActionName": actionName, 
+							"ClaimNumber": this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber") 
+						},
 					"success": function(oData, response) { 
 									this.getModel("ViewHelper").setProperty("/busy", false);
-					},
+									
+									
+									
+					}.bind(this),
 					"error": function(oError){
-									this.getModel("ViewHelper").setProperty("/busy", false); 
-					}
+						
+						switch (oError.statusCode){
+							case '500':
+								MessageBox.error("An Error has occurred while processing this claim.\n" +
+										"Please contact the Honda Help Desk on <###>."
+								);
+								break;
+							case '400':
+								break;
+						}
+
+						this.getModel("ViewHelper").setProperty("/busy", false); 
+					}.bind(this)
+					
 				}
 			); 
-		},
+			
+			warrantyClaimModel.submitChanges({"groupID": "Action"});
+			
+		}, */
 		
-		_onSaveSuccess: function(result){
+		_onActionSuccess: function(result){
 			
 			var message = "";
 			
@@ -190,48 +243,20 @@ sap.ui.define([
 				message = "Warranty Claim number " + result.ClaimNumber + " was created.";
 			}
 			
-			MessageToast.show(message);
-			
-			//THIS NEEDS WORK ****
-			this.getView().getModel("WarrantyClaim").setProperty("/ClaimNumber",result.ClaimNumber);
-			this.getView().getModel("WarrantyClaim").setProperty("/OVTotal",parseFloat(result.OVTotal));
-			this.getView().getModel("WarrantyClaim").setProperty("/OCTotal",parseFloat(result.OCTotal));
-			this.getView().getModel("WarrantyClaim").setProperty("/ICTotal",parseFloat(result.ICTotal));
-			this.getView().getModel("WarrantyClaim").setProperty("/IVTotal",parseFloat(result.IVTotal));
-			this.getView().getModel("WarrantyClaim").setProperty("/TotalCostOfClaim",result.TotalCostOfClaim);
-			this.getView().getModel("WarrantyClaim").setProperty("/StatusDescription",result.StatusDescription);
-			this.getView().getModel("WarrantyClaim").setProperty("/StatusIcon",result.StatusIcon);
-			this.getView().getModel("WarrantyClaim").setProperty("/CanEdit",result.CanEdit);
-			this.getView().getModel("WarrantyClaim").setProperty("/VersionIdentifier",result.VersionIdentifier);
-			
-			var parts = [];
-			var labour = [];
-			var sublet = [];
-			
-			for (var i = 0; i < result.WarrantyClaimItems.results.length; i++) {
-				var warrantyClaimItem = result.WarrantyClaimItems.results[i];
-				switch(warrantyClaimItem.ItemType) {
-    				case "MAT":
-    					parts.push(warrantyClaimItem);
-				        break;
-				    case "FR":
-				   		labour.push(warrantyClaimItem);
-				   	  break;
-				   	case "SUBL":
-				   		sublet.push(warrantyClaimItem);
-			    	 break;
-				}
-			} 			
-			
-			this.getView().getModel("WarrantyClaim").setProperty("/Parts",parts);
-			this.getView().getModel("WarrantyClaim").setProperty("/Labour",labour);
-			this.getView().getModel("WarrantyClaim").setProperty("/Sublet",sublet);
-			//  ******
-			
 			this.getModel("ViewHelper").setProperty("/busy", false);
+			MessageToast.show(message);
+			WarrantyClaim.updateWarrantyClaimFromJSONModel(result);
 		},
 		
-		_onSaveError: function(error){
+		_onActionError: function(error){
+			
+			switch(error.statusCode){
+				case "400":
+					var errorDetail = JSON.parse(error.responseText);
+					this._addMessagesToHeader(errorDetail.error.innererror.errordetails);
+					break;
+			}
+			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
 		
@@ -281,7 +306,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = '2016110067';	
-			claimNumber = '100000000621';
+			//claimNumber = '2016110353';
 				
 			var entityPath = "";
 			if (claimNumber){
@@ -351,6 +376,26 @@ sap.ui.define([
 			var oViewModel = this.getModel("ViewHelper");
 			// Binding the view will set it to not busy - so the view is always busy if it is not bound
 			oViewModel.setProperty("/busy", true);
+		},
+		
+		_clearHeaderMessages: function(){
+			this.getView().byId("messageArea").destroyContent();
+		},
+		
+		_addMessagesToHeader: function(messages){
+		
+			var messageArea = this.getView().byId("messageArea");
+			messageArea.destroyContent();
+			
+			for (var i = 0; i < messages.length; i++) {
+				var messageStrip = new MessageStrip("msgStrip" + i, {
+					text: messages[i].message,
+					showCloseButton: false,
+					showIcon: true,
+					type: "Error"
+				});
+				messageArea.addContent(messageStrip);
+			}
 		}
 	});
 });

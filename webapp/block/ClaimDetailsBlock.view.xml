@@ -42,9 +42,9 @@
 										<FlexBox>
 											<items>
 												<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{WarrantyClaim>MilIndicator}" select="onMILSelected" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC1" width="95%" placeholder="DTC1" value="{WarrantyClaim>DTC1}" visible="{= ${MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC2" width="95%" placeholder="DTC2" value="{WarrantyClaim>DTC2}" visible="{= ${MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC3" placeholder="DTC3" value="{WarrantyClaim>DTC3}" visible="{= ${MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC1" width="95%" placeholder="DTC1" value="{WarrantyClaim>DTC1}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC2" width="95%" placeholder="DTC2" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC3" placeholder="DTC3" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 											</items>
 										</FlexBox>
 									</l:VerticalLayout>									

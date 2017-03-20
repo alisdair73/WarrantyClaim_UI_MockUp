@@ -56,6 +56,51 @@ sap.ui.define([
 			return this.oDataModel;
 		},
 		
+		updateWarrantyClaimFromJSONModel: function(jsonModel){
+		
+			var formatOptions = {
+				minFractionDigits: 2,
+				maxFractionDigits: 2
+			};
+			var costFormat = NumberFormat.getFloatInstance(formatOptions);
+			
+			this.warrantyClaim.ClaimNumber = jsonModel.ClaimNumber;
+			this.warrantyClaim.OCTotal = parseFloat(jsonModel.OCTotal);
+			this.warrantyClaim.OVTotal = parseFloat(jsonModel.OVTotal);
+			this.warrantyClaim.ICTotal = parseFloat(jsonModel.ICTotal);
+			this.warrantyClaim.IVTotal = parseFloat(jsonModel.IVTotal);
+			this.warrantyClaim.TotalCostOfClaim = costFormat.format(jsonModel.TotalCostOfClaim);
+			this.warrantyClaim.StatusDescription = jsonModel.StatusDescription;
+			this.warrantyClaim.StatusIcon = jsonModel.StatusIcon;
+			this.warrantyClaim.CanEdit = jsonModel.CanEdit;
+			this.warrantyClaim.VersionIdentifier = jsonModel.VersionIdentifier;
+			this.warrantyClaim.CurrentVersionNumber = jsonModel.CurrentVersionNumber;
+			this.warrantyClaim.CurrentVersionCategory = jsonModel.CurrentVersionCategory;
+			
+			this.warrantyClaim.Parts = [];
+			this.warrantyClaim.Labour = [];
+			this.warrantyClaim.Sublet = [];
+
+            if(jsonModel.WarrantyClaimItems){
+				for (var i = 0; i < jsonModel.WarrantyClaimItems.results.length; i++) {
+					var warrantyClaimItem = jsonModel.WarrantyClaimItems.results[i];
+					switch(warrantyClaimItem.ItemType) {
+    					case "MAT":
+    						this.warrantyClaim.Parts.push(warrantyClaimItem);
+				        	break;
+				    	case "FR":
+				   			this.warrantyClaim.Labour.push(warrantyClaimItem);
+				   			break;
+				   		case "SUBL":
+				   			this.warrantyClaim.Sublet.push(warrantyClaimItem);
+			    			break;
+					}
+				}
+            }
+            
+            this.resetChanges();
+		},
+		
 		updateWarrantyClaimFromOdata: function(oServerOData) {
 			
 			var oSource = oServerOData.getSource ? oServerOData.getSource() : oServerOData;
@@ -101,6 +146,7 @@ sap.ui.define([
 			this.warrantyClaim.StatusDescription = oWarrantyClaim.StatusDescription;
 			this.warrantyClaim.StatusIcon = oWarrantyClaim.StatusIcon;
 			this.warrantyClaim.CanEdit = oWarrantyClaim.CanEdit;
+			this.warrantyClaim.VersionIdentifier = oWarrantyClaim.VersionIdentifier;
 			
 			var oWarrantyClaimItems = oODataModel.getObject(sPath + "/WarrantyClaimItems");
 			if (oWarrantyClaimItems){
@@ -149,6 +195,8 @@ sap.ui.define([
 			warrantyClaim.CustomerConcern = this.warrantyClaim.CustomerConcern;
 			warrantyClaim.SymptomCode = this.warrantyClaim.SymptomCode;
 			warrantyClaim.VersionIdentifier = this.warrantyClaim.VersionIdentifier;
+			warrantyClaim.CurrentVersionNumber = this.warrantyClaim.CurrentVersionNumber;
+			warrantyClaim.CurrentVersionCategory = this.warrantyClaim.CurrentVersionCategory;
 			
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
 				this.warrantyClaim.Parts[i].Quantity = this.warrantyClaim.Parts[i].Quantity.toString();

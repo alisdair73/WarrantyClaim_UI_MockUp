@@ -13,55 +13,40 @@
 							  objectImageURI="sap-icon://sales-quote"/>
 		</headerTitle>		
 		<headerContent>
-
-		
-					<layout:VerticalLayout>
-						<layout:layoutData>
-							<ObjectPageHeaderLayoutData width="30%" showSeparatorAfter="true" />
-						</layout:layoutData>					
-						<m:ObjectStatus text="{ViewHelper>/warrantyUI/dealerDescription}"/>
-						<m:ObjectAttribute title="Claim Number" text="{WarrantyClaim>/ClaimNumber}"/>
-						<m:ObjectAttribute title="Claim Type" text="{ViewHelper>/claimTypeText}"/>
-						<m:ObjectAttribute title="Submitted Date" text="{WarrantyClaim>/SubmittedOn}"/>
-					</layout:VerticalLayout>
-	
-					<layout:VerticalLayout>
-						<layout:layoutData>
-							<ObjectPageHeaderLayoutData width="40%"/>
-						</layout:layoutData>					
-						<m:ObjectStatus 
-							state="Success"
-							text="{WarrantyClaim>/StatusDescription}" 
-							icon="{WarrantyClaim>/StatusIcon}" 
-						/>
-						<m:ObjectNumber number="{WarrantyClaim>/TotalCostOfClaim}" unit="AUD" emphasized="true"/>
-					</layout:VerticalLayout>
-					<layout:VerticalLayout>
-						<layout:layoutData>
-							<ObjectPageHeaderLayoutData showSeparatorBefore="true" />
-						</layout:layoutData>					
-						<chart:ComparisonMicroChart size="M" >
-							<chart:data>
-								<chart:ComparisonMicroChartData title="Incoming Customer (IC)" value="{WarrantyClaim>/ICTotal}" color="Good"/>
-								<chart:ComparisonMicroChartData	title="Outgoing Vendor (OV)" value="{WarrantyClaim>/OVTotal}" color="Good"/>
-								<chart:ComparisonMicroChartData	title="Incoming Vendor (IV)" value="{WarrantyClaim>/IVTotal}" color="Good"/>
-								<chart:ComparisonMicroChartData	title="Outgoing Customer (OC)" value="{WarrantyClaim>/OCTotal}" color="Good"/>
-							</chart:data>
-						</chart:ComparisonMicroChart>
-					</layout:VerticalLayout>
-
-
-			<layout:VerticalLayout class="sapUiNoMargin" width="100%">
-				<layout:content>
-					<m:MessageStrip
-						text="Error with default icon and close button:"
-						type="Error"
-						showIcon="true"
-						showCloseButton="true"
-						class="sapUiMediumMarginBottom">
-					</m:MessageStrip>
-				</layout:content>
-			</layout:VerticalLayout>			
+			<layout:VerticalLayout>
+				<layout:layoutData>
+					<ObjectPageHeaderLayoutData width="30%" showSeparatorAfter="true" />
+				</layout:layoutData>					
+				<m:ObjectStatus text="{ViewHelper>/warrantyUI/dealerDescription}"/>
+				<m:ObjectAttribute title="Claim Number" text="{WarrantyClaim>/ClaimNumber}"/>
+				<m:ObjectAttribute title="Claim Type" text="{WarrantyClaim>/ClaimType}"/>
+				<m:ObjectAttribute title="Submitted Date" text="{WarrantyClaim>/SubmittedOn}"/>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout>
+				<layout:layoutData>
+					<ObjectPageHeaderLayoutData width="40%"/>
+				</layout:layoutData>					
+				<m:ObjectStatus 
+					state="Success"
+					text="{WarrantyClaim>/StatusDescription}" 
+					icon="{WarrantyClaim>/StatusIcon}" 
+				/>
+				<m:ObjectNumber number="{WarrantyClaim>/TotalCostOfClaim}" unit="AUD" emphasized="true"/>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout>
+				<layout:layoutData>
+					<ObjectPageHeaderLayoutData showSeparatorBefore="true" />
+				</layout:layoutData>					
+				<chart:ComparisonMicroChart size="M" >
+					<chart:data>
+						<chart:ComparisonMicroChartData title="Incoming Customer (IC)" value="{WarrantyClaim>/ICTotal}" color="Good"/>
+						<chart:ComparisonMicroChartData	title="Outgoing Vendor (OV)" value="{WarrantyClaim>/OVTotal}" color="Good"/>
+						<chart:ComparisonMicroChartData	title="Incoming Vendor (IV)" value="{WarrantyClaim>/IVTotal}" color="Good"/>
+						<chart:ComparisonMicroChartData	title="Outgoing Customer (OC)" value="{WarrantyClaim>/OCTotal}" color="Good"/>
+					</chart:data>
+				</chart:ComparisonMicroChart>
+			</layout:VerticalLayout>
+			<layout:VerticalLayout class="sapUiNoMargin" width="100%" id="messageArea"/>
 		</headerContent>
 		<sections>
 			<ObjectPageSection id="vehicleDetails" title="VEHICLE">
@@ -140,7 +125,7 @@
 		<footer>
 			<m:OverflowToolbar>
 				<m:ToolbarSpacer/>
-				<m:Button text="Save Draft" press="onSave"/>
+				<m:Button text="Save Draft" press="onDraft"/>
 				<m:Button text="Cancel" press="onCancel"/>
 				<m:Button text="Validate" press="onValidate"/>
 				<m:Button text="Submit" press="onSubmit" type="Emphasized"/>

@@ -1,6 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:vh="sap.ui.comp.valuehelpdialog">
 	<SelectDialog 
-		id="partsValueHelp"
 		noDataText="{i18n>noPartsFoundTableText}"	
 		title="{i18n>addItems}"
 		class="sapUiPopupWithPadding"

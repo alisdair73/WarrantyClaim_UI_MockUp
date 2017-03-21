@@ -25,6 +25,7 @@ sap.ui.define([
 	            "Invoice":"",
 	            "BusinessName":"",
 	            "Deleted":false,
+	            "isMCPN": false,
 	            "ItemIdentifier":null
 			});
 		}

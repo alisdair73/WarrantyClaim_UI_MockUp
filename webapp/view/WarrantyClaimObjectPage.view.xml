@@ -2,7 +2,7 @@
 			xmlns:m="sap.m" xmlns:claimBlocks="WarrantyClaim_MockUp.block" xmlns:layout="sap.ui.layout"
 			controllerName="WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage"
 			xmlns:chart="sap.suite.ui.microchart">
-	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" showFooter="true"
+	<ObjectPageLayout id="WarrantyClaimLayout" enableLazyLoading="false" showFooter="true"
 		showHeaderContent="true" busy="{ViewHelper>/busy}" busyIndicatorDelay="{ViewHelper>/delay}">
 		<headerTitle>
 			<ObjectPageHeader id="warrantyPageHeader"
@@ -19,8 +19,13 @@
 				</layout:layoutData>					
 				<m:ObjectStatus text="{ViewHelper>/warrantyUI/dealerDescription}"/>
 				<m:ObjectAttribute title="Claim Number" text="{WarrantyClaim>/ClaimNumber}"/>
-				<m:ObjectAttribute title="Claim Type" text="{WarrantyClaim>/ClaimType}"/>
-				<m:ObjectAttribute title="Submitted Date" text="{WarrantyClaim>/SubmittedOn}"/>
+				<m:ObjectAttribute title="Claim Type" text="{WarrantyClaim>/ClaimTypeDescription}"/>
+				<m:ObjectAttribute 
+					title="Submitted Date" 
+					text="{	path: 'WarrantyClaim>/SubmittedOn', 
+							type: 'sap.ui.model.type.Date'
+					}" 
+				/>
 			</layout:VerticalLayout>
 			<layout:VerticalLayout>
 				<layout:layoutData>
@@ -125,10 +130,10 @@
 		<footer>
 			<m:OverflowToolbar>
 				<m:ToolbarSpacer/>
-				<m:Button text="Save Draft" press="onDraft"/>
+				<m:Button text="Save Draft" press="onDraft" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button text="Cancel" press="onCancel"/>
-				<m:Button text="Validate" press="onValidate"/>
-				<m:Button text="Submit" press="onSubmit" type="Emphasized"/>
+				<m:Button text="Validate" press="onValidate" visible="{WarrantyClaim>/CanEdit}"/>
+				<m:Button text="Submit" press="onSubmit" type="Emphasized" visible="{WarrantyClaim>/CanEdit}"/>
 			</m:OverflowToolbar>
 		</footer>
     </ObjectPageLayout>

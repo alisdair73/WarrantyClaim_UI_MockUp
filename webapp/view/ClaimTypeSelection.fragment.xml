@@ -25,7 +25,7 @@
 								<sap.ui.layout.form:fields>
 									<List id="claimTypeList"
 			    						mode="SingleSelectMaster"
-			    						select="handleListSelect"
+			    						select="handleClaimTypeListSelect"
 										items="{
 											path: '/ClaimTypeSet',
 											sorter: { path: 'Description' }

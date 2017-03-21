@@ -13,6 +13,8 @@ sap.ui.define([
 			this.warrantyClaim = {
 				"ClaimNumber": "",
 				"ClaimType": "",
+				"ClaimTypeDescription": "",
+				"ClaimTypeGroup": "",
 				"Dealer":"",
 				"DealerContact": "",
 				"EngineNumber": "",
@@ -31,6 +33,11 @@ sap.ui.define([
 				"DTC3": "",
 				"Technician": "",
 				"ServiceAdvisor": "",
+				"OldSerialNumber":"",
+				"NewSerialNumber":"",
+				"PartsInstallDate": null,
+				"PartsInstallKm": "0",
+				"OriginalInvoiceNumber":"",
 				"DealerComments":"",
 				"DefectCode":"",
 				"CustomerConcern":"",
@@ -86,6 +93,9 @@ sap.ui.define([
 					var warrantyClaimItem = jsonModel.WarrantyClaimItems.results[i];
 					switch(warrantyClaimItem.ItemType) {
     					case "MAT":
+    						if(this.warrantyClaim.Parts.length === 0){
+    							warrantyClaimItem.isMCPN = true;
+    						}
     						this.warrantyClaim.Parts.push(warrantyClaimItem);
 				        	break;
 				    	case "FR":
@@ -116,6 +126,8 @@ sap.ui.define([
 
 			this.warrantyClaim.ClaimNumber = oWarrantyClaim.ClaimNumber;
 			this.warrantyClaim.ClaimType = oWarrantyClaim.ClaimType;
+			this.warrantyClaim.ClaimTypeDescription = oWarrantyClaim.ClaimTypeDescription;
+			this.warrantyClaim.ClaimTypeGroup = oWarrantyClaim.ClaimTypeGroup;
 			this.warrantyClaim.DealerContact = oWarrantyClaim.DealerContact;
 			this.warrantyClaim.EngineNumber = oWarrantyClaim.EngineNumber;
 			this.warrantyClaim.AuthorisationNumber = oWarrantyClaim.AuthorisationNumber;
@@ -124,6 +136,7 @@ sap.ui.define([
 			this.warrantyClaim.RepairOrderNumber = oWarrantyClaim.RepairOrderNumber;
 			this.warrantyClaim.TotalCostOfClaim = costFormat.format(oWarrantyClaim.TotalCostOfClaim);
 			this.warrantyClaim.ClaimCurrency = oWarrantyClaim.ClaimCurrency;
+			this.warrantyClaim.SubmittedOn = oWarrantyClaim.SubmittedOn;
 			this.warrantyClaim.DateOfRepair = oWarrantyClaim.DateOfRepair;
 			this.warrantyClaim.DateOfFailure = oWarrantyClaim.DateOfFailure;
 			this.warrantyClaim.FailureMeasure = oWarrantyClaim.FailureMeasure;
@@ -133,6 +146,11 @@ sap.ui.define([
 			this.warrantyClaim.DTC3 = oWarrantyClaim.DTC3;
 			this.warrantyClaim.Technician = oWarrantyClaim.Technician;
 			this.warrantyClaim.ServiceAdvisor = oWarrantyClaim.ServiceAdvisor;
+			this.warrantyClaim.OldSerialNumber = oWarrantyClaim.OldSerialNumber;
+			this.warrantyClaim.NewSerialNumber = oWarrantyClaim.NewSerialNumber;
+			this.warrantyClaim.PartsInstallDate = oWarrantyClaim.PartsInstallDate;
+			this.warrantyClaim.PartsInstallKm = oWarrantyClaim.PartsInstallKm;
+			this.warrantyClaim.OriginalInvoiceNumber = oWarrantyClaim.OriginalInvoiceNumber;
 			this.warrantyClaim.DealerComments = oWarrantyClaim.DealerComments;
 			this.warrantyClaim.DefectCode = oWarrantyClaim.DefectCode;
 			this.warrantyClaim.CustomerConcern = oWarrantyClaim.CustomerConcern;
@@ -154,6 +172,9 @@ sap.ui.define([
 					var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
 					switch(oWarrantyClaimItem.ItemType) {
     					case "MAT":
+    						if(this.warrantyClaim.Parts.length === 0){
+    							oWarrantyClaimItem.isMCPN = true;
+    						}
     						this.warrantyClaim.Parts.push(oWarrantyClaimItem);
 				        	break;
 				    	case "FR":
@@ -190,6 +211,11 @@ sap.ui.define([
 			warrantyClaim.DTC3 = this.warrantyClaim.DTC3;
 			warrantyClaim.Technician = this.warrantyClaim.Technician;
 			warrantyClaim.ServiceAdvisor = this.warrantyClaim.ServiceAdvisor;
+			warrantyClaim.OldSerialNumber = this.warrantyClaim.OldSerialNumber;
+			warrantyClaim.NewSerialNumber = this.warrantyClaim.NewSerialNumber;
+			warrantyClaim.PartsInstallDate = this.warrantyClaim.PartsInstallDate;
+			warrantyClaim.PartsInstallKm = this.warrantyClaim.PartsInstallKm;
+			warrantyClaim.OriginalInvoiceNumber = this.warrantyClaim.OriginalInvoiceNumber;
 			warrantyClaim.DealerComments = this.warrantyClaim.DealerComments;
 			warrantyClaim.DefectCode = this.warrantyClaim.DefectCode;
 			warrantyClaim.CustomerConcern = this.warrantyClaim.CustomerConcern;
@@ -198,17 +224,26 @@ sap.ui.define([
 			warrantyClaim.CurrentVersionNumber = this.warrantyClaim.CurrentVersionNumber;
 			warrantyClaim.CurrentVersionCategory = this.warrantyClaim.CurrentVersionCategory;
 			
+			var warrantyClaimItem = null;
+			
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
-				this.warrantyClaim.Parts[i].Quantity = this.warrantyClaim.Parts[i].Quantity.toString();
-				warrantyClaim.WarrantyClaimItems.push(this.warrantyClaim.Parts[i]);
+				warrantyClaimItem = this.warrantyClaim.Parts[i];
+				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
+				delete warrantyClaimItem.isMCPN;
+				
+				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 
 			for (var i = 0; i < this.warrantyClaim.Labour.length; i++) {
-				warrantyClaim.WarrantyClaimItems.push(this.warrantyClaim.Labour[i]);
+				warrantyClaimItem = this.warrantyClaim.Labour[i];
+				delete warrantyClaimItem.isMCPN;
+				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			
 			for (var i = 0; i < this.warrantyClaim.Sublet.length; i++) {
-				warrantyClaim.WarrantyClaimItems.push(this.warrantyClaim.Sublet[i]);
+				warrantyClaimItem = this.warrantyClaim.Sublet[i];
+				delete warrantyClaimItem.isMCPN;
+				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			return warrantyClaim;
 		},

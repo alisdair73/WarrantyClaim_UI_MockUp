@@ -15,21 +15,23 @@
 									<Input id="dealerContact" value="{WarrantyClaim>DealerContact}" editable="{WarrantyClaim>CanEdit}"/>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
-									<Label text="Engine Number"/>
-									<Input  id="engineNumber" value="{WarrantyClaim>EngineNumber}" editable="{WarrantyClaim>CanEdit}"/>
-								</l:VerticalLayout>	
-								<l:VerticalLayout width="100%">
-									<Label text="PWA Number"/>
-									<Input  id="PWANumber" value="{WarrantyClaim>AuthorisationNumber}" editable="{WarrantyClaim>CanEdit}"/>
+									<Label text="PWA Number" labelFor="PWANumber"/>
+									<Input id="PWANumber" value="{WarrantyClaim>AuthorisationNumber}" editable="{WarrantyClaim>CanEdit}"
+										required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"/>
 								</l:VerticalLayout>
+								<l:VerticalLayout width="100%">
+									<Label text="Recall Number" labelFor="recallNumber"/>
+									<Input  id="recallNumber" value="{WarrantyClaim>RecallNumber}" 
+										editable="{WarrantyClaim>CanEdit}" required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }"/>
+								</l:VerticalLayout>	
 								<l:VerticalLayout width="100%">
 									<Label text="VIN"/>
 									<Input  id="VIN" value="{WarrantyClaim>VIN}" editable="{WarrantyClaim>CanEdit}"/>
-								</l:VerticalLayout>					
-								<l:VerticalLayout width="100%">
-									<Label text="Recall Number"/>
-									<Input  id="recallNumber" value="{WarrantyClaim>RecallNumber}" editable="{WarrantyClaim>CanEdit}"/>
 								</l:VerticalLayout>	
+								<l:VerticalLayout width="100%">
+									<Label text="Engine Number"/>
+									<Input  id="engineNumber" value="{WarrantyClaim>EngineNumber}" editable="{WarrantyClaim>CanEdit}"/>
+								</l:VerticalLayout>
 								</l:content>
 							</l:Grid>
 						</sap.ui.layout.form:fields>

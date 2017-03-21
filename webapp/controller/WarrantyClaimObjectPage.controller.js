@@ -8,8 +8,10 @@ sap.ui.define([
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
         "sap/m/MessageStrip",
-        'sap/m/MessageBox'
-	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, NumberFormat, MessageStrip, MessageBox) {
+        "sap/m/MessageBox",
+        "sap/ui/core/ValueState"
+	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
+					NumberFormat, MessageStrip, MessageBox, ValueState) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -22,12 +24,19 @@ sap.ui.define([
 				"readOnly": false,
 				"warrantyUI": {
 					"dealerName":"",
-					"dealerDescription":""
+					"dealerDescription":"",
+					"MCPN":"",
+					"MCPNDescription":"",
+					"MCPNQty":0
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
 			
+			sap.ui.getCore().attachValidationError(function (oEvent) {
+            	oEvent.getParameter("element").setValueState(ValueState.Error);
+        	});
+        
 			//???
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
 			
@@ -42,28 +51,15 @@ sap.ui.define([
 			}
 		},
 		
-		handleListSelect: function(oEvent){
+		handleClaimTypeListSelect: function(oEvent){
 			
 			var claimType = oEvent.getParameter("listItem").getBindingContext().getObject().Code;
 			var claimTypeDescription = oEvent.getParameter("listItem").getBindingContext().getObject().Description;
+			var claimTypeGroup = oEvent.getParameter("listItem").getBindingContext().getObject().Group;
 			
 			this.getModel("WarrantyClaim").setProperty("/ClaimType",claimType);
-			this.getModel("ViewHelper").setProperty("/claimTypeText", claimTypeDescription);
-			
-		
-//			jQuery.sap.require("sap.ui.core.format.DateFormat");
-//			var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd/MM/yyyy"});
-		
-/*			var oContext = this.getModel().createEntry("/WarrantyClaimSet",
-				{ "properties": 
-					{	"ClaimType":claimType,
-//						"SubmittedOn": oDateFormat.format(new Date()),
-					 	"SubmittedOn": new Date(),
-						"TotalCostOfClaim" : "0"
-					}
-				} 
-			);	
-			this.getView().setBindingContext(oContext);*/
+			this.getModel("WarrantyClaim").setProperty("/ClaimTypeDescription", claimTypeDescription);
+			this.getModel("WarrantyClaim").setProperty("/ClaimTypeGroup", claimTypeGroup);
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 			this._claimTypeSelection.close();
@@ -112,7 +108,33 @@ sap.ui.define([
 			warrantyClaimModel.create("/WarrantyClaimSet",
 				WarrantyClaim.convertToODataForUpdate(), 
 				{
-					"success": this._onActionSuccess.bind(this), 
+					"success": function(result) {
+						
+						var successMessage = "";
+						
+						switch(actionName){
+							case "SaveWarranty":
+								if(this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber")){
+			  						successMessage = "Warranty Claim number " + result.ClaimNumber + " was updated.";
+								} else {
+									successMessage = "Warranty Claim number " + result.ClaimNumber + " was created.";
+								}
+								break;
+								
+							case "ValidateWarranty":
+								successMessage = "Warranty Claim was successfully validated.";
+								break;
+								
+							case "SubmitWarranty":
+								successMessage = "Warranty Claim number " + result.ClaimNumber + " was submitted.";
+								break;
+						}
+						
+						this.getModel("ViewHelper").setProperty("/busy", false);
+						MessageToast.show(successMessage);
+						WarrantyClaim.updateWarrantyClaimFromJSONModel(result);
+					}.bind(this), 
+					
 					"error": this._onActionError.bind(this),
 					"headers" : { "warrantyaction": actionName },
 					async: true
@@ -306,7 +328,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = '2016110067';	
-			//claimNumber = '2016110353';
+			claimNumber = '2016110370';
 				
 			var entityPath = "";
 			if (claimNumber){
@@ -396,6 +418,8 @@ sap.ui.define([
 				});
 				messageArea.addContent(messageStrip);
 			}
+			var objectLayout = this.getView().byId("WarrantyClaimLayout");
+			objectLayout.scrollToSection(this.getView().byId("vehicleDetails_sub1").getId(), 0, -200);
 		}
 	});
 });

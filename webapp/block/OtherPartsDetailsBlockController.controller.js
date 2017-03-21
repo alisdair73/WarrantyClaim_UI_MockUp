@@ -71,6 +71,8 @@ sap.ui.define([
 				var warrantyItem = Models.createNewWarrantyItem("MAT");
 				warrantyItem.setProperty("/PartNumber", item.PartNumber);
 				warrantyItem.setProperty("/Description", item.Description);
+				warrantyItem.setProperty("/isMCPN", warrantyItems.length === 0 ? true : false);
+				
 				warrantyItems.push(warrantyItem.getProperty("/"));
 			}
 

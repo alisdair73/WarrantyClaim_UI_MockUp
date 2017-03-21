@@ -1,6 +1,6 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core"
  xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController">
-	<Table items="{WarrantyClaim>/Parts}" id="partsTable">
+	<Table items="{WarrantyClaim>/Parts}" id="partsTable" >
 		<headerToolbar>
 			<Toolbar>
 				<Title text="Other Parts" level="H2"/>
@@ -10,15 +10,24 @@
 			</Toolbar>
 		</headerToolbar>
 	    <items>
-	        <ColumnListItem id="__item0">
+	        <ColumnListItem id="__item0" >
 	            <cells>
 	            	<Text text="{WarrantyClaim>PartNumber}"/>
-	                <Text text="{WarrantyClaim>Description}" id="__text6"/>
-	                <StepInput value="{WarrantyClaim>Quantity}" min="0" max="999" change="onChange" editable="{WarrantyClaim>/CanEdit}"/>
-	            
-	                <ComboBox id="partSelected" selectedKey="{WarrantyClaim>PartRequested}" editable="{WarrantyClaim>/CanEdit}">
+	                <Text text="{WarrantyClaim>Description}"/>
+	                <Input value="{
+									path: 'WarrantyClaim>Quantity',
+											type: 'sap.ui.model.type.Float',
+											formatOptions: {
+													minFractionDigits: 3,
+													maxFractionDigits: 3
+												}
+											}" 
+	                	editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>isMCPN} }"/>
+	          
+	                <ComboBox id="partSelected" selectedKey="{WarrantyClaim>PartRequested}" 
+	                	editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>isMCPN} }">
 	            	 <items>
-	            	 	<core:ListItem text="" key="" id="__item5"/>
+	            	 	<core:ListItem text="" key=""/>
 	            		<core:ListItem text="Part Requested 0" key="0" id="__item4"/>
 	            		<core:ListItem text="Part Requested 1" key="1" id="__item1"/>
 	            		<core:ListItem text="Part Requested 2" key="2" id="__item2"/>
@@ -27,8 +36,9 @@
 	               </ComboBox>
 	               
 	                <l:HorizontalLayout>
-	                	<Button icon="sap-icon://edit" press="editItem" visible="{WarrantyClaim>/CanEdit}"/>
-	                	<Button icon="sap-icon://delete" press="deleteItem" visible="{WarrantyClaim>/CanEdit}"/>
+	                	<core:Icon src="sap-icon://broken-link" visible="{= !!${WarrantyClaim>isMCPN} }" tooltip="Main Causal Part Number"/>
+	                	<Button icon="sap-icon://edit" press="editItem" visible="false"/>
+	                	<Button icon="sap-icon://delete" press="deleteItem" visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>isMCPN} }"/>
 	                </l:HorizontalLayout>
 	            </cells>
 	        </ColumnListItem>
@@ -57,5 +67,5 @@
 	        <Column id="__column4" width="7em" hAlign="End"/>
 	     </columns>
 	 </Table>
-	 <CheckBox text="Installed by dealer?" editable="{WarrantyClaim>/CanEdit}"/>
+	 <CheckBox text="Installed by dealer?" editable="{WarrantyClaim>/CanEdit}" visible="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' }"/>
 </mvc:View>

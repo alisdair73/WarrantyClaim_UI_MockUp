@@ -31,31 +31,83 @@
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="Main Causal Part Number (MCPN)"/>
-										<Input id="MCPN" value="{}" editable="{WarrantyClaim>CanEdit}"/>
+										<Input id="MCPN" value="{WarrantyClaim>/Parts/0/PartNumber}"	
+											editable="{WarrantyClaim>CanEdit}"
+											showValueHelp="true" valueHelpRequest="addMCPN"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="MCPN Quantity"/>
-										<Input id="MCPNQuantity" value="FIRST ROW FROM OTHER PARTS" editable="{WarrantyClaim>CanEdit}"/>
+										<Input id="MCPNQuantity"
+										value="{
+											path: 'WarrantyClaim>/Parts/0/Quantity',
+											type: 'sap.ui.model.type.Float',
+											formatOptions: {
+													minFractionDigits: 3,
+													maxFractionDigits: 3
+												}
+											}"
+										editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>									
-									<l:VerticalLayout withd="100%">
+									<l:VerticalLayout width="100%">
+										<l:layoutData>
+											<l:GridData span="L12"/>
+										</l:layoutData>
 										<Label text="MIL ON"/>
 										<FlexBox>
 											<items>
 												<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{WarrantyClaim>MilIndicator}" select="onMILSelected" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC1" width="95%" placeholder="DTC1" value="{WarrantyClaim>DTC1}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC2" width="95%" placeholder="DTC2" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC3" placeholder="DTC3" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC1" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC1' : '' }" value="{WarrantyClaim>DTC1}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC2" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC2' : '' }" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+												<Input id="DTC3" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC3' : '' }" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 											</items>
 										</FlexBox>
-									</l:VerticalLayout>									
+									</l:VerticalLayout>
+						
+									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }">
+										<Label text="Part Install Date" labelFor="partInstallDate"/>
+										<Input id="partInstallDate" value="{WarrantyClaim>PartsInstallDate}" 
+											editable="{WarrantyClaim>CanEdit}" required="true"/>
+									</l:VerticalLayout>
+									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }">
+										<Label text="Part Install KM" labelFor="partInstallKM"/>
+										<Input id="partInstallKM" value="{WarrantyClaim>PartsInstallKM}" 
+											editable="{WarrantyClaim>CanEdit}" required="true"/>
+									</l:VerticalLayout>
+									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }">
+										<Label text="Original Invoice Number" labelFor="originalInvoiceNo"/>
+										<Input id="originalInvoiceNo" value="{WarrantyClaim>OriginalInvoiceNumber}" 
+											editable="{WarrantyClaim>CanEdit}" required="true"/>
+									</l:VerticalLayout>	
+					
+									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }">
+										<l:layoutData>
+											<l:GridData span="L6"/>
+										</l:layoutData>
+										<Label text="Old Serial Number"/>
+										<Input id="oldSerialNumber" value="{WarrantyClaim>OldSerialNumber}" editable="{WarrantyClaim>CanEdit}"/>
+									</l:VerticalLayout>
+									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }">
+										<l:layoutData>
+											<l:GridData span="L6"/>
+										</l:layoutData>
+										<Label text="New Serial Number"/>
+										<Input id="newSerialNumber" value="{WarrantyClaim>NewSerialNumber}" editable="{WarrantyClaim>CanEdit}"/>
+									</l:VerticalLayout>
+									
 									<l:VerticalLayout width="100%">
+										<l:layoutData>
+											<l:GridData span="L6"/>
+										</l:layoutData>
 										<Label text="Technician"/>
 										<Input id="technician" value="{WarrantyClaim>Technician}" editable="{WarrantyClaim>CanEdit}" />
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
+										<l:layoutData>
+											<l:GridData span="L6"/>
+										</l:layoutData>
 										<Label text="Service Advisor"/>
 										<Input id="serviceAdvisor" value="{WarrantyClaim>ServiceAdvisor}" editable="{WarrantyClaim>CanEdit}"/>
-									</l:VerticalLayout>		
+									</l:VerticalLayout>	
 								</l:content>	
 							</l:Grid>
 						</sap.ui.layout.form:fields>

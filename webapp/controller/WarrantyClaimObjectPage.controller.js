@@ -32,11 +32,7 @@ sap.ui.define([
 			});
 			this.setModel(oViewModel, "ViewHelper");
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
-			
-			sap.ui.getCore().attachValidationError(function (oEvent) {
-            	oEvent.getParameter("element").setValueState(ValueState.Error);
-        	});
-        
+
 			//???
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
 			

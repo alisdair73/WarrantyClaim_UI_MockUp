@@ -14,7 +14,9 @@
 	            <cells>
 	            	<Text text="{WarrantyClaim>PartNumber}"/>
 	                <Text text="{WarrantyClaim>Description}"/>
-	                <Input value="{
+	                <Input
+	                	type="Number"
+	                	value="{
 									path: 'WarrantyClaim>Quantity',
 											type: 'sap.ui.model.type.Float',
 											formatOptions: {

@@ -37,7 +37,7 @@
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<Label text="MCPN Quantity"/>
-										<Input id="MCPNQuantity"
+										<Input id="MCPNQuantity" type="Number"
 										value="{
 											path: 'WarrantyClaim>/Parts/0/Quantity',
 											type: 'sap.ui.model.type.Float',

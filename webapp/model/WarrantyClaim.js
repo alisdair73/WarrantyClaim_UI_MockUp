@@ -155,6 +155,8 @@ sap.ui.define([
 			this.warrantyClaim.DefectCode = oWarrantyClaim.DefectCode;
 			this.warrantyClaim.CustomerConcern = oWarrantyClaim.CustomerConcern;
 			this.warrantyClaim.SymptomCode = oWarrantyClaim.SymptomCode;
+			this.warrantyClaim.AssessmentComments = oWarrantyClaim.AssessmentComments;
+			this.warrantyClaim.AssessmentResults = oWarrantyClaim.AssessmentResults;
 			this.warrantyClaim.CurrentVersionNumber = oWarrantyClaim.CurrentVersionNumber;
 			this.warrantyClaim.CurrentVersionCategory = oWarrantyClaim.CurrentVersionCategory;
 			this.warrantyClaim.OCTotal = parseFloat(oWarrantyClaim.OCTotal);

@@ -1,6 +1,24 @@
 {
   "run": [
     {
+      "filePath": "/webapp/CurrentUI5_Index.html",
+      "previewMode": 1,
+      "dataMode": 1,
+      "workspace": "withoutWorkspace",
+      "ui5ActiveVersion": null,
+      "ui5VerSource": null,
+      "isDefaultVersion": 0,
+      "urlParameters": [],
+      "hashParameter": "",
+      "backendSystem": [],
+      "_metadata": {
+        "id": 3504337,
+        "runnerId": "webapprunner",
+        "displayName": "Current UI5 from CDN",
+        "lastRunTimeStamp": 1490188811664
+      }
+    },
+    {
       "filePath": "/webapp/Component.js",
       "previewMode": 1,
       "dataMode": 1,
@@ -16,25 +34,30 @@
         "id": 648048,
         "runnerId": "fiorirunner",
         "displayName": "Run Component.js",
-        "lastRunTimeStamp": 1490077990943
+        "lastRunTimeStamp": 1490178347927
       }
     },
     {
       "filePath": "/webapp/index.html",
-      "previewMode": 0,
-      "dataMode": 0,
+      "previewMode": 1,
+      "dataMode": 1,
       "workspace": "withoutWorkspace",
       "ui5ActiveVersion": null,
       "ui5VerSource": null,
       "isDefaultVersion": 0,
-      "urlParameters": [],
+      "urlParameters": [
+        {
+          "paramName": "",
+          "paramValue": ""
+        }
+      ],
       "hashParameter": "",
       "backendSystem": [],
       "_metadata": {
         "id": 9335140,
         "runnerId": "webapprunner",
         "displayName": "Run index.html",
-        "lastRunTimeStamp": 1490077733943
+        "lastRunTimeStamp": 1490145114923
       }
     },
     {

@@ -1,21 +1,9 @@
-<core:FragmentDefinition xmlns:m="sap.m" xmlns:core="sap.ui.core" xmlns="sap.ui.table">
-	<m:Dialog title="Symptom Codes">
-		<m:content>
-			<TreeTable
-				id="symptomCodes"
-        		rows="{path:'SymptomCodes>/SymptomCodes', parameters: {arrayNames:['children']}}"
-        		selectionMode="Single"
-        		cellClick="symptomCodeSelected"
-        		enableSelectAll="false"
-        		ariaLabelledBy="title">
-        		<columns>
-        			<Column>
-            			<template>
-                			<m:Text text="{SymptomCodes>Name}"/>
-                		</template>
-            		</Column>
-        		</columns>
-			</TreeTable>
-		</m:content>
-	</m:Dialog>
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="Symptom Codes">
+		<content>
+ 			<Tree id="Tree" items="{path: 'SymptomCodes>/'}">
+       			<StandardTreeItem title="{SymptomCodes>text}"/>
+       		</Tree>
+		</content>
+	</Dialog>
 </core:FragmentDefinition>

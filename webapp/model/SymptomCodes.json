@@ -1,13 +1,12 @@
-{ "SymptomCodes" :
 [
 	{
 		"Code": "01",
 		"Name": "Engine",
-		"children": [
+		"nodes": [
 			{
 				"Code": "01-01",
 				"Name": "Idling",
-				"children": [
+				"nodes": [
 					{
 						"Code": "01-01-09103",
 						"Name": "Unstable Idling"	
@@ -28,4 +27,4 @@
 			}
 		]
 	}
-]}
+]

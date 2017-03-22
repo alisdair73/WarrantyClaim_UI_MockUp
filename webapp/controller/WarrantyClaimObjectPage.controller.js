@@ -8,10 +8,9 @@ sap.ui.define([
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
         "sap/m/MessageStrip",
-        "sap/m/MessageBox",
-        "sap/ui/core/ValueState"
+        "sap/m/MessageBox"
 	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
-					NumberFormat, MessageStrip, MessageBox, ValueState) {
+					NumberFormat, MessageStrip, MessageBox) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -24,10 +23,7 @@ sap.ui.define([
 				"readOnly": false,
 				"warrantyUI": {
 					"dealerName":"",
-					"dealerDescription":"",
-					"MCPN":"",
-					"MCPNDescription":"",
-					"MCPNQty":0
+					"dealerDescription":""
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
@@ -324,7 +320,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = '2016110067';	
-			claimNumber = '2016110370';
+			//claimNumber = '2016110370';
 				
 			var entityPath = "";
 			if (claimNumber){

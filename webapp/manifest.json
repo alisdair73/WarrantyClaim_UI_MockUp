@@ -23,7 +23,9 @@
 				"settings": {
 					"odataVersion": "2.0",
 					"localUri": "localService/ZWTY_WARRANTY_CLAIMS_SRV/metadata.xml",
-					"annotations": ["annotation0"]
+					"annotations": [
+						"annotation0"
+					]
 				}
 			},
 			"annotation0": {
@@ -51,13 +53,17 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": ["sap_hcb", "sap_bluecrystal", "sap_belize"]
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_bluecrystal",
+			"sap_belize"
+		]
 	},
 	"sap.ui5": {
 		"_version": "1.1.0",
 		"rootView": "WarrantyClaim_MockUp.view.App",
 		"dependencies": {
-			"minUI5Version": "1.30.0",
+			"minUI5Version": "1.40.0",
 			"libs": {
 				"sap.ui.core": {},
 				"sap.m": {},
@@ -88,9 +94,11 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"routing": {
 			"config": {
@@ -100,15 +108,22 @@
 				"controlAggregation": "pages",
 				"viewLevel": 1
 			},
-			"routes": [{
-				"name": "createWarranty",
-				"pattern": "",
-				"target": ["warrantyMain"]
-			}, {
-				"name": "maintainWarranty",
-				"pattern": "Claim/{warrantyClaimNumber}",
-				"target": ["warrantyMain"]
-			}],
+			"routes": [
+				{
+					"name": "createWarranty",
+					"pattern": "",
+					"target": [
+						"warrantyMain"
+					]
+				},
+				{
+					"name": "maintainWarranty",
+					"pattern": "Claim/{warrantyClaimNumber}",
+					"target": [
+						"warrantyMain"
+					]
+				}
+			],
 			"targets": {
 				"warrantyMain": {
 					"viewName": "WarrantyClaimObjectPage",

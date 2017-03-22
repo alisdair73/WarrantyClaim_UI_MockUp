@@ -8,8 +8,8 @@ sap.ui.define([
  	return Controller.extend("WarrantyClaim_MockUp.controller.SymptomCodeSelector", {
  		
  		onInit : function (evt) {
-			var modulePath = jQuery.sap.getModulePath("WarrantyClaim_MockUp");
-			var oSymptomCodesModel = new JSONModel(modulePath + "/model/SymptomCodes.json");
+			 var modulePath = jQuery.sap.getModulePath("WarrantyClaim_MockUp");
+			 var oSymptomCodesModel = new JSONModel(modulePath + "/model/SymptomCodes.json");
             this.getView().setModel(oSymptomCodesModel,"SymptomCodes");
 		}
 		

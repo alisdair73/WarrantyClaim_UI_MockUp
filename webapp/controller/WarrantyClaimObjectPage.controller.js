@@ -1,9 +1,9 @@
 sap.ui.define([
-		'jquery.sap.global',
-		'sap/m/MessageToast',
-		'sap/ui/core/Fragment',
+		"jquery.sap.global",
+		"sap/m/MessageToast",
+		"sap/ui/core/Fragment",
 		"WarrantyClaim_MockUp/controller/BaseController",
-		'sap/ui/model/json/JSONModel',
+		"sap/ui/model/json/JSONModel",
         "WarrantyClaim_MockUp/model/WarrantyClaim",
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
@@ -26,7 +26,8 @@ sap.ui.define([
 					"dealerName":"",
 					"dealerDescription":"",
 					"symptomCodeDescription":"",
-					"defectCodeDescription":""
+					"defectCodeDescription":"",
+					"subletCodeDescription":""
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");

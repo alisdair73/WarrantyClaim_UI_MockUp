@@ -7,19 +7,10 @@
 		            	<sap.ui.layout.form:formElements>
 		                	<sap.ui.layout.form:FormElement label="Sublet">
 		                    	<sap.ui.layout.form:fields>
-		                    		<ComboBox 
-										showSecondaryValues= "true"
-										items="{
-											path: '/CatalogSet',
-											sorter: { path: 'Number' },
-											filters : [
-            									{ path : 'Code', operator : 'EQ', value1 : 'WTY3'}
-        									]
-										}"
-										selectedKey="{SubletItem>ItemKey}"
-										selectionChange="subletCodeSelected">
-										<core:ListItem key="{Number}" text="{Text}" additionalText = "[{Number}]"/>
-									</ComboBox>		
+									<Input width="auto" showValueHelp="true" value="{SubletItem>ItemKey}"
+											description="{ViewHelper>/warrantyUI/SubletCodeDescription}" 
+											valueHelpOnly="true" valueHelpRequest="showSubletSelector"
+									/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
 		                	<sap.ui.layout.form:FormElement label="Invoice">

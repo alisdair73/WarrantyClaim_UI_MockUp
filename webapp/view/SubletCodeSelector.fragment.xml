@@ -1,0 +1,13 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="Sublet Code Selection">
+		<content>
+ 			<Tree id="subletCodesTree" items="{path: 'SubletCodes>/'}" mode="SingleSelectMaster"
+ 				noDataText="Loading Sublet Catalog Items..." selectionChange="subletCodeSelected">
+       			<StandardTreeItem title="{SubletCodes>text}"/>
+       		</Tree>
+		</content>
+		<buttons>
+			<Button text="Cancel" press="handleCancel" icon="sap-icon://sys-cancel"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

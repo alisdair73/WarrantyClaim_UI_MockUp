@@ -1,11 +1,34 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
-	'sap/ui/model/json/JSONModel',
-	"WarrantyClaim_MockUp/model/models"
-], function(Controller, JSONModel, Models) {
+	"WarrantyClaim_MockUp/controller/BaseController",
+	"WarrantyClaim_MockUp/model/models",
+	"sap/ui/model/json/JSONModel"
+], function(BaseController, Models, JSONModel) {
 	"use strict";
 
-	return Controller.extend("WarrantyClaim_MockUp.block.SubletDetailsBlockController", {
+	return BaseController.extend("WarrantyClaim_MockUp.block.SubletDetailsBlockController", {
+
+		showSubletSelector: function(){
+			if (! this._subletSelector) {
+				this._subletSelector = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.SubletCodeSelector", this);
+				this.getView().addDependent(this._subletSelector);
+				this.readCatalog("WTY3","SubletCodes");
+			} 
+			this._subletSelector.open(); 
+    	},
+    
+    	handleCancel: function(){
+    		this._subletSelector.close(); 
+    	},
+    
+    	subletCodeSelected: function(evt){
+    	
+    		var path = evt.getParameter("listItem").getBindingContext("SubletCodes").getPath();
+    		var sublet = this.getModel("SubletCodes").getProperty(path);
+    		this.getModel("SubletItem").setProperty("/ItemKey",sublet.code);
+    		this.getModel("ViewHelper").setProperty("/warrantyUI/SubletCodeDescription", sublet.text);
+
+			this._subletSelector.close();
+    	},
 
     	addSublet: function(){
     		
@@ -54,12 +77,7 @@ sap.ui.define([
 			sublets.splice(itemIndex, 1);
 			this.getView().getModel("WarrantyClaim").setProperty("/Sublet", sublets);
 
-		},	
-		
-    	subletCodeSelected:function(event){
-			var sublet = this.getView().getModel("SubletItem");
-			sublet.setProperty("/Description", event.getParameter("selectedItem").getProperty("text"));
-    	},
+		},
     	
     	handleOK: function(){
     	

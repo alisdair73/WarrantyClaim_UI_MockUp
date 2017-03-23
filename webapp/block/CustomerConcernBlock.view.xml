@@ -26,7 +26,9 @@
 											<l:GridData span="L4"/>
 										</l:layoutData>										
 										<Label text="Symptom"/>
-										<Input width="100%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest="showSymptomsSelector"/>
+										<Input width="auto" showValueHelp="true" value="{WarrantyClaim>SymptomCode}"
+											description="{ViewHelper>/warrantyUI/SymptomCodeDescription}" 
+											valueHelpOnly="true" valueHelpRequest="showSymptomsSelector"/>
 									</l:VerticalLayout>
 								</l:content>	
 							</l:Grid>

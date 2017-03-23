@@ -1,9 +1,13 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<Dialog title="Symptom Codes">
 		<content>
- 			<Tree id="Tree" items="{path: 'SymptomCodes>/'}">
+ 			<Tree id="symptomCodesTree" items="{path: 'SymptomCodes>/'}" mode="SingleSelectMaster"
+ 				noDataText="Loading Symptom Catalog Items..." selectionChange="symptomCodeSelected">
        			<StandardTreeItem title="{SymptomCodes>text}"/>
        		</Tree>
 		</content>
+		<buttons>
+			<Button text="Cancel" press="handleCancel" icon="sap-icon://sys-cancel"/>
+		</buttons>
 	</Dialog>
 </core:FragmentDefinition>

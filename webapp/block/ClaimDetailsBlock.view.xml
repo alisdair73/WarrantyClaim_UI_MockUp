@@ -1,4 +1,4 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" 
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
 	xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.ClaimDetailsBlockController">
 	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" id="__form0" objectBindings="{WarrantyClaim>/}">
 		<sap.ui.layout.form:layout>
@@ -62,7 +62,6 @@
 											</items>
 										</FlexBox>
 									</l:VerticalLayout>
-						
 									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }">
 										<Label text="Part Install Date" labelFor="partInstallDate"/>
 										<Input id="partInstallDate" value="{WarrantyClaim>PartsInstallDate}" 
@@ -78,7 +77,6 @@
 										<Input id="originalInvoiceNo" value="{WarrantyClaim>OriginalInvoiceNumber}" 
 											editable="{WarrantyClaim>CanEdit}" required="true"/>
 									</l:VerticalLayout>	
-					
 									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }">
 										<l:layoutData>
 											<l:GridData span="L6"/>
@@ -93,20 +91,37 @@
 										<Label text="New Serial Number"/>
 										<Input id="newSerialNumber" value="{WarrantyClaim>NewSerialNumber}" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>
-									
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
 											<l:GridData span="L6"/>
 										</l:layoutData>
-										<Label text="Technician"/>
-										<Input id="technician" value="{WarrantyClaim>Technician}" editable="{WarrantyClaim>CanEdit}" />
+										<Label text="Technician"/>									
+										<ComboBox width="100%"
+											showSecondaryValues= "true"
+											editable="{WarrantyClaim>CanEdit}"
+											items="{
+												path: '/EmployeeSet',
+												sorter: { path: 'LastName' }
+											}"
+											selectedKey="{WarrantyClaim>Technician}">
+											<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
+										</ComboBox>	
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
 											<l:GridData span="L6"/>
 										</l:layoutData>
 										<Label text="Service Advisor"/>
-										<Input id="serviceAdvisor" value="{WarrantyClaim>ServiceAdvisor}" editable="{WarrantyClaim>CanEdit}"/>
+										<ComboBox width="100%"
+											showSecondaryValues= "true"
+											editable="{WarrantyClaim>CanEdit}"
+											items="{
+												path: '/EmployeeSet',
+												sorter: { path: 'LastName' }
+											}"
+											selectedKey="{WarrantyClaim>ServiceAdvisor}">
+											<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
+										</ComboBox>	
 									</l:VerticalLayout>	
 								</l:content>	
 							</l:Grid>

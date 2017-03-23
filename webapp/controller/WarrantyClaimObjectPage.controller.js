@@ -22,8 +22,11 @@ sap.ui.define([
 				"delay": 0,
 				"readOnly": false,
 				"warrantyUI": {
+					"dealerNumber":"",
 					"dealerName":"",
-					"dealerDescription":""
+					"dealerDescription":"",
+					"symptomCodeDescription":"",
+					"defectCodeDescription":""
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
@@ -291,6 +294,7 @@ sap.ui.define([
 							if (!oData.results.length) {
 								this._showNoDealershipDialog();
 							} else {
+								this.getModel("ViewHelper").setProperty("/warrantyUI/dealerNumber", oData.results[0].dealer);
 								var dealerDescription = oData.results[0].dealerName + ", " + oData.results[0].description;
 								this.getModel("ViewHelper").setProperty("/warrantyUI/dealerDescription", dealerDescription);
 								this._openWarrantyMaintenance();

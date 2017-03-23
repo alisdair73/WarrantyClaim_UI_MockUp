@@ -1,7 +1,8 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
+	'sap/ui/model/json/JSONModel',
 	"sap/ui/core/format/DateFormat"
-], function(Controller, DateFormat) {
+], function(Controller, JSONModel, DateFormat) {
 	"use strict";
 
 	return Controller.extend("hnd.otc.ordercreate.controller.BaseController", {
@@ -76,6 +77,22 @@ sap.ui.define([
 					shellHash: "#"
 				}
 			});
+		},
+		
+		readCatalog: function(catalogCode, catalogModelName){
+			this.getView().getModel().read(
+				"/JSONFeedCollection('" + catalogCode + "')/$value",
+				{
+					success: function(JSONData){
+						var catalogModel = new JSONModel(JSON.parse(JSONData));
+						this.getView().setModel(catalogModel,catalogModelName);
+						this.getModel("ViewHelper").setProperty("/busy", false);
+					}.bind(this),
+					error: function(error){
+						this.getModel("ViewHelper").setProperty("/busy", false);
+					}
+				}
+			);
 		}
 	});
 });

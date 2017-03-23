@@ -1,5 +1,5 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-	xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.CustomerConcernBlockController">
+	xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.DealerCommentsBlockController">
 	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form0" objectBindings="{WarrantyClaim>/}">
 		<sap.ui.layout.form:layout>
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
@@ -25,20 +25,10 @@
 											<l:GridData span="L4"/>
 										</l:layoutData>										
 										<Label text="Defect"/>
-										<ComboBox 
-											showSecondaryValues= "true"
-											editable="{WarrantyClaim>CanEdit}"
-											items="{
-												path: '/CatalogSet',
-												sorter: { path: 'Number' },
-												filters : [
-            										{ path : 'Code', operator : 'EQ', value1 : 'ZDEF1'}
-        										]
-											}"
-											selectedKey="{WarrantyClaim>DefectCode}">
-											<core:ListItem key="{Number}" text="{Text}" additionalText = "[{Number}]"/>
-										</ComboBox>	
-									</l:VerticalLayout>
+										<Input width="auto" showValueHelp="true" value="{WarrantyClaim>DefectCode}"
+											description="{ViewHelper>/warrantyUI/DefectCodeDescription}" 
+											valueHelpOnly="true" valueHelpRequest="showDefectSelector"/>
+									</l:VerticalLayout>									
 								</l:content>	
 							</l:Grid>
 						</sap.ui.layout.form:fields>

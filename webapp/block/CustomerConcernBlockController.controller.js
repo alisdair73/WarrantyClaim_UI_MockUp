@@ -1,52 +1,35 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
-	'sap/ui/model/json/JSONModel'
-], function(Controller, JSONModel) {
+	"WarrantyClaim_MockUp/controller/BaseController"
+], function(BaseController) {
 	"use strict";
 
-	return Controller.extend("WarrantyClaim_MockUp.block.CustomerConcernBlockController", {
-
-		onInit: function(){
-		},
-
+	return BaseController.extend("WarrantyClaim_MockUp.block.CustomerConcernBlockController", {
 
     showSymptomsSelector: function(){
     	
-		if (! this._oSymptomsSelector) {
-			this._oSymptomsSelector = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.SymptomCodeSelector", this);
-			
-			//Load the Symptom Catalog from the backend
-			this.getView().getModel().read(
-				"/JSONFeedCollection('ZSYM1')/$value",
-				{
-					success: function(JSONData){
-						var oSymptomCodesModel = new JSONModel(JSON.parse(JSONData));
-						
-						this._oSymptomsSelector.setModel(oSymptomCodesModel,"SymptomCodes");
-					}.bind(this),
-					error: function(error){
-						
-					}
-				}
-			);			
+    	
+		if (! this._symptomSelector) {
+			this._symptomSelector = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.SymptomCodeSelector", this);
+			this.getView().addDependent(this._symptomSelector);
+			this.getModel("ViewHelper").setProperty("/busy", true);
+			this.readCatalog("ZSYM1","SymptomCodes");
 		} 
-		
-		this._oSymptomsSelector.open(); 
-		
-/*		var modulePath = jQuery.sap.getModulePath("WarrantyClaim_MockUp");
-		var oSymptomCodesModel = new JSONModel(modulePath + "/model/SymptomCodes.json");*/
-    }
+		this._symptomSelector.open(); 
+    },
     
- /*   symptomCodeSelected: function(evt){
+    handleCancel: function(){
+    	this._symptomSelector.close(); 
+    },
+    
+    symptomCodeSelected: function(evt){
     	
-    	if(evt.getParameter("cellControl").getBindingContext("SymptomCodes")){
-    		theToaster.show("You have chosen " + 
-				evt.getParameter("cellControl").getBindingContext("SymptomCodes").getObject().Name +
-				"(" + evt.getParameter("cellControl").getBindingContext("SymptomCodes").getObject().Code + ")" );	
-    	}
-    	
-		this._oSymptomsSelector.close();
-    }*/
+    	var path = evt.getParameter("listItem").getBindingContext("SymptomCodes").getPath();
+    	var symptom = this.getView().getModel("SymptomCodes").getProperty(path);
+    	this.getModel("WarrantyClaim").setProperty("/SymptomCode",symptom.code);
+    	this.getModel("ViewHelper").setProperty("/warrantyUI/SymptomCodeDescription", symptom.text);
+
+		this._symptomSelector.close();
+    }
     
 	});
 

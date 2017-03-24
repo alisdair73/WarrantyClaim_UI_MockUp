@@ -42,13 +42,12 @@ sap.ui.define([
 				"DefectCode":"",
 				"CustomerConcern":"",
 				"SymptomCode":"",
-				"CurrentVersionNumber":"0001",
-				"CurrentVersionCategory":"IC",
-				"OCTotal":"0",
-				"OVTotal":"0",
-				"ICTotal":"0",
-				"IVTotal":"0",
-				"StatusDescription":"New Claim",
+				"CurrentVersionNumber":"",
+				"CurrentVersionCategory":"",
+				"TotalMaterial":"0",
+				"TotalExternalServices":"0",
+				"TotalLabour":"0",
+				"StatusDescription":"NEW CLAIM",
 				"StatusIcon":"sap-icon://write-new-document",
 				"CanEdit":true,
 				"VersionIdentifier":null,
@@ -72,10 +71,12 @@ sap.ui.define([
 			var costFormat = NumberFormat.getFloatInstance(formatOptions);
 			
 			this.warrantyClaim.ClaimNumber = jsonModel.ClaimNumber;
+			
 			this.warrantyClaim.OCTotal = parseFloat(jsonModel.OCTotal);
 			this.warrantyClaim.OVTotal = parseFloat(jsonModel.OVTotal);
 			this.warrantyClaim.ICTotal = parseFloat(jsonModel.ICTotal);
 			this.warrantyClaim.IVTotal = parseFloat(jsonModel.IVTotal);
+			
 			this.warrantyClaim.TotalCostOfClaim = costFormat.format(jsonModel.TotalCostOfClaim);
 			this.warrantyClaim.StatusDescription = jsonModel.StatusDescription;
 			this.warrantyClaim.StatusIcon = jsonModel.StatusIcon;
@@ -159,10 +160,9 @@ sap.ui.define([
 			this.warrantyClaim.AssessmentResults = oWarrantyClaim.AssessmentResults;
 			this.warrantyClaim.CurrentVersionNumber = oWarrantyClaim.CurrentVersionNumber;
 			this.warrantyClaim.CurrentVersionCategory = oWarrantyClaim.CurrentVersionCategory;
-			this.warrantyClaim.OCTotal = parseFloat(oWarrantyClaim.OCTotal);
-			this.warrantyClaim.OVTotal = parseFloat(oWarrantyClaim.OVTotal);
-			this.warrantyClaim.ICTotal = parseFloat(oWarrantyClaim.ICTotal);
-			this.warrantyClaim.IVTotal = parseFloat(oWarrantyClaim.IVTotal);
+			this.warrantyClaim.TotalMaterial = oWarrantyClaim.TotalMaterial;
+			this.warrantyClaim.TotalExternalServices = oWarrantyClaim.TotalExternalServices;
+			this.warrantyClaim.TotalLabour = oWarrantyClaim.TotalLabour;
 			this.warrantyClaim.StatusDescription = oWarrantyClaim.StatusDescription;
 			this.warrantyClaim.StatusIcon = oWarrantyClaim.StatusIcon;
 			this.warrantyClaim.CanEdit = oWarrantyClaim.CanEdit;

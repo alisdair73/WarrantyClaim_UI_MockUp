@@ -15,7 +15,7 @@
 		<headerContent>
 			<layout:VerticalLayout>
 				<layout:layoutData>
-					<ObjectPageHeaderLayoutData width="30%" showSeparatorAfter="true" />
+					<ObjectPageHeaderLayoutData showSeparatorAfter="true" width="65%"/>
 				</layout:layoutData>					
 				<m:ObjectStatus text="{ViewHelper>/warrantyUI/dealerDescription}"/>
 				<m:ObjectAttribute title="Claim Number" text="{WarrantyClaim>/ClaimNumber}"/>
@@ -26,31 +26,39 @@
 							type: 'sap.ui.model.type.Date'
 					}" 
 				/>
+				<m:ObjectStatus state="Success" text="{WarrantyClaim>/StatusDescription}" icon="{WarrantyClaim>/StatusIcon}" />
 			</layout:VerticalLayout>
-			<layout:VerticalLayout>
+			
+			<layout:VerticalLayout width="100%">
 				<layout:layoutData>
-					<ObjectPageHeaderLayoutData width="40%"/>
-				</layout:layoutData>					
-				<m:ObjectStatus 
-					state="Success"
-					text="{WarrantyClaim>/StatusDescription}" 
-					icon="{WarrantyClaim>/StatusIcon}" 
-				/>
-				<m:ObjectNumber number="{WarrantyClaim>/TotalCostOfClaim}" unit="AUD" emphasized="true"/>
+					<ObjectPageHeaderLayoutData width="20%"/>
+				</layout:layoutData>	
+				<m:FlexBox alignItems="Start" justifyContent="SpaceBetween">
+					<m:items>
+						<m:Label text="Material"/>
+						<m:ObjectNumber textAlign="Right" number="{WarrantyClaim>/TotalMaterial}" unit="AUD" emphasized="false"/>
+					</m:items>
+				</m:FlexBox>
+				<m:FlexBox alignItems="Start" justifyContent="SpaceBetween">
+					<m:items>
+						<m:Label text="External Services"/>
+						<m:ObjectNumber textAlign="Right" number="{WarrantyClaim>/TotalExternalServices}" unit="AUD" emphasized="false"/>
+					</m:items>
+				</m:FlexBox>
+				<m:FlexBox alignItems="Start" justifyContent="SpaceBetween">
+					<m:items>
+						<m:Label text="Labour"/>
+						<m:ObjectNumber textAlign="Right" number="{WarrantyClaim>/TotalLabour}" unit="AUD" emphasized="false"/>
+					</m:items>
+				</m:FlexBox>
+				<m:FlexBox alignItems="Start" justifyContent="SpaceBetween">
+					<m:items>
+						<m:Label text="Total" design="Bold"/>
+						<m:ObjectNumber textAlign="Right" number="{WarrantyClaim>/TotalCostOfClaim}" unit="AUD"/>
+					</m:items>
+				</m:FlexBox>
 			</layout:VerticalLayout>
-			<layout:VerticalLayout>
-				<layout:layoutData>
-					<ObjectPageHeaderLayoutData showSeparatorBefore="true" />
-				</layout:layoutData>					
-				<chart:ComparisonMicroChart size="M" >
-					<chart:data>
-						<chart:ComparisonMicroChartData title="Incoming Customer (IC)" value="{WarrantyClaim>/ICTotal}" color="Good"/>
-						<chart:ComparisonMicroChartData	title="Outgoing Vendor (OV)" value="{WarrantyClaim>/OVTotal}" color="Good"/>
-						<chart:ComparisonMicroChartData	title="Incoming Vendor (IV)" value="{WarrantyClaim>/IVTotal}" color="Good"/>
-						<chart:ComparisonMicroChartData	title="Outgoing Customer (OC)" value="{WarrantyClaim>/OCTotal}" color="Good"/>
-					</chart:data>
-				</chart:ComparisonMicroChart>
-			</layout:VerticalLayout>
+				
 			<layout:VerticalLayout class="sapUiNoMargin" width="100%" id="messageArea"/>
 		</headerContent>
 		<sections>

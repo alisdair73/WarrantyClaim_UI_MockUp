@@ -186,71 +186,6 @@ sap.ui.define([
 				);
 		},
 		
-/*		_executeAction: function(actionName){
-			
-			this.getModel("ViewHelper").setProperty("/busy", true);
-			
-			
-			this.getModel("ViewHelper").setProperty("/busy", false);
-			
-			
-			//Batch up "Create" and Function Call so function can be applied to current data
-			//In case of Validate, data is not saved. For Submit, if data is valid then
-			//the claim is saved...
-			
-			var warrantyClaimModel = this.getOwnerComponent().getModel();
-			
-			
-			warrantyClaimModel.create("/WarrantyClaimSet",
-				WarrantyClaim.convertToODataForUpdate(), {
-					"success": this._onSaveSuccess.bind(this), 
-					"error": this._onSaveError.bind(this),
-					"groupId":"Action",
-					"changeSetId":"Change1",
-					async: true
-					
-				}
-			);
-			
-			warrantyClaimModel.callFunction(
-				"/ExecuteAction",
-				{ 
-					"method": "POST", 
-					"groupId":"Action",
-					"changeSetId":"Change1",
-					"urlParameters" :	
-						{	
-							"ActionName": actionName, 
-							"ClaimNumber": this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber") 
-						},
-					"success": function(oData, response) { 
-									this.getModel("ViewHelper").setProperty("/busy", false);
-									
-									
-									
-					}.bind(this),
-					"error": function(oError){
-						
-						switch (oError.statusCode){
-							case '500':
-								MessageBox.error("An Error has occurred while processing this claim.\n" +
-										"Please contact the Honda Help Desk on <###>."
-								);
-								break;
-							case '400':
-								break;
-						}
-
-						this.getModel("ViewHelper").setProperty("/busy", false); 
-					}.bind(this)
-					
-				}
-			); 
-			
-			warrantyClaimModel.submitChanges({"groupID": "Action"});
-			
-		}, */
-		
 		_onActionSuccess: function(result){
 			
 			var message = "";
@@ -325,7 +260,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = '2016110067';	
-			//claimNumber = '2016110370';
+			//claimNumber = '100000000651';
 				
 			var entityPath = "";
 			if (claimNumber){

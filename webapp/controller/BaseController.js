@@ -81,7 +81,7 @@ sap.ui.define([
 		
 		readCatalog: function(catalogCode, catalogModelName){
 			this.getView().getModel().read(
-				"/JSONFeedCollection('" + catalogCode + "')/$value",
+				"/CatalogSet('" + catalogCode + "')/$value",
 				{
 					success: function(JSONData){
 						var catalogModel = new JSONModel(JSON.parse(JSONData));

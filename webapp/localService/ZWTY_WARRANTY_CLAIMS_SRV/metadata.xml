@@ -141,6 +141,24 @@
                 <Property Name="VersionIdentifier" Type="Edm.Guid" sap:label="Version Identifier"
                     sap:creatable="false" sap:updatable="false" sap:sortable="false"
                     sap:filterable="false"/>
+                <Property Name="ClaimTypeDescription" Type="Edm.String" Nullable="false"
+                    MaxLength="40" sap:label="Claim Type Description" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ClaimTypeGroup" Type="Edm.String" Nullable="false" MaxLength="10"
+                    sap:label="Claim Type Group" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TotalMaterial" Type="Edm.Decimal" Nullable="false" Precision="13"
+                    Scale="2" sap:unit="ClaimCurrency" sap:label="Total Material"
+                    sap:creatable="false" sap:updatable="false" sap:sortable="false"
+                    sap:filterable="false"/>
+                <Property Name="TotalExternalServices" Type="Edm.Decimal" Nullable="false"
+                    Precision="13" Scale="2" sap:unit="ClaimCurrency"
+                    sap:label="Total External Services" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TotalLabour" Type="Edm.Decimal" Nullable="false" Precision="13"
+                    Scale="2" sap:unit="ClaimCurrency" sap:label="Total Labour"
+                    sap:creatable="false" sap:updatable="false" sap:sortable="false"
+                    sap:filterable="false"/>
                 <NavigationProperty Name="WarrantyClaimItems"
                     Relationship="ZWTY_WARRANTY_CLAIMS_SRV.WarrantyClaim_to_WarrantyClaimItems"
                     FromRole="FromRole_WarrantyClaim_to_WarrantyClaimItems"
@@ -163,11 +181,29 @@
                 <Property Name="Icon" Type="Edm.String" Nullable="false" MaxLength="40"
                     sap:label="Icon" sap:creatable="false" sap:updatable="false"
                     sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Group" Type="Edm.String" Nullable="false" MaxLength="10"
+                    sap:label="Claim Type Group" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IsAuthorisationType" Type="Edm.Boolean" Nullable="false"
+                    sap:label="Is Authorisation Type" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false"/>
+            </EntityType>
+            <EntityType Name="Attachment" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="DocumentID"/>
+                </Key>
+                <Property Name="DocumentID" Type="Edm.String" Nullable="false" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="FileName" Type="Edm.String" Nullable="false" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MimeType" Type="Edm.String" Nullable="false" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Content" Type="Edm.Binary" Nullable="false" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
             </EntityType>
             <EntityType Name="Catalog" sap:content-version="1">
                 <Key>
                     <PropertyRef Name="Code"/>
-                    <PropertyRef Name="Number"/>
                 </Key>
                 <Property Name="Code" Type="Edm.String" Nullable="false" MaxLength="5"
                     sap:label="Catalog Code" sap:creatable="false" sap:updatable="false"
@@ -244,6 +280,168 @@
                 <Property Name="DocumentType" Type="Edm.String" Nullable="false"
                     sap:creatable="false" sap:updatable="false" sap:sortable="false"
                     sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="Employee" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="DealerNumber"/>
+                    <PropertyRef Name="EmployeeNumber"/>
+                </Key>
+                <Property Name="DealerNumber" Type="Edm.String" Nullable="false" MaxLength="10"
+                    sap:label="Dealer Number" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="EmployeeNumber" Type="Edm.String" Nullable="false" MaxLength="10"
+                    sap:label="Employee Number" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="FirstName" Type="Edm.String" Nullable="false" MaxLength="40"
+                    sap:label="First name" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="LastName" Type="Edm.String" Nullable="false" MaxLength="40"
+                    sap:label="Last name" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="PriorWorkApproval" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PWANumber"/>
+                </Key>
+                <Property Name="PWANumber" Type="Edm.String" Nullable="false" MaxLength="12"
+                    sap:label="PWA Number" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PWAType" Type="Edm.String" Nullable="false" MaxLength="4"
+                    sap:label="PWA Type" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SubmittedOn" Type="Edm.DateTime" Precision="7"
+                    sap:label="Submitted On" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="VIN" Type="Edm.String" Nullable="false" MaxLength="40"
+                    sap:label="VIN" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+                    sap:filterable="false"/>
+                <Property Name="EngineNumber" Type="Edm.String" Nullable="false" MaxLength="10"
+                    sap:label="Engine Number" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DealerContact" Type="Edm.String" Nullable="false" MaxLength="20"
+                    sap:label="Dealer Contact Name" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DateOfFailure" Type="Edm.DateTime" Precision="7"
+                    sap:label="Current Date" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="FailureMeasure" Type="Edm.String" Nullable="false" MaxLength="10"
+                    sap:label="Failed Distance" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MCPN" Type="Edm.String" Nullable="false" MaxLength="40"
+                    sap:label="MCPN" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="OwnerName" Type="Edm.String" Nullable="false" MaxLength="20"
+                    sap:label="Owner name" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CompanyName" Type="Edm.String" Nullable="false" MaxLength="20"
+                    sap:label="Company" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PhoneNumber" Type="Edm.String" Nullable="false" MaxLength="20"
+                    sap:label="Phone" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SoldByDealer" Type="Edm.Boolean" Nullable="false"
+                    sap:label="Sold By Dealer" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="HistoryComplete" Type="Edm.Boolean" Nullable="false"
+                    sap:label="History Complete" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ServicedByDealer" Type="Edm.Boolean" Nullable="false"
+                    sap:label="Service by dealer" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="OriginalOwner" Type="Edm.Boolean" Nullable="false"
+                    sap:label="Original Owner" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RequestedLabourHours" Type="Edm.Decimal" Nullable="false"
+                    Precision="15" Scale="3" sap:label="Quantity" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RequestedLabourCost" Type="Edm.Decimal" Nullable="false"
+                    Precision="23" Scale="4" sap:label="Currency amount" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RequestedPartsCost" Type="Edm.Decimal" Nullable="false"
+                    Precision="23" Scale="4" sap:label="Currency amount" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RequestedSubletCost" Type="Edm.Decimal" Nullable="false"
+                    Precision="23" Scale="4" sap:label="Currency amount" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ApprovedLabourHours" Type="Edm.Decimal" Nullable="false"
+                    Precision="15" Scale="3" sap:label="Quantity" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ApprovedLabourCost" Type="Edm.Decimal" Nullable="false"
+                    Precision="23" Scale="4" sap:label="Currency amount" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ApprovedPartsCost" Type="Edm.Decimal" Nullable="false"
+                    Precision="23" Scale="4" sap:label="Currency amount" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ApprovedSubletCost" Type="Edm.Decimal" Nullable="false"
+                    Precision="23" Scale="4" sap:label="Currency amount" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="LabourSplitOwner" Type="Edm.String" Nullable="false" MaxLength="3"
+                    sap:label="Percentage for Labor" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="LabourSplitDealer" Type="Edm.String" Nullable="false" MaxLength="3"
+                    sap:label="Percentage for Labor" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PartsSplitOwner" Type="Edm.String" Nullable="false" MaxLength="3"
+                    sap:label="Percentage for Parts" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PartsSplitDealer" Type="Edm.String" Nullable="false" MaxLength="3"
+                    sap:label="Percentage for Parts" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SubletSplitOwner" Type="Edm.String" Nullable="false" MaxLength="3"
+                    sap:label="Percentage for Suble" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SubletSplitDealer" Type="Edm.String" Nullable="false" MaxLength="3"
+                    sap:label="Percentage for suble" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="GoodwillReason" Type="Edm.String" Nullable="false" MaxLength="100"
+                    sap:label="Reason Goodwill" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CustomerConcern" Type="Edm.String" Nullable="false" MaxLength="200"
+                    sap:label="Customer Concern" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Rectification" Type="Edm.String" Nullable="false" MaxLength="100"
+                    sap:label="Rectification" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DealerComment" Type="Edm.String" Nullable="false" MaxLength="500"
+                    sap:label="Dealer Comment" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AssessmentComments" Type="Edm.String" Nullable="false"
+                    sap:label="ASSESSMENT_COMMENTS" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AssessmentCodes" Type="Edm.String" Nullable="false"
+                    sap:label="ASSESSMENT_CODES" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PWATypeDescription" Type="Edm.String" Nullable="false"
+                    MaxLength="40" sap:label="PWA Type Description" sap:creatable="false"
+                    sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PWATypeGroup" Type="Edm.String" Nullable="false" MaxLength="10"
+                    sap:label="PWA Type Group" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="StatusDescription" Type="Edm.String" Nullable="false" MaxLength="40"
+                    sap:label="Status Description" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="StatusIcon" Type="Edm.String" Nullable="false" MaxLength="40"
+                    sap:label="Status Icon" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MCPNDescription" Type="Edm.String" Nullable="false" MaxLength="40"
+                    sap:label="MCPNDescription" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="VersionIdentifier" Type="Edm.Guid" Nullable="false"
+                    sap:label="Internal Number" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CurrentVersionNumber" Type="Edm.String" Nullable="false"
+                    MaxLength="4" sap:label="Version" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CurrentVersionCategory" Type="Edm.String" Nullable="false"
+                    MaxLength="2" sap:label="Category" sap:creatable="false" sap:updatable="false"
+                    sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CanEdit" Type="Edm.Boolean" Nullable="false" sap:label="Can Edit?"
+                    sap:creatable="false" sap:updatable="false" sap:sortable="false"
+                    sap:filterable="false"/>
+                <NavigationProperty Name="Attachments"
+                    Relationship="ZWTY_WARRANTY_CLAIMS_SRV.PriorWorkApproval_to_Attachments"
+                    FromRole="FromRole_PriorWorkApproval_to_Attachments"
+                    ToRole="ToRole_PriorWorkApproval_to_Attachments"/>
             </EntityType>
             <EntityType Name="Dealership" sap:content-version="1">
                 <Key>
@@ -350,6 +548,12 @@
                 <End Type="ZWTY_WARRANTY_CLAIMS_SRV.WarrantyClaimItem" Multiplicity="*"
                     Role="ToRole_WarrantyClaim_to_WarrantyClaimItems"/>
             </Association>
+            <Association Name="PriorWorkApproval_to_Attachments" sap:content-version="1">
+                <End Type="ZWTY_WARRANTY_CLAIMS_SRV.PriorWorkApproval" Multiplicity="1"
+                    Role="FromRole_PriorWorkApproval_to_Attachments"/>
+                <End Type="ZWTY_WARRANTY_CLAIMS_SRV.Attachment" Multiplicity="*"
+                    Role="ToRole_PriorWorkApproval_to_Attachments"/>
+            </Association>
             <EntityContainer Name="ZWTY_WARRANTY_CLAIMS_SRV_Entities"
                 m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="WarrantyClaimSet"
@@ -358,6 +562,9 @@
                 <EntitySet Name="ClaimTypeSet" EntityType="ZWTY_WARRANTY_CLAIMS_SRV.ClaimType"
                     sap:creatable="false" sap:updatable="false" sap:deletable="false"
                     sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="AttachmentSet" EntityType="ZWTY_WARRANTY_CLAIMS_SRV.Attachment"
+                    sap:updatable="false" sap:deletable="false" sap:pageable="false"
+                    sap:content-version="1"/>
                 <EntitySet Name="CatalogSet" EntityType="ZWTY_WARRANTY_CLAIMS_SRV.Catalog"
                     sap:creatable="false" sap:updatable="false" sap:deletable="false"
                     sap:pageable="false" sap:content-version="1"/>
@@ -370,6 +577,13 @@
                 <EntitySet Name="DocumentSet" EntityType="ZWTY_WARRANTY_CLAIMS_SRV.Document"
                     sap:creatable="false" sap:updatable="false" sap:deletable="false"
                     sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="EmployeeSet" EntityType="ZWTY_WARRANTY_CLAIMS_SRV.Employee"
+                    sap:creatable="false" sap:updatable="false" sap:deletable="false"
+                    sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="PriorWorkApprovalSet"
+                    EntityType="ZWTY_WARRANTY_CLAIMS_SRV.PriorWorkApproval" sap:creatable="false"
+                    sap:updatable="false" sap:deletable="false" sap:pageable="false"
+                    sap:content-version="1"/>
                 <EntitySet Name="DealershipSet" EntityType="ZWTY_WARRANTY_CLAIMS_SRV.Dealership"
                     sap:creatable="false" sap:updatable="false" sap:deletable="false"
                     sap:pageable="false" sap:content-version="1"/>
@@ -386,13 +600,14 @@
                     <End EntitySet="WarrantyClaimItemSet"
                         Role="ToRole_WarrantyClaim_to_WarrantyClaimItems"/>
                 </AssociationSet>
-                <FunctionImport Name="ExecuteAction"
-                    ReturnType="Collection(ZWTY_WARRANTY_CLAIMS_SRV.MessageTable)"
-                    m:HttpMethod="POST" sap:label="Execute Action"
-                    sap:action-for="ZWTY_WARRANTY_CLAIMS_SRV.WarrantyClaim">
-                    <Parameter Name="ActionName" Type="Edm.String" Mode="In"/>
-                    <Parameter Name="ClaimNumber" Type="Edm.String" Mode="In"/>
-                </FunctionImport>
+                <AssociationSet Name="PriorWorkApproval_to_AttachmentsSet"
+                    Association="ZWTY_WARRANTY_CLAIMS_SRV.PriorWorkApproval_to_Attachments"
+                    sap:creatable="false" sap:updatable="false" sap:deletable="false"
+                    sap:content-version="1">
+                    <End EntitySet="PriorWorkApprovalSet"
+                        Role="FromRole_PriorWorkApproval_to_Attachments"/>
+                    <End EntitySet="AttachmentSet" Role="ToRole_PriorWorkApproval_to_Attachments"/>
+                </AssociationSet>
             </EntityContainer>
             <atom:link rel="self"
                 href="https://VHHMCDGWCI.HEC.HONDA1SAP.LOCAL:44300/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/$metadata"

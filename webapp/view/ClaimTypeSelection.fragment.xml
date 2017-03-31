@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<Dialog title="Select Claim Type">
 		<content>
-			<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" objectBindings="{SubletItem>/}">
+			<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true">
 		    	<sap.ui.layout.form:formContainers>
 		        	<sap.ui.layout.form:FormContainer>
 		            	<sap.ui.layout.form:formElements>
@@ -12,7 +12,7 @@
 										required = "true"
 										items="{
 											path: 'SalesAreas>/',
-											sorter: { path: 'SalesAreas>CompanyCode' }
+											sorter: { path: 'CompanyCodeName' }
 										}"
 										selectedKey="{WarrantyClaim>/CompanyCode}"
 										selectionChange="companyCodeSelected"
@@ -28,7 +28,10 @@
 			    						select="handleClaimTypeListSelect"
 										items="{
 											path: '/ClaimTypeSet',
-											sorter: { path: 'Description' }
+											sorter: { path: 'Description' },
+											filters : [
+												{ path : 'IsAuthorisationType', operator : 'EQ', value1 : false}
+											]
 										}">
 										<StandardListItem title="{Description}" icon="{Icon}" />
 									</List>	

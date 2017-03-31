@@ -7,10 +7,9 @@ sap.ui.define([
         "WarrantyClaim_MockUp/model/WarrantyClaim",
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
-        "sap/m/MessageStrip",
-        "sap/m/MessageBox"
+        "sap/m/MessageStrip"
 	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
-					NumberFormat, MessageStrip, MessageBox) {
+					NumberFormat, MessageStrip) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -27,7 +26,9 @@ sap.ui.define([
 					"dealerDescription":"",
 					"symptomCodeDescription":"",
 					"defectCodeDescription":"",
-					"subletCodeDescription":""
+					"subletCodeDescription":"",
+					"symptomCodeL1": "",
+					"symptomCodeL2": ""
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
@@ -153,6 +154,11 @@ sap.ui.define([
 					distinctCompanyCodes.push(salesArea.CompCode);
 				}
 			}
+			
+			salesOrganisations.sort(function(a,b){
+				return ((a.CompanyCodeName < b.CompanyCodeName) ? -1 : ((a.CompanyCodeName > b.CompanyCodeName) ? 1 : 0));
+			});
+			
 			// Set the default as the first entry in the list
 			this.getView().getModel("WarrantyClaim").setProperty("/CompanyCode",salesOrganisations[0].CompanyCode);
 			this.getView().getModel("WarrantyClaim").setProperty("/SalesOrganisation",salesOrganisations[0].SalesOrg);
@@ -259,7 +265,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = '2016110067';	
+			claimNumber = '2016110067';	
 			//claimNumber = '100000000651';
 				
 			var entityPath = "";
@@ -323,6 +329,7 @@ sap.ui.define([
 		_onBindingChange: function(oData) {
 			//Check if there is any data first
 			WarrantyClaim.updateWarrantyClaimFromOdata(oData);
+			this.readCatalog("ZSYM1","SymptomCodes");
 		},		
 		
 		_onMetadataLoaded: function() {

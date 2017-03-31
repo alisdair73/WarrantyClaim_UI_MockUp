@@ -87,6 +87,11 @@ sap.ui.define([
 						var catalogModel = new JSONModel(JSON.parse(JSONData));
 						this.getView().setModel(catalogModel,catalogModelName);
 						this.getModel("ViewHelper").setProperty("/busy", false);
+						
+						//Event Bus is used to set correct Combo Box binding if Symptom Code is already selected
+						var eventBus = sap.ui.getCore().getEventBus();
+						eventBus.publish("SymptomCodes","CatalogLoaded");
+						
 					}.bind(this),
 					error: function(error){
 						this.getModel("ViewHelper").setProperty("/busy", false);

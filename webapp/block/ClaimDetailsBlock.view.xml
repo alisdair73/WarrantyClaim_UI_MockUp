@@ -95,7 +95,7 @@
 										<l:layoutData>
 											<l:GridData span="L6"/>
 										</l:layoutData>
-										<Label text="Technician"/>									
+										<Label text="Technician"/>	
 										<ComboBox width="100%"
 											showSecondaryValues= "true"
 											editable="{WarrantyClaim>CanEdit}"

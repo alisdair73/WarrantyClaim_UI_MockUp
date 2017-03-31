@@ -54,6 +54,7 @@ sap.ui.define([
 				"Parts": [],
 				"Labour": [],
 				"Sublet":[],
+				"Attachments": [],
 				"changed": false
 			};
 			
@@ -189,6 +190,15 @@ sap.ui.define([
 				} 
 			}
 			
+			var oAttachments = oODataModel.getObject(sPath + "/Attachments");
+			if (oAttachments){
+				for (i = 0; i < oAttachments.length; i++) {
+					var oAttachment = oODataModel.getObject("/" + oAttachments[i]);
+					oAttachment.URL = "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('" + this.warrantyClaim.ClaimNumber + "')/Attachments('" + oAttachment.DocumentID + "')/$value";
+					this.warrantyClaim.Attachments.push(oAttachment);
+				}
+			}
+			
 			this.resetChanges();
 		},
 		
@@ -236,13 +246,13 @@ sap.ui.define([
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 
-			for (var i = 0; i < this.warrantyClaim.Labour.length; i++) {
+			for (i = 0; i < this.warrantyClaim.Labour.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Labour[i];
 				delete warrantyClaimItem.isMCPN;
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			
-			for (var i = 0; i < this.warrantyClaim.Sublet.length; i++) {
+			for (i = 0; i < this.warrantyClaim.Sublet.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Sublet[i];
 				delete warrantyClaimItem.isMCPN;
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);

@@ -1,0 +1,51 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout"
+	controllerName="WarrantyClaim_MockUp.block.SupportingDocumentsBlockController">
+	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" objectBindings="{WarrantyClaim>/}">
+		<sap.ui.layout.form:layout>
+	    	<sap.ui.layout.form:ResponsiveGridLayout/>
+	    </sap.ui.layout.form:layout>
+		<sap.ui.layout.form:formContainers>
+			<sap.ui.layout.form:FormContainer>
+				<sap.ui.layout.form:formElements>
+					<sap.ui.layout.form:FormElement>
+						<sap.ui.layout.form:fields>
+							<UploadCollection
+								id="UploadCollection"
+								uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('{WarrantyClaim>ClaimNumber}')/Attachments"
+								multiple="false"
+								showSeparators="All"
+								fileDeleted="onFileDeleted"
+								uploadComplete="onUploadComplete"
+								beforeUploadStarts="onBeforeUploadStarts"
+								uploadTerminated="onUploadTerminated"
+								filenameLengthExceed="onFileSizeExceed"
+								change="onChange"
+								maximumFileSize="10"
+								noDataText="{= ${WarrantyClaim>ClaimNumber} === '' ? 'Warranty Claim must be saved before adding attachments' : 'No Attachments' }"
+								items="{path : 'WarrantyClaim>/Attachments'}"
+								mode="SingleSelectMaster">
+								<toolbar>
+									<OverflowToolbar id="myId" >
+									<Title id="attachmentTitle"/>
+									<ToolbarSpacer/>
+									<UploadCollectionToolbarPlaceholder/>
+									</OverflowToolbar>
+								</toolbar>
+								<items>
+									<UploadCollectionItem
+										documentId="{WarrantyClaim>DocumentID}"
+										fileName="{WarrantyClaim>FileName}"
+										mimeType="{WarrantyClaim>MimeType}"
+										url="{WarrantyClaim>URL}"
+										visibleEdit="false"
+										visibleDelete="{WarrantyClaim>/CanEdit}">
+									</UploadCollectionItem>
+								</items>
+							</UploadCollection>			
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+				</sap.ui.layout.form:formElements>
+			</sap.ui.layout.form:FormContainer>
+		</sap.ui.layout.form:formContainers>
+	</sap.ui.layout.form:Form>
+</mvc:View>

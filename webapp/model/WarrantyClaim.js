@@ -195,6 +195,7 @@ sap.ui.define([
 				for (i = 0; i < oAttachments.length; i++) {
 					var oAttachment = oODataModel.getObject("/" + oAttachments[i]);
 					oAttachment.URL = "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('" + this.warrantyClaim.ClaimNumber + "')/Attachments('" + oAttachment.DocumentID + "')/$value";
+					oAttachment.deleted = false;
 					this.warrantyClaim.Attachments.push(oAttachment);
 				}
 			}
@@ -204,7 +205,8 @@ sap.ui.define([
 		
 		convertToODataForUpdate: function() {
 			var warrantyClaim = {
-				"WarrantyClaimItems" : []
+				"WarrantyClaimItems" : [],
+				"Attachments":[]
 			};
 			warrantyClaim.ClaimNumber = this.warrantyClaim.ClaimNumber;
 			warrantyClaim.ClaimType = this.warrantyClaim.ClaimType;
@@ -257,6 +259,8 @@ sap.ui.define([
 				delete warrantyClaimItem.isMCPN;
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
+			
+			warrantyClaim.Attachments = this.warrantyClaim.Attachments;
 			return warrantyClaim;
 		},
 		

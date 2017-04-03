@@ -265,9 +265,11 @@ sap.ui.define([
 			}
 			
 			//Testing
-			claimNumber = '2016110067';	
+			//claimNumber = '2016110067';	
 			//claimNumber = '100000000651';
-				
+			//claimNumber = "100000000660";
+			//claimNumber = "2016110419";
+			
 			var entityPath = "";
 			if (claimNumber){
 				entityPath = "/WarrantyClaimSet('" + claimNumber + "')";
@@ -299,7 +301,7 @@ sap.ui.define([
 			this.getView().bindElement({
 				path: entityPath,
 				parameters: {
-					expand: "WarrantyClaimItems"
+					expand: "WarrantyClaimItems,Attachments"
 				},
 				events: {
 					change: this._onBindingChange.bind(this),

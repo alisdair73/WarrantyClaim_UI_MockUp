@@ -20,7 +20,6 @@ sap.ui.define([
 		},
 		
 		deleteItem: function(event) {
-//			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 
 			// get the data for the deleted row
 			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
@@ -35,12 +34,6 @@ sap.ui.define([
 			));
 			
 			this.getView().byId("partsTable").getBinding("items").filter(filters);
-			
-/*            var itemIndex = path.split("/")[2];
-			// delete the line using the path to work out the index
-			warrantyItems.splice(itemIndex, 1);
-			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);*/
-
 		},		
 		onValueHelpSearch: function(event) {
 			

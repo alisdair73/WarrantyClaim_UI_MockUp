@@ -13,6 +13,7 @@ sap.ui.define([
 			this.warrantyClaim = {
 				"ClaimNumber": "",
 				"ClaimType": "",
+				"ObjectType":"",
 				"ClaimTypeDescription": "",
 				"ClaimTypeGroup": "",
 				"Dealer":"",
@@ -195,7 +196,6 @@ sap.ui.define([
 				for (i = 0; i < oAttachments.length; i++) {
 					var oAttachment = oODataModel.getObject("/" + oAttachments[i]);
 					oAttachment.URL = "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('" + this.warrantyClaim.ClaimNumber + "')/Attachments('" + oAttachment.DocumentID + "')/$value";
-					oAttachment.deleted = false;
 					this.warrantyClaim.Attachments.push(oAttachment);
 				}
 			}
@@ -260,7 +260,13 @@ sap.ui.define([
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			
-			warrantyClaim.Attachments = this.warrantyClaim.Attachments;
+			for (i = 0; i < this.warrantyClaim.Attachments.length; i++) {
+				var attachment = this.warrantyClaim.Attachments[i];
+				delete attachment.__metadata;
+				delete attachment.URL;
+				warrantyClaim.Attachments.push(attachment);
+			}
+			
 			return warrantyClaim;
 		},
 		

@@ -53,11 +53,15 @@ sap.ui.define([
 			var claimType = oEvent.getParameter("listItem").getBindingContext().getObject().Code;
 			var claimTypeDescription = oEvent.getParameter("listItem").getBindingContext().getObject().Description;
 			var claimTypeGroup = oEvent.getParameter("listItem").getBindingContext().getObject().Group;
+			var objectType = oEvent.getParameter("listItem").getBindingContext().getObject().ObjectType;
 			
 			this.getModel("WarrantyClaim").setProperty("/ClaimType",claimType);
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeDescription", claimTypeDescription);
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeGroup", claimTypeGroup);
+			this.getModel("WarrantyClaim").setProperty("/ObjectType", objectType);
 			
+			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Ready");
+						
 			this.getModel("ViewHelper").setProperty("/busy", false);
 			this._claimTypeSelection.close();
 		},
@@ -93,7 +97,9 @@ sap.ui.define([
 		},
 		
 		companyCodeSelected:function(event){
-			this._filterClaimType(event.getParameter("selectedItem").getBindingContext("SalesAreas").getObject().SalesOrg);
+			var salesOrganisation = event.getParameter("selectedItem").getBindingContext("SalesAreas").getObject().SalesOrg;
+			this.getView().getModel("WarrantyClaim").setProperty("/SalesOrganisation",salesOrganisation);
+			this._filterClaimType(salesOrganisation);
 		},
 		
 		_doWarrantyAction: function(actionName){
@@ -268,7 +274,7 @@ sap.ui.define([
 			//claimNumber = '2016110067';	
 			//claimNumber = '100000000651';
 			//claimNumber = "100000000660";
-			//claimNumber = "2016110419";
+			//claimNumber = "100000000662";
 			
 			var entityPath = "";
 			if (claimNumber){

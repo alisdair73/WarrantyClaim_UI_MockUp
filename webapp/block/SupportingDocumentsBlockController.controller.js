@@ -62,19 +62,17 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		onFileDeleted: function(oEvent) {
 			
 			var path = oEvent.getParameter("item").getBindingContext("WarrantyClaim").getPath();
-			this.getView().getModel("WarrantyClaim").setProperty(path + "/deleted", true);
+			this.getView().getModel("WarrantyClaim").setProperty(path + "/Deleted", true);
 
            	var filters = [];
 
 			filters.push(new Filter(
-				"deleted",
+				"Deleted",
 				sap.ui.model.FilterOperator.EQ, 
 				false
 			));
 			
 			this.getView().byId("UploadCollection").getBinding("items").filter(filters);		    
-		    
-		    
 		},		
 		
 		onFileSizeExceed : function(oEvent) {

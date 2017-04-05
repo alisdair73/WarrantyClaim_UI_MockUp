@@ -28,7 +28,8 @@ sap.ui.define([
 					"defectCodeDescription":"",
 					"subletCodeDescription":"",
 					"symptomCodeL1": "",
-					"symptomCodeL2": ""
+					"symptomCodeL2": "",
+					"serialNumberIsInitial": false
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
@@ -60,7 +61,7 @@ sap.ui.define([
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeGroup", claimTypeGroup);
 			this.getModel("WarrantyClaim").setProperty("/ObjectType", objectType);
 			
-			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Ready");
+		//	sap.ui.getCore().getEventBus().publish("WarrantyClaim","Ready");
 						
 			this.getModel("ViewHelper").setProperty("/busy", false);
 			this._claimTypeSelection.close();
@@ -274,7 +275,7 @@ sap.ui.define([
 			//claimNumber = '2016110067';	
 			//claimNumber = '100000000651';
 			//claimNumber = "100000000660";
-			//claimNumber = "100000000662";
+			//claimNumber = "2016110477";
 			
 			var entityPath = "";
 			if (claimNumber){

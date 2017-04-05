@@ -81,15 +81,17 @@
 										<l:layoutData>
 											<l:GridData span="L6"/>
 										</l:layoutData>
-										<Label text="Old Serial Number"/>
-										<Input id="oldSerialNumber" value="{WarrantyClaim>OldSerialNumber}" editable="{WarrantyClaim>CanEdit}"/>
+										<Label text="Old Serial Number" labelFor="oldSerialNumber"/>
+										<Input id="oldSerialNumber" value="{WarrantyClaim>OldSerialNumber}" 
+											editable="{WarrantyClaim>CanEdit}" required="{ViewHelper>/warrantyUI/serialNumberIsMandatory}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }">
 										<l:layoutData>
 											<l:GridData span="L6"/>
 										</l:layoutData>
-										<Label text="New Serial Number"/>
-										<Input id="newSerialNumber" value="{WarrantyClaim>NewSerialNumber}" editable="{WarrantyClaim>CanEdit}"/>
+										<Label text="New Serial Number" labelFor="newSerialNumber"/>
+										<Input id="newSerialNumber" value="{WarrantyClaim>NewSerialNumber}" 
+											editable="{WarrantyClaim>CanEdit}" required="{ViewHelper>/warrantyUI/serialNumberIsMandatory}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>

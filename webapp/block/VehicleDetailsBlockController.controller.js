@@ -6,32 +6,37 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 	return Controller.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
 
-		onInit: function(){
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Ready",this._filterPWAList.bind(this),this);
-		},
-
-    	_filterPWAList: function(event){
+    	loadPWAList: function(event){
  
-			var filters = [];
-/*			filters.push(
-				new Filter(
-					"Dealer",
-					sap.ui.model.FilterOperator.EQ, 
-					this.getView().getModel("ViewHelper").getProperty("/warrantyUI/dealerNumber")
-			));
-			*/
+ 			var filters = [];
 			filters.push(
 				new Filter(
 					"SalesOrg",
 					sap.ui.model.FilterOperator.EQ, 
 					this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")
 			));
-
-			this.getView().byId("PWANumber").getBinding("items").filter(filters);
-//			event.getSource().getBinding("items").filter(filters);
-//			event.getSource().getBinding("items").resume();
+						
+ 			event.getSource().getBinding("items").filter(filters);
+			event.getSource().getBinding("items").resume();
 			
-      }
+			event.getSource().bindElement({
+				path: "/PriorWorkApprovalSet",
+				events: {
+					dataRequested: function() {
+						this.getView().byId("PWANumber").setBusy(true);
+					}.bind(this),
+					dataReceived: function() {
+						this.getView().byId("PWANumber").setBusy(false);
+					}.bind(this)
+				}
+			});
+			
+    	},
+    	
+    	onRecallSelected: function(event){
+    		var isMandatory = event.getParameter("selectedItem").getBindingContext().getObject().SerialNumberIsMandatory;
+    		this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",isMandatory);
+    	}
 	});
 
 });

@@ -85,6 +85,10 @@ sap.ui.define([
 			this._doWarrantyAction("ValidateWarranty");
 		},
 		
+		onCancel: function(){
+			this.navigateToLaunchpad();
+		},
+		
 		viewMyDealerships: function() {
 			var crossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
 
@@ -224,10 +228,6 @@ sap.ui.define([
 			}
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
-		},
-		
-		onCancel: function(){
-			this.navigateToLaunchpad();
 		},
 		
 		_onCreateWarrantyMatched: function(oEvent) {

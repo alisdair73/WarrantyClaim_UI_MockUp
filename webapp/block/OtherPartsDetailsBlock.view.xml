@@ -6,7 +6,6 @@
 				<Title text="Other Parts" level="H2"/>
 				<ToolbarSpacer/>
 				<Button text="Add more parts" icon="sap-icon://add" press="addItem" visible="{WarrantyClaim>/CanEdit}"/>
-				<Button text="Check LON" icon="sap-icon://task" press="checkLON" visible="{WarrantyClaim>/CanEdit}"/>
 			</Toolbar>
 		</headerToolbar>
 	    <items>

@@ -3,6 +3,8 @@
 		<headerToolbar>
 			<Toolbar>
 				<Title text="Labour Operation Numbers" level="H2"/>
+				<ToolbarSpacer/>
+				<Button text="Check LON" icon="sap-icon://task" press="checkLON" visible="{WarrantyClaim>/CanEdit}"/>
 			</Toolbar>
 		</headerToolbar>
 	    <items>

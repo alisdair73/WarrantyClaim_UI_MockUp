@@ -9,7 +9,7 @@
 			</Toolbar>
 		</headerToolbar>
 	    <items>
-	        <ColumnListItem id="__item0">
+	        <ColumnListItem id="__item0" vAlign="Middle">
 	            <cells>
 	                <Text text="{WarrantyClaim>ItemKey}" id="__text5"/>
 	                <Text text="{WarrantyClaim>Invoice}" id="__text7"/>

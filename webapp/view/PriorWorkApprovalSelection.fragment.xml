@@ -1,0 +1,45 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<TableSelectDialog 
+	    id="PWASelectionList"
+		noDataText="No Prior Work Approvals found."
+		title="Select PWA"
+		search="onPWASelectionSearch"
+		confirm="onPWASelection"
+		cancel="onPWASelectionClose"
+		items="{
+			path: '/PriorWorkApprovalSet',
+			sorter: { path: 'PWANumber' }
+		}"
+		>
+		<ColumnListItem>
+			<cells>
+				<Text text="{PWANumber}" />
+				<Text text="{OwnerName}" />
+				<Text text="{VIN}" />
+				<Text text="{EngineNumber}" />
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column>
+				<header>
+					<Text text="PWA Number" />
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="Owner Name" />
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="VIN" />
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="Engine Number" />
+				</header>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>

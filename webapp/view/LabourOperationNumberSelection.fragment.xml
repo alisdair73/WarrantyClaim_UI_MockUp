@@ -1,0 +1,49 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="Select Claim Type">
+		<content>
+			<Table 
+				id="LONCatalog"
+				mode="MultiSelect"
+				items="{
+					path: '/LabourOperationNumberSet'
+				}"
+			>
+				<headerToolbar>
+					<Toolbar>
+						<Title text="Labour Operation Numbers" level="H2"/>
+					</Toolbar>
+				</headerToolbar>
+	    		<items>
+	        		<ColumnListItem>
+	            		<cells>
+	                		<Text text="{LONCode}"/>
+	                		<Text text="{Description}"/>
+	                		<Text text="{Hours}"/>
+	                	</cells>
+	        		</ColumnListItem>
+	    		</items>
+	    		<columns>
+	        		<Column>
+	            		<header>
+	                		<Label text="LON"/>
+	            		</header>
+	        		</Column>
+	        		<Column>
+	            		<header>
+	                		<Label text="Description"/>
+	            		</header>
+	        		</Column>
+	        		<Column>
+	            		<header>
+	                		<Label text="Hours"/>
+	            		</header>
+	        		</Column>
+	    		</columns>
+			</Table>
+		</content>
+		<buttons>
+			<Button text="Add Selected" press="onAddLON" icon="sap-icon://add-activity"/>
+			<Button text="Cancel" press="onCancelCheckLON" icon="sap-icon://sys-cancel"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,14 +1,15 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout"
+	controllerName="WarrantyClaim_MockUp.block.LONDetailsBlockController">
 	<Table items="{WarrantyClaim>/Labour}" id="__table0" >
 		<headerToolbar>
 			<Toolbar>
 				<Title text="Labour Operation Numbers" level="H2"/>
 				<ToolbarSpacer/>
-				<Button text="Check LON" icon="sap-icon://task" press="checkLON" visible="{WarrantyClaim>/CanEdit}"/>
+				<Button text="Check LON" icon="sap-icon://task" press="onCheckLON" visible="{WarrantyClaim>/CanEdit}"/>
 			</Toolbar>
 		</headerToolbar>
 	    <items>
-	        <ColumnListItem id="__item0">
+	        <ColumnListItem id="__item0" vAlign="Middle">
 	            <cells>
 	                <Text text="{WarrantyClaim>ItemKey}" id="__text5"/>
 	                <Text text="{WarrantyClaim>Description}" id="__text6"/>

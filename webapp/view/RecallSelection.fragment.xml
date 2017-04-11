@@ -1,0 +1,45 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<TableSelectDialog 
+	    id="RecallSelectionList"
+		noDataText="No Recalls found."
+		title="Select Recall"
+		search="onRecallSelectionSearch"
+		confirm="onRecallSelection"
+		cancel="onRecallSelectionClose"
+		items="{
+			path: '/RecallSet',
+			sorter: { path: 'InternalRecallNumber' }
+		}"
+		>
+		<ColumnListItem>
+			<cells>
+				<Text text="{InternalRecallNumber}" />
+				<Text text="{ExternalRecallNumber}" />
+				<Text text="{RecallInformation}" />
+				<CheckBox selected="{SerialNumberIsMandatory}" editable="false"/>
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column>
+				<header>
+					<Text text="Internal Recall Number" />
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="External Recall Number" />
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="Details" />
+				</header>
+			</Column>
+			<Column>
+				<header>
+					<Text text="Serial # Required" />
+				</header>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>

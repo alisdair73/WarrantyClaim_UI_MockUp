@@ -29,42 +29,27 @@
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="PWA Number" labelFor="PWANumber"/>
-									<ComboBox 
-										id="PWANumber"
-										busyIndicatorDelay="0"
-										width="100%"
-										showSecondaryValues= "false"
+									<Input 
+										id="PWANumber" 
+										value="{WarrantyClaim>AuthorisationNumber}"	
 										editable="{WarrantyClaim>CanEdit}"
-										items="{
-											path: '/PriorWorkApprovalSet',
-											sorter: { path: 'PWANumber' },
-											suspended: true
-										}"
-										loadItems="loadPWAList"
-										selectedKey="{WarrantyClaim>AuthorisationNumber}"
 										required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
-									>
-										<core:ListItem key="{PWANumber}" text="{PWANumber} - [{VIN}/{OwnerName}]"/>
-									</ComboBox>		
+										showValueHelp="true" 
+										valueHelpRequest="onPWAValueHelpRequest"
+										valueHelpOnly = "true"
+									/>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="Recall Number" labelFor="recallNumber"/>
-									<ComboBox 
-										id="recallNumber"
-										busyIndicatorDelay="0"
-										width="100%"
-										showSecondaryValues= "false"
+									<Input 
+										id="recallNumber" 
+										value="{WarrantyClaim>RecallNumber}"	
 										editable="{WarrantyClaim>CanEdit}"
-										items="{
-											path: '/RecallSet',
-											sorter: { path: 'InternalRecallNumber' }
-										}"
-										selectedKey="{WarrantyClaim>RecallNumber}"
-										selectionChange="onRecallSelected"
 										required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }"
-									>
-										<core:ListItem key="{InternalRecallNumber}" text="{ExternalRecallNumber} - {RecallInformation}"/>
-									</ComboBox>											
+										showValueHelp="true" 
+										valueHelpRequest="onRecallValueHelpRequest"
+										valueHelpOnly = "true"
+									/>
 								</l:VerticalLayout>	
 								<l:VerticalLayout width="100%">
 									<Label text="{= ${WarrantyClaim>ObjectType} === 'VELO'? 'VIN' : 'Serial Number' }"/>

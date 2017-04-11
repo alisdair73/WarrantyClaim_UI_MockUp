@@ -9,33 +9,39 @@
 			</Toolbar>
 		</headerToolbar>
 	    <items>
-	        <ColumnListItem id="__item0" >
+	        <ColumnListItem id="__item0" vAlign="Middle">
+	        	<customData>
+    				<core:CustomData key="isMCPN" value="{= ${WarrantyClaim>isMCPN}? 'X':''}" writeToDom="true"/>
+				</customData>
 	            <cells>
 	            	<Text text="{WarrantyClaim>PartNumber}"/>
 	                <Text text="{WarrantyClaim>Description}"/>
-	                <Input
-	                	type="Number"
-	                	value="{
-									path: 'WarrantyClaim>Quantity',
-											type: 'sap.ui.model.type.Float',
-											formatOptions: {
-													minFractionDigits: 3,
-													maxFractionDigits: 3
-												}
-											}" 
-	                	editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>isMCPN} }"/>
-	          
-	                <ComboBox id="partSelected" selectedKey="{WarrantyClaim>PartRequested}" 
-	                	editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>isMCPN} }">
-	            	 <items>
-	            	 	<core:ListItem text="" key=""/>
-	            		<core:ListItem text="Part Requested 0" key="0" id="__item4"/>
-	            		<core:ListItem text="Part Requested 1" key="1" id="__item1"/>
-	            		<core:ListItem text="Part Requested 2" key="2" id="__item2"/>
-	            		<core:ListItem text="Part Requested 3" key="3" id="__item3"/>
-	            	 </items><!-- sap.ui.core.Item -->
-	               </ComboBox>
-	               
+	                <l:HorizontalLayout>
+	                	<Text 
+	                		text="{
+	                			path: 'WarrantyClaim>Quantity',							
+	                			type: 'sap.ui.model.type.Float',
+								formatOptions: {
+									minFractionDigits: 3,
+									maxFractionDigits: 3
+								}
+							}" 
+							visible= "{= ${WarrantyClaim>isMCPN}}"
+						/>
+	                	<Input
+	                		type="Number"
+	                		value="{
+								path: 'WarrantyClaim>Quantity',
+								type: 'sap.ui.model.type.Float',
+								formatOptions: {
+									minFractionDigits: 3,
+									maxFractionDigits: 3
+								}
+							}" 
+							editable="{WarrantyClaim>/CanEdit}"
+	                		visible="{= !${WarrantyClaim>isMCPN} }"
+	            		/>
+	        		</l:HorizontalLayout>
 	                <l:HorizontalLayout>
 	                	<core:Icon src="sap-icon://broken-link" visible="{= !!${WarrantyClaim>isMCPN} }" tooltip="Main Causal Part Number"/>
 	                	<Button icon="sap-icon://edit" press="editItem" visible="false"/>
@@ -60,11 +66,11 @@
 	                <Label text="Qty" id="__label2"/>
 	            </header>
 	        </Column>
-	        	<Column id="__column3">
+<!--	    <Column id="__column3">
 	            <header>
 	                <Label text="Part Requested" id="__label3"/>
 	            </header>
-	        </Column>
+	        </Column>  -->
 	        <Column id="__column4" width="7em" hAlign="End"/>
 	     </columns>
 	 </Table>

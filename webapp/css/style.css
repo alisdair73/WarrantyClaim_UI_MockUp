@@ -1,1 +1,3 @@
-/* Enter your custom styles here */
+tr[data-isMCPN="X"]{
+  background:  LightGray!important;
+}

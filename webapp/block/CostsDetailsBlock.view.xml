@@ -1,0 +1,111 @@
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:l="sap.ui.layout">
+	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" id="__form0" objectBindings="{WarrantyClaim>/}">
+		<sap.ui.layout.form:layout>
+	    	<sap.ui.layout.form:ResponsiveGridLayout/>
+	    </sap.ui.layout.form:layout>	
+		<sap.ui.layout.form:formContainers>
+			<sap.ui.layout.form:FormContainer id="__container0" title="Estimated Claim Costs" >
+				<sap.ui.layout.form:formElements>
+					<sap.ui.layout.form:FormElement id="__element0" >
+						<sap.ui.layout.form:fields>
+							<Table>
+	    						<items>
+	    							<ColumnListItem id="Costs">
+	    								<cells>
+											<ObjectNumber
+												binding="{WarrantyClaim>\}"
+												number="{
+													parts:[{path:'TotalLabour'},{path:'ClaimCurrency'}],
+													type: 'sap.ui.model.type.Currency',
+													formatOptions: {showMeasure: false}
+												}"
+												unit="{ClaimCurrency}" 
+											/>	
+											<ObjectNumber
+												binding="{WarrantyClaim>\}"
+												number="{
+													parts:[{path:'TotalMaterial'},{path:'ClaimCurrency'}],
+													type: 'sap.ui.model.type.Currency',
+													formatOptions: {showMeasure: false}
+												}"
+												unit="{ClaimCurrency}" 
+											/>	
+											<ObjectNumber
+												binding="{WarrantyClaim>\}"
+												number="{
+													parts:[{path:'TotalHandling'},{path:'ClaimCurrency'}],
+													type: 'sap.ui.model.type.Currency',
+													formatOptions: {showMeasure: false}
+												}"
+												unit="{ClaimCurrency}" 
+											/>	
+											<ObjectNumber
+												binding="{WarrantyClaim>\}"
+												number="{
+													parts:[{path:'TotalExternalServices'},{path:'ClaimCurrency'}],
+													type: 'sap.ui.model.type.Currency',
+													formatOptions: {showMeasure: false}
+												}"
+												unit="{ClaimCurrency}" 
+											/>	
+											<ObjectNumber
+												binding="{WarrantyClaim>\}"
+												number="{
+													parts:[{path:'TotalGST'},{path:'ClaimCurrency'}],
+													type: 'sap.ui.model.type.Currency',
+													formatOptions: {showMeasure: false}
+												}"
+												unit="{ClaimCurrency}" 
+											/>	
+											<ObjectNumber
+												binding="{WarrantyClaim>\}"
+												number="{
+													parts:[{path:'TotalCostOfClaim'},{path:'ClaimCurrency'}],
+													type: 'sap.ui.model.type.Currency',
+													formatOptions: {showMeasure: false}
+												}"
+												unit="{ClaimCurrency}" 
+											/>												
+	        							</cells>
+									</ColumnListItem>
+	    						</items>
+	    						<columns>
+	        						<Column>
+	        							<header>
+	            							<Label text="Labour"/>
+	            						</header>
+	        						</Column>
+	        						<Column>
+	        							<header>
+	            							<Label text="Parts"/>
+	            						</header>
+	        						</Column>
+	        						<Column>
+	        							<header>
+	            							<Label text="Handling"/>
+	            						</header>
+	        						</Column>
+	        						<Column>
+	        							<header>
+	            							<Label text="Sublet"/>
+	            						</header>
+	        						</Column>
+	        						<Column>
+	        							<header>
+	            							<Label text="GST"/>
+	            						</header>
+	        						</Column>	  
+	        						<Column>
+	        							<header>
+	            							<Label text="TOTAL"/>
+	            						</header>
+	        						</Column>	        						
+								</columns>
+							</Table>
+						</sap.ui.layout.form:fields>
+					</sap.ui.layout.form:FormElement>
+				</sap.ui.layout.form:formElements>
+			</sap.ui.layout.form:FormContainer>
+		</sap.ui.layout.form:formContainers>
+	</sap.ui.layout.form:Form>
+</mvc:View>

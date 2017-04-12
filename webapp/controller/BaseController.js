@@ -89,8 +89,7 @@ sap.ui.define([
 						this.getModel("ViewHelper").setProperty("/busy", false);
 						
 						//Event Bus is used to set correct Combo Box binding if Symptom Code is already selected
-						var eventBus = sap.ui.getCore().getEventBus();
-						eventBus.publish("SymptomCodes","CatalogLoaded");
+						sap.ui.getCore().getEventBus().publish(catalogCode,"CatalogLoaded");
 						
 					}.bind(this),
 					error: function(error){

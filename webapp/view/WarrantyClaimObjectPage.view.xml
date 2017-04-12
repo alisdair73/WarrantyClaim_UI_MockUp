@@ -14,7 +14,7 @@
 		<headerContent>
 			<layout:VerticalLayout>
 				<layout:layoutData>
-					<ObjectPageHeaderLayoutData showSeparatorAfter="true" width="65%"/>
+					<ObjectPageHeaderLayoutData/>
 				</layout:layoutData>					
 				<m:ObjectStatus text="{ViewHelper>/warrantyUI/dealerDescription}"/>
 				<m:ObjectAttribute title="Claim Number" text="{WarrantyClaim>/ClaimNumber}"/>
@@ -27,37 +27,6 @@
 				/>
 				<m:ObjectStatus state="Success" text="{WarrantyClaim>/StatusDescription}" icon="{WarrantyClaim>/StatusIcon}" />
 			</layout:VerticalLayout>
-			
-			<layout:VerticalLayout width="100%">
-				<layout:layoutData>
-					<ObjectPageHeaderLayoutData width="20%"/>
-				</layout:layoutData>	
-				<m:FlexBox alignItems="Start" justifyContent="SpaceBetween">
-					<m:items>
-						<m:Label text="Material"/>
-						<m:ObjectNumber textAlign="Right" number="{WarrantyClaim>/TotalMaterial}" unit="AUD" emphasized="false"/>
-					</m:items>
-				</m:FlexBox>
-				<m:FlexBox alignItems="Start" justifyContent="SpaceBetween">
-					<m:items>
-						<m:Label text="External Services"/>
-						<m:ObjectNumber textAlign="Right" number="{WarrantyClaim>/TotalExternalServices}" unit="AUD" emphasized="false"/>
-					</m:items>
-				</m:FlexBox>
-				<m:FlexBox alignItems="Start" justifyContent="SpaceBetween">
-					<m:items>
-						<m:Label text="Labour"/>
-						<m:ObjectNumber textAlign="Right" number="{WarrantyClaim>/TotalLabour}" unit="AUD" emphasized="false"/>
-					</m:items>
-				</m:FlexBox>
-				<m:FlexBox alignItems="Start" justifyContent="SpaceBetween">
-					<m:items>
-						<m:Label text="Total" design="Bold"/>
-						<m:ObjectNumber textAlign="Right" number="{WarrantyClaim>/TotalCostOfClaim}" unit="AUD"/>
-					</m:items>
-				</m:FlexBox>
-			</layout:VerticalLayout>
-				
 			<layout:VerticalLayout class="sapUiNoMargin" width="100%" id="messageArea"/>
 		</headerContent>
 		<sections>
@@ -142,6 +111,15 @@
 					</ObjectPageSubSection>
 				</subSections>
 			</ObjectPageSection>
+			<ObjectPageSection id="costs" title="COSTS">
+				<subSections>
+					<ObjectPageSubSection id="costs_sub1" title="COSTS" mode="Expanded">
+						<blocks>
+							<claimBlocks:CostsDetailsBlock/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>			
 		</sections>
 		<footer>
 			<m:OverflowToolbar>

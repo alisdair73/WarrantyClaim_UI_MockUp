@@ -24,11 +24,10 @@ sap.ui.define([
 					"dealerNumber":"",
 					"dealerName":"",
 					"dealerDescription":"",
-					"symptomCodeDescription":"",
-					"defectCodeDescription":"",
 					"subletCodeDescription":"",
 					"symptomCodeL1": "",
 					"symptomCodeL2": "",
+					"defectCodeL1": "",
 					"serialNumberIsInitial": false
 				}
 			});
@@ -61,8 +60,6 @@ sap.ui.define([
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeGroup", claimTypeGroup);
 			this.getModel("WarrantyClaim").setProperty("/ObjectType", objectType);
 			
-		//	sap.ui.getCore().getEventBus().publish("WarrantyClaim","Ready");
-						
 			this.getModel("ViewHelper").setProperty("/busy", false);
 			this._claimTypeSelection.close();
 		},
@@ -275,7 +272,7 @@ sap.ui.define([
 			//claimNumber = '2016110067';	
 			//claimNumber = '100000000651';
 			//claimNumber = "100000000660";
-			//claimNumber = "2016110477";
+			claimNumber = "2016110477";
 			//claimNumber = "100000000511";
 			
 			var entityPath = "";
@@ -340,6 +337,7 @@ sap.ui.define([
 			//Check if there is any data first
 			WarrantyClaim.updateWarrantyClaimFromOdata(oData);
 			this.readCatalog("ZSYM1","SymptomCodes");
+			this.readCatalog("ZDEF1","DefectCodes");
 		},		
 		
 		_onMetadataLoaded: function() {

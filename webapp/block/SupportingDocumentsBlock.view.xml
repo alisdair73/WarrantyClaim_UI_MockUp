@@ -15,21 +15,21 @@
 								multiple="false"
 								showSeparators="All"
 								fileDeleted="onFileDeleted"
-								uploadEnabled="{WarrantyClaim>CanEdit}"
+								uploadEnabled="{= ${WarrantyClaim>CanEdit} &amp;&amp; ${WarrantyClaim>ClaimNumber} !== ''}"
 								uploadComplete="onUploadComplete"
 								beforeUploadStarts="onBeforeUploadStarts"
 								uploadTerminated="onUploadTerminated"
 								filenameLengthExceed="onFileSizeExceed"
 								change="onChange"
-								maximumFileSize="10"
+								maximumFileSize="25"
 								noDataText="{= ${WarrantyClaim>ClaimNumber} === '' ? 'Warranty Claim must be saved before adding attachments' : 'No Attachments' }"
 								items="{path : 'WarrantyClaim>/Attachments'}"
 								mode="SingleSelectMaster">
 								<toolbar>
-									<OverflowToolbar id="myId" >
-									<Title id="attachmentTitle"/>
-									<ToolbarSpacer/>
-									<UploadCollectionToolbarPlaceholder/>
+									<OverflowToolbar>
+										<Title id="attachmentTitle"/>
+										<ToolbarSpacer/>
+										<UploadCollectionToolbarPlaceholder/>
 									</OverflowToolbar>
 								</toolbar>
 								<items>

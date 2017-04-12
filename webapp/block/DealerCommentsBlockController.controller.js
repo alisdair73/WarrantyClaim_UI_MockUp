@@ -1,34 +1,49 @@
 sap.ui.define([
-	"WarrantyClaim_MockUp/controller/BaseController"
-], function(BaseController) {
+	"WarrantyClaim_MockUp/controller/BaseController",
+	"sap/ui/model/json/JSONModel"
+], function(BaseController, JSONModel) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.DealerCommentsBlockController", {
 
-    showDefectSelector: function(){
-    	
-		if (! this._defectSelector) {
-			this._defectSelector = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.DefectCodeSelector", this);
-			this.getView().addDependent(this._defectSelector);
+		onInit: function(){
+			
+			this.setModel(new JSONModel({
+				"DefectsL2":[]
+			}) , "DefectCodesHelper");
+			
+			var eventBus = sap.ui.getCore().getEventBus();
+			eventBus.subscribe("ZDEF1","CatalogLoaded",this._defectCatalogLoaded.bind(this),this);
+		},
+		
+		readDefectCatalog: function(){
 			this.readCatalog("ZDEF1","DefectCodes");
-		} 
-		this._defectSelector.open(); 
-    },
-    
-    handleCancel: function(){
-    	this._defectSelector.close(); 
-    },
-    
-    defectCodeSelected: function(evt){
-    	
-    	var path = evt.getParameter("listItem").getBindingContext("DefectCodes").getPath();
-    	var defect = this.getView().getModel("DefectCodes").getProperty(path);
-    	this.getModel("WarrantyClaim").setProperty("/DefectCode",defect.code);
-    	this.getModel("ViewHelper").setProperty("/warrantyUI/DefectCodeDescription", defect.text);
+		},
+		
+		onDefectCodeSelectedL1: function(oEvent){
+			this._updateL2Defects(oEvent.getParameter("selectedItem").mProperties.key);
+			this.getModel("WarrantyClaim").setProperty("/DefectCode","");
+		},		
+		
+		_defectCatalogLoaded: function(sChannelId, sEventId, oData){
+			if(this.getModel("WarrantyClaim").getProperty("/DefectCode")){
+				var defectCodeLevels = this.getModel("WarrantyClaim").getProperty("/DefectCode").split("-");
+				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1",defectCodeLevels[0]);
+				this._updateL2Defects(this.getModel("ViewHelper").getProperty("/warrantyUI/defectCodeL1"));
+			}
+		},
+		
+		_updateL2Defects: function(level1Code){
+			
+			var defectCatalog = this.getModel("DefectCodes").getData();
 
-		this._defectSelector.close();
-    }
-    
+			for(var i=0; i< defectCatalog.length; i++){
+			  if (defectCatalog[i].code === level1Code){
+			    this.getModel("DefectCodesHelper").setProperty("/DefectsL2",defectCatalog[i].nodes);
+			    return;
+			  }
+			}			
+		}
 	});
 
 });

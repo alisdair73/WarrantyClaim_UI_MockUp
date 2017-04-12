@@ -26,7 +26,7 @@
 									maxFractionDigits: 3
 								}
 							}" 
-							visible= "{= ${WarrantyClaim>isMCPN}}"
+							visible= "{= ${WarrantyClaim>isMCPN} || !${WarrantyClaim>/CanEdit}}"
 						/>
 	                	<Input
 	                		type="Number"
@@ -39,11 +39,12 @@
 								}
 							}" 
 							editable="{WarrantyClaim>/CanEdit}"
-	                		visible="{= !${WarrantyClaim>isMCPN} }"
+	                		visible="{= !${WarrantyClaim>isMCPN} &amp;&amp; ${WarrantyClaim>/CanEdit}}"
 	            		/>
 	        		</l:HorizontalLayout>
 	                <l:HorizontalLayout>
-	                	<core:Icon src="sap-icon://broken-link" visible="{= !!${WarrantyClaim>isMCPN} }" tooltip="Main Causal Part Number"/>
+	                	<!-- <core:Icon src="sap-icon://broken-link" visible="{WarrantyClaim>isMCPN}" tooltip="Main Causal Part Number"/> -->
+	                	<RadioButton groupName="MCPN" selected="{WarrantyClaim>isMCPN}" editable="{WarrantyClaim>/CanEdit}"/>
 	                	<Button icon="sap-icon://edit" press="editItem" visible="false"/>
 	                	<Button icon="sap-icon://delete" press="deleteItem" visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>isMCPN} }"/>
 	                </l:HorizontalLayout>
@@ -66,12 +67,11 @@
 	                <Label text="Qty" id="__label2"/>
 	            </header>
 	        </Column>
-<!--	    <Column id="__column3">
+	        <Column id="__column4" width="7em" hAlign="End">
 	            <header>
-	                <Label text="Part Requested" id="__label3"/>
+	                <Label text="MCPN?"/>
 	            </header>
-	        </Column>  -->
-	        <Column id="__column4" width="7em" hAlign="End"/>
+	        </Column>
 	     </columns>
 	 </Table>
 	 <CheckBox text="Installed by dealer?" editable="{WarrantyClaim>/CanEdit}" visible="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' }"/>

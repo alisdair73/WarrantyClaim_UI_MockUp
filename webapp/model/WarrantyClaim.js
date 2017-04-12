@@ -48,6 +48,8 @@ sap.ui.define([
 				"TotalMaterial":"0",
 				"TotalExternalServices":"0",
 				"TotalLabour":"0",
+				"TotalHandling":"0",
+				"TotalGST":"0",
 				"StatusDescription":"NEW CLAIM",
 				"StatusIcon":"sap-icon://write-new-document",
 				"CanEdit":true,
@@ -74,11 +76,11 @@ sap.ui.define([
 			
 			this.warrantyClaim.ClaimNumber = jsonModel.ClaimNumber;
 			
-			this.warrantyClaim.OCTotal = parseFloat(jsonModel.OCTotal);
-			this.warrantyClaim.OVTotal = parseFloat(jsonModel.OVTotal);
-			this.warrantyClaim.ICTotal = parseFloat(jsonModel.ICTotal);
-			this.warrantyClaim.IVTotal = parseFloat(jsonModel.IVTotal);
-			
+			this.warrantyClaim.TotalMaterial = jsonModel.TotalMaterial;
+			this.warrantyClaim.TotalExternalServices = jsonModel.TotalExternalServices;
+			this.warrantyClaim.TotalLabour = jsonModel.TotalLabour;
+			this.warrantyClaim.TotalHandling = jsonModel.TotalHandling;
+			this.warrantyClaim.TotalGST = jsonModel.TotalGST;
 			this.warrantyClaim.TotalCostOfClaim = costFormat.format(jsonModel.TotalCostOfClaim);
 			this.warrantyClaim.StatusDescription = jsonModel.StatusDescription;
 			this.warrantyClaim.StatusIcon = jsonModel.StatusIcon;
@@ -165,6 +167,8 @@ sap.ui.define([
 			this.warrantyClaim.TotalMaterial = oWarrantyClaim.TotalMaterial;
 			this.warrantyClaim.TotalExternalServices = oWarrantyClaim.TotalExternalServices;
 			this.warrantyClaim.TotalLabour = oWarrantyClaim.TotalLabour;
+			this.warrantyClaim.TotalHandling = oWarrantyClaim.TotalHandling;
+			this.warrantyClaim.TotalGST = oWarrantyClaim.TotalGST;
 			this.warrantyClaim.StatusDescription = oWarrantyClaim.StatusDescription;
 			this.warrantyClaim.StatusIcon = oWarrantyClaim.StatusIcon;
 			this.warrantyClaim.CanEdit = oWarrantyClaim.CanEdit;
@@ -176,6 +180,7 @@ sap.ui.define([
 					var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
 					switch(oWarrantyClaimItem.ItemType) {
     					case "MAT":
+    						oWarrantyClaimItem.isMCPN = false;
     						if(this.warrantyClaim.Parts.length === 0){
     							oWarrantyClaimItem.isMCPN = true;
     						}

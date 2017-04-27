@@ -1,11 +1,15 @@
 sap.ui.define(["sap/ui/core/mvc/Controller",
 "sap/ui/model/Filter",
-"sap/ui/model/json/JSONModel"
-], function(Controller, Filter) {
+"WarrantyClaim_MockUp/model/models"
+], function(Controller, Filter, Models) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
 
+		onInit: function(){
+			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
+		},
+		
 		onPWAValueHelpRequest: function(event){
 			if (!this._PWAValueHelpDialog) {
 				this._PWAValueHelpDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.PriorWorkApprovalSelection", this);
@@ -25,13 +29,47 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			this._PWAValueHelpDialog.open();
 		},
 
-        onPWASelectionSearch: function(){
+        onPWASelectionSearch: function(event){
+        	var searchValue = event.getParameter("value");
+			var filters = [];
+			filters.push(new Filter("PWANumber",sap.ui.model.FilterOperator.Contains, searchValue));
+			filters.push(new Filter("VIN",sap.ui.model.FilterOperator.Contains, searchValue));
+			filters.push(new Filter("EngineNumber",sap.ui.model.FilterOperator.Contains, searchValue));
+			event.getSource().getBinding("items").filter(filters);
         },
         
 		onPWASelection: function(event){
 			
-			var PWANumber = event.getParameter("selectedItem").getBindingContext().getObject().PWANumber;
-			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber",PWANumber);
+			var dataObject = null;
+			if (event.getId() === "suggestionItemSelected"){
+				dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
+			} else {
+				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
+			}
+			
+			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber",dataObject.PWANumber);
+			this.getView().getModel("WarrantyClaim").setProperty("/VIN",dataObject.VIN);
+			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber",dataObject.EngineNumber);
+			
+			if (dataObject.MCPN){
+				
+				var parts = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
+
+				if(parts.length === 0){
+					var warrantyItem = Models.createNewWarrantyItem("MAT");
+					warrantyItem.setProperty("/PartNumber", dataObject.MCPN);
+					warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
+					warrantyItem.setProperty("/Quantity", 1); //???
+					warrantyItem.setProperty("/isMCPN", true);
+					parts.push(warrantyItem.getProperty("/"));
+					this.getView().getModel("WarrantyClaim").setProperty("/Parts",parts);
+					
+				} else {
+					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/PartNumber",dataObject.MCPN);
+					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/Description",dataObject.MCPNDescription);
+					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/Quantity",1); //???
+				}
+			}
 		},
 		
 		onPWASelectionClose: function(){
@@ -57,24 +95,37 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			this._RecallValueHelpDialog.open();
 		},
 		
-        onRecallSelectionSearch: function(){
+        onRecallSelectionSearch: function(event){
+        	var searchValue = event.getParameter("value");
+			var filters = [];
+			filters.push(new Filter("ExternalRecallNumber",sap.ui.model.FilterOperator.Contains, searchValue));
+			filters.push(new Filter("RecallInformation",sap.ui.model.FilterOperator.Contains, searchValue));
+			event.getSource().getBinding("items").filter(filters);  
         },
         
 		onRecallSelection: function(event){
 			
-			var recallNumber = event.getParameter("selectedItem").getBindingContext().getObject().InternalRecallNumber;
-			var serialIsMandatory = event.getParameter("selectedItem").getBindingContext().getObject().SerialNumberIsMandatory;
-			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber",recallNumber);
-			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",serialIsMandatory);
+			var dataObject = null;
+			if (event.getId() === "suggestionItemSelected"){
+				dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
+			} else {
+				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
+			}
+
+			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber",dataObject.ExternalRecallNumber);
+			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
 		},
 		
 		onRecallSelectionClose: function(){
 			this._RecallValueHelpDialog.close();
 		},
 		
-    	onRecallSelected: function(event){
-    		var isMandatory = event.getParameter("selectedItem").getBindingContext().getObject().SerialNumberIsMandatory;
-    		this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",isMandatory);
+    	_salesOrgChanged: function(channel, event, data){
+    		
+    		var filters = [];
+			filters.push(new Filter("SalesOrg", sap.ui.model.FilterOperator.EQ, data.SalesOrg));
+    		this.getView().byId("PWANumber").getBinding("suggestionRows").filter(filters);
+    		this.getView().byId("recallNumber").getBinding("suggestionRows").filter(filters);
     	}
 	});
 

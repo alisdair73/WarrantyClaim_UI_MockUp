@@ -272,8 +272,9 @@ sap.ui.define([
 			//claimNumber = '2016110067';	
 			//claimNumber = '100000000651';
 			//claimNumber = "100000000660";
-			claimNumber = "2016110477";
+			//claimNumber = "2016110477";
 			//claimNumber = "100000000511";
+			//claimNumber = "100000000567"; //MOCK Record
 			
 			var entityPath = "";
 			if (claimNumber){
@@ -306,7 +307,7 @@ sap.ui.define([
 			this.getView().bindElement({
 				path: entityPath,
 				parameters: {
-					expand: "WarrantyClaimItems,Attachments"
+					expand: "WarrantyClaimItems" //,Attachments
 				},
 				events: {
 					change: this._onBindingChange.bind(this),
@@ -331,6 +332,9 @@ sap.ui.define([
 			));
 			
 			sap.ui.getCore().byId("claimTypeList").getBinding("items").filter(filters);	
+			
+			//Notify any subscribers to Sales Organisation Changes
+			sap.ui.getCore().getEventBus().publish("SalesOrg","Changed",{"SalesOrg":salesOrganisation});
 		},
 		
 		_onBindingChange: function(oData) {
@@ -338,6 +342,9 @@ sap.ui.define([
 			WarrantyClaim.updateWarrantyClaimFromOdata(oData);
 			this.readCatalog("ZSYM1","SymptomCodes");
 			this.readCatalog("ZDEF1","DefectCodes");
+			
+			//Notify any subscribers to Sales Organisation Changes
+			sap.ui.getCore().getEventBus().publish("SalesOrg","Changed",{"SalesOrg":this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")});
 		},		
 		
 		_onMetadataLoaded: function() {

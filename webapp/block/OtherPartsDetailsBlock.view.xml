@@ -44,7 +44,9 @@
 	        		</l:HorizontalLayout>
 	                <l:HorizontalLayout>
 	                	<!-- <core:Icon src="sap-icon://broken-link" visible="{WarrantyClaim>isMCPN}" tooltip="Main Causal Part Number"/> -->
-	                	<RadioButton groupName="MCPN" selected="{WarrantyClaim>isMCPN}" editable="{WarrantyClaim>/CanEdit}"/>
+	                	<RadioButton groupName="MCPN" selected="{WarrantyClaim>isMCPN}" editable="false"/>
+	                </l:HorizontalLayout>
+	                <l:HorizontalLayout>
 	                	<Button icon="sap-icon://edit" press="editItem" visible="false"/>
 	                	<Button icon="sap-icon://delete" press="deleteItem" visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>isMCPN} }"/>
 	                </l:HorizontalLayout>
@@ -67,11 +69,12 @@
 	                <Label text="Qty" id="__label2"/>
 	            </header>
 	        </Column>
-	        <Column id="__column4" width="7em" hAlign="End">
+	        <Column id="__column4" width="7em">
 	            <header>
 	                <Label text="MCPN?"/>
 	            </header>
 	        </Column>
+	     	<Column id="__column5" width="7em" hAlign="End"/>
 	     </columns>
 	 </Table>
 	 <CheckBox text="Installed by dealer?" editable="{WarrantyClaim>/CanEdit}" visible="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' }"/>

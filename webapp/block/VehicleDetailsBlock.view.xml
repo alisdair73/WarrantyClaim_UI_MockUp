@@ -14,18 +14,17 @@
 								<l:content>
 								<l:VerticalLayout width="100%">
 									<Label text="Dealer Contact" labelFor="dealerContact"/>
-									<ComboBox 
-										id="dealerContact"
-										width="100%"
-										showSecondaryValues= "true"
+									<Input 
+										id="dealerContact" 
+										value="{WarrantyClaim>DealerContact}"
 										editable="{WarrantyClaim>CanEdit}"
-										items="{
-											path: '/EmployeeSet',
-											sorter: { path: 'LastName' }
-										}"
-										selectedKey="{WarrantyClaim>DealerContact}">
-										<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
-									</ComboBox>		
+										showSuggestion="true"
+										suggestionItemSelected="onDealerContactSelection"
+										suggestionItems="{/EmployeeSet}">
+										<suggestionItems>
+											<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" />
+										</suggestionItems>										
+									</Input>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="PWA Number" labelFor="PWANumber"/>
@@ -36,20 +35,68 @@
 										required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 										showValueHelp="true" 
 										valueHelpRequest="onPWAValueHelpRequest"
-										valueHelpOnly = "true"
-									/>
+										showSuggestion="true"
+										suggestionItemSelected="onPWASelection"
+										maxSuggestionWidth="500px"
+										suggestionRows="{/PriorWorkApprovalSet}">
+										<suggestionColumns>
+											<Column>
+												<Text text="PWA Number" />
+											</Column>
+											<Column>
+												<Text text="VIN" />
+											</Column>
+											<Column>
+												<Text text="Engine Number" />
+											</Column>
+										</suggestionColumns>
+										<suggestionRows>
+											<ColumnListItem>
+												<cells>
+													<Label text="{PWANumber}" />
+													<Label text="{VIN}" />
+													<Label text="{EngineNumber}" />
+												</cells>
+											</ColumnListItem>
+										</suggestionRows>
+									</Input>
 								</l:VerticalLayout>
 								<l:VerticalLayout width="100%">
 									<Label text="Recall Number" labelFor="recallNumber"/>
 									<Input 
 										id="recallNumber" 
-										value="{WarrantyClaim>RecallNumber}"	
+										value="{WarrantyClaim>RecallNumber}"
+										valueState="{= ${WarrantyClaim>RecallNumber}.length > 10 ? 'Error' : 'None'}"
+										valueStateText="Recall niumber is maximum 10 characters."
 										editable="{WarrantyClaim>CanEdit}"
-										required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }"
+										required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 										showValueHelp="true" 
 										valueHelpRequest="onRecallValueHelpRequest"
-										valueHelpOnly = "true"
-									/>
+										showSuggestion="true"
+										suggestionItemSelected="onRecallSelection"
+										maxSuggestionWidth="600px"
+										suggestionRows="{/RecallSet}">
+										<suggestionColumns>
+											<Column>
+												<Text text="External Recall Number" />
+											</Column>
+											<Column width="15em">
+												<Text text="Details" />
+											</Column>
+											<Column>
+												<Text text="Serial # \nRequired" />
+											</Column>
+										</suggestionColumns>
+										<suggestionRows>
+											<ColumnListItem>
+												<cells>
+													<Label text="{ExternalRecallNumber}" />
+													<Label text="{RecallInformation}" />
+													<CheckBox selected="{SerialNumberIsMandatory}" editable="false"/>
+												</cells>
+											</ColumnListItem>
+										</suggestionRows>
+									</Input>									
 								</l:VerticalLayout>	
 								<l:VerticalLayout width="100%">
 									<Label text="{= ${WarrantyClaim>ObjectType} === 'VELO'? 'VIN' : 'Serial Number' }"/>

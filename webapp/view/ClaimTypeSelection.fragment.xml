@@ -5,7 +5,7 @@
 		    	<sap.ui.layout.form:formContainers>
 		        	<sap.ui.layout.form:FormContainer>
 		            	<sap.ui.layout.form:formElements>
-		                	<sap.ui.layout.form:FormElement label="Sales Organisation">
+		                	<sap.ui.layout.form:FormElement label="Sales Organisation" visible="{= ${SalesAreas>/}.length > 1 ? true:false }">
 		                    	<sap.ui.layout.form:fields>			
 									<ComboBox 
 										showSecondaryValues= "false"
@@ -26,6 +26,7 @@
 									<List id="claimTypeList"
 			    						mode="SingleSelectMaster"
 			    						select="handleClaimTypeListSelect"
+			    						noDataText="No Claim Types for selected Sales Organisation"
 										items="{
 											path: '/ClaimTypeSet',
 											sorter: { path: 'Description' },

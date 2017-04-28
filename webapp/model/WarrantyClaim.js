@@ -38,6 +38,7 @@ sap.ui.define([
 				"NewSerialNumber":"",
 				"PartsInstallDate": null,
 				"PartsInstallKm": "0",
+				"PartsInstalledByDealer": false,
 				"OriginalInvoiceNumber":"",
 				"DealerComments":"",
 				"DefectCode":"",
@@ -155,6 +156,7 @@ sap.ui.define([
 			this.warrantyClaim.NewSerialNumber = oWarrantyClaim.NewSerialNumber;
 			this.warrantyClaim.PartsInstallDate = oWarrantyClaim.PartsInstallDate;
 			this.warrantyClaim.PartsInstallKm = oWarrantyClaim.PartsInstallKm;
+			this.warrantyClaim.PartsInstalledByDealer = oWarrantyClaim.PartsInstalledByDealer;
 			this.warrantyClaim.OriginalInvoiceNumber = oWarrantyClaim.OriginalInvoiceNumber;
 			this.warrantyClaim.DealerComments = oWarrantyClaim.DealerComments;
 			this.warrantyClaim.DefectCode = oWarrantyClaim.DefectCode;
@@ -234,6 +236,7 @@ sap.ui.define([
 			warrantyClaim.NewSerialNumber = this.warrantyClaim.NewSerialNumber;
 			warrantyClaim.PartsInstallDate = this.warrantyClaim.PartsInstallDate;
 			warrantyClaim.PartsInstallKm = this.warrantyClaim.PartsInstallKm;
+			warrantyClaim.PartsInstalledByDealer = this.warrantyClaim.PartsInstalledByDealer;
 			warrantyClaim.OriginalInvoiceNumber = this.warrantyClaim.OriginalInvoiceNumber;
 			warrantyClaim.DealerComments = this.warrantyClaim.DealerComments;
 			warrantyClaim.DefectCode = this.warrantyClaim.DefectCode;

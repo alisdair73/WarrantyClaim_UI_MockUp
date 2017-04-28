@@ -28,7 +28,7 @@ sap.ui.define([
 					"symptomCodeL1": "",
 					"symptomCodeL2": "",
 					"defectCodeL1": "",
-					"serialNumberIsInitial": false
+					"serialNumberIsMandatory": false
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
@@ -93,7 +93,7 @@ sap.ui.define([
 			crossAppNavigator.toExternal({
 				target: {
 					semanticObject: "Dealer",
-					action: "setDealership"
+					action: "setDealership" 
 				}
 			});
 		},
@@ -153,19 +153,19 @@ sap.ui.define([
 			
 			for (var i = 0; i < oSalesAreas.results.length; i++) {
 				var salesArea = oSalesAreas.results[i];
-				if (distinctCompanyCodes.indexOf(salesArea.CompCode) === -1){
+				if (distinctCompanyCodes.indexOf(salesArea.CompanyCode) === -1){
 					salesOrganisations.push({
-						"CompanyCode":salesArea.CompCode,
-						"CompanyCodeName": salesArea.CompCodeDescr,
+						"CompanyCode":salesArea.CompanyCode,
+						"CompanyCodeName": salesArea.CompanyCodeName,
 						"SalesOrg":salesArea.SalesOrg
 					});
-					distinctCompanyCodes.push(salesArea.CompCode);
+					distinctCompanyCodes.push(salesArea.CompanyCode);
 				}
 			}
 			
-			salesOrganisations.sort(function(a,b){
+/*			salesOrganisations.sort(function(a,b){
 				return ((a.CompanyCodeName < b.CompanyCodeName) ? -1 : ((a.CompanyCodeName > b.CompanyCodeName) ? 1 : 0));
-			});
+			});*/
 			
 			// Set the default as the first entry in the list
 			this.getView().getModel("WarrantyClaim").setProperty("/CompanyCode",salesOrganisations[0].CompanyCode);
@@ -176,8 +176,9 @@ sap.ui.define([
 		_openClaimTypeSelectDialog: function() {
 			//Need to determine the Sales Organisations being used and filter Claim Types
 			this.getOwnerComponent().getModel().read(
-				"/DealerSalesAreaSet", {
+				"/ClaimTypeSet", {
 					context: null,
+					filters: [new Filter("IsAuthorisationType",sap.ui.model.FilterOperator.EQ, false)],
 					success: function(oData) {
 							//this._busyDialog.close();
 							if (!oData.results.length) {
@@ -234,8 +235,9 @@ sap.ui.define([
 				// check that the user has an active Dealership assigned if not 
 				// we don't allow them to continue
 				this.getOwnerComponent().getModel().read(
-					"/DealershipSet?$filter=active eq true", {
+					"/DealershipSet", {
 						context: null,
+						filters: [new Filter("active",sap.ui.model.FilterOperator.EQ, true)],
 						success: function(oData) {
 							if (!oData.results.length) {
 								this._showNoDealershipDialog();
@@ -274,7 +276,7 @@ sap.ui.define([
 			//claimNumber = "100000000660";
 			//claimNumber = "2016110477";
 			//claimNumber = "100000000511";
-			//claimNumber = "100000000567"; //MOCK Record
+			claimNumber = "100000000567"; //MOCK Record
 			
 			var entityPath = "";
 			if (claimNumber){
@@ -307,7 +309,7 @@ sap.ui.define([
 			this.getView().bindElement({
 				path: entityPath,
 				parameters: {
-					expand: "WarrantyClaimItems" //,Attachments
+					expand: "WarrantyClaimItems,Attachments"
 				},
 				events: {
 					change: this._onBindingChange.bind(this),

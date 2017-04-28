@@ -77,5 +77,4 @@
 	     	<Column id="__column5" width="7em" hAlign="End"/>
 	     </columns>
 	 </Table>
-	 <CheckBox text="Installed by dealer?" editable="{WarrantyClaim>/CanEdit}" visible="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' }"/>
 </mvc:View>

@@ -77,21 +77,25 @@
 										<Input id="originalInvoiceNo" value="{WarrantyClaim>OriginalInvoiceNumber}" 
 											editable="{WarrantyClaim>CanEdit}" required="true"/>
 									</l:VerticalLayout>	
-									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }">
+									<l:VerticalLayout 
+										width="100%" 
+										visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
+									>
 										<l:layoutData>
 											<l:GridData span="L6"/>
 										</l:layoutData>
-										<Label text="Old Serial Number" labelFor="oldSerialNumber"/>
-										<Input id="oldSerialNumber" value="{WarrantyClaim>OldSerialNumber}" 
-											editable="{WarrantyClaim>CanEdit}" required="{ViewHelper>/warrantyUI/serialNumberIsMandatory}"/>
+										<Label text="Old Serial Number" labelFor="oldSerialNumber" required="true"/>
+										<Input id="oldSerialNumber" value="{WarrantyClaim>OldSerialNumber}" editable="{WarrantyClaim>CanEdit}" />
 									</l:VerticalLayout>
-									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' }">
+									<l:VerticalLayout 
+										width="100%" 
+										visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
+									>
 										<l:layoutData>
 											<l:GridData span="L6"/>
 										</l:layoutData>
-										<Label text="New Serial Number" labelFor="newSerialNumber"/>
-										<Input id="newSerialNumber" value="{WarrantyClaim>NewSerialNumber}" 
-											editable="{WarrantyClaim>CanEdit}" required="{ViewHelper>/warrantyUI/serialNumberIsMandatory}"/>
+										<Label text="New Serial Number" labelFor="newSerialNumber" required="true"/>
+										<Input id="newSerialNumber" value="{WarrantyClaim>NewSerialNumber}" editable="{WarrantyClaim>CanEdit}"/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>

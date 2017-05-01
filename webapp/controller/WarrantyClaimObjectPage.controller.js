@@ -276,7 +276,7 @@ sap.ui.define([
 			//claimNumber = "100000000660";
 			//claimNumber = "2016110477";
 			//claimNumber = "100000000511";
-			claimNumber = "100000000567"; //MOCK Record
+			//claimNumber = "100000000567"; //MOCK Record
 			
 			var entityPath = "";
 			if (claimNumber){

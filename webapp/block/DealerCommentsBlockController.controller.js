@@ -17,7 +17,7 @@ sap.ui.define([
 		},
 		
 		readDefectCatalog: function(){
-			this.readCatalog("ZDEF1","DefectCodes");
+			this.readCatalog("ZDEF1","DefectCodes",2);
 		},
 		
 		onDefectCodeSelectedL1: function(oEvent){

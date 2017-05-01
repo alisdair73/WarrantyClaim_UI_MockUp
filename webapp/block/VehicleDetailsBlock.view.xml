@@ -1,137 +1,117 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" 
-	xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" 
+	xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form"
 	controllerName="WarrantyClaim_MockUp.block.VehicleDetailsBlockController">
-	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" editable="true" id="__form0" objectBindings="{WarrantyClaim>/}">
-		<sap.ui.layout.form:layout>
-	    	<sap.ui.layout.form:ResponsiveGridLayout/>
-	    </sap.ui.layout.form:layout>
-		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer title="Vehicle Details">
-				<sap.ui.layout.form:formElements>
-					<sap.ui.layout.form:FormElement>
-						<sap.ui.layout.form:fields>
-							<l:BlockLayout>
-								<l:BlockLayoutRow>
-									<l:BlockLayoutCell>
-										<l:VerticalLayout width="100%">
-											<Label text="Dealer Contact" labelFor="dealerContact"/>
-										<Input 
-											id="dealerContact" 
-											value="{WarrantyClaim>DealerContact}"
-											editable="{WarrantyClaim>CanEdit}"
-											showSuggestion="true"
-											suggestionItemSelected="onDealerContactSelection"
-											suggestionItems="{/EmployeeSet}">
-											<suggestionItems>
-												<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" />
-											</suggestionItems>										
-										</Input>
-									</l:VerticalLayout>
-								</l:BlockLayoutCell>
-								<l:BlockLayoutCell>
-									<l:VerticalLayout width="100%">
-										<Label 
-											text="PWA Number" 
-											labelFor="PWANumber" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
-										/>
-										<Input 
-											id="PWANumber" 
-											value="{WarrantyClaim>AuthorisationNumber}"	
-											editable="{WarrantyClaim>CanEdit}"
-											showValueHelp="true" 
-											valueHelpRequest="onPWAValueHelpRequest"
-											showSuggestion="true"
-											suggestionItemSelected="onPWASelection"
-											maxSuggestionWidth="500px"
-											suggestionRows="{/PriorWorkApprovalSet}">
-											<suggestionColumns>
-												<Column>
-													<Text text="PWA Number" />
-												</Column>
-												<Column>
-													<Text text="VIN" />
-												</Column>
-												<Column>
-													<Text text="Engine Number" />
-												</Column>
-											</suggestionColumns>
-											<suggestionRows>
-												<ColumnListItem>
-													<cells>
-														<Label text="{PWANumber}" />
-														<Label text="{VIN}" />
-														<Label text="{EngineNumber}" />
-													</cells>
-												</ColumnListItem>
-											</suggestionRows>
-										</Input>
-									</l:VerticalLayout>
-								</l:BlockLayoutCell>
-								<l:BlockLayoutCell>
-									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}">
-										<Label 
-											text="Recall Number" 
-											labelFor="recallNumber" 
-											required="true"
-										/>
-										<Input 
-											id="recallNumber" 
-											value="{WarrantyClaim>RecallNumber}"
-											valueState="{= ${WarrantyClaim>RecallNumber}.length > 10 ? 'Error' : 'None'}"
-											valueStateText="Recall number is maximum 10 characters."
-											editable="{WarrantyClaim>CanEdit}"
-											showValueHelp="true" 
-											valueHelpRequest="onRecallValueHelpRequest"
-											showSuggestion="true"
-											suggestionItemSelected="onRecallSelection"
-											maxSuggestionWidth="600px"
-											suggestionRows="{/RecallSet}"
-										>
-											<suggestionColumns>
-												<Column>
-													<Text text="External Recall Number" />
-												</Column>
-												<Column width="15em">
-													<Text text="Details" />
-												</Column>
-												<Column>
-													<Text text="Serial # \nRequired" />
-												</Column>
-											</suggestionColumns>
-											<suggestionRows>
-												<ColumnListItem>
-													<cells>
-														<Label text="{ExternalRecallNumber}" />
-														<Label text="{RecallInformation}" />
-														<CheckBox selected="{SerialNumberIsMandatory}" editable="false"/>
-													</cells>
-												</ColumnListItem>
-											</suggestionRows>
-										</Input>									
-									</l:VerticalLayout>	
-								</l:BlockLayoutCell>
-								</l:BlockLayoutRow>
-							<l:BlockLayoutRow>
-									<l:BlockLayoutCell>
-								<l:VerticalLayout width="100%">
-									<Label text="{= ${WarrantyClaim>ObjectType} === 'VELO'? 'VIN' : 'Serial Number' }"/>
-									<Input  id="VIN" value="{WarrantyClaim>VIN}" editable="{WarrantyClaim>CanEdit}"/>
-								</l:VerticalLayout>	
-								</l:BlockLayoutCell>
-								<l:BlockLayoutCell>
-								<l:VerticalLayout width="100%">
-									<Label text="Engine Number"/>
-									<Input  id="engineNumber" value="{WarrantyClaim>EngineNumber}" editable="{WarrantyClaim>CanEdit}"/>
-								</l:VerticalLayout>
-								</l:BlockLayoutCell>
-								<l:BlockLayoutCell/>
-								</l:BlockLayoutRow>
-								</l:BlockLayout>
-						</sap.ui.layout.form:fields>
-					</sap.ui.layout.form:FormElement>
-				</sap.ui.layout.form:formElements>
-			</sap.ui.layout.form:FormContainer>
-		</sap.ui.layout.form:formContainers>
-	</sap.ui.layout.form:Form>
+		<f:SimpleForm id="VehicleForm" objectBindings="{WarrantyClaim>/}"
+			minWidth="1024"
+			maxContainerCols="2"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanL="4"
+			labelSpanM="4"
+			emptySpanL="0"
+			emptySpanM="0"
+			columnsL="2"
+			columnsM="2"
+			class="editableForm">
+			<f:content>
+				<core:Title text="Vehicle Details" />
+				<Label text="{= ${WarrantyClaim>ObjectType} === 'VELO'? 'VIN' : 'Serial Number' }"/>
+				<Input  id="VIN" value="{WarrantyClaim>VIN}" editable="{WarrantyClaim>CanEdit}"/>
+				<Label text="Engine Number"/>
+				<Input  id="engineNumber" value="{WarrantyClaim>EngineNumber}" editable="{WarrantyClaim>CanEdit}"/>
+				
+				<core:Title text="Dealer" />
+				<Label text="Dealer Contact" labelFor="dealerContact"/>
+				<Input 
+					id="dealerContact" 
+					value="{WarrantyClaim>DealerContact}"
+					editable="{WarrantyClaim>CanEdit}"
+					showSuggestion="true"
+					suggestionItemSelected="onDealerContactSelection"
+					suggestionItems="{/EmployeeSet}">
+					<suggestionItems>
+						<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" />
+					</suggestionItems>										
+				</Input>
+
+				<core:Title text="Authorisation/Recall" />
+				<Label 
+					text="PWA Number" 
+					labelFor="PWANumber" 
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+				/>
+				<Input 
+					id="PWANumber" 
+					value="{WarrantyClaim>AuthorisationNumber}"	
+					editable="{WarrantyClaim>CanEdit}"
+					showValueHelp="true" 
+					valueHelpRequest="onPWAValueHelpRequest"
+					showSuggestion="true"
+					suggestionItemSelected="onPWASelection"
+					maxSuggestionWidth="500px"
+					suggestionRows="{/PriorWorkApprovalSet}">
+					<suggestionColumns>
+						<Column>
+							<Text text="PWA Number" />
+						</Column>
+						<Column>
+							<Text text="VIN" />
+						</Column>
+						<Column>
+							<Text text="Engine Number" />
+						</Column>
+					</suggestionColumns>
+					<suggestionRows>
+						<ColumnListItem>
+							<cells>
+								<Label text="{PWANumber}" />
+								<Label text="{VIN}" />
+								<Label text="{EngineNumber}" />
+							</cells>
+						</ColumnListItem>
+					</suggestionRows>
+				</Input>
+				<Label 
+					text="Recall Number" 
+					labelFor="recallNumber" 
+					required="true"
+					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
+				/>
+				<Input 
+					id="recallNumber" 
+					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
+					value="{WarrantyClaim>RecallNumber}"
+					valueState="{= ${WarrantyClaim>RecallNumber}.length > 10 ? 'Error' : 'None'}"
+					valueStateText="Recall number is maximum 10 characters."
+					editable="{WarrantyClaim>CanEdit}"
+					showValueHelp="true" 
+					valueHelpRequest="onRecallValueHelpRequest"
+					showSuggestion="true"
+					suggestionItemSelected="onRecallSelection"
+					maxSuggestionWidth="600px"
+					suggestionRows="{/RecallSet}"
+				>
+					<suggestionColumns>
+						<Column>
+							<Text text="External Recall Number" />
+						</Column>
+						<Column width="15em">
+							<Text text="Details" />
+						</Column>
+						<Column>
+							<Text text="Serial # \nRequired" />
+						</Column>
+					</suggestionColumns>
+					<suggestionRows>
+						<ColumnListItem>
+							<cells>
+								<Label text="{ExternalRecallNumber}" />
+								<Label text="{RecallInformation}" />
+								<CheckBox selected="{SerialNumberIsMandatory}" editable="false"/>
+							</cells>
+						</ColumnListItem>
+					</suggestionRows>
+				</Input>	
+			</f:content>
+		</f:SimpleForm>
 </mvc:View>

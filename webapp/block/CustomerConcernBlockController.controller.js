@@ -18,7 +18,7 @@ sap.ui.define([
 		},
 		
 		readSymptomCatalog: function(){
-			this.readCatalog("ZSYM1","SymptomCodes");
+			this.readCatalog("ZSYM1","SymptomCodes",3);
 		},
 		
 		onSymptomCodeSelectedL1: function(oEvent){

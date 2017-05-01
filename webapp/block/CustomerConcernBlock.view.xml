@@ -63,7 +63,7 @@
 											}"
 											selectedKey="{WarrantyClaim>SymptomCode}">
 											<core:ListItem key="{SymptomCodesHelper>code}" 
-												text="{SymptomCodesHelper>text} ({=${SymptomCodesHelper>code}.substr(6,5)})"/>
+												text="{SymptomCodesHelper>text} ({=${SymptomCodesHelper>code}.substr(8,5)})"/>
 										</ComboBox>	
 									</l:VerticalLayout>									
 								</l:content>	

@@ -1,5 +1,6 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.uxap" xmlns:core="sap.ui.core"
 			xmlns:m="sap.m" xmlns:claimBlocks="WarrantyClaim_MockUp.block" xmlns:layout="sap.ui.layout"
+			xmlns:chart="sap.suite.ui.microchart"
 			controllerName="WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage">
 	<ObjectPageLayout id="WarrantyClaimLayout" enableLazyLoading="false" showFooter="true"
 		showHeaderContent="true" busy="{ViewHelper>/busy}" busyIndicatorDelay="{ViewHelper>/delay}">

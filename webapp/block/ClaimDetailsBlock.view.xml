@@ -1,140 +1,148 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-	xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.ClaimDetailsBlockController">
-	<sap.ui.layout.form:Form xmlns:sap.ui.layout.form="sap.ui.layout.form" id="__form0" objectBindings="{WarrantyClaim>/}">
-		<sap.ui.layout.form:layout>
-	    	<sap.ui.layout.form:ResponsiveGridLayout/>
-	    </sap.ui.layout.form:layout>	
-		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer id="__container0" title="Claim Details" >
-				<sap.ui.layout.form:formElements>
-					<sap.ui.layout.form:FormElement id="__element0" >
-						<sap.ui.layout.form:fields>
-							<l:Grid defaultSpan="L4 M6 S6">
-								<l:content>							
-									<l:VerticalLayout width="100%">
-										<Label text="Repair Order Number"/>
-										<Input id="repairOrderNumber" value="{WarrantyClaim>RepairOrderNumber}" editable="{WarrantyClaim>CanEdit}"/>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%">
-										<Label text="Date of Repair"/>
-										<DatePicker id="dateOfRepair" change="onChangeDatePicker"
-											displayFormat="medium" dateValue="{WarrantyClaim>DateOfRepair}" editable="{WarrantyClaim>CanEdit}"/>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%">
-										<Label text="Date of Failure"/>
-										<DatePicker id="dateOfFailure" change="onChangeDatePicker"
-											displayFormat="medium" dateValue="{WarrantyClaim>DateOfFailure}" editable="{WarrantyClaim>CanEdit}"/>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%">
-										<Label text="Failure KM"/>
-										<Input id="failureKM" value="{WarrantyClaim>FailureMeasure}" editable="{WarrantyClaim>CanEdit}"/>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%">
-										<Label text="Main Causal Part Number (MCPN)"/>
-										<Input id="MCPN" value="{WarrantyClaim>/Parts/0/PartNumber}"	
-											editable="{WarrantyClaim>CanEdit}"
-											showValueHelp="true" valueHelpRequest="addMCPN"/>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%">
-										<Label text="MCPN Quantity"/>
-										<Input id="MCPNQuantity" type="Number"
-										value="{
-											path: 'WarrantyClaim>/Parts/0/Quantity',
-											type: 'sap.ui.model.type.Float',
-											formatOptions: {
-													minFractionDigits: 3,
-													maxFractionDigits: 3
-												}
-											}"
-										editable="{WarrantyClaim>CanEdit}"/>
-									</l:VerticalLayout>									
-									<l:VerticalLayout width="100%">
-										<l:layoutData>
-											<l:GridData span="L12"/>
-										</l:layoutData>
-										<Label text="MIL ON"/>
-										<FlexBox>
-											<items>
-												<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{WarrantyClaim>MilIndicator}" select="onMILSelected" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC1" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC1' : '' }" value="{WarrantyClaim>DTC1}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC2" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC2' : '' }" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
-												<Input id="DTC3" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC3' : '' }" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
-											</items>
-										</FlexBox>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }">
-										<Label text="Part Install Date" labelFor="partInstallDate"/>
-										<Input id="partInstallDate" value="{WarrantyClaim>PartsInstallDate}" 
-											editable="{WarrantyClaim>CanEdit}" required="true"/>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }">
-										<Label text="Part Install KM" labelFor="partInstallKM"/>
-										<Input id="partInstallKM" value="{WarrantyClaim>PartsInstallKM}" 
-											editable="{WarrantyClaim>CanEdit}" required="true"/>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%" visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }">
-										<Label text="Original Invoice Number" labelFor="originalInvoiceNo"/>
-										<Input id="originalInvoiceNo" value="{WarrantyClaim>OriginalInvoiceNumber}" 
-											editable="{WarrantyClaim>CanEdit}" required="true"/>
-									</l:VerticalLayout>	
-									<l:VerticalLayout 
-										width="100%" 
-										visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
-									>
-										<l:layoutData>
-											<l:GridData span="L6"/>
-										</l:layoutData>
-										<Label text="Old Serial Number" labelFor="oldSerialNumber" required="true"/>
-										<Input id="oldSerialNumber" value="{WarrantyClaim>OldSerialNumber}" editable="{WarrantyClaim>CanEdit}" />
-									</l:VerticalLayout>
-									<l:VerticalLayout 
-										width="100%" 
-										visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
-									>
-										<l:layoutData>
-											<l:GridData span="L6"/>
-										</l:layoutData>
-										<Label text="New Serial Number" labelFor="newSerialNumber" required="true"/>
-										<Input id="newSerialNumber" value="{WarrantyClaim>NewSerialNumber}" editable="{WarrantyClaim>CanEdit}"/>
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%">
-										<l:layoutData>
-											<l:GridData span="L6"/>
-										</l:layoutData>
-										<Label text="Technician"/>	
-										<ComboBox width="100%"
-											showSecondaryValues= "true"
-											editable="{WarrantyClaim>CanEdit}"
-											items="{
-												path: '/EmployeeSet',
-												sorter: { path: 'LastName' }
-											}"
-											selectedKey="{WarrantyClaim>Technician}">
-											<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
-										</ComboBox>	
-									</l:VerticalLayout>
-									<l:VerticalLayout width="100%">
-										<l:layoutData>
-											<l:GridData span="L6"/>
-										</l:layoutData>
-										<Label text="Service Advisor"/>
-										<ComboBox width="100%"
-											showSecondaryValues= "true"
-											editable="{WarrantyClaim>CanEdit}"
-											items="{
-												path: '/EmployeeSet',
-												sorter: { path: 'LastName' }
-											}"
-											selectedKey="{WarrantyClaim>ServiceAdvisor}">
-											<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
-										</ComboBox>	
-									</l:VerticalLayout>	
-								</l:content>	
-							</l:Grid>
-						</sap.ui.layout.form:fields>
-					</sap.ui.layout.form:FormElement>
-				</sap.ui.layout.form:formElements>
-			</sap.ui.layout.form:FormContainer>
-		</sap.ui.layout.form:formContainers>
-	</sap.ui.layout.form:Form>
+	xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
+	controllerName="WarrantyClaim_MockUp.block.ClaimDetailsBlockController">
+	<VBox class="sapUiSmallMargin">
+		<f:SimpleForm id="SimpleFormChange480_12120"
+		objectBindings="{WarrantyClaim>/}"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanL="4"
+			labelSpanM="12"
+			adjustLabelSpan="false"
+			emptySpanL="0"
+			emptySpanM="0"
+			columnsL="2"
+			columnsM="2">
+		<f:content>
+			<core:Title text="Failure Details"/>
+			<Label text="Failure KM"/>
+			<Input 
+				id="failureKM" 
+				value="{WarrantyClaim>FailureMeasure}" 
+				editable="{WarrantyClaim>CanEdit}"
+				valueState="{= ${WarrantyClaim>FailureMeasure} > 0 &amp;&amp; ${WarrantyClaim>FailureMeasure} &lt; 1000000 ? 'None' : 'Error' }"
+				valueStateText="Failure KM must be between 0 and 1000000"
+			/>
+			<Label text="Date of Failure"/>
+			<DatePicker 
+				id="dateOfFailure" 
+				change="onChangeDatePicker"
+				displayFormat="medium" 
+				dateValue="{WarrantyClaim>DateOfFailure}" 
+				editable="{WarrantyClaim>CanEdit}"
+			/>
+			<core:Title text="Repair Details"/>
+			<Label text="Repair Order Number"/>
+			<Input id="repairOrderNumber" value="{WarrantyClaim>RepairOrderNumber}" editable="{WarrantyClaim>CanEdit}"/>
+			<Label text="Date of Repair"/>
+			<DatePicker 
+				id="dateOfRepair" 
+				change="onChangeDatePicker"
+				displayFormat="medium" 
+				dateValue="{WarrantyClaim>DateOfRepair}" 
+				editable="{WarrantyClaim>CanEdit}"
+			/>
+			<core:Title text="Main Causal Part" />
+			<Label text="MCPN"/>
+			<Input 
+				id="MCPN" 
+				value="{WarrantyClaim>/Parts/0/PartNumber}"	
+				editable="{WarrantyClaim>CanEdit}"
+				showValueHelp="true" 
+				valueHelpRequest="addMCPN"/>
+			<Label text="MCPN Quantity"/>
+			<Input 
+				id="MCPNQuantity" 
+				type="Number"
+				value="{
+					path: 'WarrantyClaim>/Parts/0/Quantity',
+					type: 'sap.ui.model.type.Float',
+					formatOptions: {
+						maxFractionDigits: 0
+					}
+				}"
+				editable="{WarrantyClaim>CanEdit}"
+			/>
+			<core:Title text="MIL" />
+			<Label text="MIL ON"/>
+			<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{WarrantyClaim>MilIndicator}" select="onMILSelected" editable="{WarrantyClaim>CanEdit}"/>
+			<Input id="DTC1" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC1' : '' }" value="{WarrantyClaim>DTC1}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+			<Input id="DTC2" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC2' : '' }" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+			<Input id="DTC3" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC3' : '' }" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+			<core:Title text="Staff" />
+			<Label text="Technician"/>	
+			<ComboBox width="100%"
+				showSecondaryValues= "true"
+				editable="{WarrantyClaim>CanEdit}"
+				items="{
+					path: '/EmployeeSet',
+					sorter: { path: 'LastName' }
+				}"
+				selectedKey="{WarrantyClaim>Technician}">
+				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
+			</ComboBox>	
+			<Label text="Service Advisor"/>
+			<ComboBox width="100%"
+				showSecondaryValues= "true"
+				editable="{WarrantyClaim>CanEdit}"
+				items="{
+					path: '/EmployeeSet',
+					sorter: { path: 'LastName' }
+				}"
+				selectedKey="{WarrantyClaim>ServiceAdvisor}">
+				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
+			</ComboBox>	
+		</f:content>
+		</f:SimpleForm>
+		<f:SimpleForm id="ClaimSerial"
+			visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
+			objectBindings="{WarrantyClaim>/}"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanL="2"
+			labelSpanM="12"
+			adjustLabelSpan="false"
+			emptySpanL="2"
+			emptySpanM="0"
+			columnsL="1"
+			columnsM="2"
+			singleContainerFullSize="false">
+			<f:content>
+				<core:Title text="Recall Serial Numbers" />
+				<Label text="Serial Numbers" required="true"/>
+				<Input id="oldSerialNumber" placeholder="Old Serial #" value="{WarrantyClaim>OldSerialNumber}" editable="{WarrantyClaim>CanEdit}" />
+				<Input id="newSerialNumber" placeholder="New Serial #" value="{WarrantyClaim>NewSerialNumber}" editable="{WarrantyClaim>CanEdit}" />
+			</f:content>
+		</f:SimpleForm>
+		<f:SimpleForm id="ClaimParts"
+			visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+			objectBindings="{WarrantyClaim>/}"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanL="4"
+			labelSpanM="12"
+			adjustLabelSpan="false"
+			emptySpanL="0"
+			emptySpanM="0"
+			columnsL="2"
+			columnsM="2"
+			singleContainerFullSize="false">
+			<f:content>
+				<core:Title text="Parts" />
+				<Label text="Install Date" labelFor="partInstallDate" required="true"/>
+				<DatePicker 
+					id="dateOfInstall" 
+					change="onChangeDatePicker"
+					displayFormat="medium" 
+					dateValue="{WarrantyClaim>PartsInstallDate}" 
+					editable="{WarrantyClaim>CanEdit}"
+					required="true"
+				/>
+				<Label text="Part Install KM" labelFor="partInstallKM" required="true"/>
+				<Input id="partInstallKM" value="{WarrantyClaim>PartsInstallKM}" editable="{WarrantyClaim>CanEdit}" required="true"/>
+				<Label text="Original Invoice Number" labelFor="originalInvoiceNo" required="true"/>
+				<Input id="originalInvoiceNo" value="{WarrantyClaim>OriginalInvoiceNumber}" editable="{WarrantyClaim>CanEdit}" required="true"/>
+			</f:content>
+		</f:SimpleForm>
+	</VBox>
 </mvc:View>

@@ -120,6 +120,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			this._RecallValueHelpDialog.close();
 		},
 		
+		onDealerVINSelection: function(event){
+			var dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
+			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber",dataObject.EngineNumber);
+		},
+		
     	_salesOrgChanged: function(channel, event, data){
     		
     		var filters = [];

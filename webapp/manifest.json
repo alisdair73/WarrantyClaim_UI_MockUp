@@ -62,6 +62,7 @@
 	"sap.ui5": {
 		"_version": "1.1.0",
 		"rootView": "WarrantyClaim_MockUp.view.App",
+		"handleValidation": true,
 		"dependencies": {
 			"minUI5Version": "1.40.0",
 			"libs": {

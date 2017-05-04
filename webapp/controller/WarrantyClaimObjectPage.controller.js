@@ -7,15 +7,19 @@ sap.ui.define([
         "WarrantyClaim_MockUp/model/WarrantyClaim",
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
-        "sap/m/MessageStrip"
+        "sap/m/MessageStrip",
+        "sap/m/MessagePopover"
 	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
-					NumberFormat, MessageStrip) {
+					NumberFormat, MessageStrip, MessagePopover) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
 		
 		onInit: function() {
 
+			this.getView().setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
+			this._messagePopover = new MessagePopover({});
+			
 			var oViewModel = new JSONModel({
 				"busy": false,
 				"delay": 0,
@@ -55,10 +59,21 @@ sap.ui.define([
 			var claimTypeGroup = oEvent.getParameter("listItem").getBindingContext().getObject().Group;
 			var objectType = oEvent.getParameter("listItem").getBindingContext().getObject().ObjectType;
 			
+			var statusDescription = oEvent.getParameter("listItem").getBindingContext().getObject().InitialStatusDescription;
+			var statusIcon = oEvent.getParameter("listItem").getBindingContext().getObject().InitialStatusIcon;
+			
 			this.getModel("WarrantyClaim").setProperty("/ClaimType",claimType);
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeDescription", claimTypeDescription);
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeGroup", claimTypeGroup);
 			this.getModel("WarrantyClaim").setProperty("/ObjectType", objectType);
+			
+			this.getModel("WarrantyClaim").setProperty("/StatusDescription",statusDescription);
+			this.getModel("WarrantyClaim").setProperty("/StatusIcon",statusIcon);
+			
+			var customerConcernSection = this.getView().byId("customerConcern");
+			if(claimTypeGroup === 'RECALL'){
+				customerConcernSection.setVisible(false);
+			}
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 			this._claimTypeSelection.close();
@@ -98,6 +113,24 @@ sap.ui.define([
 			});
 		},
 		
+		openMessages: function(event){
+			
+/*			var messages = this.getView().getModel("ViewHelper").getProperty("/messages");
+			messages.push({ "message":"Message", "description":"Description", "type":"Error" });
+			this.getView().getModel("ViewHelper").setProperty("/messages",messages);
+            this.getView().getModel("ViewHelper").setProperty("/messageCount",messages.length);
+
+			if (!this._messagePopup)  {
+				this._messagePopup = sap.ui.xmlfragment( "WarrantyClaim_MockUp.view.Messages" );
+				this.getView().addDependent(this._messagePopup );
+			}
+			this._messagePopup.openBy(event.getSource());*/
+			
+			this._messagePopover.openBy(event.getSource());
+			
+			
+		},
+		
 		companyCodeSelected:function(event){
 			var salesOrganisation = event.getParameter("selectedItem").getBindingContext("SalesAreas").getObject().SalesOrg;
 			this.getView().getModel("WarrantyClaim").setProperty("/SalesOrganisation",salesOrganisation);
@@ -108,38 +141,11 @@ sap.ui.define([
 			this.getModel("ViewHelper").setProperty("/busy", true);
 			this._clearHeaderMessages();
 			
-			var warrantyClaimModel = this.getOwnerComponent().getModel();
-
-			warrantyClaimModel.create("/WarrantyClaimSet",
+			this.getOwnerComponent().getModel().create("/WarrantyClaimSet",
 				WarrantyClaim.convertToODataForUpdate(), 
 				{
-					"success": function(result) {
-						
-						var successMessage = "";
-						
-						switch(actionName){
-							case "SaveWarranty":
-								if(this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber")){
-			  						successMessage = "Warranty Claim number " + result.ClaimNumber + " was updated.";
-								} else {
-									successMessage = "Warranty Claim number " + result.ClaimNumber + " was created.";
-								}
-								break;
-								
-							case "ValidateWarranty":
-								successMessage = "Warranty Claim was successfully validated.";
-								break;
-								
-							case "SubmitWarranty":
-								successMessage = "Warranty Claim number " + result.ClaimNumber + " was submitted.";
-								break;
-						}
-						
-						this.getModel("ViewHelper").setProperty("/busy", false);
-						MessageToast.show(successMessage);
-						WarrantyClaim.updateWarrantyClaimFromJSONModel(result);
-					}.bind(this), 
-					
+					context: null,
+					"success": this._onActionSuccess.bind(this),
 					"error": this._onActionError.bind(this),
 					"headers" : { "warrantyaction": actionName },
 					async: true
@@ -201,19 +207,15 @@ sap.ui.define([
 				);
 		},
 		
-		_onActionSuccess: function(result){
+		_onActionSuccess: function(responseData,response){
 			
-			var message = "";
+			var leadingMessage = JSON.parse(response.headers['sap-message']);
+			MessageToast.show(leadingMessage.message);
 			
-			if(this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber")){
-			  	message = "Warranty Claim number " + result.ClaimNumber + " was updated.";
-			} else {
-				message = "Warranty Claim number " + result.ClaimNumber + " was created.";
-			}
+//			this._addMessagesToHeader(leadingMessage.details);
+			WarrantyClaim.updateWarrantyClaimFromJSONModel(responseData);
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
-			MessageToast.show(message);
-			WarrantyClaim.updateWarrantyClaimFromJSONModel(result);
 		},
 		
 		_onActionError: function(error){
@@ -222,6 +224,7 @@ sap.ui.define([
 				case "400":
 					var errorDetail = JSON.parse(error.responseText);
 					this._addMessagesToHeader(errorDetail.error.innererror.errordetails);
+					
 					break;
 			}
 			
@@ -342,6 +345,13 @@ sap.ui.define([
 		_onBindingChange: function(oData) {
 			//Check if there is any data first
 			WarrantyClaim.updateWarrantyClaimFromOdata(oData);
+			
+			var claimTypeGroup = this.getModel("WarrantyClaim").getProperty("/ClaimTypeGroup");
+			var customerConcernSection = this.getView().byId("customerConcern");
+			if(claimTypeGroup === 'RECALL'){
+				customerConcernSection.setVisible(false);
+			}
+			
 			this.readCatalog("ZSYM1","SymptomCodes");
 			this.readCatalog("ZDEF1","DefectCodes");
 			

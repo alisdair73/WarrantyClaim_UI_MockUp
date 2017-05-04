@@ -92,14 +92,19 @@ sap.ui.define([
 						for(var i=0; i< catalog.length; i++){
 							if (!catalog[i].nodes){
 								catalog.splice(i,1);
-								
+								if( i > 0 ){ i--; }
 							} else {
 								//Remove any Level 2 Entries with no Level 3
 								if( expectedLevels === 3){
 									for(var j=0; j< catalog[i].nodes.length; j++){
 										if (!catalog[i].nodes[j].nodes){
 											catalog[i].nodes.splice(j,1);
+											if( j > 0 ){ j--;}
 										}
+									}
+									if (catalog[i].nodes.length === 0){
+										catalog.splice(i,1);
+										if( i > 0 ){ i--; }
 									}
 								}
 							}

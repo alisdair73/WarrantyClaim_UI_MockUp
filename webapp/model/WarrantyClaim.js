@@ -51,8 +51,8 @@ sap.ui.define([
 				"TotalLabour":"0",
 				"TotalHandling":"0",
 				"TotalGST":"0",
-				"StatusDescription":"NEW CLAIM",
-				"StatusIcon":"sap-icon://write-new-document",
+				"StatusDescription":"",
+				"StatusIcon":"",
 				"CanEdit":true,
 				"VersionIdentifier":null,
 				"Parts": [],
@@ -276,6 +276,22 @@ sap.ui.define([
 			}
 			
 			return warrantyClaim;
+		},
+		
+		validate: function(){
+			
+			switch(this.warrantyClaim.ClaimTypeGroup){
+				
+				case "GOODWILL":
+					if(this.warrantyClaim.AuthorisationNumber === ""){
+						//Error
+					}
+					break;
+					
+					
+			
+			}
+			
 		},
 		
 		resetChanges: function() {

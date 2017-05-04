@@ -2,7 +2,7 @@
 	xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
 	controllerName="WarrantyClaim_MockUp.block.ClaimDetailsBlockController">
 	<VBox class="sapUiSmallMargin">
-		<f:SimpleForm id="SimpleFormChange480_12120"
+		<f:SimpleForm id="ClaimDetail"
 		objectBindings="{WarrantyClaim>/}"
 			editable="true"
 			layout="ResponsiveGridLayout"
@@ -30,6 +30,8 @@
 				displayFormat="medium" 
 				dateValue="{WarrantyClaim>DateOfFailure}" 
 				editable="{WarrantyClaim>CanEdit}"
+				valueState="{ parts: [{path: 'WarrantyClaim>DateOfFailure'}, {path: 'WarrantyClaim>DateOfRepair'}], formatter:'.validationRules.validateFailureDate' }"
+				valueStateText="Failure Date cannot be after the Repair Date"
 			/>
 			<core:Title text="Repair Details"/>
 			<Label text="Repair Order Number"/>
@@ -41,6 +43,8 @@
 				displayFormat="medium" 
 				dateValue="{WarrantyClaim>DateOfRepair}" 
 				editable="{WarrantyClaim>CanEdit}"
+				valueState="{ parts: [{path: 'WarrantyClaim>DateOfFailure'}, {path: 'WarrantyClaim>DateOfRepair'}], formatter:'.validationRules.validateFailureDate' }"
+				valueStateText="Failure Date cannot be after the Repair Date"
 			/>
 			<core:Title text="Main Causal Part" />
 			<Label text="MCPN"/>
@@ -66,7 +70,16 @@
 			<core:Title text="MIL" />
 			<Label text="MIL ON"/>
 			<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{WarrantyClaim>MilIndicator}" select="onMILSelected" editable="{WarrantyClaim>CanEdit}"/>
-			<Input id="DTC1" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC1' : '' }" value="{WarrantyClaim>DTC1}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
+			<Input 
+				id="DTC1" 
+				width="95%" 
+				placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC1' : '' }" 
+				value="{WarrantyClaim>DTC1}" 
+				visible="{= ${WarrantyClaim>MilIndicator}}" 
+				editable="{WarrantyClaim>CanEdit}"
+				valueState="{= ${WarrantyClaim>MilIndicator} &amp;&amp; ${WarrantyClaim>DTC1} === '' ? 'Error' : 'None' }"
+				valueStateText="At least one DTC must be entered when MIL is selected"				
+			/>
 			<Input id="DTC2" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC2' : '' }" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 			<Input id="DTC3" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC3' : '' }" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 			<core:Title text="Staff" />
@@ -106,7 +119,8 @@
 			emptySpanM="0"
 			columnsL="1"
 			columnsM="2"
-			singleContainerFullSize="false">
+			singleContainerFullSize="false"
+		>
 			<f:content>
 				<core:Title text="Recall Serial Numbers" />
 				<Label text="Serial Numbers" required="true"/>

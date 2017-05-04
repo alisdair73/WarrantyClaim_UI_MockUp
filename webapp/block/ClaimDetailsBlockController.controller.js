@@ -1,11 +1,14 @@
 sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/Filter",
-	"WarrantyClaim_MockUp/model/models"
-], function(BaseController,Filter, Models) {
+	"WarrantyClaim_MockUp/model/models",
+	"WarrantyClaim_MockUp/model/validationRules"
+], function(BaseController,Filter, Models, validationRules) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.ClaimDetailsBlockController", {
+		
+		validationRules:validationRules,
 		
 		onInit: function(){
 		},

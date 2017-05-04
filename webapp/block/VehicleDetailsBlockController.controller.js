@@ -8,6 +8,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 		onInit: function(){
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
+			
+			
+			sap.ui.getCore().getMessageManager().registerObject(
+				this.getView().byId("recallNumber"), true
+			);
 		},
 		
 		onPWAValueHelpRequest: function(event){

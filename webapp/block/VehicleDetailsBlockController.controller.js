@@ -126,8 +126,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		},
 		
 		onDealerVINSelection: function(event){
-			var dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
-			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber",dataObject.EngineNumber);
+//			var dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
+//			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber",dataObject.EngineNumber);
 		},
 		
     	_salesOrgChanged: function(channel, event, data){

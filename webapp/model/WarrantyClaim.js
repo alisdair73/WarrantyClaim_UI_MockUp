@@ -225,7 +225,7 @@ sap.ui.define([
 			warrantyClaim.RepairOrderNumber = this.warrantyClaim.RepairOrderNumber;
 			warrantyClaim.DateOfRepair = this.warrantyClaim.DateOfRepair;
 			warrantyClaim.DateOfFailure = this.warrantyClaim.DateOfFailure;
-			warrantyClaim.FailureMeasure = this.warrantyClaim.FailureMeasure;
+			warrantyClaim.FailureMeasure = this.warrantyClaim.FailureMeasure.toString();
 			warrantyClaim.MilIndicator = this.warrantyClaim.MilIndicator;
 			warrantyClaim.DTC1 = this.warrantyClaim.DTC1;
 			warrantyClaim.DTC2 = this.warrantyClaim.DTC2;

@@ -8,9 +8,9 @@ sap.ui.define([
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
         "sap/m/MessageStrip",
-        "sap/m/MessagePopover"
+        "sap/ui/core/message/Message"
 	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
-					NumberFormat, MessageStrip, MessagePopover) {
+					NumberFormat, MessageStrip, Message) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -18,7 +18,7 @@ sap.ui.define([
 		onInit: function() {
 
 			this.getView().setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
-			this._messagePopover = new MessagePopover({});
+			sap.ui.getCore().getMessageManager().registerObject(this.getView(), true);
 			
 			var oViewModel = new JSONModel({
 				"busy": false,
@@ -115,20 +115,11 @@ sap.ui.define([
 		
 		openMessages: function(event){
 			
-/*			var messages = this.getView().getModel("ViewHelper").getProperty("/messages");
-			messages.push({ "message":"Message", "description":"Description", "type":"Error" });
-			this.getView().getModel("ViewHelper").setProperty("/messages",messages);
-            this.getView().getModel("ViewHelper").setProperty("/messageCount",messages.length);
-
-			if (!this._messagePopup)  {
-				this._messagePopup = sap.ui.xmlfragment( "WarrantyClaim_MockUp.view.Messages" );
-				this.getView().addDependent(this._messagePopup );
+			if (!this._messagePopover)  {
+				this._messagePopover = sap.ui.xmlfragment( "WarrantyClaim_MockUp.view.Messages" );
+				this.getView().addDependent(this._messagePopover );
 			}
-			this._messagePopup.openBy(event.getSource());*/
-			
 			this._messagePopover.openBy(event.getSource());
-			
-			
 		},
 		
 		companyCodeSelected:function(event){

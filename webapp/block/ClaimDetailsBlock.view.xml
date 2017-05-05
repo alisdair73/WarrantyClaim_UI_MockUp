@@ -18,20 +18,26 @@
 			<Label text="Failure KM"/>
 			<Input 
 				id="failureKM" 
-				value="{WarrantyClaim>FailureMeasure}" 
+				value="{
+					path: 'WarrantyClaim>FailureMeasure',
+					type: 'type.FailureDistance',
+					formatOptions: {
+						groupingEnabled: true,
+						groupingSeparator: ','
+					}
+				}"
 				editable="{WarrantyClaim>CanEdit}"
-				valueState="{= ${WarrantyClaim>FailureMeasure} > 0 &amp;&amp; ${WarrantyClaim>FailureMeasure} &lt; 1000000 ? 'None' : 'Error' }"
-				valueStateText="Failure KM must be between 0 and 1000000"
 			/>
 			<Label text="Date of Failure"/>
 			<DatePicker 
 				id="dateOfFailure" 
 				change="onChangeDatePicker"
 				displayFormat="medium" 
-				dateValue="{WarrantyClaim>DateOfFailure}" 
+				value="{
+					path: 'WarrantyClaim>DateOfFailure',
+					type: 'type.FailureDate'
+				}"
 				editable="{WarrantyClaim>CanEdit}"
-				valueState="{ parts: [{path: 'WarrantyClaim>DateOfFailure'}, {path: 'WarrantyClaim>DateOfRepair'}], formatter:'.validationRules.validateFailureDate' }"
-				valueStateText="Failure Date cannot be after the Repair Date"
 			/>
 			<core:Title text="Repair Details"/>
 			<Label text="Repair Order Number"/>
@@ -43,9 +49,7 @@
 				displayFormat="medium" 
 				dateValue="{WarrantyClaim>DateOfRepair}" 
 				editable="{WarrantyClaim>CanEdit}"
-				valueState="{ parts: [{path: 'WarrantyClaim>DateOfFailure'}, {path: 'WarrantyClaim>DateOfRepair'}], formatter:'.validationRules.validateFailureDate' }"
-				valueStateText="Failure Date cannot be after the Repair Date"
-			/>
+				/>
 			<core:Title text="Main Causal Part" />
 			<Label text="MCPN"/>
 			<Input 
@@ -74,11 +78,11 @@
 				id="DTC1" 
 				width="95%" 
 				placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC1' : '' }" 
-				value="{WarrantyClaim>DTC1}" 
+				value="{WarrantyClaim>DTC1}"
 				visible="{= ${WarrantyClaim>MilIndicator}}" 
 				editable="{WarrantyClaim>CanEdit}"
 				valueState="{= ${WarrantyClaim>MilIndicator} &amp;&amp; ${WarrantyClaim>DTC1} === '' ? 'Error' : 'None' }"
-				valueStateText="At least one DTC must be entered when MIL is selected"				
+				valueStateText="At least one DTC must be entered when MIL is selected"	
 			/>
 			<Input id="DTC2" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC2' : '' }" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 			<Input id="DTC3" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC3' : '' }" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>

@@ -2,17 +2,14 @@ sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/Filter",
 	"WarrantyClaim_MockUp/model/models",
-	"WarrantyClaim_MockUp/model/validationRules",
-	"WarrantyClaim_MockUp/type/FailureDistance",
-	"WarrantyClaim_MockUp/type/FailureDate"
+	"WarrantyClaim_MockUp/model/valueStateFormatter"
 	
-], function(BaseController,Filter, Models, validationRules, FailureDistance, FailureDate) {
+], function(BaseController,Filter, Models, valueStateFormatter) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.ClaimDetailsBlockController", {
 		
-		validationRules:validationRules,
-		//FailureDistance:FailureDistance,
+		valueStateFormatter: valueStateFormatter,
 		
 		onInit: function(){
 		},
@@ -56,7 +53,7 @@ sap.ui.define([
 			warrantyItem = Models.createNewWarrantyItem("MAT");
 			warrantyItem.setProperty("/PartNumber", item.PartNumber);
 			warrantyItem.setProperty("/Description", item.Description);
-			warrantyItem.setProperty("/isMCPN",true);
+			warrantyItem.setProperty("/IsMCPN",true);
 			
 			if (warrantyItems[0]){
 				warrantyItem.setProperty("/Quantity", warrantyItems[0].Quantity);

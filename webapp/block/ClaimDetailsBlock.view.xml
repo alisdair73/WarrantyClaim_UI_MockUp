@@ -18,14 +18,10 @@
 			<Label text="Failure KM"/>
 			<Input 
 				id="failureKM" 
-				value="{
-					path: 'WarrantyClaim>FailureMeasure',
-					type: 'type.FailureDistance',
-					formatOptions: {
-						groupingEnabled: true,
-						groupingSeparator: ','
-					}
-				}"
+				type="Number"
+				value="{WarrantyClaim>FailureMeasure}"
+				valueState="{path: 'WarrantyClaim>FailureMeasure', formatter:'.valueStateFormatter.failureKM' }"
+				valueStateText = "{i18n>failureKM}"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
 			<Label text="Date of Failure"/>
@@ -33,21 +29,24 @@
 				id="dateOfFailure" 
 				change="onChangeDatePicker"
 				displayFormat="medium" 
-				value="{
-					path: 'WarrantyClaim>DateOfFailure',
-					type: 'type.FailureDate'
-				}"
+				dateValue="{WarrantyClaim>DateOfFailure}"
+				valueState="{path: 'WarrantyClaim>DateOfFailure', formatter:'.valueStateFormatter.failureDate' }"
+				valueStateText = "{i18n>failureDate}"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
+			
 			<core:Title text="Repair Details"/>
 			<Label text="Repair Order Number"/>
 			<Input id="repairOrderNumber" value="{WarrantyClaim>RepairOrderNumber}" editable="{WarrantyClaim>CanEdit}"/>
+			
 			<Label text="Date of Repair"/>
 			<DatePicker 
 				id="dateOfRepair" 
 				change="onChangeDatePicker"
 				displayFormat="medium" 
 				dateValue="{WarrantyClaim>DateOfRepair}" 
+				valueState="{path: 'WarrantyClaim>DateOfRepair', formatter:'.valueStateFormatter.repairDate' }"
+				valueStateText = "{i18n>failureDate}"
 				editable="{WarrantyClaim>CanEdit}"
 				/>
 			<core:Title text="Main Causal Part" />

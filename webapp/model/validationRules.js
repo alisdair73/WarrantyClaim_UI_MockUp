@@ -1,64 +1,105 @@
-sap.ui.define(["sap/ui/core/message/Message"], function(Message) {
+sap.ui.define([
+		"sap/ui/core/message/Message",
+		"WarrantyClaim_MockUp/model/WarrantyClaim"
+	], function(Message, WarrantyClaim) {
 	"use strict";
 	
+//  Private Functions
+	var	_doesMessageExistInMessageManager = function (messageID){
+			var registeredMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
+  				function(registeredMessage){
+					return registeredMessage.id === messageID;
+				}
+			);
+    		
+    		if(registeredMessages.length > 0){
+    			return registeredMessages[0];
+    		}  
+	};	
+	
+	var	_removeErrorMessageFromMessageManager = function(messageID){
+			
+			var message = _doesMessageExistInMessageManager(messageID);
+			if(message){
+				sap.ui.getCore().getMessageManager().removeMessages(message);
+			}
+	};
+		
+	var	_addErrorMessageToMessageManager = function(messageID, messageProcessor, messageText, messageTarget){
+			
+			if( !_doesMessageExistInMessageManager(messageID)){
+			
+				var message = new Message({
+					"id": messageID,
+	            	"message": messageText,
+	                "type": 'Error',
+	                "target": messageTarget,
+	                "processor": messageProcessor
+	        	});
+      			sap.ui.getCore().getMessageManager().addMessages(message);
+			}
+	};
+
 	return {
 
-		validateFailureDate: function(failureDate,repairDate) {
+		validateFailureDate: function(failureDate,view) {
 			
-			var newMessage = new Message({id: "repairDateError"});
-			if(failureDate && repairDate){
-				if (failureDate.valueOf() > repairDate.valueOf()){
-					
-					newMessage.message = "Failure Date cannot be after the Repair Date";
-                	newMessage.type = "Error";
-               		newMessage.target = "/DateOfFailure";
-                	newMessage.processor = this.getView().getModel("WarrantyClaim");
-//            		sap.ui.getCore().getMessageManager().addMessages(newMessage);
-            		
-					return "Error";
-				} else {
-//					sap.ui.getCore().getMessageManager().removeMessages(newMessage);
-					return "None";
+			var validated = true;
+			_removeErrorMessageFromMessageManager("failureDate");
+			
+			if(failureDate && WarrantyClaim.warrantyClaim.DateOfRepair){
+				if (failureDate.valueOf() > WarrantyClaim.warrantyClaim.DateOfRepair.valueOf()){
+					_addErrorMessageToMessageManager(
+						"failureDate",
+						view.getModel("WarrantyClaim"),
+						view.getModel("i18n").getResourceBundle().getText("failureDate"),
+						"/DateOfFailure"
+					);
+					validated = false;
 				}
-			} else {
-			//	sap.ui.getCore().getMessageManager().removeMessages(newMessage);
-				return "None";
 			}
+			return validated;
 		},
 		
-		validateFailureKM: function(failureKM){
-			if(failureKM){
-				if(failureKM > 0 && failureKM < 1000000){
-					return "None";
-				} else {
-					
-					var newMessage = new Message({
-            			message: "Failure KM must be between 0 and 1000000",
- //               		description: "Description",
- //             		additionalText: "Add Text",
-                		type: "Error",
- //               		target: "/FailureMeasure",
-                		processor: this.getView().getModel("WarrantyClaim")
-        			});
-            		sap.ui.getCore().getMessageManager().addMessages(newMessage);
-					
-					return "Error";
+		validateRepairDate: function(repairDate,view) {
+			
+			var validated = true;
+			_removeErrorMessageFromMessageManager("repairDate");
+			
+			if(repairDate && WarrantyClaim.warrantyClaim.DateOfFailure){
+				if (repairDate.valueOf() <= WarrantyClaim.warrantyClaim.DateOfFailure.valueOf()){
+					_addErrorMessageToMessageManager(
+						"repairDate",
+						view.getModel("WarrantyClaim"),
+						view.getModel("i18n").getResourceBundle().getText("repairDate"),
+						"/DateOfRepair"
+					);
+					validated = false;
 				}
-			} else {
-				return "None";
 			}
+			return validated;
 		},
 		
-		_addErrorMessage: function(){
-			var newMessage = new Message({
-            	message: "My generated error message",
-                description: "Description",
- //               additionalText: "Add Text",
-                type: 'Error',
-                target: "/FailureMeasure",
-                processor: this.getView().getModel("WarrantyClaim")
-        	});
-            		sap.ui.getCore().getMessageManager().addMessages(newMessage);
+//		Failure KM - Must be between 0 and 1000000
+		validateFailureKM: function(failureKMValue, view){
+
+			var validated = true;
+			_removeErrorMessageFromMessageManager("failureKM");
+
+			if(failureKMValue && failureKMValue !== ""){
+				if (failureKMValue <= 0 || failureKMValue >= 1000000){
+					
+					_addErrorMessageToMessageManager(
+						"failureKM",
+						view.getModel("WarrantyClaim"),
+						view.getModel("i18n").getResourceBundle().getText("failureKM"),
+						"/FailureMeasure"
+					);
+					validated = false;
+				}
+			}
+			
+			return validated; 
 		}
 	};
 

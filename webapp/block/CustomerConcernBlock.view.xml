@@ -25,7 +25,7 @@
 										<l:layoutData>
 											<l:GridData span="L4"/>
 										</l:layoutData>
-										<Label text="Symptom Code L1" labelFor="symptomCodeL1"/>
+										<Label text="Symptom Code L1" labelFor="symptomCodeL1" required="true"/>
 										<ComboBox
 											id="symptomCodeL1"
 											required="true"
@@ -39,7 +39,7 @@
 											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL1}">
 											<core:ListItem key="{SymptomCodes>code}" text="{SymptomCodes>text}"/>
 										</ComboBox>	
-										<Label text="Symptom Code L2" labelFor="symptomCodeL2"/>
+										<Label text="Symptom Code L2" labelFor="symptomCodeL2" required="true"/>
 										<ComboBox
 											id="symptomCodeL2"
 											required="true"
@@ -52,7 +52,7 @@
 											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL2}">
 											<core:ListItem key="{SymptomCodesHelper>code}" text="{SymptomCodesHelper>text}"/>
 										</ComboBox>	
-										<Label text="Symptom Code L3" labelFor="symptomCodeL3"/>
+										<Label text="Symptom Code L3" labelFor="symptomCodeL3" required="true"/>
 										<ComboBox
 											id="symptomCodeL3"
 											required="true"

@@ -100,7 +100,7 @@ sap.ui.define([
 					switch(warrantyClaimItem.ItemType) {
     					case "MAT":
     						if(this.warrantyClaim.Parts.length === 0){
-    							warrantyClaimItem.isMCPN = true;
+    							warrantyClaimItem.IsMCPN = true;
     						}
     						this.warrantyClaim.Parts.push(warrantyClaimItem);
 				        	break;
@@ -182,9 +182,9 @@ sap.ui.define([
 					var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
 					switch(oWarrantyClaimItem.ItemType) {
     					case "MAT":
-    						oWarrantyClaimItem.isMCPN = false;
+    						oWarrantyClaimItem.IsMCPN = false;
     						if(this.warrantyClaim.Parts.length === 0){
-    							oWarrantyClaimItem.isMCPN = true;
+    							oWarrantyClaimItem.IsMCPN = true;
     						}
     						this.warrantyClaim.Parts.push(oWarrantyClaimItem);
 				        	break;
@@ -251,20 +251,17 @@ sap.ui.define([
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Parts[i];
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
-				delete warrantyClaimItem.isMCPN;
-				
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 
 			for (i = 0; i < this.warrantyClaim.Labour.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Labour[i];
-				delete warrantyClaimItem.isMCPN;
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			
 			for (i = 0; i < this.warrantyClaim.Sublet.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Sublet[i];
-				delete warrantyClaimItem.isMCPN;
+				delete warrantyClaimItem.path;
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			
@@ -276,22 +273,6 @@ sap.ui.define([
 			}
 			
 			return warrantyClaim;
-		},
-		
-		validate: function(){
-			
-			switch(this.warrantyClaim.ClaimTypeGroup){
-				
-				case "GOODWILL":
-					if(this.warrantyClaim.AuthorisationNumber === ""){
-						//Error
-					}
-					break;
-					
-					
-			
-			}
-			
 		},
 		
 		resetChanges: function() {

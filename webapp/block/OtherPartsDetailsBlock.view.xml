@@ -11,7 +11,7 @@
 	    <items>
 	        <ColumnListItem id="__item0" vAlign="Middle">
 	        	<customData>
-    				<core:CustomData key="isMCPN" value="{= ${WarrantyClaim>isMCPN}? 'X':''}" writeToDom="true"/>
+    				<core:CustomData key="isMCPN" value="{= ${WarrantyClaim>IsMCPN}? 'X':''}" writeToDom="true"/>
 				</customData>
 	            <cells>
 	            	<Text text="{WarrantyClaim>PartNumber}"/>
@@ -44,11 +44,11 @@
 	        		</l:HorizontalLayout>
 	                <l:HorizontalLayout>
 	                	<!-- <core:Icon src="sap-icon://broken-link" visible="{WarrantyClaim>isMCPN}" tooltip="Main Causal Part Number"/> -->
-	                	<RadioButton groupName="MCPN" selected="{WarrantyClaim>isMCPN}" editable="false"/>
+	                	<RadioButton groupName="MCPN" selected="{WarrantyClaim>IsMCPN}" editable="false"/>
 	                </l:HorizontalLayout>
 	                <l:HorizontalLayout>
 	                	<Button icon="sap-icon://edit" press="editItem" visible="false"/>
-	                	<Button icon="sap-icon://delete" press="deleteItem" visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>isMCPN} }"/>
+	                	<Button icon="sap-icon://delete" press="deleteItem" visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>IsMCPN} }"/>
 	                </l:HorizontalLayout>
 	            </cells>
 	        </ColumnListItem>

@@ -5,7 +5,7 @@
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
 	    </sap.ui.layout.form:layout>	
 		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer id="__container0" title="Dealer Comments" >
+			<sap.ui.layout.form:FormContainer id="__container0" title="Dealer Remark" >
 				<sap.ui.layout.form:formElements>
 					<sap.ui.layout.form:FormElement id="__element0" >
 						<sap.ui.layout.form:fields>
@@ -24,7 +24,7 @@
 										<l:layoutData>
 											<l:GridData span="L4"/>
 										</l:layoutData>
-										<Label text="Defect Code L1" labelFor="defectCodeL1"/>
+										<Label text="Defect Code L1" labelFor="defectCodeL1" required="true"/>
 										<ComboBox
 											id="defectCodeL1"
 											required="true"
@@ -38,7 +38,7 @@
 											selectedKey="{ViewHelper>/warrantyUI/defectCodeL1}">
 											<core:ListItem key="{DefectCodes>code}" text="{DefectCodes>text}"/>
 										</ComboBox>	
-										<Label text="Defect Code L2" labelFor="defectCodeL2"/>
+										<Label text="Defect Code L2" labelFor="defectCodeL2" required="true"/>
 										<ComboBox
 											id="defectCodeL2"
 											required="true"

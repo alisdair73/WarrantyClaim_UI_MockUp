@@ -18,8 +18,6 @@ sap.ui.define([
 		onInit: function() {
 
 			this.getView().setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
-			sap.ui.getCore().getMessageManager().registerObject(this.getView(), true);
-			
 			var oViewModel = new JSONModel({
 				"busy": false,
 				"delay": 0,
@@ -38,7 +36,7 @@ sap.ui.define([
 			this.setModel(oViewModel, "ViewHelper");
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
 
-			//???
+			//Is this needed???
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
 			
 			//var oViewModel = this.getModel("detailView");
@@ -203,7 +201,7 @@ sap.ui.define([
 			var leadingMessage = JSON.parse(response.headers['sap-message']);
 			MessageToast.show(leadingMessage.message);
 			
-//			this._addMessagesToHeader(leadingMessage.details);
+			this._addMessagesToHeader(leadingMessage.details);
 			WarrantyClaim.updateWarrantyClaimFromJSONModel(responseData);
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
@@ -215,6 +213,19 @@ sap.ui.define([
 				case "400":
 					var errorDetail = JSON.parse(error.responseText);
 					this._addMessagesToHeader(errorDetail.error.innererror.errordetails);
+					
+//REMOVE THE DUPLICATED LEAD MESSAGE - "SY/530"
+			var registeredMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
+  				function(registeredMessage){
+					return registeredMessage.code === 'SY/530';
+				}
+			);
+    		
+    		if(registeredMessages.length > 0){
+    			sap.ui.getCore().getMessageManager().removeMessages(registeredMessages[0]);
+    		}  
+//////////////
+					
 					
 					break;
 			}
@@ -265,7 +276,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = '2016110067';	
+			claimNumber = '2016110789';	
 			//claimNumber = '100000000651';
 			//claimNumber = "100000000660";
 			//claimNumber = "2016110477";
@@ -361,6 +372,20 @@ sap.ui.define([
 			this.getView().byId("messageArea").destroyContent();
 		},
 		
+		_translateMessageTypes: function(messageType){
+			
+			switch(messageType){
+				case 'error':
+					return sap.ui.core.MessageType.Error;
+				case 'info':
+					return sap.ui.core.MessageType.Information;
+				case 'warning':
+					return sap.ui.core.MessageType.Warning;
+				default:
+					return sap.ui.core.MessageType.Success;
+			}
+		},
+		
 		_addMessagesToHeader: function(messages){
 		
 			var messageArea = this.getView().byId("messageArea");
@@ -371,7 +396,7 @@ sap.ui.define([
 					text: messages[i].message,
 					showCloseButton: false,
 					showIcon: true,
-					type: "Error"
+					type: this._translateMessageTypes(messages[i].severity)
 				});
 				messageArea.addContent(messageStrip);
 			}

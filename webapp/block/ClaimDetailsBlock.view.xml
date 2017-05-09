@@ -111,7 +111,6 @@
 		</f:content>
 		</f:SimpleForm>
 		<f:SimpleForm id="ClaimSerial"
-			visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
 			objectBindings="{WarrantyClaim>/}"
 			editable="true"
 			layout="ResponsiveGridLayout"
@@ -126,13 +125,24 @@
 		>
 			<f:content>
 				<core:Title text="Recall Serial Numbers" />
-				<Label text="Serial Numbers" required="true"/>
-				<Input id="oldSerialNumber" placeholder="Old Serial #" value="{WarrantyClaim>OldSerialNumber}" editable="{WarrantyClaim>CanEdit}" />
-				<Input id="newSerialNumber" placeholder="New Serial #" value="{WarrantyClaim>NewSerialNumber}" editable="{WarrantyClaim>CanEdit}" />
+				<Label text="Serial Numbers" required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"/>
+				<Input 
+					id="oldSerialNumber" 
+					placeholder="Old Serial #" 
+					value="{WarrantyClaim>OldSerialNumber}" 
+					editable="{WarrantyClaim>CanEdit}" 
+					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
+				/>
+				<Input 
+					id="newSerialNumber" 
+					placeholder="New Serial #" 
+					value="{WarrantyClaim>NewSerialNumber}" 
+					editable="{WarrantyClaim>CanEdit}" 
+					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"	
+				/>
 			</f:content>
 		</f:SimpleForm>
 		<f:SimpleForm id="ClaimParts"
-			visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 			objectBindings="{WarrantyClaim>/}"
 			editable="true"
 			layout="ResponsiveGridLayout"
@@ -146,19 +156,45 @@
 			singleContainerFullSize="false">
 			<f:content>
 				<core:Title text="Parts" />
-				<Label text="Install Date" labelFor="partInstallDate" required="true"/>
+				<Label 
+					text="Install Date" 
+					labelFor="partInstallDate" 
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+				/>
 				<DatePicker 
 					id="dateOfInstall" 
 					change="onChangeDatePicker"
 					displayFormat="medium" 
 					dateValue="{WarrantyClaim>PartsInstallDate}" 
 					editable="{WarrantyClaim>CanEdit}"
-					required="true"
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 				/>
-				<Label text="Part Install KM" labelFor="partInstallKM" required="true"/>
-				<Input id="partInstallKM" value="{WarrantyClaim>PartsInstallKM}" editable="{WarrantyClaim>CanEdit}" required="true"/>
-				<Label text="Original Invoice Number" labelFor="originalInvoiceNo" required="true"/>
-				<Input id="originalInvoiceNo" value="{WarrantyClaim>OriginalInvoiceNumber}" editable="{WarrantyClaim>CanEdit}" required="true"/>
+				<Label 
+					text="Part Install KM" 
+					labelFor="partInstallKM" 
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+				/>
+				<Input 
+					id="partInstallKM" 
+					value="{WarrantyClaim>PartsInstallKM}" 
+					editable="{WarrantyClaim>CanEdit}" 
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+				/>
+				<Label 
+					text="Original Invoice Number" 
+					labelFor="originalInvoiceNo" 
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+				/>
+				<Input 
+					id="originalInvoiceNo" 
+					value="{WarrantyClaim>OriginalInvoiceNumber}" 
+					editable="{WarrantyClaim>CanEdit}" 
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+				/>
 			</f:content>
 		</f:SimpleForm>
 	</VBox>

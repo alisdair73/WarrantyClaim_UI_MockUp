@@ -25,6 +25,7 @@
 				showSuggestion="true"
 				showTableSuggestionValueHelp="false"
 				suggestionItemSelected="onDealerVINSelection"
+				change="onVINChanged"
 				suggestionRows="{/VINSet}"
 				maxSuggestionWidth="500px">
 				<suggestionColumns>
@@ -102,12 +103,11 @@
 			<Label 
 				text="Recall Number" 
 				labelFor="recallNumber" 
-				required="true"
-				visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 			/>
 			<Input 
 				id="recallNumber" 
-				visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
+				enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 				value="{WarrantyClaim>RecallNumber}"
 				valueState="{= ${WarrantyClaim>RecallNumber}.length > 10 ? 'Error' : 'None'}"
 				valueStateText="Recall number is maximum 10 characters."
@@ -115,6 +115,7 @@
 				showValueHelp="true" 
 				valueHelpRequest="onRecallValueHelpRequest"
 				showSuggestion="true"
+				suggest="onRecallSuggest"
 				suggestionItemSelected="onRecallSelection"
 				maxSuggestionWidth="600px"
 				suggestionRows="{/RecallSet}"

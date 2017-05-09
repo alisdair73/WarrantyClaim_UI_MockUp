@@ -8,11 +8,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 		onInit: function(){
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
-			
-			
-			sap.ui.getCore().getMessageManager().registerObject(
-				this.getView().byId("recallNumber"), true
-			);
+		},
+		
+		onVINChanged: function(event){
+        	//Add the VIN to the PWA Filter
+    		this.getView().byId("PWANumber").getBinding("suggestionRows").filter(this._getFilter());
+			this.getView().byId("recallNumber").getBinding("suggestionRows").filter(this._getFilter());
 		},
 		
 		onPWAValueHelpRequest: function(event){
@@ -20,15 +21,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				this._PWAValueHelpDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.PriorWorkApprovalSelection", this);
 				this.getView().addDependent(this._PWAValueHelpDialog);
 			}
-
- 			var filters = [];
-			filters.push(
-				new Filter(
-					"SalesOrg",
-					sap.ui.model.FilterOperator.EQ, 
-					this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")
-			));
-			sap.ui.getCore().byId("PWASelectionList").getBinding("items").filter(filters);
+			sap.ui.getCore().byId("PWASelectionList").getBinding("items").filter(this._getFilter());
 			
 			// Display the popup dialog for adding parts
 			this._PWAValueHelpDialog.open();
@@ -65,7 +58,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 					warrantyItem.setProperty("/PartNumber", dataObject.MCPN);
 					warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
 					warrantyItem.setProperty("/Quantity", 1); //???
-					warrantyItem.setProperty("/isMCPN", true);
+					warrantyItem.setProperty("/IsMCPN", true);
 					parts.push(warrantyItem.getProperty("/"));
 					this.getView().getModel("WarrantyClaim").setProperty("/Parts",parts);
 					
@@ -81,20 +74,22 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			this._PWAValueHelpDialog.close();
 		},
 		
+		onRecallSuggest: function(event){
+			
+			var recallSearch = event.getParameter("suggestValue");
+			var filters = this._getFilter();
+			if (recallSearch) {
+				filters.push(new Filter("ExternalRecallNumber", sap.ui.model.FilterOperator.StartsWith, recallSearch));
+			}
+			event.getSource().getBinding("suggestionRows").filter(filters);
+		},
+		
 		onRecallValueHelpRequest: function(event){
 			if (!this._RecallValueHelpDialog) {
 				this._RecallValueHelpDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.RecallSelection", this);
 				this.getView().addDependent(this._RecallValueHelpDialog);
 			}
-
- 			var filters = [];
-			filters.push(
-				new Filter(
-					"SalesOrg",
-					sap.ui.model.FilterOperator.EQ, 
-					this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")
-			));
-			sap.ui.getCore().byId("RecallSelectionList").getBinding("items").filter(filters);
+			sap.ui.getCore().byId("RecallSelectionList").getBinding("items").filter(this._getFilter());
 			
 			// Display the popup dialog for adding parts
 			this._RecallValueHelpDialog.open();
@@ -132,10 +127,22 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		
     	_salesOrgChanged: function(channel, event, data){
     		
-    		var filters = [];
-			filters.push(new Filter("SalesOrg", sap.ui.model.FilterOperator.EQ, data.SalesOrg));
-    		this.getView().byId("PWANumber").getBinding("suggestionRows").filter(filters);
-    		this.getView().byId("recallNumber").getBinding("suggestionRows").filter(filters);
+    		this.getView().byId("PWANumber").getBinding("suggestionRows").filter(this._getFilter());
+    		this.getView().byId("recallNumber").getBinding("suggestionRows").filter(this._getFilter());
+    	},
+    	
+    	_getFilter: function(){
+    		
+    	    //Apply VIN and Sales Organisation to PWA/Recall collections
+        	var filters = [];
+			filters.push(new Filter("SalesOrg", sap.ui.model.FilterOperator.EQ, 
+				this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")));
+		
+			if(this.getView().getModel("WarrantyClaim").getProperty("/VIN") !== ""){
+    			filters.push(new Filter("VIN", sap.ui.model.FilterOperator.EQ, 
+					this.getView().getModel("WarrantyClaim").getProperty("/VIN")));
+			}
+			return filters;
     	}
 	});
 

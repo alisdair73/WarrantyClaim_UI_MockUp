@@ -276,8 +276,9 @@ sap.ui.define([
 			}
 			
 			//Testing
-			claimNumber = '2016110789';	
-			//claimNumber = '100000000651';
+			//claimNumber = "2016110789";
+			//claimNumber = "2016110808";
+			//claimNumber = '2016110829';
 			//claimNumber = "100000000660";
 			//claimNumber = "2016110477";
 			//claimNumber = "100000000511";

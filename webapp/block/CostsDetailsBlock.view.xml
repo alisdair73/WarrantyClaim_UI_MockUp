@@ -13,58 +13,52 @@
 	    							<ColumnListItem id="Costs">
 	    								<cells>
 											<ObjectNumber
-												binding="{WarrantyClaim>\}"
 												number="{
-													parts:[{path:'TotalLabour'},{path:'ClaimCurrency'}],
+													parts:[{path:'WarrantyClaim>TotalLabour'},{path:'WarrantyClaim>ClaimCurrency'}],
 													type: 'sap.ui.model.type.Currency',
 													formatOptions: {showMeasure: false}
 												}"
-												unit="{ClaimCurrency}" 
+												unit="{WarrantyClaim>ClaimCurrency}" 
 											/>	
 											<ObjectNumber
-												binding="{WarrantyClaim>\}"
 												number="{
-													parts:[{path:'TotalMaterial'},{path:'ClaimCurrency'}],
+													parts:[{path:'WarrantyClaim>TotalMaterial'},{path:'WarrantyClaim>ClaimCurrency'}],
 													type: 'sap.ui.model.type.Currency',
 													formatOptions: {showMeasure: false}
 												}"
-												unit="{ClaimCurrency}" 
+												unit="{WarrantyClaim>ClaimCurrency}" 
 											/>	
 											<ObjectNumber
-												binding="{WarrantyClaim>\}"
 												number="{
-													parts:[{path:'TotalHandling'},{path:'ClaimCurrency'}],
+													parts:[{path:'WarrantyClaim>TotalHandling'},{path:'WarrantyClaim>ClaimCurrency'}],
 													type: 'sap.ui.model.type.Currency',
 													formatOptions: {showMeasure: false}
 												}"
-												unit="{ClaimCurrency}" 
+												unit="{WarrantyClaim>ClaimCurrency}" 
 											/>	
 											<ObjectNumber
-												binding="{WarrantyClaim>\}"
 												number="{
-													parts:[{path:'TotalExternalServices'},{path:'ClaimCurrency'}],
+													parts:[{path:'WarrantyClaim>TotalExternalServices'},{path:'WarrantyClaim>ClaimCurrency'}],
 													type: 'sap.ui.model.type.Currency',
 													formatOptions: {showMeasure: false}
 												}"
-												unit="{ClaimCurrency}" 
+												unit="{WarrantyClaim>ClaimCurrency}" 
 											/>	
 											<ObjectNumber
-												binding="{WarrantyClaim>\}"
 												number="{
-													parts:[{path:'TotalGST'},{path:'ClaimCurrency'}],
+													parts:[{path:'WarrantyClaim>TotalGST'},{path:'WarrantyClaim>ClaimCurrency'}],
 													type: 'sap.ui.model.type.Currency',
 													formatOptions: {showMeasure: false}
 												}"
-												unit="{ClaimCurrency}" 
+												unit="{WarrantyClaim>ClaimCurrency}" 
 											/>	
 											<ObjectNumber
-												binding="{WarrantyClaim>\}"
 												number="{
-													parts:[{path:'TotalCostOfClaim'},{path:'ClaimCurrency'}],
+													parts:[{path:'WarrantyClaim>TotalCostOfClaim'},{path:'WarrantyClaim>ClaimCurrency'}],
 													type: 'sap.ui.model.type.Currency',
 													formatOptions: {showMeasure: false}
 												}"
-												unit="{ClaimCurrency}" 
+												unit="{WarrantyClaim>ClaimCurrency}" 
 											/>												
 	        							</cells>
 									</ColumnListItem>

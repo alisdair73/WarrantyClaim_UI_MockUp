@@ -124,9 +124,12 @@
 		</sections>
 		<footer>
 			<m:OverflowToolbar>
-				<m:Button icon="sap-icon://message-popup" 
+				<m:Button 
+					icon="sap-icon://message-popup" 
+					visible="{= ${message>/length} &gt; 0}"
 					text="{message>/length}" 
-					type="Emphasized" press="openMessages"/>
+					type="Emphasized" 
+					press="openMessages"/>
 				<m:ToolbarSpacer/>
 				<m:Button text="Save Draft" press="onDraft" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button text="Cancel" press="onCancel"/>

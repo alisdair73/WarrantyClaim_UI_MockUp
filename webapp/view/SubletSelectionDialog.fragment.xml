@@ -7,10 +7,18 @@
 		            	<sap.ui.layout.form:formElements>
 		                	<sap.ui.layout.form:FormElement label="Sublet">
 		                    	<sap.ui.layout.form:fields>
-									<Input width="auto" showValueHelp="true" value="{SubletItem>ItemKey}"
-											description="{ViewHelper>/warrantyUI/SubletCodeDescription}" 
-											valueHelpOnly="true" valueHelpRequest="showSubletSelector"
-									/>
+									<ComboBox
+										id="subletCode"
+										required="true"
+										width="100%"
+										editable="{WarrantyClaim>CanEdit}"
+										items="{
+											path: 'SubletCodes>/'
+										}"
+										loadItems="readSubletCatalog"
+										selectedKey="{SubletItem>ItemKey}">
+										<core:ListItem key="{SubletCodes>code}" text="{SubletCodes>text}"/>
+									</ComboBox>										
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
 		                	<sap.ui.layout.form:FormElement label="Invoice">
@@ -23,9 +31,16 @@
 		                        	<Input width="100%" id="BusinessName" value="{SubletItem>BusinessName}"/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
-		                	<sap.ui.layout.form:FormElement label="Cost">
+		                	<sap.ui.layout.form:FormElement label="Cost (Pre GST)">
 		                    	<sap.ui.layout.form:fields>
-		                        	<Input width="100%" id="Quantity" value="{SubletItem>Quantity}"/>
+		                        	<Input 
+		                        		width="100%" 
+		                        		id="Quantity" 
+		                        		value="{
+		                        			path: 'SubletItem>Quantity',
+            								type: 'sap.ui.model.type.Currency'
+										}"
+		                        	/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
 		            	</sap.ui.layout.form:formElements>

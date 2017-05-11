@@ -24,7 +24,7 @@ sap.ui.define([
 				"RecallNumber": "",
 				"RepairOrderNumber": "",
 				"TotalCostOfClaim":"0",
-				"ClaimCurrency":"",
+				"ClaimCurrency":"AUD",
 				"DateOfRepair": null,
 				"DateOfFailure": null,
 				"FailureMeasure": "",

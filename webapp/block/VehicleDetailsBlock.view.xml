@@ -17,17 +17,20 @@
 		adjustLabelSpan="false">
 		<f:content>
 			<core:Title text="Vehicle Details" />
-			<Label text="{= ${WarrantyClaim>ObjectType} === 'VELO'? 'VIN' : 'Serial Number' }"/>
+			<Label id="VIN_label" text="VIN/Serial Number" required="true" labelFor="VIN"/>
 			<Input 
 				id="VIN" 
 				value="{WarrantyClaim>VIN}"
+				required="true"
 				editable="{WarrantyClaim>CanEdit}"
 				showSuggestion="true"
 				showTableSuggestionValueHelp="false"
 				suggestionItemSelected="onDealerVINSelection"
 				change="onVINChanged"
 				suggestionRows="{/VINSet}"
-				maxSuggestionWidth="500px">
+				maxSuggestionWidth="500px"
+				valueState="{path: 'WarrantyClaim>VIN', formatter: '.valueStateFormatter.vin'}"
+			>
 				<suggestionColumns>
 					<Column>
 						<Text text="VIN" />
@@ -46,14 +49,27 @@
 				</suggestionRows>									
 			</Input>
 			
-			<Label text="Engine Number"/>
-			<Input  id="engineNumber" value="{WarrantyClaim>EngineNumber}" editable="{WarrantyClaim>CanEdit}"/>
+			<Label id="EngineNumber_label" text="Engine Number" required="true" labelFor="EngineNumber"/>
+			<Input  
+				id="EngineNumber" 
+				value="{WarrantyClaim>EngineNumber}" 
+				editable="{WarrantyClaim>CanEdit}" 
+				required="true"
+				valueState="{path: 'WarrantyClaim>EngineNumber', formatter: '.valueStateFormatter.engineNumber'}"
+			/>
 			
 			<core:Title text="Dealer" />
-			<Label text="Dealer Contact" labelFor="dealerContact"/>
+			<Label 
+				id="DealerContact_label" 
+				text="Dealer Contact" 
+				labelFor="DealerContact"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+			/>
 			<Input 
-				id="dealerContact" 
+				id="DealerContact" 
 				value="{WarrantyClaim>DealerContact}"
+				valueState="{ parts: [{path: 'WarrantyClaim>DealerContact'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.dealerContact'}"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
 				editable="{WarrantyClaim>CanEdit}"
 				showSuggestion="true"
 				suggestionItemSelected="onDealerContactSelection"

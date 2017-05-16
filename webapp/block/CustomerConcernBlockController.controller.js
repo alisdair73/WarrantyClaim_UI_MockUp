@@ -1,10 +1,13 @@
 sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
-	"sap/ui/model/json/JSONModel"
-], function(BaseController, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"WarrantyClaim_MockUp/model/valueStateFormatter"
+], function(BaseController, JSONModel, valueStateFormatter) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.CustomerConcernBlockController", {
+		
+		valueStateFormatter: valueStateFormatter,
 		
 		onInit: function(){
 			

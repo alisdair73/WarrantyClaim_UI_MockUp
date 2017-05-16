@@ -15,19 +15,33 @@
 										<l:layoutData>
 											<l:GridData span="L8"/>
 										</l:layoutData>
-										<TextArea xmlns="sap.m" rows="10" cols="120" 
-											placeholder="" value="{WarrantyClaim>DealerComments}"
+										<Label 
+											id="DealerComments_label" 
+											text="Dealer Comments" 
+											visible="false"
+										/>
+										<TextArea 
+										    id="DealerComments"
+											rows="10" 
+											cols="120" 
+											placeholder="Dealer Comments" 
+											value="{WarrantyClaim>DealerComments}"
 											editable="{WarrantyClaim>CanEdit}"	
+											valueState="{ parts: [{path: 'WarrantyClaim>DealerComments'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.dealerComments'}"
 										/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
 											<l:GridData span="L4"/>
 										</l:layoutData>
-										<Label text="Defect Code L1" labelFor="defectCodeL1" required="true"/>
+										<Label 
+											id="defectCodeL1_label" 
+											text="Defect Code L1" 
+											labelFor="defectCodeL1" 
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+										/>
 										<ComboBox
 											id="defectCodeL1"
-											required="true"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
 											items="{
@@ -35,19 +49,28 @@
 											}"
 											loadItems="readDefectCatalog"
 											selectionChange="onDefectCodeSelectedL1"
-											selectedKey="{ViewHelper>/warrantyUI/defectCodeL1}">
+											selectedKey="{ViewHelper>/warrantyUI/defectCodeL1}"
+											valueState="{ parts: [{path: 'ViewHelper>/warrantyUI/defectCodeL1'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.defectCodeL1'}"
+										>
 											<core:ListItem key="{DefectCodes>code}" text="{DefectCodes>text}"/>
 										</ComboBox>	
-										<Label text="Defect Code L2" labelFor="defectCodeL2" required="true"/>
+										<Label 
+											id="DefectCode_label" 
+											text="Defect Code L2" 
+											labelFor="defectCodeL2" 
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+										/>
 										<ComboBox
-											id="defectCodeL2"
+											id="DefectCode"
 											required="true"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
 											items="{
 												path: 'DefectCodesHelper>/DefectsL2'
 											}"
-											selectedKey="{WarrantyClaim>DefectCode}">
+											selectedKey="{WarrantyClaim>DefectCode}"
+											valueState="{ parts: [{path: 'WarrantyClaim>DefectCode'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.defectCodeL2'}"
+										>
 											<core:ListItem key="{DefectCodesHelper>code}" 
 												text="{DefectCodesHelper>text} ({=${DefectCodesHelper>code}.substr(4,5)})"/>
 										</ComboBox>	

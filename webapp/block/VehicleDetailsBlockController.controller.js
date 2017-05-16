@@ -1,10 +1,13 @@
 sap.ui.define(["sap/ui/core/mvc/Controller",
 "sap/ui/model/Filter",
-"WarrantyClaim_MockUp/model/models"
-], function(Controller, Filter, Models) {
+"WarrantyClaim_MockUp/model/models",
+"WarrantyClaim_MockUp/model/valueStateFormatter"
+], function(Controller, Filter, Models, valueStateFormatter) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
+
+    	valueStateFormatter: valueStateFormatter,
 
 		onInit: function(){
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);

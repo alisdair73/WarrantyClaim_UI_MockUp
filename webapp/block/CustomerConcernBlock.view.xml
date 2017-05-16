@@ -15,20 +15,29 @@
 										<l:layoutData>
 											<l:GridData span="L8"/>
 										</l:layoutData>
-										<TextArea xmlns="sap.m" id="__area0" rows="10" cols="120" 
+										<Label id="CustomerConcern_label" text="Customer Concern" visible="false"/>
+										<TextArea 
+											id="CustomerConcern" 
+											rows="10" 
+											cols="120" 
 											placeholder="Enter Details of Customer Concern" 
 											value="{WarrantyClaim>CustomerConcern}"
 											editable="{WarrantyClaim>CanEdit}"
+											valueState="{ parts: [{path: 'WarrantyClaim>CustomerConcern'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.customerConcern'}"
 										/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
 										<l:layoutData>
 											<l:GridData span="L4"/>
 										</l:layoutData>
-										<Label text="Symptom Code L1" labelFor="symptomCodeL1" required="true"/>
+										<Label 
+											id="symptomCodeL1_label" 
+											text="Symptom Code L1" 
+											labelFor="symptomCodeL1" 
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+										/>
 										<ComboBox
 											id="symptomCodeL1"
-											required="true"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
 											items="{
@@ -36,32 +45,47 @@
 											}"
 											loadItems="readSymptomCatalog"
 											selectionChange="onSymptomCodeSelectedL1"
-											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL1}">
+											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL1}"
+											valueState="{ parts: [{path: 'ViewHelper>/warrantyUI/symptomCodeL1'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.symptomCodeL1'}"
+										>
 											<core:ListItem key="{SymptomCodes>code}" text="{SymptomCodes>text}"/>
 										</ComboBox>	
-										<Label text="Symptom Code L2" labelFor="symptomCodeL2" required="true"/>
+										<Label 
+											id="symptomCodeL2_label" 
+											text="Symptom Code L2" 
+											labelFor="symptomCodeL2" 
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+										/>
 										<ComboBox
 											id="symptomCodeL2"
-											required="true"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
 											items="{
 												path: 'SymptomCodesHelper>/SymptomsL2'
 											}"
 											selectionChange="onSymptomCodeSelectedL2"
-											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL2}">
+											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL2}"
+											valueState="{ parts: [{path: 'ViewHelper>/warrantyUI/symptomCodeL2'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.symptomCodeL2'}"
+										>
 											<core:ListItem key="{SymptomCodesHelper>code}" text="{SymptomCodesHelper>text}"/>
 										</ComboBox>	
-										<Label text="Symptom Code L3" labelFor="symptomCodeL3" required="true"/>
+										<Label 
+											id="SymptomCode_label" 
+											text="Symptom Code L3" 
+											labelFor="SymptomCode" 
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+										/>
 										<ComboBox
-											id="symptomCodeL3"
-											required="true"
+											id="SymptomCode"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
 											items="{
 												path: 'SymptomCodesHelper>/SymptomsL3'
 											}"
-											selectedKey="{WarrantyClaim>SymptomCode}">
+											selectedKey="{WarrantyClaim>SymptomCode}"
+											valueState="{ parts: [{path: 'WarrantyClaim>SymptomCode'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.symptomCodeL3'}"
+										>
 											<core:ListItem key="{SymptomCodesHelper>code}" 
 												text="{SymptomCodesHelper>text} ({=${SymptomCodesHelper>code}.substr(8,5)})"/>
 										</ComboBox>	

@@ -45,14 +45,19 @@ sap.ui.define([
 		validateFailureDate: function(failureDate,view) {
 			
 			var validated = true;
-			_removeErrorMessageFromMessageManager("failureDate");
+			_removeErrorMessageFromMessageManager("DateOfFailure");
 			
 			if(failureDate && WarrantyClaim.warrantyClaim.DateOfRepair){
-				if (failureDate.valueOf() > WarrantyClaim.warrantyClaim.DateOfRepair.valueOf()){
+				
+				var dateOfRepair = new Date(WarrantyClaim.warrantyClaim.DateOfRepair.getFullYear(), 
+					WarrantyClaim.warrantyClaim.DateOfRepair.getMonth(), WarrantyClaim.warrantyClaim.DateOfRepair.getDate());
+				var dateOfFailure = new Date(failureDate.getFullYear(), failureDate.getMonth(), failureDate.getDate());				
+				
+				if (dateOfFailure.valueOf() >= dateOfRepair.valueOf()){
 					_addErrorMessageToMessageManager(
-						"failureDate",
+						"DateOfFailure",
 						view.getModel("WarrantyClaim"),
-						view.getModel("i18n").getResourceBundle().getText("failureDate"),
+						view.getModel("i18n").getResourceBundle().getText("DateOfFailure"),
 						"/DateOfFailure"
 					);
 					validated = false;
@@ -64,14 +69,19 @@ sap.ui.define([
 		validateRepairDate: function(repairDate,view) {
 			
 			var validated = true;
-			_removeErrorMessageFromMessageManager("repairDate");
+			_removeErrorMessageFromMessageManager("DateOfRepair");
 			
 			if(repairDate && WarrantyClaim.warrantyClaim.DateOfFailure){
-				if (repairDate.valueOf() <= WarrantyClaim.warrantyClaim.DateOfFailure.valueOf()){
+				
+				var dateOfRepair = new Date(repairDate.getFullYear(), repairDate.getMonth(), repairDate.getDate());
+				var dateOfFailure = new Date(WarrantyClaim.warrantyClaim.DateOfFailure.getFullYear(), 
+					WarrantyClaim.warrantyClaim.DateOfFailure.getMonth(), WarrantyClaim.warrantyClaim.DateOfFailure.getDate());
+				
+				if (dateOfRepair.valueOf() <= dateOfFailure.valueOf()){
 					_addErrorMessageToMessageManager(
-						"repairDate",
+						"DateOfRepair",
 						view.getModel("WarrantyClaim"),
-						view.getModel("i18n").getResourceBundle().getText("repairDate"),
+						view.getModel("i18n").getResourceBundle().getText("DateOfRepair"),
 						"/DateOfRepair"
 					);
 					validated = false;
@@ -81,18 +91,18 @@ sap.ui.define([
 		},
 		
 //		Failure KM - Must be between 0 and 1000000
-		validateFailureKM: function(failureKMValue, view){
+		validateFailureMeasure: function(failureKMValue, view){
 
 			var validated = true;
-			_removeErrorMessageFromMessageManager("failureKM");
+			_removeErrorMessageFromMessageManager("FailureMeasure");
 
 			if(failureKMValue && failureKMValue !== ""){
 				if (failureKMValue <= 0 || failureKMValue >= 1000000){
 					
 					_addErrorMessageToMessageManager(
-						"failureKM",
+						"FailureMeasure",
 						view.getModel("WarrantyClaim"),
-						view.getModel("i18n").getResourceBundle().getText("failureKM"),
+						view.getModel("i18n").getResourceBundle().getText("FailureMeasure_BadRange"),
 						"/FailureMeasure"
 					);
 					validated = false;
@@ -100,6 +110,53 @@ sap.ui.define([
 			}
 			
 			return validated; 
+		},
+		
+		validateDateIsNotFutureDate: function(fieldValue, fieldId, view){
+			
+			var now = new Date();   
+			var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); 
+			var dateToValidate = new Date(fieldValue.getFullYear(), fieldValue.getMonth(), fieldValue.getDate());
+			
+			var validated = true;
+			_removeErrorMessageFromMessageManager(fieldId);
+			
+			if(fieldValue){
+				
+				if(dateToValidate.valueOf() > today.valueOf()){
+					_addErrorMessageToMessageManager(
+						fieldId,
+						view.getModel("WarrantyClaim"),
+						view.getModel("i18n").getResourceBundle().getText("noFutureDates",[view.byId(fieldId + "_label").getText()]),
+						"/" + fieldId
+					);
+					validated = false;
+				}
+			}
+			return validated;
+		},
+		
+		validateRequiredFieldIsPopulated: function(fieldValue, fieldId, view, processor, target){
+			
+			_removeErrorMessageFromMessageManager(fieldId);
+			
+			if (fieldValue){
+				if (fieldValue !== ""){
+                  return true;
+				}
+			}
+			
+			var messageProcessor = processor ? view.getModel(processor) : view.getModel("WarrantyClaim"); 
+			var messageTarget = target ? target : "/" + fieldId; 
+			
+			_addErrorMessageToMessageManager(
+				fieldId,
+				messageProcessor,
+				view.getModel("i18n").getResourceBundle().getText("mandatoryField",[view.byId(fieldId + "_label").getText()]),
+				messageTarget
+			);
+			
+			return false;
 		}
 	};
 

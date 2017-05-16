@@ -17,7 +17,7 @@ sap.ui.define([
     	},*/
     
     	readSubletCatalog: function(){
-			this.readCatalog("WTY3","SubletCodes",1);
+			this.readCatalog("ZSUBL","SubletCodes",1);
 		},
 		
 /*    	handleCancel: function(){

@@ -26,7 +26,11 @@
 							type: 'sap.ui.model.type.Date'
 					}" 
 				/>
-				<m:ObjectStatus state="Success" text="{WarrantyClaim>/StatusDescription}" icon="{WarrantyClaim>/StatusIcon}" />
+				<m:ObjectStatus
+					text="{WarrantyClaim>/StatusDescription}"
+					state="Success"
+					icon="{= !${WarrantyClaim>CanEdit} ? 'sap-icon://unlocked' : 'sap-icon://locked' }"
+				/>
 			</layout:VerticalLayout>
 			<layout:VerticalLayout class="sapUiNoMargin" width="100%" id="messageArea"/>
 		</headerContent>

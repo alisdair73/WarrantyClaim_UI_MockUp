@@ -15,52 +15,59 @@
 			columnsM="2">
 		<f:content>
 			<core:Title text="Failure Details"/>
-			<Label text="Failure KM"/>
+			<Label id="FailureMeasure_label" text="Failure KM" required="true" labelFor="FailureMeasure"/>
 			<Input 
-				id="failureKM" 
+				id="FailureMeasure" 
 				type="Number"
+				required="true"
 				value="{WarrantyClaim>FailureMeasure}"
-				valueState="{path: 'WarrantyClaim>FailureMeasure', formatter:'.valueStateFormatter.failureKM' }"
-				valueStateText = "{i18n>failureKM}"
+				valueState="{path: 'WarrantyClaim>FailureMeasure', formatter:'.valueStateFormatter.failureMeasure' }"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
-			<Label text="Date of Failure"/>
+			<Label id="DateOfFailure_label" text="Date of Failure" required="true" labelFor="DateOfFailure"/>
 			<DatePicker 
-				id="dateOfFailure" 
+				id="DateOfFailure" 
+				required="true"
 				change="onChangeDatePicker"
 				displayFormat="medium" 
 				dateValue="{WarrantyClaim>DateOfFailure}"
 				valueState="{path: 'WarrantyClaim>DateOfFailure', formatter:'.valueStateFormatter.failureDate' }"
-				valueStateText = "{i18n>failureDate}"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
 			
 			<core:Title text="Repair Details"/>
-			<Label text="Repair Order Number"/>
-			<Input id="repairOrderNumber" value="{WarrantyClaim>RepairOrderNumber}" editable="{WarrantyClaim>CanEdit}"/>
+			<Label id="RepairOrderNumber_label" text="Repair Order Number" required="true" labelFor="repairOrderNumber"/>
+			<Input 
+				id="RepairOrderNumber" 
+				value="{WarrantyClaim>RepairOrderNumber}" 
+				editable="{WarrantyClaim>CanEdit}"
+				valueState="{path: 'WarrantyClaim>RepairOrderNumber', formatter:'.valueStateFormatter.repairOrderNumber' }"
+			/>
 			
-			<Label text="Date of Repair"/>
+			<Label id="DateOfRepair_label" text="Date of Repair" required="true" labelFor="DateOfRepair"/>
 			<DatePicker 
-				id="dateOfRepair" 
+				id="DateOfRepair" 
 				change="onChangeDatePicker"
 				displayFormat="medium" 
+				required="true"
 				dateValue="{WarrantyClaim>DateOfRepair}" 
 				valueState="{path: 'WarrantyClaim>DateOfRepair', formatter:'.valueStateFormatter.repairDate' }"
-				valueStateText = "{i18n>failureDate}"
 				editable="{WarrantyClaim>CanEdit}"
 				/>
 			<core:Title text="Main Causal Part" />
-			<Label text="MCPN"/>
+			<Label text="MCPN" required="true" labelFor="MCPN"/>
 			<Input 
 				id="MCPN" 
+				required="true"
 				value="{WarrantyClaim>/Parts/0/PartNumber}"	
 				editable="{WarrantyClaim>CanEdit}"
 				showValueHelp="true" 
 				valueHelpRequest="addMCPN"/>
-			<Label text="MCPN Quantity"/>
+			<Label text="MCPN Quantity" required="true" labelFor="MCPNQuantity"/>
 			<Input 
 				id="MCPNQuantity" 
 				type="Number"
+				required="true"
 				value="{
 					path: 'WarrantyClaim>/Parts/0/Quantity',
 					type: 'sap.ui.model.type.Float',
@@ -86,26 +93,36 @@
 			<Input id="DTC2" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC2' : '' }" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 			<Input id="DTC3" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC3' : '' }" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 			<core:Title text="Staff" />
-			<Label text="Technician"/>	
-			<ComboBox width="100%"
+			<Label id="Technician_label" labelFor="Technician" text="Technician" required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"/>	
+			<ComboBox
+				id="Technician"
+				width="100%"
 				showSecondaryValues= "true"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
 				editable="{WarrantyClaim>CanEdit}"
 				items="{
 					path: '/EmployeeSet',
 					sorter: { path: 'LastName' }
 				}"
-				selectedKey="{WarrantyClaim>Technician}">
+				selectedKey="{WarrantyClaim>Technician}"
+				valueState="{ parts: [{path: 'WarrantyClaim>Technician'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.technician'}"
+			>
 				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
 			</ComboBox>	
-			<Label text="Service Advisor"/>
-			<ComboBox width="100%"
+			<Label id="ServiceAdvisor_label" labelFor="ServiceAdvsior" text="Service Advisor" required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"/>
+			<ComboBox
+				id="ServiceAdvisor"
+				width="100%"
 				showSecondaryValues= "true"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
 				editable="{WarrantyClaim>CanEdit}"
 				items="{
 					path: '/EmployeeSet',
 					sorter: { path: 'LastName' }
 				}"
-				selectedKey="{WarrantyClaim>ServiceAdvisor}">
+				selectedKey="{WarrantyClaim>ServiceAdvisor}"
+				valueState="{ parts: [{path: 'WarrantyClaim>ServiceAdvisor'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.serviceAdvisor'}"
+			>
 				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
 			</ComboBox>	
 		</f:content>

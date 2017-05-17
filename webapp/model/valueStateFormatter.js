@@ -41,11 +41,16 @@ sap.ui.define([
 			repairOrderNumber: function(repairOrderNumber){
 				return Rule.validateRequiredFieldIsPopulated(repairOrderNumber, "RepairOrderNumber", this.getView()) ? "None" : "Error";
 			},
-			
+
+//			
+//          Below Formatters vary based on Claim Type 			
+//
+
 			dealerContact: function(dealerContact, claimTypeGroup){
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(dealerContact, "DealerContact", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -56,6 +61,7 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(technician, "Technician", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -66,6 +72,7 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(serviceAdvisor, "ServiceAdvisor", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -76,6 +83,7 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(customerConcern, "CustomerConcern", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -86,6 +94,7 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(symptomCodeL1, "symptomCodeL1", 
 							this.getView(), "ViewHelper", "/warrantyUI/symptomCodeL1") ? "None" : "Error";
 					default:
@@ -97,6 +106,7 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(symptomCodeL2, "symptomCodeL2", 
 							this.getView(), "ViewHelper", "/warrantyUI/symptomCodeL2") ? "None" : "Error";
 					default:
@@ -108,6 +118,7 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(symptomCodeL3, "SymptomCode", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -118,6 +129,7 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(dealerComments, "DealerComments", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -128,6 +140,7 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(defectCodeL1, "defectCodeL1", 
 							this.getView(), "ViewHelper", "/warrantyUI/defectCodeL1") ? "None" : "Error";
 					default:
@@ -139,11 +152,23 @@ sap.ui.define([
 				
 				switch(claimTypeGroup){
 					case "NORMAL":
+					case "GOODWILL":
 						return Rule.validateRequiredFieldIsPopulated(defectCodeL2, "DefectCode", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
 				}
-			}
+			},
+			
+			pwa: function(pwa, claimTypeGroup){
+				
+				switch(claimTypeGroup){
+					case "GOODWILL":
+						return Rule.validateRequiredFieldIsPopulated(pwa, "AuthorisationNumber", this.getView()) ? "None" : "Error";
+					default:
+						return "None";
+				}
+			},
+			
 		};
 	}
 );

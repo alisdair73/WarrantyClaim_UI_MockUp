@@ -34,7 +34,7 @@
 											id="symptomCodeL1_label" 
 											text="Symptom Code L1" 
 											labelFor="symptomCodeL1" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 										/>
 										<ComboBox
 											id="symptomCodeL1"
@@ -54,7 +54,7 @@
 											id="symptomCodeL2_label" 
 											text="Symptom Code L2" 
 											labelFor="symptomCodeL2" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 										/>
 										<ComboBox
 											id="symptomCodeL2"
@@ -74,7 +74,7 @@
 											id="SymptomCode_label" 
 											text="Symptom Code L3" 
 											labelFor="SymptomCode" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 										/>
 										<ComboBox
 											id="SymptomCode"

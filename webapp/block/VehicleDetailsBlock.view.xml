@@ -63,13 +63,13 @@
 				id="DealerContact_label" 
 				text="Dealer Contact" 
 				labelFor="DealerContact"
-				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 			/>
 			<Input 
 				id="DealerContact" 
 				value="{WarrantyClaim>DealerContact}"
 				valueState="{ parts: [{path: 'WarrantyClaim>DealerContact'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.dealerContact'}"
-				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 				editable="{WarrantyClaim>CanEdit}"
 				showSuggestion="true"
 				suggestionItemSelected="onDealerContactSelection"
@@ -81,15 +81,17 @@
 
 			<core:Title text="Authorisation/Recall" />
 			<Label 
+			    id="AuthorisationNumber_label"
 				text="PWA Number" 
-				labelFor="PWANumber" 
+				labelFor="PWA" 
 				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 			/>
 			<Input 
-				id="PWANumber" 
+				id="AuthorisationNumber" 
 				value="{WarrantyClaim>AuthorisationNumber}"	
 				editable="{WarrantyClaim>CanEdit}"
 				showValueHelp="true" 
+				valueState="{ parts: [{path: 'WarrantyClaim>AuthorisationNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.pwa'}"
 				valueHelpRequest="onPWAValueHelpRequest"
 				showSuggestion="true"
 				suggestionItemSelected="onPWASelection"

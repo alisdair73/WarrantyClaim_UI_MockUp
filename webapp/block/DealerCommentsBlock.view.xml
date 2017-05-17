@@ -38,7 +38,7 @@
 											id="defectCodeL1_label" 
 											text="Defect Code L1" 
 											labelFor="defectCodeL1" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 										/>
 										<ComboBox
 											id="defectCodeL1"
@@ -58,7 +58,7 @@
 											id="DefectCode_label" 
 											text="Defect Code L2" 
 											labelFor="defectCodeL2" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 										/>
 										<ComboBox
 											id="DefectCode"

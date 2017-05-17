@@ -93,12 +93,17 @@
 			<Input id="DTC2" width="95%" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC2' : '' }" value="{WarrantyClaim>DTC2}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 			<Input id="DTC3" placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC3' : '' }" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 			<core:Title text="Staff" />
-			<Label id="Technician_label" labelFor="Technician" text="Technician" required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"/>	
+			<Label 
+				id="Technician_label" 
+				labelFor="Technician" 
+				text="Technician" 
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+			/>	
 			<ComboBox
 				id="Technician"
 				width="100%"
 				showSecondaryValues= "true"
-				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 				editable="{WarrantyClaim>CanEdit}"
 				items="{
 					path: '/EmployeeSet',
@@ -109,12 +114,17 @@
 			>
 				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
 			</ComboBox>	
-			<Label id="ServiceAdvisor_label" labelFor="ServiceAdvsior" text="Service Advisor" required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"/>
+			<Label 
+				id="ServiceAdvisor_label" 
+				labelFor="ServiceAdvsior" 
+				text="Service Advisor" 
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+			/>
 			<ComboBox
 				id="ServiceAdvisor"
 				width="100%"
 				showSecondaryValues= "true"
-				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
 				editable="{WarrantyClaim>CanEdit}"
 				items="{
 					path: '/EmployeeSet',

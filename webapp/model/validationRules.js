@@ -5,10 +5,22 @@ sap.ui.define([
 	"use strict";
 	
 //  Private Functions
+
+    var _updateUIErrorFlag = function(){
+    	
+		var uiMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
+  			function(uiMessage){
+				return uiMessage.id.match("UI");
+			}
+		); 
+		
+		sap.ui.getCore().getModel("UIValidation").setProperty("/hasUIValidationError",uiMessages.length > 0);
+    };
+
 	var	_doesMessageExistInMessageManager = function (messageID){
 			var registeredMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
   				function(registeredMessage){
-					return registeredMessage.id === messageID;
+					return registeredMessage.id ===  messageID;
 				}
 			);
     		
@@ -23,6 +35,7 @@ sap.ui.define([
 			if(message){
 				sap.ui.getCore().getMessageManager().removeMessages(message);
 			}
+			_updateUIErrorFlag();
 	};
 		
 	var	_addErrorMessageToMessageManager = function(messageID, messageProcessor, messageText, messageTarget){
@@ -37,6 +50,7 @@ sap.ui.define([
 	                "processor": messageProcessor
 	        	});
       			sap.ui.getCore().getMessageManager().addMessages(message);
+      			_updateUIErrorFlag();
 			}
 	};
 
@@ -45,7 +59,7 @@ sap.ui.define([
 		validateFailureDate: function(failureDate,view) {
 			
 			var validated = true;
-			_removeErrorMessageFromMessageManager("DateOfFailure");
+			_removeErrorMessageFromMessageManager("UI_DateOfFailure");
 			
 			if(failureDate && WarrantyClaim.warrantyClaim.DateOfRepair){
 				
@@ -55,7 +69,7 @@ sap.ui.define([
 				
 				if (dateOfFailure.valueOf() >= dateOfRepair.valueOf()){
 					_addErrorMessageToMessageManager(
-						"DateOfFailure",
+						"UI_DateOfFailure",
 						view.getModel("WarrantyClaim"),
 						view.getModel("i18n").getResourceBundle().getText("DateOfFailure"),
 						"/DateOfFailure"
@@ -69,7 +83,7 @@ sap.ui.define([
 		validateRepairDate: function(repairDate,view) {
 			
 			var validated = true;
-			_removeErrorMessageFromMessageManager("DateOfRepair");
+			_removeErrorMessageFromMessageManager("UI_DateOfRepair");
 			
 			if(repairDate && WarrantyClaim.warrantyClaim.DateOfFailure){
 				
@@ -79,7 +93,7 @@ sap.ui.define([
 				
 				if (dateOfRepair.valueOf() <= dateOfFailure.valueOf()){
 					_addErrorMessageToMessageManager(
-						"DateOfRepair",
+						"UI_DateOfRepair",
 						view.getModel("WarrantyClaim"),
 						view.getModel("i18n").getResourceBundle().getText("DateOfRepair"),
 						"/DateOfRepair"
@@ -94,13 +108,13 @@ sap.ui.define([
 		validateFailureMeasure: function(failureKMValue, view){
 
 			var validated = true;
-			_removeErrorMessageFromMessageManager("FailureMeasure");
+			_removeErrorMessageFromMessageManager("UI_FailureMeasure");
 
 			if(failureKMValue && failureKMValue !== ""){
 				if (failureKMValue <= 0 || failureKMValue >= 1000000){
 					
 					_addErrorMessageToMessageManager(
-						"FailureMeasure",
+						"UI_FailureMeasure",
 						view.getModel("WarrantyClaim"),
 						view.getModel("i18n").getResourceBundle().getText("FailureMeasure_BadRange"),
 						"/FailureMeasure"
@@ -119,13 +133,13 @@ sap.ui.define([
 			var dateToValidate = new Date(fieldValue.getFullYear(), fieldValue.getMonth(), fieldValue.getDate());
 			
 			var validated = true;
-			_removeErrorMessageFromMessageManager(fieldId);
+			_removeErrorMessageFromMessageManager("UI_" + fieldId);
 			
 			if(fieldValue){
 				
 				if(dateToValidate.valueOf() > today.valueOf()){
 					_addErrorMessageToMessageManager(
-						fieldId,
+						"UI_" + fieldId,
 						view.getModel("WarrantyClaim"),
 						view.getModel("i18n").getResourceBundle().getText("noFutureDates",[view.byId(fieldId + "_label").getText()]),
 						"/" + fieldId
@@ -138,7 +152,7 @@ sap.ui.define([
 		
 		validateRequiredFieldIsPopulated: function(fieldValue, fieldId, view, processor, target){
 			
-			_removeErrorMessageFromMessageManager(fieldId);
+			_removeErrorMessageFromMessageManager("UI_" + fieldId);
 			
 			if (fieldValue){
 				if (fieldValue !== ""){
@@ -150,13 +164,37 @@ sap.ui.define([
 			var messageTarget = target ? target : "/" + fieldId; 
 			
 			_addErrorMessageToMessageManager(
-				fieldId,
+				"UI_" + fieldId,
 				messageProcessor,
 				view.getModel("i18n").getResourceBundle().getText("mandatoryField",[view.byId(fieldId + "_label").getText()]),
 				messageTarget
 			);
 			
 			return false;
+		},
+		
+		validateSerialNumbersArePopulated: function(fieldValue, fieldId, view){
+			
+			_removeErrorMessageFromMessageManager("UI_" + fieldId);
+			
+			if(view.getModel("ViewHelper").getProperty("/warrantyUI/serialNumberIsMandatory")){
+				if (fieldValue){
+					if (fieldValue !== ""){
+	                  return true;
+					}
+				}
+				
+				_addErrorMessageToMessageManager(
+					"UI_" + fieldId,
+					view.getModel("WarrantyClaim"),
+					view.getModel("i18n").getResourceBundle().getText("recallSerialNumber"),
+					"/" + fieldId
+				);
+				
+				return false;
+			} else{
+				return true;
+			}
 		}
 	};
 

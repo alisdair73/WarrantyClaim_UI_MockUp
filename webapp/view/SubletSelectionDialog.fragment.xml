@@ -36,9 +36,15 @@
 		                        	<Input 
 		                        		width="100%" 
 		                        		id="Quantity" 
-		                        		value="{
-		                        			path: 'SubletItem>Quantity',
-            								type: 'sap.ui.model.type.Currency'
+										value="{
+    										parts: [
+        										{path: 'SubletItem>Quantity'}, 
+        										{path: 'WarrantyClaim>ClaimCurrency'}
+    										],
+    										type: 'sap.ui.model.type.Currency',
+    										formatOptions: {
+        										showMeasure: true
+											 }
 										}"
 		                        	/>
 		                    	</sap.ui.layout.form:fields>

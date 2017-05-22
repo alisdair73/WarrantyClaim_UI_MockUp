@@ -15,7 +15,7 @@
         "id": 3504337,
         "runnerId": "webapprunner",
         "displayName": "Current UI5 from CDN",
-        "lastRunTimeStamp": 1494996448959
+        "lastRunTimeStamp": 1495438137103
       }
     },
     {
@@ -34,7 +34,7 @@
         "id": 648048,
         "runnerId": "fiorirunner",
         "displayName": "Run Component.js",
-        "lastRunTimeStamp": 1494282951351
+        "lastRunTimeStamp": 1495173420328
       }
     },
     {

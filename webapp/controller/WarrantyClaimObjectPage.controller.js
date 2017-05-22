@@ -7,10 +7,9 @@ sap.ui.define([
         "WarrantyClaim_MockUp/model/WarrantyClaim",
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
-        "sap/m/MessageStrip",
-        "sap/ui/core/message/Message"
+        "sap/m/MessageStrip"
 	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
-					NumberFormat, MessageStrip, Message) {
+					NumberFormat, MessageStrip) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -34,11 +33,14 @@ sap.ui.define([
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
+			
+			sap.ui.getCore().setModel(new JSONModel({"hasUIValidationError": false}),"UIValidation");
+			
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
 
 			//Is this needed???
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
-			
+		
 			//var oViewModel = this.getModel("detailView");
 			//If the view was not bound yet its not busy, only if the binding requests data it is set to busy again
 			//oViewModel.setProperty("/busy", false);
@@ -68,10 +70,10 @@ sap.ui.define([
 			this.getModel("WarrantyClaim").setProperty("/StatusDescription",statusDescription);
 			this.getModel("WarrantyClaim").setProperty("/StatusIcon",statusIcon);
 			
-			var customerConcernSection = this.getView().byId("customerConcern");
+/*			var customerConcernSection = this.getView().byId("customerConcern");
 			if(claimTypeGroup === 'RECALL'){
 				customerConcernSection.setVisible(false);
-			}
+			}*/
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 			this._claimTypeSelection.close();
@@ -276,7 +278,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "2016110789";
+			//claimNumber = "2016110991";
 			//claimNumber = "2016110808";
 			//claimNumber = '2016110829';
 			//claimNumber = "100000000660";

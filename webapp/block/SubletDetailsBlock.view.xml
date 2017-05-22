@@ -20,11 +20,22 @@
 	    <items>
 	        <ColumnListItem id="__item0" vAlign="Middle">
 	            <cells>
-	                <Text text="{WarrantyClaim>ItemKey}" id="__text5"/>
-	                <Text text="{WarrantyClaim>Invoice}" id="__text7"/>
-	                <Text text="{WarrantyClaim>BusinessName}" id="__text8"/>
-	                <Text text="{WarrantyClaim>Quantity}" id="__text9"/>
-	                <Text text="{WarrantyClaim>Description}" id="__text6"/>
+	                <Text text="{WarrantyClaim>ItemKey}"/>
+	                <Text text="{WarrantyClaim>Invoice}"/>
+	                <Text text="{WarrantyClaim>BusinessName}"/>
+	                <Text 
+	                	text="{
+    						parts: [
+        						{path: 'WarrantyClaim>Quantity'}, 
+        						{path: 'WarrantyClaim>ClaimCurrency'}
+    						],
+    						type: 'sap.ui.model.type.Currency',
+    						formatOptions: {
+        						showMeasure: true
+							}
+						}"
+	                />
+	                <Text text="{WarrantyClaim>Description}"/>
 	                <l:HorizontalLayout>
 	                	<Button icon="sap-icon://edit" press="editSublet" visible="{WarrantyClaim>/CanEdit}"/>
 	                	<Button icon="sap-icon://delete" press="deleteSublet" visible="{WarrantyClaim>/CanEdit}"/>

@@ -38,12 +38,14 @@
 											id="defectCodeL1_label" 
 											text="Defect Code L1" 
 											labelFor="defectCodeL1" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 										/>
 										<ComboBox
 											id="defectCodeL1"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
+											enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											items="{
 												path: 'DefectCodes>/'
 											}"
@@ -58,13 +60,14 @@
 											id="DefectCode_label" 
 											text="Defect Code L2" 
 											labelFor="defectCodeL2" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 										/>
 										<ComboBox
 											id="DefectCode"
-											required="true"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
+											enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											items="{
 												path: 'DefectCodesHelper>/DefectsL2'
 											}"

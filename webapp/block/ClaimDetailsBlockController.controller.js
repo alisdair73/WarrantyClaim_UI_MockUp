@@ -2,9 +2,10 @@ sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/Filter",
 	"WarrantyClaim_MockUp/model/models",
-	"WarrantyClaim_MockUp/model/valueStateFormatter"
+	"WarrantyClaim_MockUp/model/valueStateFormatter",
+	"WarrantyClaim_MockUp/model/validationRules"
 	
-], function(BaseController,Filter, Models, valueStateFormatter) {
+], function(BaseController,Filter, Models, valueStateFormatter, Rule) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.ClaimDetailsBlockController", {
@@ -12,6 +13,7 @@ sap.ui.define([
 		valueStateFormatter: valueStateFormatter,
 		
 		onInit: function(){
+			sap.ui.getCore().getEventBus().subscribe("RecallNumber","Changed",this._recallNumberChanged.bind(this),this);
 		},
 		
 		addMCPN: function(){
@@ -64,8 +66,19 @@ sap.ui.define([
 			
 			// update the model
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
-		}		
-
-
+		},
+		
+    	_recallNumberChanged: function(channel, event, data){
+    		
+    		var oldSerialNumber = this.getView().getModel("WarrantyClaim").getProperty("/OldSerialNumber");
+    		var newSerialNumber = this.getView().getModel("WarrantyClaim").getProperty("/NewSerialNumber");
+    	
+    		this.getView().byId("OldSerialNumber").setValueState(
+    			Rule.validateSerialNumbersArePopulated(oldSerialNumber, "OldSerialNumber", this.getView()) ? "None" : "Error"
+    		);
+    		this.getView().byId("NewSerialNumber").setValueState(
+    			Rule.validateSerialNumbersArePopulated(newSerialNumber, "NewSerialNumber", this.getView()) ? "None" : "Error"
+    		);
+    	}
 	});
 });

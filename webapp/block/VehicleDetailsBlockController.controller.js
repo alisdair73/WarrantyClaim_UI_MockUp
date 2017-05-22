@@ -15,8 +15,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		
 		onVINChanged: function(event){
         	//Add the VIN to the PWA Filter
-    		this.getView().byId("PWANumber").getBinding("suggestionRows").filter(this._getFilter());
-			this.getView().byId("recallNumber").getBinding("suggestionRows").filter(this._getFilter());
+    		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
+			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
 		},
 		
 		onPWAValueHelpRequest: function(event){
@@ -33,7 +33,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
         onPWASelectionSearch: function(event){
         	var searchValue = event.getParameter("value");
 			var filters = [];
-			filters.push(new Filter("PWANumber",sap.ui.model.FilterOperator.Contains, searchValue));
+			filters.push(new Filter("AuthorisationNumber",sap.ui.model.FilterOperator.Contains, searchValue));
 			filters.push(new Filter("VIN",sap.ui.model.FilterOperator.Contains, searchValue));
 			filters.push(new Filter("EngineNumber",sap.ui.model.FilterOperator.Contains, searchValue));
 			event.getSource().getBinding("items").filter(filters);
@@ -117,6 +117,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber",dataObject.ExternalRecallNumber);
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
+			sap.ui.getCore().getEventBus().publish("RecallNumber","Changed",{"IsMandatory":dataObject.SerialNumberIsMandatory});
 		},
 		
 		onRecallSelectionClose: function(){
@@ -128,10 +129,15 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 //			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber",dataObject.EngineNumber);
 		},
 		
+		toUpperCase: function(event){
+    		var value = event.getParameter('newValue');     
+    		this.getView().getModel("WarrantyClaim").setProperty("/VIN",value.toUpperCase());
+		},
+		
     	_salesOrgChanged: function(channel, event, data){
     		
-    		this.getView().byId("PWANumber").getBinding("suggestionRows").filter(this._getFilter());
-    		this.getView().byId("recallNumber").getBinding("suggestionRows").filter(this._getFilter());
+    		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
+    		this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
     	},
     	
     	_getFilter: function(){

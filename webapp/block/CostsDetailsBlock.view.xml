@@ -64,35 +64,23 @@
 									</ColumnListItem>
 	    						</items>
 	    						<columns>
-	        						<Column>
-	        							<header>
-	            							<Label text="Labour"/>
-	            						</header>
+	        						<Column hAlign="Right">
+	        							<Label text="Labour"/>
 	        						</Column>
-	        						<Column>
-	        							<header>
-	            							<Label text="Parts"/>
-	            						</header>
+	        						<Column hAlign="Right">
+	        							<Label text="Parts"/>
 	        						</Column>
-	        						<Column>
-	        							<header>
-	            							<Label text="Handling"/>
-	            						</header>
+	        						<Column hAlign="Right">
+	        							<Label text="Handling"/>
 	        						</Column>
-	        						<Column>
-	        							<header>
-	            							<Label text="Sublet"/>
-	            						</header>
+	        						<Column hAlign="Right">
+	        							<Label text="Sublet"/>
 	        						</Column>
-	        						<Column>
-	        							<header>
-	            							<Label text="GST"/>
-	            						</header>
+	        						<Column hAlign="Right">
+	        							<Label text="GST"/>
 	        						</Column>	  
-	        						<Column>
-	        							<header>
-	            							<Label text="TOTAL"/>
-	            						</header>
+	        						<Column hAlign="Right">
+	        							<Label text="TOTAL"/>
 	        						</Column>	        						
 								</columns>
 							</Table>

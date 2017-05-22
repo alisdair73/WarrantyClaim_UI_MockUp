@@ -28,8 +28,8 @@
 				/>
 				<m:ObjectStatus
 					text="{WarrantyClaim>/StatusDescription}"
-					state="Success"
-					icon="{= !${WarrantyClaim>CanEdit} ? 'sap-icon://unlocked' : 'sap-icon://locked' }"
+					state="{= ${WarrantyClaim>/CanEdit} ? 'Success' : 'Warning' }"
+					icon="{= ${WarrantyClaim>/CanEdit} ? 'sap-icon://unlocked' : 'sap-icon://locked' }"
 				/>
 			</layout:VerticalLayout>
 			<layout:VerticalLayout class="sapUiNoMargin" width="100%" id="messageArea"/>
@@ -135,7 +135,7 @@
 					type="Emphasized" 
 					press="openMessages"/>
 				<m:ToolbarSpacer/>
-				<m:Button text="Save Draft" press="onDraft" visible="{WarrantyClaim>/CanEdit}"/>
+				<m:Button text="Save Draft" press="onDraft" enabled="{= !!${UIValidation>/hasUIValidationError}}" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button text="Cancel" press="onCancel"/>
 				<m:Button text="Validate" press="onValidate" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button text="Submit" press="onSubmit" type="Emphasized" visible="{WarrantyClaim>/CanEdit}"/>

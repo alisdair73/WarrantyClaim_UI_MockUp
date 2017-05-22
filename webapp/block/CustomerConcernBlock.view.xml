@@ -34,12 +34,14 @@
 											id="symptomCodeL1_label" 
 											text="Symptom Code L1" 
 											labelFor="symptomCodeL1" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 										/>
 										<ComboBox
 											id="symptomCodeL1"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
+											enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											items="{
 												path: 'SymptomCodes>/'
 											}"
@@ -54,11 +56,12 @@
 											id="symptomCodeL2_label" 
 											text="Symptom Code L2" 
 											labelFor="symptomCodeL2" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 										/>
 										<ComboBox
 											id="symptomCodeL2"
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' }"
+								            required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
+								            enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											width="100%"
 											editable="{WarrantyClaim>CanEdit}"
 											items="{
@@ -74,11 +77,13 @@
 											id="SymptomCode_label" 
 											text="Symptom Code L3" 
 											labelFor="SymptomCode" 
-											required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 										/>
 										<ComboBox
 											id="SymptomCode"
 											width="100%"
+											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
+											enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											editable="{WarrantyClaim>CanEdit}"
 											items="{
 												path: 'SymptomCodesHelper>/SymptomsL3'

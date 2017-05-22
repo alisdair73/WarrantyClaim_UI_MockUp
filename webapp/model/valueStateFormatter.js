@@ -51,6 +51,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(dealerContact, "DealerContact", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -62,6 +63,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":	
 						return Rule.validateRequiredFieldIsPopulated(technician, "Technician", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -73,6 +75,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(serviceAdvisor, "ServiceAdvisor", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -84,6 +87,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(customerConcern, "CustomerConcern", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -95,6 +99,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(symptomCodeL1, "symptomCodeL1", 
 							this.getView(), "ViewHelper", "/warrantyUI/symptomCodeL1") ? "None" : "Error";
 					default:
@@ -107,6 +112,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(symptomCodeL2, "symptomCodeL2", 
 							this.getView(), "ViewHelper", "/warrantyUI/symptomCodeL2") ? "None" : "Error";
 					default:
@@ -119,6 +125,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(symptomCodeL3, "SymptomCode", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -130,6 +137,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(dealerComments, "DealerComments", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -141,6 +149,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(defectCodeL1, "defectCodeL1", 
 							this.getView(), "ViewHelper", "/warrantyUI/defectCodeL1") ? "None" : "Error";
 					default:
@@ -153,6 +162,7 @@ sap.ui.define([
 				switch(claimTypeGroup){
 					case "NORMAL":
 					case "GOODWILL":
+					case "PARTS":
 						return Rule.validateRequiredFieldIsPopulated(defectCodeL2, "DefectCode", this.getView()) ? "None" : "Error";
 					default:
 						return "None";
@@ -169,6 +179,65 @@ sap.ui.define([
 				}
 			},
 			
+			installDate: function(installDate, claimTypeGroup){
+				
+				switch(claimTypeGroup){
+					case "PARTS":
+						return Rule.validateRequiredFieldIsPopulated(installDate, "PartsInstallDate", this.getView()) ? "None" : "Error";
+					default:
+						return "None";
+				}
+			},
+			
+			installKM: function(installKM, claimTypeGroup){
+				
+				switch(claimTypeGroup){
+					case "PARTS":
+						return Rule.validateRequiredFieldIsPopulated(installKM, "PartsInstallKM", this.getView()) ? "None" : "Error";
+					default:
+						return "None";
+				}
+			},
+			
+			invoiceNumber: function(invoiceNumber, claimTypeGroup){
+				
+				switch(claimTypeGroup){
+					case "PARTS":
+						return Rule.validateRequiredFieldIsPopulated(invoiceNumber, "OriginalInvoiceNumber", this.getView()) ? "None" : "Error";
+					default:
+						return "None";
+				}
+			},
+			
+			recallNumber: function(recallNumber, claimTypeGroup){
+				
+				switch(claimTypeGroup){
+					case "RECALL":
+						return Rule.validateRequiredFieldIsPopulated(recallNumber, "RecallNumber", this.getView()) ? "None" : "Error";
+					default:
+						return "None";
+				}
+			},
+			
+			oldSerialNumber: function(oldSerialNumber, claimTypeGroup){
+				
+	    		switch(claimTypeGroup){
+					case "RECALL":
+						return Rule.validateSerialNumbersArePopulated(oldSerialNumber, "OldSerialNumber", this.getView()) ? "None" : "Error";
+					default:
+						return "None";
+				}
+			},
+			
+			newSerialNumber: function(newSerialNumber, claimTypeGroup){
+
+	    		switch(claimTypeGroup){
+					case "RECALL":
+						return Rule.validateSerialNumbersArePopulated(newSerialNumber, "NewSerialNumber", this.getView()) ? "None" : "Error";
+					default:
+						return "None";
+				}
+			}
 		};
 	}
 );

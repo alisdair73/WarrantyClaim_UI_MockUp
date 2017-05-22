@@ -97,13 +97,14 @@
 				id="Technician_label" 
 				labelFor="Technician" 
 				text="Technician" 
-				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 			/>	
 			<ComboBox
 				id="Technician"
 				width="100%"
 				showSecondaryValues= "true"
-				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
+				enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 				editable="{WarrantyClaim>CanEdit}"
 				items="{
 					path: '/EmployeeSet',
@@ -118,13 +119,14 @@
 				id="ServiceAdvisor_label" 
 				labelFor="ServiceAdvsior" 
 				text="Service Advisor" 
-				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 			/>
 			<ComboBox
 				id="ServiceAdvisor"
 				width="100%"
 				showSecondaryValues= "true"
-				required="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+				required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
+				enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 				editable="{WarrantyClaim>CanEdit}"
 				items="{
 					path: '/EmployeeSet',
@@ -154,18 +156,21 @@
 				<core:Title text="Recall Serial Numbers" />
 				<Label text="Serial Numbers" required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"/>
 				<Input 
-					id="oldSerialNumber" 
-					placeholder="Old Serial #" 
+					id="OldSerialNumber" 
+					placeholder="Old Serial Number" 
 					value="{WarrantyClaim>OldSerialNumber}" 
 					editable="{WarrantyClaim>CanEdit}" 
-					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
+					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
+					valueState="{ parts: [{path: 'WarrantyClaim>OldSerialNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.oldSerialNumber'}"
+
 				/>
 				<Input 
-					id="newSerialNumber" 
-					placeholder="New Serial #" 
+					id="NewSerialNumber" 
+					placeholder="New Serial Number" 
 					value="{WarrantyClaim>NewSerialNumber}" 
 					editable="{WarrantyClaim>CanEdit}" 
-					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"	
+					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"	
+					valueState="{ parts: [{path: 'WarrantyClaim>NewSerialNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.newSerialNumber'}"
 				/>
 			</f:content>
 		</f:SimpleForm>
@@ -184,43 +189,49 @@
 			<f:content>
 				<core:Title text="Parts" />
 				<Label 
+					id="PartsInstallDate_label"
 					text="Install Date" 
-					labelFor="partInstallDate" 
+					labelFor="PartsInstallDate"
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 				/>
 				<DatePicker 
-					id="dateOfInstall" 
+					id="PartsInstallDate" 
 					change="onChangeDatePicker"
 					displayFormat="medium" 
 					dateValue="{WarrantyClaim>PartsInstallDate}" 
 					editable="{WarrantyClaim>CanEdit}"
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					valueState="{ parts: [{path: 'WarrantyClaim>PartsInstallDate'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.installDate'}"
 				/>
 				<Label 
+					id="PartsInstallKM_label"
 					text="Part Install KM" 
 					labelFor="partInstallKM" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 				/>
 				<Input 
-					id="partInstallKM" 
+					id="PartsInstallKM" 
 					value="{WarrantyClaim>PartsInstallKM}" 
 					editable="{WarrantyClaim>CanEdit}" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					valueState="{ parts: [{path: 'WarrantyClaim>PartsInstallKM'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.installKM'}"
 				/>
 				<Label 
+					id="OriginalInvoiceNumber_label"
 					text="Original Invoice Number" 
 					labelFor="originalInvoiceNo" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 				/>
 				<Input 
-					id="originalInvoiceNo" 
+					id="OriginalInvoiceNumber" 
 					value="{WarrantyClaim>OriginalInvoiceNumber}" 
 					editable="{WarrantyClaim>CanEdit}" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					valueState="{ parts: [{path: 'WarrantyClaim>OriginalInvoiceNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.invoiceNumber'}"
 				/>
 			</f:content>
 		</f:SimpleForm>

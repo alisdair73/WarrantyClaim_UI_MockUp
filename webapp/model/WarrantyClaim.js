@@ -69,12 +69,6 @@ sap.ui.define([
 		
 		updateWarrantyClaimFromJSONModel: function(jsonModel){
 		
-/*			var formatOptions = {
-				minFractionDigits: 2,
-				maxFractionDigits: 2
-			};
-			var costFormat = NumberFormat.getFloatInstance(formatOptions);*/
-			
 			this.warrantyClaim.ClaimNumber = jsonModel.ClaimNumber;
 			this.warrantyClaim.ClaimCurrency = jsonModel.ClaimCurrency;
 			this.warrantyClaim.TotalMaterial = jsonModel.TotalMaterial;
@@ -83,9 +77,6 @@ sap.ui.define([
 			this.warrantyClaim.TotalHandling = jsonModel.TotalHandling;
 			this.warrantyClaim.TotalGST = jsonModel.TotalGST;
 			this.warrantyClaim.TotalCostOfClaim = jsonModel.TotalCostOfClaim;
-			
-//			this.warrantyClaim.TotalCostOfClaim = costFormat.format(jsonModel.TotalCostOfClaim);
-			
 			this.warrantyClaim.StatusDescription = jsonModel.StatusDescription;
 			this.warrantyClaim.StatusIcon = jsonModel.StatusIcon;
 			this.warrantyClaim.CanEdit = jsonModel.CanEdit;
@@ -265,6 +256,7 @@ sap.ui.define([
 			for (i = 0; i < this.warrantyClaim.Sublet.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Sublet[i];
 				delete warrantyClaimItem.path;
+				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			

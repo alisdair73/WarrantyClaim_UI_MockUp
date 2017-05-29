@@ -108,7 +108,10 @@
 				editable="{WarrantyClaim>CanEdit}"
 				items="{
 					path: '/EmployeeSet',
-					sorter: { path: 'LastName' }
+					sorter: { path: 'LastName' },
+					filters : [
+						{ path : 'Relationship', operator : 'EQ', value1 : 'Technician'}
+					]
 				}"
 				selectedKey="{WarrantyClaim>Technician}"
 				valueState="{ parts: [{path: 'WarrantyClaim>Technician'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.technician'}"
@@ -130,7 +133,10 @@
 				editable="{WarrantyClaim>CanEdit}"
 				items="{
 					path: '/EmployeeSet',
-					sorter: { path: 'LastName' }
+					sorter: { path: 'LastName' },
+					filters : [
+						{ path : 'Relationship', operator : 'EQ', value1 : 'Service Advisor'}
+					]					
 				}"
 				selectedKey="{WarrantyClaim>ServiceAdvisor}"
 				valueState="{ parts: [{path: 'WarrantyClaim>ServiceAdvisor'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.serviceAdvisor'}"

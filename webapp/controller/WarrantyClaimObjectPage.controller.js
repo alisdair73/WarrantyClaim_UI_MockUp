@@ -70,11 +70,6 @@ sap.ui.define([
 			this.getModel("WarrantyClaim").setProperty("/StatusDescription",statusDescription);
 			this.getModel("WarrantyClaim").setProperty("/StatusIcon",statusIcon);
 			
-/*			var customerConcernSection = this.getView().byId("customerConcern");
-			if(claimTypeGroup === 'RECALL'){
-				customerConcernSection.setVisible(false);
-			}*/
-			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 			this._claimTypeSelection.close();
 		},
@@ -279,7 +274,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = "2016110991";
-			//claimNumber = "2016110808";
+			//claimNumber = "2016111115";
 			//claimNumber = '2016110829';
 			//claimNumber = "100000000660";
 			//claimNumber = "2016110477";

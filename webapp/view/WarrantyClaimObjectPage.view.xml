@@ -98,7 +98,7 @@
 					</ObjectPageSubSection>
 				</subSections>
 			</ObjectPageSection>				
-			<ObjectPageSection id="hondaAssessmentResults" title="RESULTS">
+			<ObjectPageSection id="hondaAssessmentResults" title="RESULTS" visible="{= ${WarrantyClaim>/CurrentVersionNumber} !== '0001'}">
 				<subSections>
 					<ObjectPageSubSection id="hondaAssessmentResults_sub1" title="RESULTS" mode="Expanded">
 						<blocks>
@@ -138,7 +138,12 @@
 				<m:Button text="Save Draft" press="onDraft" enabled="{= !!${UIValidation>/hasUIValidationError}}" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button text="Cancel" press="onCancel"/>
 				<m:Button text="Validate" press="onValidate" visible="{WarrantyClaim>/CanEdit}"/>
-				<m:Button text="Submit" press="onSubmit" type="Emphasized" visible="{WarrantyClaim>/CanEdit}"/>
+				<m:Button 
+					text="{= ${WarrantyClaim>/CurrentVersionNumber} === '0001' ? 'Submit' : 'Resubmit'}"
+					press="onSubmit" 
+					type="Emphasized" 
+					visible="{WarrantyClaim>/CanEdit}"
+				/>
 			</m:OverflowToolbar>
 		</footer>
     </ObjectPageLayout>

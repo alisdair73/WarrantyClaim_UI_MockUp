@@ -1,8 +1,9 @@
 sap.ui.define(["sap/ui/core/mvc/Controller",
 "sap/ui/model/Filter",
 "WarrantyClaim_MockUp/model/models",
-"WarrantyClaim_MockUp/model/valueStateFormatter"
-], function(Controller, Filter, Models, valueStateFormatter) {
+"WarrantyClaim_MockUp/model/valueStateFormatter",
+"sap/ui/model/json/JSONModel"
+], function(Controller, Filter, Models, valueStateFormatter,JSONModel) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
@@ -10,6 +11,15 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
     	valueStateFormatter: valueStateFormatter,
 
 		onInit: function(){
+			
+			var recallGroupModel = new JSONModel({
+				"group1": true,
+				"group2": false,
+				"group3": false,
+				"group4": false
+			});
+			this.getView().setModel(recallGroupModel, "RecallGroup");
+			
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
 		},
 		
@@ -108,7 +118,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
         
 		onRecallSelection: function(event){
 			
-			var dataObject = null;
+/*			var dataObject = null;
 			if (event.getId() === "suggestionItemSelected"){
 				dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
 			} else {
@@ -117,7 +127,19 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber",dataObject.ExternalRecallNumber);
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
-			sap.ui.getCore().getEventBus().publish("RecallNumber","Changed",{"IsMandatory":dataObject.SerialNumberIsMandatory});
+			sap.ui.getCore().getEventBus().publish("RecallNumber","Changed",{"IsMandatory":dataObject.SerialNumberIsMandatory});*/
+			
+			if (!this._recallDialog) {
+				this._recallDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.fragment.RecallProductGroupSelector", this);
+				this.getView().addDependent(this._recallDialog);
+			}
+
+			// Display the popup dialog for adding parts
+			this._recallDialog.open();
+		},
+		
+		onRecallProductGroupCancel: function(){
+			this._recallDialog.close();
 		},
 		
 		onRecallSelectionClose: function(){

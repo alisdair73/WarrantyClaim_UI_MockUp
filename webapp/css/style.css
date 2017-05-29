@@ -1,3 +1,20 @@
 tr[data-isMCPN="X"]{
   background:  LightGray!important;
 }
+
+.sapMListTblCell.cellBorderRight {
+	border-right: 1px solid lightgray;
+}
+ 
+.sapMListTblCell.cellBorderLeft {
+	border-left: 1px solid lightgray;
+}
+
+.sapMListTblCell.notSelected {
+	background: #f7f7f7;
+}
+
+
+
+
+

@@ -5,7 +5,7 @@ sap.ui.define([
 ], function(Controller, JSONModel, DateFormat) {
 	"use strict";
 
-	return Controller.extend("hnd.otc.ordercreate.controller.BaseController", {
+	return Controller.extend("WarrantyClaim_MockUp.controller.BaseController", {
 		/**
 		 * Convenience method for accessing the router.
 		 * @public

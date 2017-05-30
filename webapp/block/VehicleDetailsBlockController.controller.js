@@ -12,13 +12,13 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 
 		onInit: function(){
 			
-			var recallGroupModel = new JSONModel({
+/*			var recallGroupModel = new JSONModel({
 				"group1": true,
 				"group2": false,
 				"group3": false,
 				"group4": false
 			});
-			this.getView().setModel(recallGroupModel, "RecallGroup");
+			this.getView().setModel(recallGroupModel, "RecallGroup");*/
 			
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
 		},
@@ -118,7 +118,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
         
 		onRecallSelection: function(event){
 			
-/*			var dataObject = null;
+			var dataObject = null;
 			if (event.getId() === "suggestionItemSelected"){
 				dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
 			} else {
@@ -126,8 +126,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber",dataObject.ExternalRecallNumber);
+			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/internalRecallNumber",dataObject.InternalRecallNumber);
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
-			sap.ui.getCore().getEventBus().publish("RecallNumber","Changed",{"IsMandatory":dataObject.SerialNumberIsMandatory});*/
+			sap.ui.getCore().getEventBus().publish("RecallNumber","Changed",{"IsMandatory":dataObject.SerialNumberIsMandatory});
 			
 			if (!this._recallDialog) {
 				this._recallDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.fragment.RecallProductGroupSelector", this);

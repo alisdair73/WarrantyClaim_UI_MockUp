@@ -29,6 +29,7 @@ sap.ui.define([
 					"symptomCodeL1": "",
 					"symptomCodeL2": "",
 					"defectCodeL1": "",
+					"internalRecallNumber":"",
 					"serialNumberIsMandatory": false
 				}
 			});

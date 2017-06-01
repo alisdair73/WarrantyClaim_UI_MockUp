@@ -10,10 +10,12 @@ sap.ui.define([
 		onInit: function(){
 			
 			var recallGroupModel = new JSONModel({
-				"group1": true,
+				"inspect":{"selected":false, "displayText":"", "visible":false},
+				"replace":{"selected":false, "displayText":"", "visible":false},
+				"group0": true,
+				"group1": false,
 				"group2": false,
-				"group3": false,
-				"group4": false
+				"group3": false
 			});
 			this.getView().setModel(recallGroupModel, "RecallGroup");
 			this.getView().setModel(new JSONModel({"groupParts":[]}),"RecallItems");
@@ -70,9 +72,9 @@ sap.ui.define([
 	          		
 	          		var maxValue = minValue;
 	          		if(quantity.indexOf("*") === -1){
-	          			maxValue = quantity;
+	          			maxValue = parseInt(quantity);
 	          		} else {
-	          			maxValue = quantity.substring(0, quantity.indexOf("*"));	          		
+	          			maxValue = parseInt(quantity.substring(0, quantity.indexOf("*")));	          		
 	          			minValue = maxValue;
 	          		}
 	          		//Create the Step Input with Min and Max
@@ -97,9 +99,40 @@ sap.ui.define([
 			//Recall Parts (for all groups)
 			var parts = recallItems.results.filter(
   				function(recallItem){
-					return recallItem.ItemType === 'MAT' && recallItem.ReplacementSelectionRule !== "";
+					return recallItem.ItemType === 'MAT' && !recallItem.IsMcpn;
 				}
 			);
+			
+			var labour = recallItems.results.filter(
+  				function(recallItem){
+					if(recallItem.ItemType === 'FR'){
+						
+						switch(recallItem.FRTType){
+							
+							case "IN":
+								this.getView().getModel("RecallGroup").setProperty("/inspect/displayText",recallItem.ItemKeyDescription);
+								this.getView().getModel("RecallGroup").setProperty("/inspect/selected",true);
+								this.getView().getModel("RecallGroup").setProperty("/inspect/visible",true);
+								break;
+								
+							case "RP":
+							case "RE":
+								this.getView().getModel("RecallGroup").setProperty("/replace/displayText",recallItem.ItemKeyDescription);
+								this.getView().getModel("RecallGroup").setProperty("/replace/visible",true);								
+								break;
+						}
+						return true;
+					} else {
+						return false;
+					}
+				}.bind(this)
+			);
+			
+/*			var sublet = recallItems.results.filter(
+  				function(recallItem){
+					return recallItem.ItemType === 'SUBL';
+				}
+			);*/
 			
 			var groupParts = [];
 			if(parts.length > 0){
@@ -110,8 +143,18 @@ sap.ui.define([
 						"materialDescription": part.Description,
 						"groups":[]
 					};	
-
-					groupPart.groups = this._applyReplacementSelectionRuleForMaterial(part.ReplacementSelectionRule);
+					
+					if(part.ReplacementSelectionRule === ""){
+					
+						groupPart.groups.push({	
+							"isRadioButton": false,
+							"isStepInput": true,
+							"stepInput": {"minValue": part.Quantity, "maxValue": part.Quantity}
+						});
+						
+					} else {
+						groupPart.groups = this._applyReplacementSelectionRuleForMaterial(part.ReplacementSelectionRule);
+					}
 		  	    	numberOfColumns = Math.max(numberOfColumns, groupPart.groups.length);
 					groupParts.push(groupPart);
 				}.bind(this));
@@ -124,7 +167,8 @@ sap.ui.define([
             		"hAlign": "Left",
             		"width":"10rem",
                 	"header" : new sap.m.Label({
-                		text : "Material Number"
+                		"text" : "Material Number",
+                		"design": "Bold"
             		})
 				})
 			);
@@ -134,16 +178,30 @@ sap.ui.define([
             		"width":"10rem",
             		"styleClass": "cellBorderRight",            		
                 	"header" : new sap.m.Label({
-                		text : "Description"
+                		"text" : "Description",
+                		"design": "Bold"
             		})
 				})
 			);
 			
-			var tableCells = [];
-			tableCells.push(new sap.m.Text({"text":"{RecallItems>materialNumber}"}));
-			tableCells.push(new sap.m.Text({"text":"{RecallItems>materialDescription}"}));
-				        		
 			for(var i=0; i<numberOfColumns; i++){
+			
+				var columnItems = [];
+				
+				if(numberOfColumns === 1){
+					columnItems.push(
+						new sap.m.Label({"text": "Quantity", "design": "Bold"})
+					);
+				} else {
+					columnItems.push(
+						new sap.m.Label({"text": "Group " + (i + 1), "design": "Bold"})
+					);
+					columnItems.push(
+                		new sap.ui.layout.HorizontalLayout({
+	        				"content":[new sap.m.RadioButton({"groupName":"recallGroup", "selected":"{RecallGroup>/group" + i + "}"})]
+                		})
+                	);
+				}
 			
             	recallItemsTable.addColumn(
 					new sap.m.Column({
@@ -151,43 +209,63 @@ sap.ui.define([
 	            		"width":"7rem",
 	            		"styleClass": "{= ${RecallGroup>/group" + i + "} ? 'cellBorderRight' : 'cellBorderRight notSelected' }",
                 		"header" : new sap.m.VBox({
-							"items": [
-                				new sap.m.Label({text : "Group " + i}),
-                				new sap.ui.layout.HorizontalLayout({
-	        						"content":[new sap.m.RadioButton({"groupName":"recallGroup", "selected":"{RecallGroup>/group" + i + "}"})]
-		        				})
-    	            		]})	
+							"items": columnItems
+		        		})
 					})
 				);
-				
-				tableCells.push(
-					new sap.m.VBox({
-						"items": [
-							new sap.m.Text({"visible":"{= ${RecallItems>groups/" + i + "/isRadioButton} || ${RecallItems>groups/" + i + "/isStepInput} === false}"}),	
-							new sap.m.StepInput({
-								"min":"{RecallItems>groups/" + i + "/stepInput/minValue}",
-								"max":"{RecallItems>groups/" + i + "/stepInput/maxValue}",
-								"enabled":"{= ${RecallGroup>/group" + i + "}}",
-								"visible":"{= ${RecallItems>groups/" + i + "/isStepInput}}"
-							}),
-							new sap.ui.layout.HorizontalLayout({
-								"visible":"{= ${RecallItems>groups/" + i + "/isRadioButton}}",
-	        					"content":[new sap.m.RadioButton({
-	        						"groupName":"{RecallItems>groups/" + i + "/radioButton/group}",
-	        						"enabled":"{= ${RecallGroup>/group" + i + "}}"
-	        					})]
-	        				})
-						]
-					})
-			    );
-			}
+			} 
 			
 			recallItemsTable.bindItems({
 				"path":"RecallItems>/groupParts", 
-				"template": new sap.m.ColumnListItem({"cells" : tableCells})
+				"factory": this._tableCellFactory
 			});
 			
 			this.getView().getModel("RecallItems").setProperty("/groupParts", groupParts);
+		},
+		
+		_tableCellFactory: function(sId,oContext){
+				
+			var tableCells = [];
+			tableCells.push(new sap.m.Text({"text":"{RecallItems>materialNumber}"}));
+			tableCells.push(new sap.m.Text({"text":"{RecallItems>materialDescription}"}));
+			
+			oContext.getProperty(oContext.sPath).groups.forEach(function(group, index){
+
+				if(group.isStepInput){
+					if(group.stepInput.minValue === group.stepInput.maxValue){
+						tableCells.push(
+							new sap.m.Input({
+								"value":group.stepInput.maxValue, 
+								"enabled":"{= ${RecallGroup>/group" + index + "}}",
+								"editable": false,
+								"textAlign":"Center"
+							})
+						);
+					} else {
+				  		tableCells.push(
+							new sap.m.StepInput({
+								"min":"{RecallItems>groups/" + index + "/stepInput/minValue}",
+								"max":"{RecallItems>groups/" + index + "/stepInput/maxValue}",
+								"enabled":"{= ${RecallGroup>/group" + index + "}}"
+							})
+						);
+					}
+				} else {
+					if(group.isRadioButton){
+				  		tableCells.push(
+							new sap.ui.layout.HorizontalLayout({
+			        			"content":[new sap.m.RadioButton({
+			        				"groupName":"{RecallItems>groups/" + index + "/radioButton/group}",
+			        				"enabled":"{= ${RecallGroup>/group" + index + "}}"
+			        			})]
+			        		})
+						);
+					} else {
+						tableCells.push(new sap.m.Text());
+					}
+				}
+			});	
+			return new sap.m.ColumnListItem({"cells" : tableCells});
 		}
 	});
 });

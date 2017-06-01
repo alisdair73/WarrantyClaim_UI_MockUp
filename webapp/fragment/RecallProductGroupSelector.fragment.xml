@@ -1,10 +1,10 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc">
-	<Dialog title="Recall Material Groups">
+	<Dialog title="Recall Materials">
 		<content>
             <mvc:XMLView id="recallMaterials" viewName="WarrantyClaim_MockUp.view.RecallProductGroupSelector"></mvc:XMLView>
 		</content>
 		<buttons>
-			<Button text="Transfer Materials to Warranty Claim" press="onRecallProductGroupCancel" icon="sap-icon://sys-enter"/>
+			<Button text="Transfer Materials to Warranty Claim" press="onTransferMaterials" icon="sap-icon://sys-enter"/>
 			<Button text="Cancel" press="onRecallProductGroupCancel" icon="sap-icon://sys-cancel"/>
 		</buttons>
 	</Dialog>

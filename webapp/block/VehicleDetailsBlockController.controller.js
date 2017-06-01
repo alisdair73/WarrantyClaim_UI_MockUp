@@ -11,15 +11,6 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
     	valueStateFormatter: valueStateFormatter,
 
 		onInit: function(){
-			
-/*			var recallGroupModel = new JSONModel({
-				"group1": true,
-				"group2": false,
-				"group3": false,
-				"group4": false
-			});
-			this.getView().setModel(recallGroupModel, "RecallGroup");*/
-			
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
 		},
 		
@@ -142,6 +133,19 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		onRecallProductGroupCancel: function(){
 			this._recallDialog.close();
 		},
+		
+		onTransferMaterials  : function(){
+			
+			
+//			this._recallDialog.getAggregation("content")[0].getModel("RecallItems").getProperty("/groupParts");
+//			this._recallDialog.getAggregation("content")[0].getModel("RecallGroup").getProperty("/group0");		
+			
+			
+			
+			
+			
+			this._recallDialog.close();
+		},		
 		
 		onRecallSelectionClose: function(){
 			this._RecallValueHelpDialog.close();

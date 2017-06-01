@@ -5,9 +5,14 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	controllerName="WarrantyClaim_MockUp.controller.RecallProductGroupSelector"
 >
+	<RadioButtonGroup columns="1" width="100%" class="sapUiMediumMarginBottom">
+		<RadioButton selected="{RecallGroup>/inspect/selected}" text="{RecallGroup>/inspect/displayText}" groupName="Labour" visible="{RecallGroup>/inspect/visible}"/>
+		<RadioButton selected="{RecallGroup>/replace/selected}" text="{RecallGroup>/replace/displayText}" groupName="Labour" visible="{RecallGroup>/replace/visible}"/>
+	</RadioButtonGroup>
 	<Table 
 		id="recallItems"
 		items="{RecallItems>/groupParts}" 
+		showOverlay="{RecallGroup>/inspect/selected}"
 	>
 		<columns>
     		<Column hAlign="Left" styleClass="cellBorderRight" width="11rem">

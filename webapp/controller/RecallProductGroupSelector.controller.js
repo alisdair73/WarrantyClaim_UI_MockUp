@@ -8,22 +8,20 @@ sap.ui.define([
 	return Controller.extend("WarrantyClaim_MockUp.controller.RecallProductGroupSelector", {
 		
 		onInit: function(){
-			
-			var recallGroupModel = new JSONModel({
-				"inspect":{"selected":false, "displayText":"", "visible":false},
-				"replace":{"selected":false, "displayText":"", "visible":false},
-				"group0": true,
-				"group1": false,
-				"group2": false,
-				"group3": false
+/*			var recallGroupModel = new JSONModel({
+				"inspect":{"selected":false, "displayText":"", "visible":false, "LON":"", "quantity":""},
+				"replace":{"selected":false, "displayText":"", "visible":false, "LON":"", "quantity":""},
+				"MCP":{"materialNumber":"","materialDescription":"","quantity":0},
+				"subletItems":[],
+				"selectedGroup": []
 			});
 			this.getView().setModel(recallGroupModel, "RecallGroup");
-			this.getView().setModel(new JSONModel({"groupParts":[]}),"RecallItems");
+			this.getView().setModel(new JSONModel({"groupParts":[]}),"RecallItems");*/
 		},
 		
 		onBeforeRendering: function(){
 			//Load the details of the Recall
-			var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN");
+/*			var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN");
 			var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
 			
 			this.getView().getModel().read(
@@ -38,7 +36,21 @@ sap.ui.define([
 					  //No Parts???
 					}.bind(this)
 				}
-			);
+			);*/
+			
+			
+			var recallItemsTable = this.getView().byId("recallItems");
+			recallItemsTable.removeAllColumns();
+			recallItemsTable.bindItems({
+				"path":"RecallItems>/groupParts", 
+				"factory": this._tableCellFactory
+			});
+			
+			
+			
+			
+			
+			
 		},
 		
 		_applyReplacementSelectionRuleForMaterial: function(rule){
@@ -96,43 +108,66 @@ sap.ui.define([
 		_buildPartsView: function(recallItems){
 			
 			var numberOfColumns = 0;
+
+//          MCPN
+			recallItems.results.forEach(
+  				function(recallItem){
+					if(recallItem.ItemType === 'MAT' && recallItem.IsMcpn){
+						this.getView().getModel("RecallGroup").setProperty("/MCP/materialNumber",recallItem.PartNumber);
+						this.getView().getModel("RecallGroup").setProperty("/MCP/materialDescription",recallItem.Description);
+						this.getView().getModel("RecallGroup").setProperty("/MCP/quantity",recallItem.Quantity);
+					}
+				}.bind(this)
+			);
+			
+//			Labour
+			recallItems.results.forEach(
+  				function(recallItem){
+					if(recallItem.ItemType === 'FR'){
+						
+						switch(recallItem.FRTType){
+							case "IN":
+								this.getView().getModel("RecallGroup").setProperty("/inspect/displayText",recallItem.ItemKeyDescription);
+								this.getView().getModel("RecallGroup").setProperty("/inspect/selected",true);
+								this.getView().getModel("RecallGroup").setProperty("/inspect/visible",true);
+								this.getView().getModel("RecallGroup").setProperty("/inspect/LON",recallItem.ItemKey);
+								this.getView().getModel("RecallGroup").setProperty("/inspect/quantity",recallItem.Quantity);
+								break;
+								
+							case "RP":
+							case "RE":
+								this.getView().getModel("RecallGroup").setProperty("/replace/displayText",recallItem.ItemKeyDescription);
+								this.getView().getModel("RecallGroup").setProperty("/replace/visible",true);
+								this.getView().getModel("RecallGroup").setProperty("/replace/LON",recallItem.ItemKey);
+								this.getView().getModel("RecallGroup").setProperty("/replace/quantity",recallItem.Quantity);
+								break;
+						}
+					}
+				}.bind(this)
+			);
+			
+//			Sublet
+			var sublets = [];
+			recallItems.results.forEach(
+  				function(recallItem){
+					if(recallItem.ItemType === 'SUBL'){
+						var sublet = {	
+							"subletCode": recallItem.ItemKey,
+							"quantity": recallItem.Quantity,
+							"fixedSublet": recallItem.IsSubletFixed
+						};
+						sublets.push(sublet);
+					}
+				}
+			);
+			this.getView().getModel("RecallGroup").setProperty("/subletItems",sublets);
+			
 			//Recall Parts (for all groups)
 			var parts = recallItems.results.filter(
   				function(recallItem){
 					return recallItem.ItemType === 'MAT' && !recallItem.IsMcpn;
 				}
 			);
-			
-			var labour = recallItems.results.filter(
-  				function(recallItem){
-					if(recallItem.ItemType === 'FR'){
-						
-						switch(recallItem.FRTType){
-							
-							case "IN":
-								this.getView().getModel("RecallGroup").setProperty("/inspect/displayText",recallItem.ItemKeyDescription);
-								this.getView().getModel("RecallGroup").setProperty("/inspect/selected",true);
-								this.getView().getModel("RecallGroup").setProperty("/inspect/visible",true);
-								break;
-								
-							case "RP":
-							case "RE":
-								this.getView().getModel("RecallGroup").setProperty("/replace/displayText",recallItem.ItemKeyDescription);
-								this.getView().getModel("RecallGroup").setProperty("/replace/visible",true);								
-								break;
-						}
-						return true;
-					} else {
-						return false;
-					}
-				}.bind(this)
-			);
-			
-/*			var sublet = recallItems.results.filter(
-  				function(recallItem){
-					return recallItem.ItemType === 'SUBL';
-				}
-			);*/
 			
 			var groupParts = [];
 			if(parts.length > 0){
@@ -184,6 +219,7 @@ sap.ui.define([
 				})
 			);
 			
+			var selectedGroups = [];
 			for(var i=0; i<numberOfColumns; i++){
 			
 				var columnItems = [];
@@ -198,22 +234,25 @@ sap.ui.define([
 					);
 					columnItems.push(
                 		new sap.ui.layout.HorizontalLayout({
-	        				"content":[new sap.m.RadioButton({"groupName":"recallGroup", "selected":"{RecallGroup>/group" + i + "}"})]
+	        				"content":[new sap.m.RadioButton({"groupName":"recallGroup", "selected":"{RecallGroup>/selectedGroup/" + i + "}"})]
                 		})
                 	);
 				}
+			
+			    selectedGroups.push( i === 0 );
 			
             	recallItemsTable.addColumn(
 					new sap.m.Column({
 	            		"hAlign": "Center",
 	            		"width":"7rem",
-	            		"styleClass": "{= ${RecallGroup>/group" + i + "} ? 'cellBorderRight' : 'cellBorderRight notSelected' }",
+	            		"styleClass": "{= ${RecallGroup>/selectedGroup/" + i + "} ? 'cellBorderRight' : 'cellBorderRight notSelected' }",
                 		"header" : new sap.m.VBox({
 							"items": columnItems
 		        		})
 					})
 				);
 			} 
+			this.getView().getModel("RecallGroup").setProperty("/selectedGroup", selectedGroups);
 			
 			recallItemsTable.bindItems({
 				"path":"RecallItems>/groupParts", 
@@ -233,10 +272,11 @@ sap.ui.define([
 
 				if(group.isStepInput){
 					if(group.stepInput.minValue === group.stepInput.maxValue){
+						group.stepInput.quantity = group.stepInput.maxValue;
 						tableCells.push(
 							new sap.m.Input({
-								"value":group.stepInput.maxValue, 
-								"enabled":"{= ${RecallGroup>/group" + index + "}}",
+								"value":"{RecallItems>groups/" + index + "/stepInput/quantity}", 
+								"enabled":"{= ${RecallGroup>/selectedGroup/" + index + "}}",
 								"editable": false,
 								"textAlign":"Center"
 							})
@@ -246,7 +286,8 @@ sap.ui.define([
 							new sap.m.StepInput({
 								"min":"{RecallItems>groups/" + index + "/stepInput/minValue}",
 								"max":"{RecallItems>groups/" + index + "/stepInput/maxValue}",
-								"enabled":"{= ${RecallGroup>/group" + index + "}}"
+								"value":"{RecallItems>groups/" + index + "/stepInput/quantity}",
+								"enabled":"{= ${RecallGroup>/selectedGroup/" + index + "}}"
 							})
 						);
 					}
@@ -256,7 +297,8 @@ sap.ui.define([
 							new sap.ui.layout.HorizontalLayout({
 			        			"content":[new sap.m.RadioButton({
 			        				"groupName":"{RecallItems>groups/" + index + "/radioButton/group}",
-			        				"enabled":"{= ${RecallGroup>/group" + index + "}}"
+			        				"enabled":"{= ${RecallGroup>/selectedGroup/" + index + "}}",
+			        				"selected":"{RecallItems>groups/" + index + "/radioButton/selected}"
 			        			})]
 			        		})
 						);

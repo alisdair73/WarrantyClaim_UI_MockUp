@@ -38,7 +38,7 @@
 									maxFractionDigits: 3
 								}
 							}" 
-							editable="{WarrantyClaim>/CanEdit}"
+							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 	                		visible="{= !${WarrantyClaim>isMCPN} &amp;&amp; ${WarrantyClaim>/CanEdit}}"
 	            		/>
 	        		</l:HorizontalLayout>
@@ -48,7 +48,11 @@
 	                </l:HorizontalLayout>
 	                <l:HorizontalLayout>
 	                	<Button icon="sap-icon://edit" press="editItem" visible="false"/>
-	                	<Button icon="sap-icon://delete" press="deleteItem" visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>IsMCPN} }"/>
+	                	<Button 
+	                		icon="sap-icon://delete" 
+	                		press="deleteItem" 
+	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>IsMCPN} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+	                	/>
 	                </l:HorizontalLayout>
 	            </cells>
 	        </ColumnListItem>

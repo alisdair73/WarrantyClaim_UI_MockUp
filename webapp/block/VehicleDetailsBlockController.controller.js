@@ -2,8 +2,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 "sap/ui/model/Filter",
 "WarrantyClaim_MockUp/model/models",
 "WarrantyClaim_MockUp/model/valueStateFormatter",
-"sap/ui/model/json/JSONModel"
-], function(Controller, Filter, Models, valueStateFormatter,JSONModel) {
+"sap/ui/model/json/JSONModel",
+"WarrantyClaim_MockUp/model/RecallProductGroup"
+], function(Controller, Filter, Models, valueStateFormatter,JSONModel, Recall) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
@@ -127,7 +128,15 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 
 			// Display the popup dialog for adding parts
-			this._recallDialog.open();
+		/*	this._recallDialog.open();*/
+			
+			var recall = new Recall(this);
+			
+			var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN");
+			var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
+			recall.getRecallItemsFor(vin, internalRecallNumber);                         
+
+
 		},
 		
 		onRecallProductGroupCancel: function(){
@@ -136,14 +145,83 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		
 		onTransferMaterials  : function(){
 			
+			var recallGroup = this._recallDialog.getAggregation("content")[0].getModel("RecallGroup");
 			
-//			this._recallDialog.getAggregation("content")[0].getModel("RecallItems").getProperty("/groupParts");
-//			this._recallDialog.getAggregation("content")[0].getModel("RecallGroup").getProperty("/group0");		
+			var recallItems = [];
+			var subletItems = [];
+			var labourItems = [];
 			
+			var labourItem = Models.createNewWarrantyItem("FR");
+			if(recallGroup.getProperty("/inspect/selected")){
+				//Inspect
+				labourItem.setProperty("/ItemKey", recallGroup.getProperty("/inspect/LON"));
+				labourItem.setProperty("/Description", recallGroup.getProperty("/inspect/displayText"));
+				labourItem.setProperty("/Quantity", recallGroup.getProperty("/inspect/quantity"));
+			} else {
+				//Replace/Repair
+				labourItem.setProperty("/ItemKey", recallGroup.getProperty("/replace/LON"));
+				labourItem.setProperty("/Description", recallGroup.getProperty("/replace/displayText"));
+				labourItem.setProperty("/Quantity", recallGroup.getProperty("/replace/quantity"));
+			}
+			labourItems.push(labourItem.getProperty("/"));
+			this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
 			
+			if(recallGroup.getProperty("/inspect/selected")){
+				this.getView().getModel("WarrantyClaim").setProperty("/Parts", []); //Clear Parts
+				this.getView().getModel("WarrantyClaim").setProperty("/Sublet", []); //Clear Sublet??
+				this._recallDialog.close();
+				return; //Only Inspection to be performed...
+			}
+				
+			//Add the Sublet Items
+			recallGroup.getProperty("/subletItems").forEach(function(subletItem){
+				var sublet = Models.createNewWarrantyItem("SUBL");
+				sublet.setProperty("/ItemKey", subletItem.subletCode);
+				sublet.setProperty("/Quantity", subletItem.quantity);
+				subletItems.push(sublet.getProperty("/"));
+			});
+			this.getView().getModel("WarrantyClaim").setProperty("/Sublet", subletItems);
 			
+			//Add the MCPN
+			var MCPN = Models.createNewWarrantyItem("MAT");
+			MCPN.setProperty("/PartNumber", recallGroup.getProperty("/MCP/materialNumber"));
+			MCPN.setProperty("/Description", recallGroup.getProperty("/MCP/materialDescription"));
+			MCPN.setProperty("/Quantity",recallGroup.getProperty("/MCP/quantity"));
+			MCPN.setProperty("/IsMCPN", true);
+			recallItems.push(MCPN.getProperty("/"));
 			
+			//Replace/Repair Selected by Dealer - Transfer Parts/Labour/Sublet
+			var selectedGroupIndex = this._recallDialog.getAggregation("content")[0]
+										.getModel("RecallGroup").getProperty("/selectedGroup").findIndex(function(groupSelected){
+				return groupSelected;
+			});
 			
+			var materialsToTransfer = this._recallDialog.getAggregation("content")[0].getModel("RecallItems").getProperty("/groupParts");
+			materialsToTransfer.forEach(function(materialToTransfer){
+			
+				// add the new part
+				var recallItem = Models.createNewWarrantyItem("MAT");
+				recallItem.setProperty("/PartNumber", materialToTransfer.materialNumber);
+				recallItem.setProperty("/Description", materialToTransfer.materialDescription);
+				
+				var selectedGroup = materialToTransfer.groups[selectedGroupIndex];
+				
+				if(selectedGroup.isRadioButton || selectedGroup.isStepInput){
+					if(selectedGroup.isRadioButton){
+						if(selectedGroup.radioButton.selected){
+							recallItem.setProperty("/Quantity", 1);
+						} else {
+							return;
+						}
+					} else {
+						recallItem.setProperty("/Quantity", selectedGroup.stepInput.quantity);
+					}
+					recallItem.setProperty("/IsMCPN", false);
+					recallItems.push(recallItem.getProperty("/"));
+				}
+			});
+
+			this.getView().getModel("WarrantyClaim").setProperty("/Parts", recallItems);
 			this._recallDialog.close();
 		},		
 		

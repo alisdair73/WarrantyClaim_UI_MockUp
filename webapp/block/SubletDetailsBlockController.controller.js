@@ -7,33 +7,10 @@ sap.ui.define([
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.SubletDetailsBlockController", {
 
-/*		showSubletSelector: function(){
-			if (! this._subletSelector) {
-				this._subletSelector = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.SubletCodeSelector", this);
-				this.getView().addDependent(this._subletSelector);
-				this.readCatalog("WTY3","SubletCodes");
-			} 
-			this._subletSelector.open(); 
-    	},*/
-    
     	readSubletCatalog: function(){
 			this.readCatalog("ZSUBL","SubletCodes",1);
 		},
 		
-/*    	handleCancel: function(){
-    		this._subletSelector.close(); 
-    	},*/
-    
-/*    	subletCodeSelected: function(evt){
-    	
-    		var path = evt.getParameter("listItem").getBindingContext("SubletCodes").getPath();
-    		var sublet = this.getModel("SubletCodes").getProperty(path);
-    		this.getModel("SubletItem").setProperty("/ItemKey",sublet.code);
-    		this.getModel("ViewHelper").setProperty("/warrantyUI/SubletCodeDescription", sublet.text);
-
-			this._subletSelector.close();
-    	},*/
-
     	addSublet: function(){
     		
     		// Create the dialog if it isn't already

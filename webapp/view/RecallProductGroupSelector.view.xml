@@ -17,20 +17,14 @@
 		<columns>
     		<Column hAlign="Left" styleClass="cellBorderRight" width="11rem">
     			<header>
-	            	<Label text="Material Number"/>
+	            	<Label text="DUMMY"/>
 	            </header>
 	        </Column>
-    		<Column hAlign="Left" styleClass="cellBorderRight" width="11rem">
-    			<header>
-	            	<Label text="Description"/>
-	            </header>
-	        </Column>	        
 		</columns>	
 		<items>
 			<ColumnListItem>
 				<cells>
-	        		<Text text="{RecallItems>materialNumber}"/>
-	        		<Text text="{RecallItems>materialDescription}"/>
+	        		<Text text="DUMMY"/>
 	        	</cells>
 	        </ColumnListItem>        
 	    </items>

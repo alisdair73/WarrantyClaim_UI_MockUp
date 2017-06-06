@@ -7,41 +7,19 @@ sap.ui.define([
   
   return BaseObject.extend("WarrantyClaim_MockUp.model.RecallProductGroup", {
     
-    	constructor: function(controller) {
-    		
-    		this._parentView = controller.getView();
-    		this._model = this._parentView.getModel();
-    		this._recallDialog = controller._recallDialog;
+    	constructor: function() {
     		
     		this._recallGroup = {
 				"inspect":{"selected":false, "displayText":"", "visible":false, "LON":"", "quantity":""},
 				"replace":{"selected":false, "displayText":"", "visible":false, "LON":"", "quantity":""},
 				"MCP":{"materialNumber":"","materialDescription":"","quantity":0},
+				"maxGroups":0,
 				"subletItems":[],
 				"selectedGroup": []
 			};
 			this._groupParts = [];
-			this._showRecallGroupSelection = false;
     	},
       
-		getRecallItemsFor: function(vin, internalRecallNumber){
-			
-			//Load the details of the Recall
-			this._model.read(
-				"/RecallItemSet", {
-					context: null,
-					filters: [
-						new Filter("InternalRecallNumber",sap.ui.model.FilterOperator.EQ, internalRecallNumber),
-						new Filter("VIN",sap.ui.model.FilterOperator.EQ, vin)
-					],
-					success: this._buildRecallItemsModel.bind(this),
-					error: function() {
-					  //No Parts???
-					}.bind(this)
-				}
-			);
-		},
-
 		_applyReplacementSelectionRuleForMaterial: function(rule){
 			
 			var groups = rule.split("-");
@@ -89,14 +67,14 @@ sap.ui.define([
 	          }
 	          
 	          recallGroups.push(recallGroup);
-	        });
+	        }.bind(this));
 			return recallGroups;
 		},
 		
-		_buildRecallItemsModel: function(recallItems){
+		buildRecallItemsModel: function(recallItems){
 			
 //          MCPN
-			recallItems.results.forEach(
+			recallItems.forEach(
   				function(recallItem){
 					if(recallItem.ItemType === 'MAT' && recallItem.IsMcpn){
 						this._recallGroup.MCP.materialNumber = recallItem.PartNumber;
@@ -107,7 +85,7 @@ sap.ui.define([
 			);
 			
 //			Labour
-			recallItems.results.forEach(
+			recallItems.forEach(
   				function(recallItem, index){
 					if(recallItem.ItemType === "FR"){
 						
@@ -129,13 +107,11 @@ sap.ui.define([
 								break;
 						}
 					}
-					
-					this._showRecallGroupSelection = index > 0 ? true:false;
 				}.bind(this)
 			);
 			
 //			Sublet
-			recallItems.results.forEach(
+			recallItems.forEach(
   				function(recallItem){
 					if(recallItem.ItemType === 'SUBL'){
 						var sublet = {	
@@ -149,14 +125,14 @@ sap.ui.define([
 			);
 			
 			//Recall Parts (for all groups)
-			var parts = recallItems.results.filter(
+			var parts = recallItems.filter(
   				function(recallItem){
 					return recallItem.ItemType === 'MAT' && !recallItem.IsMcpn;
 				}
 			);
 			
 			if(parts.length > 0){
-				parts.forEach(function(part){
+				parts.forEach(function(part, index){
 					
 					var groupPart = {
 						"materialNumber": part.PartNumber,
@@ -165,26 +141,26 @@ sap.ui.define([
 					};	
 					
 					if(part.ReplacementSelectionRule === ""){
-					
+
 						groupPart.groups.push({	
 							"isRadioButton": false,
 							"isStepInput": true,
-							"stepInput": {"minValue": part.Quantity, "maxValue": part.Quantity}
+							"stepInput": {"minValue": part.Quantity, "maxValue": part.Quantity, "quantity":part.Quantity}
 						});
 						
 					} else {
 						groupPart.groups = this._applyReplacementSelectionRuleForMaterial(part.ReplacementSelectionRule);
 					}
+					this._recallGroup.maxGroups = Math.max(this._recallGroup.maxGroups, groupPart.groups.length);
 					this._groupParts.push(groupPart);
 				}.bind(this));
 			}
 			
-			this._parentView.setModel(new JSONModel().setData(this._recallGroupModel), "RecallGroup");
-			this._parentView.setModel(new JSONModel().setData(this._groupParts),"RecallItems");
-			
-			if(this._showRecallGroupSelection){
-				this._recallDialog.open();
+			for(var i=0;i<this._recallGroup.maxGroups;i++){
+				this._recallGroup.selectedGroup.push( i === 0 );
 			}
+		
+			return {"RecallGroup": this._recallGroup, "RecallItems":this._groupParts};
 		}
     });
 });

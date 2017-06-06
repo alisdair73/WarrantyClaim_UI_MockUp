@@ -61,6 +61,7 @@
 				required="true"
 				value="{WarrantyClaim>/Parts/0/PartNumber}"	
 				editable="{WarrantyClaim>CanEdit}"
+				description="{WarrantyClaim>/Parts/0/Description}"
 				showValueHelp="true" 
 				valueHelpRequest="addMCPN"/>
 			<Label text="MCPN Quantity" required="true" labelFor="MCPNQuantity"/>

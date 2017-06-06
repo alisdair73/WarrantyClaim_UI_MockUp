@@ -32,14 +32,11 @@ sap.ui.define([
 			
 			var searchValue = event.getParameter("value");
 			var filters = [];
-			filters.push(new Filter(
-				"PartNumber",
-				sap.ui.model.FilterOperator.Contains, searchValue
-			));
-			filters.push(new Filter(
-				"Description",
-				sap.ui.model.FilterOperator.Contains, searchValue
-			));
+			filters.push(new Filter([
+				new Filter("materialNo", sap.ui.model.FilterOperator.Contains, searchValue),
+				new Filter("description", sap.ui.model.FilterOperator.Contains, searchValue)
+			], false));
+			
 			event.getSource().getBinding("items").filter(filters);
 		},
 		
@@ -53,8 +50,8 @@ sap.ui.define([
 				
 			// add the new part - If the MCPN is already defined, overwrite this
 			warrantyItem = Models.createNewWarrantyItem("MAT");
-			warrantyItem.setProperty("/PartNumber", item.PartNumber);
-			warrantyItem.setProperty("/Description", item.Description);
+			warrantyItem.setProperty("/PartNumber", item.materialNo);
+			warrantyItem.setProperty("/Description", item.description);
 			warrantyItem.setProperty("/IsMCPN",true);
 			
 			if (warrantyItems[0]){

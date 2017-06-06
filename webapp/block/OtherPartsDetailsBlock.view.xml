@@ -9,7 +9,7 @@
 			</Toolbar>
 		</headerToolbar>
 	    <items>
-	        <ColumnListItem id="__item0" vAlign="Middle">
+	        <ColumnListItem vAlign="Middle">
 	        	<customData>
     				<core:CustomData key="isMCPN" value="{= ${WarrantyClaim>IsMCPN}? 'X':''}" writeToDom="true"/>
 				</customData>
@@ -42,6 +42,18 @@
 	                		visible="{= !${WarrantyClaim>isMCPN} &amp;&amp; ${WarrantyClaim>/CanEdit}}"
 	            		/>
 	        		</l:HorizontalLayout>
+					<ComboBox
+						width="100%"
+						editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+						items="{path:'/PartStatusSet', templateShareable:false}"
+						selectedKey="{WarrantyClaim>PartRequested}"
+					>
+						<core:ListItem 
+							key="{StatusCode}" 
+							text="{Description}" 
+							enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4'}"
+						/>
+					</ComboBox>	
 	                <l:HorizontalLayout>
 	                	<!-- <core:Icon src="sap-icon://broken-link" visible="{WarrantyClaim>isMCPN}" tooltip="Main Causal Part Number"/> -->
 	                	<RadioButton groupName="MCPN" selected="{WarrantyClaim>IsMCPN}" editable="false"/>
@@ -58,27 +70,32 @@
 	        </ColumnListItem>
 	    </items>		
 	    <columns>
-	        <Column id="__column0" width="25em">
+	        <Column >
 	            <header>
-	                <Label text="Part No." id="__label0"/>
+	                <Label text="Part No."/>
 	            </header>
 	        </Column>
-	        <Column id="__column1" width="25em">
+	        <Column  >
 	            <header>
-	                <Label text="Description" id="__label1"/>
+	                <Label text="Description"/>
 	            </header>
 	        </Column>
-	        <Column id="__column2" width="10em">
+	        <Column  width="10em">
 	            <header>
-	                <Label text="Qty" id="__label2"/>
+	                <Label text="Qty"/>
 	            </header>
 	        </Column>
-	        <Column id="__column4" width="7em">
+	        <Column >
 	            <header>
-	                <Label text="MCPN?"/>
+	                <Label text="Part Status"/>
 	            </header>
 	        </Column>
-	     	<Column id="__column5" width="7em" hAlign="End"/>
+	        <Column  width="7em">
+	            <header>
+	                <Label text="MCPN"/>
+	            </header>
+	        </Column>
+	     	<Column width="7em" hAlign="End"/>
 	     </columns>
 	 </Table>
 </mvc:View>

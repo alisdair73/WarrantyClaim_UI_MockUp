@@ -39,14 +39,10 @@ sap.ui.define([
 			
 			var searchValue = event.getParameter("value");
 			var filters = [];
-			filters.push(new Filter(
-				"PartNumber",
-				sap.ui.model.FilterOperator.Contains, searchValue
-			));
-			filters.push(new Filter(
-				"Description",
-				sap.ui.model.FilterOperator.Contains, searchValue
-			));
+			filters.push(new Filter([
+				new Filter("materialNo", sap.ui.model.FilterOperator.Contains, searchValue),
+				new Filter("description", sap.ui.model.FilterOperator.Contains, searchValue)
+			], false));
 			event.getSource().getBinding("items").filter(filters);
 		},
 		
@@ -55,15 +51,14 @@ sap.ui.define([
 			var selectedContexts = event.getParameter("selectedContexts");
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 
-			// add the parts that were selected (to the top) and update the model
-			// we default the requestedDeliveryDate to today
 			for (var i = 0; i < selectedContexts.length; i++) {
 				var item = selectedContexts[i].getModel().getProperty(selectedContexts[i].getPath());
 				
 				// add the new part
 				var warrantyItem = Models.createNewWarrantyItem("MAT");
-				warrantyItem.setProperty("/PartNumber", item.PartNumber);
-				warrantyItem.setProperty("/Description", item.Description);
+				warrantyItem.setProperty("/PartNumber", item.materialNo);
+				warrantyItem.setProperty("/Description", item.description);
+				warrantyItem.setProperty("/PartRequested", "S");
 				warrantyItem.setProperty("/IsMCPN", warrantyItems.length === 0 ? true : false);
 				
 				warrantyItems.push(warrantyItem.getProperty("/"));

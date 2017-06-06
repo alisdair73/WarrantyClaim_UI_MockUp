@@ -6,6 +6,11 @@ tr[data-isMCPN="X"]{
 	border-right: 1px solid lightgray;
 }
  
+.sapMListTblHeaderCell.listHeaderDivider {
+	border-top: 1px solid black;
+	border-bottom: 2px solid black;
+}
+ 
 .sapMListTblCell.cellBorderLeft {
 	border-left: 1px solid lightgray;
 }
@@ -13,8 +18,3 @@ tr[data-isMCPN="X"]{
 .sapMListTblCell.notSelected {
 	background: #f7f7f7;
 }
-
-
-
-
-

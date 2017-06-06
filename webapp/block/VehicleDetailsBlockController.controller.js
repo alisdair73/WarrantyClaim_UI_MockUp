@@ -3,8 +3,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 "WarrantyClaim_MockUp/model/models",
 "WarrantyClaim_MockUp/model/valueStateFormatter",
 "sap/ui/model/json/JSONModel",
-"WarrantyClaim_MockUp/model/RecallProductGroup"
-], function(Controller, Filter, Models, valueStateFormatter,JSONModel, Recall) {
+"WarrantyClaim_MockUp/model/RecallProductGroup",
+"sap/m/MessageToast"
+], function(Controller, Filter, Models, valueStateFormatter,JSONModel, Recall, MessageToast) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
@@ -122,21 +123,23 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
 			sap.ui.getCore().getEventBus().publish("RecallNumber","Changed",{"IsMandatory":dataObject.SerialNumberIsMandatory});
 			
-			if (!this._recallDialog) {
-				this._recallDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.fragment.RecallProductGroupSelector", this);
-				this.getView().addDependent(this._recallDialog);
-			}
-
-			// Display the popup dialog for adding parts
-		/*	this._recallDialog.open();*/
-			
-			var recall = new Recall(this);
-			
+			//Load the details of the Recall
 			var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN");
 			var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
-			recall.getRecallItemsFor(vin, internalRecallNumber);                         
-
-
+			
+			this.getView().getModel().read(
+				"/RecallItemSet", {
+					context: null,
+					filters: [
+						new Filter("InternalRecallNumber",sap.ui.model.FilterOperator.EQ, internalRecallNumber),
+						new Filter("VIN",sap.ui.model.FilterOperator.EQ, vin)
+					],
+					success: this._handleRecallItems.bind(this),
+					error: function() {
+					  //No Parts???
+					}.bind(this)
+				}
+			);
 		},
 		
 		onRecallProductGroupCancel: function(){
@@ -145,7 +148,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		
 		onTransferMaterials  : function(){
 			
-			var recallGroup = this._recallDialog.getAggregation("content")[0].getModel("RecallGroup");
+			var recallGroup = this.getView().getModel("RecallGroup");
 			
 			var recallItems = [];
 			var subletItems = [];
@@ -191,12 +194,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			recallItems.push(MCPN.getProperty("/"));
 			
 			//Replace/Repair Selected by Dealer - Transfer Parts/Labour/Sublet
-			var selectedGroupIndex = this._recallDialog.getAggregation("content")[0]
-										.getModel("RecallGroup").getProperty("/selectedGroup").findIndex(function(groupSelected){
+			var selectedGroupIndex = this.getView().getModel("RecallGroup").getProperty("/selectedGroup").findIndex(function(groupSelected){
 				return groupSelected;
 			});
 			
-			var materialsToTransfer = this._recallDialog.getAggregation("content")[0].getModel("RecallItems").getProperty("/groupParts");
+			var materialsToTransfer = this.getView().getModel("RecallItems").getProperty("/");
 			materialsToTransfer.forEach(function(materialToTransfer){
 			
 				// add the new part
@@ -222,7 +224,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			});
 
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", recallItems);
-			this._recallDialog.close();
+			MessageToast.show("Recall Items have been transferred to the Warranty.");
+			
+			if (this._recallDialog && this._recallDialog.isOpen()){
+				this._recallDialog.close();
+			}
 		},		
 		
 		onRecallSelectionClose: function(){
@@ -257,6 +263,27 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 					this.getView().getModel("WarrantyClaim").getProperty("/VIN")));
 			}
 			return filters;
+    	},
+    	
+    	_handleRecallItems: function(recallItems){
+    		
+    		var recall = new Recall(this);
+			var recallModels = recall.buildRecallItemsModel(recallItems.results); 
+			
+			this.getView().setModel(new JSONModel(recallModels.RecallGroup), "RecallGroup");
+			this.getView().setModel(new JSONModel(recallModels.RecallItems), "RecallItems");
+			
+			if (recallModels.RecallGroup.maxGroups > 1){
+//          	Need to open Group Selection Popup
+    			if (!this._recallDialog) {
+					this._recallDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.fragment.RecallProductGroupSelector", this);
+					this.getView().addDependent(this._recallDialog);
+				}
+				this._recallDialog.open();
+			} else {
+				//Only one option - automatically transfer data
+				this.onTransferMaterials();
+			}
     	}
 	});
 

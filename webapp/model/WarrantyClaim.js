@@ -245,17 +245,20 @@ sap.ui.define([
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Parts[i];
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
+				warrantyClaimItem.Description = "";
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 
 			for (i = 0; i < this.warrantyClaim.Labour.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Labour[i];
+				warrantyClaimItem.Description = "";
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			
 			for (i = 0; i < this.warrantyClaim.Sublet.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Sublet[i];
 				delete warrantyClaimItem.path;
+				warrantyClaimItem.Description = "";
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}

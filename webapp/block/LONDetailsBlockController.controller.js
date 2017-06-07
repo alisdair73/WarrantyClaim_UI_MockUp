@@ -23,6 +23,12 @@ sap.ui.define([
 					sap.ui.model.FilterOperator.EQ, 
 					this.getView().getModel("WarrantyClaim").getProperty("/VIN")
 			));
+			filters.push(
+				new Filter(
+					"MCPN",
+					sap.ui.model.FilterOperator.EQ, 
+					this.getView().getModel("WarrantyClaim").getProperty("/Parts/0/PartNumber")
+			));			
 			sap.ui.getCore().byId("LONCatalog").getBinding("items").filter(filters);
  			
 			// Display the popup dialog for adding parts
@@ -43,10 +49,10 @@ sap.ui.define([
 				var selectedLON = sap.ui.getCore().byId("LONCatalog").getModel().getProperty(bindingPath);
 				
 				var newLONItem = Models.createNewWarrantyItem("FR");   
-				newLONItem.ItemKey = selectedLON.LONCode;
-				newLONItem.Description = selectedLON.Description;
-				newLONItem.Quantity = selectedLON.Hours;
-				labourItems.push(newLONItem);
+				newLONItem.setProperty("/ItemKey",selectedLON.LONCode);
+				newLONItem.setProperty("/Description",selectedLON.Description);
+				newLONItem.setProperty("/Quantity",selectedLON.Hours);
+				labourItems.push(newLONItem.getProperty("/"));
 			}
 			this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 			this._LONDialog.close();

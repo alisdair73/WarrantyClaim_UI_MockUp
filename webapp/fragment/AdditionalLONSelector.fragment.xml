@@ -5,16 +5,17 @@
 			<sap.ui.layout.form:formContainers>
 		    	<sap.ui.layout.form:FormContainer>
 		            <sap.ui.layout.form:formElements>
-		            	<sap.ui.layout.form:FormElement label="Assembly">
+		            	<sap.ui.layout.form:FormElement>
 		                	<sap.ui.layout.form:fields>
+		                		<Label id="assembly_label" text="Assembly" required="true"/>
 								<ComboBox
 									id="assembly"
 									width="100%"
+									required="true"
 									editable="{WarrantyClaim>CanEdit}"
 									loadItems="loadAdditionalLONCatalog"
 									selectionChange="onAssemblySelected"
 									selectedKey="{AdditionalLONHelper>/Assembly}"
-									required="true"
 									items="{
 										path: 'AdditionalLON>/LON/ASSEMBLY_SYSTEMS'
 									}"
@@ -23,29 +24,31 @@
 								</ComboBox>	
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>
-		            	<sap.ui.layout.form:FormElement label="Sub Assembly">
+		            	<sap.ui.layout.form:FormElement>
 		                	<sap.ui.layout.form:fields>
+		                		<Label id="subAssembly_label" text="Sub Assembly" required="true"/>
 								<ComboBox
 									id="subAssembly"
 									width="100%"
-									editable="{WarrantyClaim>CanEdit}"
 									required="true"
+									editable="{WarrantyClaim>CanEdit}"
 									selectedKey="{AdditionalLONHelper>/SubAssembly}"
 									items="{
 										path: 'AdditionalLONHelper>/SubAssemblies'
 									}"
 								>
-									<core:ListItem key="{DefectCodes>code}" text="{DefectCodes>text}"/>
+									<core:ListItem key="{AdditionalLONHelper>CODE}" text="{AdditionalLONHelper>DESCRIPTION}"/>
 								</ComboBox>	
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>
-		            	<sap.ui.layout.form:FormElement label="Operation Type">
+		            	<sap.ui.layout.form:FormElement>
 		                	<sap.ui.layout.form:fields>
+		                		<Label id="operationType_label" text="Operation Type" required="true"/>
 								<ComboBox
 									id="operationType"
+									required="true"
 									width="100%"
 									editable="{WarrantyClaim>CanEdit}"
-									required="true"
 									loadItems="loadAdditionalLONCatalog"
 									selectedKey="{AdditionalLONHelper>/OperationType}"
 									items="{
@@ -56,6 +59,38 @@
 								</ComboBox>	
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>
+		            	<sap.ui.layout.form:FormElement>
+		                	<sap.ui.layout.form:fields>
+		                		<Label id="operationCode_label" text="Operation Code" required="true"/>
+								<ComboBox
+									id="operationCode"
+									width="100%"
+									editable="{WarrantyClaim>CanEdit}"
+									required="true"
+									selectedKey="{AdditionalLONHelper>/OperationCode}"
+									items="{
+										path: 'AdditionalLON>/LON/LON_CODES'
+									}"
+								>
+									<core:ListItem key="{AdditionalLON>LONCODE}" text="{AdditionalLON>DESCRIPTION}"/>
+								</ComboBox>	
+		                    </sap.ui.layout.form:fields>
+		                </sap.ui.layout.form:FormElement>
+		            	<sap.ui.layout.form:FormElement label="Hours">
+		                	<sap.ui.layout.form:fields>
+	                			<Input
+	                				type="Number"
+	                				value="{
+										path: 'AdditionalLONHelper>/RequestedHours',
+										type: 'sap.ui.model.type.Float',
+										formatOptions: {
+											minFractionDigits: 2,
+											maxFractionDigits: 2
+										}
+									}" 
+	            				/>
+		                    </sap.ui.layout.form:fields>
+		                </sap.ui.layout.form:FormElement>		                
 		            </sap.ui.layout.form:formElements>
 		        </sap.ui.layout.form:FormContainer>
 			</sap.ui.layout.form:formContainers>
@@ -66,7 +101,7 @@
     </content>
     <buttons>
       <Button text="Add LON" press="onAddAdditionalLON" icon="sap-icon://add-activity"/>
-      <Button text="Cancel" press="onRecallProductGroupCancel" icon="sap-icon://sys-cancel"/>
+      <Button text="Cancel" press="onCancelAdditionaLON" icon="sap-icon://sys-cancel"/>
     </buttons>
   </Dialog>
 </core:FragmentDefinition>

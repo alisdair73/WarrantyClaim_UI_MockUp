@@ -10,11 +10,15 @@ sap.ui.define([
 		
 		onInit: function(){
 			
-			this.setModel(new JSONModel({
+			this.getView().setModel(new JSONModel({
 				"Assembly":"",
 				"SubAssembly":"",
 				"SubAssemblies":[],
-				"OperationType":""
+				"OperationType":"",
+				"OperationCode":"",
+				"OperationCodes":[],
+				"RequestedHours":0,
+				"Description":""
 			}) , "AdditionalLONHelper");
 		},
 		
@@ -70,38 +74,44 @@ sap.ui.define([
 		},
 		
 		loadAdditionalLONCatalog: function(){
-			
+
+        	var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN");
+			var mcpn = this.getView().getModel("WarrantyClaim").getProperty("/Parts/0/PartNumber");
+
 			this.getView().getModel().read(
-				"/AdditionalLONSet('')/$value",
+				"/AdditionalLONSet(VIN='" + vin + "',MCPN='" + mcpn + "')/$value",
 				{
 					success: function(JSONData){
 						var additionalLON = JSON.parse(JSONData);
 						this.getView().setModel(new JSONModel(additionalLON),"AdditionalLON");
-						this.getModel("ViewHelper").setProperty("/busy", false);
+						this.getView().getModel("ViewHelper").setProperty("/busy", false);
 						
 					}.bind(this),
 					error: function(error){
-						this.getModel("ViewHelper").setProperty("/busy", false);
+						this.getView().getModel("ViewHelper").setProperty("/busy", false);
 					}
 				}
 			);
 		},
 		
 		onAssemblySelected: function(oEvent){
-			this._updateL2Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
-			
-			var additionalLON = this.getModel("AdditionalLON").getData();
 
-/*			for(var i=0; i< symptomCatalog.length; i++){
-			  if (symptomCatalog[i].code === level1Code){
-			    this.getModel("SymptomCodesHelper").setProperty("/SymptomsL2",symptomCatalog[i].nodes);
+			var additionalLON = this.getView().getModel("AdditionalLON").getData();
+
+			for(var i=0; i< additionalLON.LON.ASSEMBLY_SYSTEMS.length; i++){
+			  if (additionalLON.LON.ASSEMBLY_SYSTEMS[i].CODE === oEvent.getParameter("selectedItem").mProperties.key){
+			  	this.getView().getModel("AdditionalLONHelper").setProperty("/SubAssembly","");
+			    this.getView().getModel("AdditionalLONHelper").setProperty("/SubAssemblies",additionalLON.LON.ASSEMBLY_SYSTEMS[i].SUBASSEMBLY_SYSTEMS);
 			    return;
 			  }
-			}*/
+			}
 			
 		},
 		
 		onAdditionalLON: function(){
+			
+			//Close the Add LON Dialog
+			this._LONDialog.close();
 			
 			// Create the dialog if it isn't already
 			if (!this._additionalLONDialog) {
@@ -109,7 +119,12 @@ sap.ui.define([
 				this.getView().addDependent(this._additionalLONDialog);
 			}
 			this._additionalLONDialog.open();
-		}
+		},
+		
+		onCancelAdditionaLON: function(){
+			this._additionalLONDialog.close();
+		},		
+		
 	});
 
 });

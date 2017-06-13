@@ -7,6 +7,7 @@
 				items="{
 					path: '/LabourOperationNumberSet'
 				}"
+				noDataText="No LON codes found for VIN and MCPN"
 			>
 				<headerToolbar>
 					<Toolbar>
@@ -41,8 +42,10 @@
 	    		</columns>
 			</Table>
 		</content>
+		
 		<buttons>
-			<Button text="Add Selected" press="onAddLON" icon="sap-icon://add-activity"/>
+			<Button text="Add LON" press="onAddLON" icon="sap-icon://add-activity"/>
+			<Button text="Additional LON" press="onAdditionalLON" icon="sap-icon://create"/>
 			<Button text="Cancel" press="onCancelCheckLON" icon="sap-icon://sys-cancel"/>
 		</buttons>
 	</Dialog>

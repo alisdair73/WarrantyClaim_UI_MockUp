@@ -1,6 +1,6 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	'sap/ui/model/json/JSONModel',
+	"sap/ui/model/json/JSONModel",
 	"sap/ui/core/format/DateFormat"
 ], function(Controller, JSONModel, DateFormat) {
 	"use strict";

@@ -3,7 +3,7 @@
 	controllerName="WarrantyClaim_MockUp.block.ClaimDetailsBlockController">
 	<VBox class="sapUiSmallMargin">
 		<f:SimpleForm id="ClaimDetail"
-		objectBindings="{WarrantyClaim>/}"
+			objectBindings="{WarrantyClaim>/}"
 			editable="true"
 			layout="ResponsiveGridLayout"
 			labelSpanL="4"
@@ -62,8 +62,30 @@
 				value="{WarrantyClaim>/Parts/0/PartNumber}"	
 				editable="{WarrantyClaim>CanEdit}"
 				description="{WarrantyClaim>/Parts/0/Description}"
-				showValueHelp="true" 
-				valueHelpRequest="addMCPN"/>
+				showValueHelp="true"
+				showSuggestion="true"
+				suggest="onPartSuggest"
+				suggestionItemSelected="onPartSelected"
+				suggestionRows="{/ZDPE_C_MATERIALS}"
+				valueHelpRequest="addMCPN"
+			>
+				<suggestionColumns>
+					<Column>
+						<Text text="Part No." />
+					</Column>
+					<Column>
+						<Text text="Description" />
+					</Column>
+				</suggestionColumns>
+				<suggestionRows>
+					<ColumnListItem>
+						<cells>
+							<Label text="{materialNo}" />
+							<Label text="{description}" />
+						</cells>
+					</ColumnListItem>
+				</suggestionRows>									
+			</Input>
 			<Label text="MCPN Quantity" required="true" labelFor="MCPNQuantity"/>
 			<Input 
 				id="MCPNQuantity" 
@@ -168,7 +190,9 @@
 					value="{WarrantyClaim>OldSerialNumber}" 
 					editable="{WarrantyClaim>CanEdit}" 
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
-					valueState="{ parts: [{path: 'WarrantyClaim>OldSerialNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.oldSerialNumber'}"
+					valueState="{ parts: [{path: 'WarrantyClaim>OldSerialNumber'}, 
+						{path: 'ViewHelper>/warrantyUI/serialNumberIsMandatory'},
+						{path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.oldSerialNumber'}"
 
 				/>
 				<Input 
@@ -177,7 +201,9 @@
 					value="{WarrantyClaim>NewSerialNumber}" 
 					editable="{WarrantyClaim>CanEdit}" 
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"	
-					valueState="{ parts: [{path: 'WarrantyClaim>NewSerialNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.newSerialNumber'}"
+					valueState="{ parts: [{path: 'WarrantyClaim>NewSerialNumber'}, 
+						{path: 'ViewHelper>/warrantyUI/serialNumberIsMandatory'},
+						{path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.newSerialNumber'}"
 				/>
 			</f:content>
 		</f:SimpleForm>

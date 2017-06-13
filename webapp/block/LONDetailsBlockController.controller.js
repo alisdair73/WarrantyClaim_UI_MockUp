@@ -1,11 +1,22 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/Filter",
-	"WarrantyClaim_MockUp/model/models"
-], function(Controller, Filter, Models) {
+	"WarrantyClaim_MockUp/model/models",
+	"sap/ui/model/json/JSONModel"
+], function(Controller, Filter, Models, JSONModel) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.LONDetailsBlockController", {
+		
+		onInit: function(){
+			
+			this.setModel(new JSONModel({
+				"Assembly":"",
+				"SubAssembly":"",
+				"SubAssemblies":[],
+				"OperationType":""
+			}) , "AdditionalLONHelper");
+		},
 		
 		onCheckLON: function(){
 			
@@ -56,6 +67,48 @@ sap.ui.define([
 			}
 			this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 			this._LONDialog.close();
+		},
+		
+		loadAdditionalLONCatalog: function(){
+			
+			this.getView().getModel().read(
+				"/AdditionalLONSet('')/$value",
+				{
+					success: function(JSONData){
+						var additionalLON = JSON.parse(JSONData);
+						this.getView().setModel(new JSONModel(additionalLON),"AdditionalLON");
+						this.getModel("ViewHelper").setProperty("/busy", false);
+						
+					}.bind(this),
+					error: function(error){
+						this.getModel("ViewHelper").setProperty("/busy", false);
+					}
+				}
+			);
+		},
+		
+		onAssemblySelected: function(oEvent){
+			this._updateL2Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
+			
+			var additionalLON = this.getModel("AdditionalLON").getData();
+
+/*			for(var i=0; i< symptomCatalog.length; i++){
+			  if (symptomCatalog[i].code === level1Code){
+			    this.getModel("SymptomCodesHelper").setProperty("/SymptomsL2",symptomCatalog[i].nodes);
+			    return;
+			  }
+			}*/
+			
+		},
+		
+		onAdditionalLON: function(){
+			
+			// Create the dialog if it isn't already
+			if (!this._additionalLONDialog) {
+				this._additionalLONDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.fragment.AdditionalLONSelector", this);
+				this.getView().addDependent(this._additionalLONDialog);
+			}
+			this._additionalLONDialog.open();
 		}
 	});
 

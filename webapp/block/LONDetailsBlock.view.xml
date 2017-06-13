@@ -5,7 +5,13 @@
 			<Toolbar>
 				<Title text="Labour Operation Numbers" level="H2"/>
 				<ToolbarSpacer/>
-				<Button text="Check LON" icon="sap-icon://task" press="onCheckLON" visible="{WarrantyClaim>/CanEdit}"/>
+				<Button 
+					text="Select LON" 
+					icon="sap-icon://task" 
+					press="onCheckLON" 
+					enabled="{= ${WarrantyClaim>/Parts/0/PartNumber} !== '' &amp;&amp; ${WarrantyClaim>/VIN} !== ''}"
+					visible="{WarrantyClaim>/CanEdit}"
+				/>
 			</Toolbar>
 		</headerToolbar>
 	    <items>

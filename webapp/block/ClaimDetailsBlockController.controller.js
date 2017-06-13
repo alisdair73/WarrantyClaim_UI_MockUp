@@ -13,7 +13,7 @@ sap.ui.define([
 		valueStateFormatter: valueStateFormatter,
 		
 		onInit: function(){
-			sap.ui.getCore().getEventBus().subscribe("RecallNumber","Changed",this._recallNumberChanged.bind(this),this);
+			//sap.ui.getCore().getEventBus().subscribe("RecallNumber","Changed",this._recallNumberChanged.bind(this),this);
 		},
 		
 		addMCPN: function(){
@@ -40,18 +40,33 @@ sap.ui.define([
 			event.getSource().getBinding("items").filter(filters);
 		},
 		
+		onPartSuggest: function(event){
+			
+			var partSearch = event.getParameter("suggestValue");
+			var filters = [];
+			if (partSearch) {
+				filters.push(
+					new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, partSearch));
+			}
+			event.getSource().getBinding("suggestionRows").filter(filters);
+		},
+		
 		onPartSelected: function(event){
 
-			var selectedContexts = event.getParameter("selectedContexts");
+			var dataObject = null;
+			if (event.getId() === "suggestionItemSelected"){
+				dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
+			} else {
+				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
+			}
+
 			var warrantyItem = null;
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
-			
-			var item = selectedContexts[0].getModel().getProperty(selectedContexts[0].getPath());
-				
+
 			// add the new part - If the MCPN is already defined, overwrite this
 			warrantyItem = Models.createNewWarrantyItem("MAT");
-			warrantyItem.setProperty("/PartNumber", item.materialNo);
-			warrantyItem.setProperty("/Description", item.description);
+			warrantyItem.setProperty("/PartNumber", dataObject.materialNo);
+			warrantyItem.setProperty("/Description", dataObject.description);
 			warrantyItem.setProperty("/IsMCPN",true);
 			
 			if (warrantyItems[0]){
@@ -63,9 +78,9 @@ sap.ui.define([
 			
 			// update the model
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
-		},
+		}
 		
-    	_recallNumberChanged: function(channel, event, data){
+/*    	_recallNumberChanged: function(channel, event, data){
     		
     		var oldSerialNumber = this.getView().getModel("WarrantyClaim").getProperty("/OldSerialNumber");
     		var newSerialNumber = this.getView().getModel("WarrantyClaim").getProperty("/NewSerialNumber");
@@ -76,6 +91,6 @@ sap.ui.define([
     		this.getView().byId("NewSerialNumber").setValueState(
     			Rule.validateSerialNumbersArePopulated(newSerialNumber, "NewSerialNumber", this.getView()) ? "None" : "Error"
     		);
-    	}
+    	}*/
 	});
 });

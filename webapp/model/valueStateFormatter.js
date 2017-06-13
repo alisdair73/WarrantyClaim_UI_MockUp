@@ -219,7 +219,7 @@ sap.ui.define([
 				}
 			},
 			
-			oldSerialNumber: function(oldSerialNumber, claimTypeGroup){
+			oldSerialNumber: function(oldSerialNumber, isMandatory, claimTypeGroup){
 				
 	    		switch(claimTypeGroup){
 					case "RECALL":
@@ -229,7 +229,7 @@ sap.ui.define([
 				}
 			},
 			
-			newSerialNumber: function(newSerialNumber, claimTypeGroup){
+			newSerialNumber: function(newSerialNumber, isMandatory, claimTypeGroup){
 
 	    		switch(claimTypeGroup){
 					case "RECALL":

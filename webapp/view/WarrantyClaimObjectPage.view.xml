@@ -39,7 +39,7 @@
 				<subSections>
 					<ObjectPageSubSection id="vehicleDetails_sub1" title="VEHICLE" mode="Expanded">
 						<blocks>
-							<claimBlocks:VehicleDetailsBlock/>
+							<claimBlocks:VehicleDetailsBlock id="vehicleDetailsBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -48,7 +48,7 @@
 				<subSections>
 					<ObjectPageSubSection id="claimDetails_sub1" title="CLAIM" mode="Expanded">
 						<blocks>
-							<claimBlocks:ClaimDetailsBlock/>
+							<claimBlocks:ClaimDetailsBlock id="claimDetailBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -57,7 +57,7 @@
 				<subSections>
 					<ObjectPageSubSection id="otherParts_sub1" title="PARTS" mode="Expanded">
 						<blocks>
-							<claimBlocks:OtherPartsDetailsBlock/>
+							<claimBlocks:OtherPartsDetailsBlock id="otherPartsBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -66,7 +66,7 @@
 				<subSections>
 					<ObjectPageSubSection id="LON_sub1" title="LABOUR" mode="Expanded">
 						<blocks>
-							<claimBlocks:LONDetailsBlock/>
+							<claimBlocks:LONDetailsBlock id="LONBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -75,7 +75,7 @@
 				<subSections>
 					<ObjectPageSubSection id="sublet_sub1" title="SUBLET" mode="Expanded">
 						<blocks>
-							<claimBlocks:SubletDetailsBlock/>
+							<claimBlocks:SubletDetailsBlock id="subletBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -84,7 +84,7 @@
 				<subSections>
 					<ObjectPageSubSection id="customerConcern_sub1" title="CONCERN" mode="Expanded">
 						<blocks>
-							<claimBlocks:CustomerConcernBlock/>
+							<claimBlocks:CustomerConcernBlock id="customerConcernBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -93,7 +93,7 @@
 				<subSections>
 					<ObjectPageSubSection id="dealerComments_sub1" title="DEALER" mode="Expanded">
 						<blocks>
-							<claimBlocks:DealerCommentsBlock/>
+							<claimBlocks:DealerCommentsBlock id="dealerCommentsBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -102,7 +102,7 @@
 				<subSections>
 					<ObjectPageSubSection id="hondaAssessmentResults_sub1" title="RESULTS" mode="Expanded">
 						<blocks>
-							<claimBlocks:HondaAssessmentBlock/>
+							<claimBlocks:HondaAssessmentBlock id="hondaAssessmentResultsBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -111,7 +111,7 @@
 				<subSections>
 					<ObjectPageSubSection id="attachments_sub1" title="ATTACHMENTS" mode="Expanded">
 						<blocks>
-							<claimBlocks:SupportingDocumentsBlock/>
+							<claimBlocks:SupportingDocumentsBlock id="attachmentsBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
@@ -120,7 +120,7 @@
 				<subSections>
 					<ObjectPageSubSection id="costs_sub1" title="COSTS" mode="Expanded">
 						<blocks>
-							<claimBlocks:CostsDetailsBlock/>
+							<claimBlocks:CostsDetailsBlock id="costsBlock"/>
 						</blocks>
 					</ObjectPageSubSection>
 				</subSections>

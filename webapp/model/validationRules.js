@@ -91,7 +91,7 @@ sap.ui.define([
 				var dateOfFailure = new Date(WarrantyClaim.warrantyClaim.DateOfFailure.getFullYear(), 
 					WarrantyClaim.warrantyClaim.DateOfFailure.getMonth(), WarrantyClaim.warrantyClaim.DateOfFailure.getDate());
 				
-				if (dateOfRepair.valueOf() <= dateOfFailure.valueOf()){
+				if (dateOfRepair.valueOf() < dateOfFailure.valueOf()){
 					_addErrorMessageToMessageManager(
 						"UI_DateOfRepair",
 						view.getModel("WarrantyClaim"),

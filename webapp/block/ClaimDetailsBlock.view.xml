@@ -31,7 +31,6 @@
 				change="onChangeDatePicker"
 				displayFormat="medium" 
 				dateValue="{WarrantyClaim>DateOfFailure}"
-				valueState="{path: 'WarrantyClaim>DateOfFailure', formatter:'.valueStateFormatter.failureDate' }"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
 			

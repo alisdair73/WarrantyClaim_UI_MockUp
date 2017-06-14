@@ -32,6 +32,7 @@
 									width="100%"
 									required="true"
 									editable="{WarrantyClaim>CanEdit}"
+									selectionChange="onSubAssemblySelected"
 									selectedKey="{AdditionalLONHelper>/SubAssembly}"
 									items="{
 										path: 'AdditionalLONHelper>/SubAssemblies'
@@ -50,6 +51,7 @@
 									width="100%"
 									editable="{WarrantyClaim>CanEdit}"
 									loadItems="loadAdditionalLONCatalog"
+									selectionChange="onOperationTypeSelected"
 									selectedKey="{AdditionalLONHelper>/OperationType}"
 									items="{
 										path: 'AdditionalLON>/LON/OPERATION_TYPES'
@@ -67,12 +69,13 @@
 									width="100%"
 									editable="{WarrantyClaim>CanEdit}"
 									required="true"
+									selectionChange="onOperationCodeSelected"
 									selectedKey="{AdditionalLONHelper>/OperationCode}"
 									items="{
-										path: 'AdditionalLON>/LON/LON_CODES'
+										path: 'AdditionalLONHelper>/OperationCodes'
 									}"
 								>
-									<core:ListItem key="{AdditionalLON>LONCODE}" text="{AdditionalLON>DESCRIPTION}"/>
+									<core:ListItem key="{AdditionalLONHelper>LON_CODE}" text="{AdditionalLONHelper>DESCRIPTION}"/>
 								</ComboBox>	
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>
@@ -88,6 +91,16 @@
 											maxFractionDigits: 2
 										}
 									}" 
+									editable="{= ${AdditionalLONHelper>/OperationCode}.substr(4, 2) === '99'}"
+	            				/>
+		                    </sap.ui.layout.form:fields>
+		                </sap.ui.layout.form:FormElement>
+		            	<sap.ui.layout.form:FormElement label="Description">
+		                	<sap.ui.layout.form:fields>
+	                			<TextArea
+	                				value="{AdditionalLONHelper>/Description}" 
+	                				editable="{= ${AdditionalLONHelper>/OperationCode}.substr(4, 2) === '99'}"
+	                				rows="2"
 	            				/>
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>		                

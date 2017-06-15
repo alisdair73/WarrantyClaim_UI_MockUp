@@ -5,7 +5,7 @@ sap.ui.define([
 	"use strict";
 
 	return {
-		oDataModel: null,
+		oDataModel: null, 
 		warrantyClaim: {},
 		warrantyClaimOriginal: {},
 		

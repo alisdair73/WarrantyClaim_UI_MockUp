@@ -20,7 +20,7 @@
 				id="FailureMeasure" 
 				type="Number"
 				required="true"
-				value="{WarrantyClaim>FailureMeasure}"
+				value="{WarrantyClaim>FailureMeasure}"				
 				valueState="{path: 'WarrantyClaim>FailureMeasure', formatter:'.valueStateFormatter.failureMeasure' }"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
@@ -244,7 +244,8 @@
 				/>
 				<Input 
 					id="PartsInstallKM" 
-					value="{WarrantyClaim>PartsInstallKM}" 
+					type="Number"
+					value="{WarrantyClaim>PartsInstallKM}"
 					editable="{WarrantyClaim>CanEdit}" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"

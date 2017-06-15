@@ -134,12 +134,19 @@
 					text="{message>/length}" 
 					type="Emphasized" 
 					press="openMessages"/>
+				<m:SegmentedButton width="300px" selectedKey="{WarrantyClaim>/Validate}">
+					<m:items>
+						<m:SegmentedButtonItem text="Validate UI" key="yes" />
+						<m:SegmentedButtonItem text="Don't Validate UI" key="no"/>
+					</m:items>
+				</m:SegmentedButton>					
 				<m:ToolbarSpacer/>
-				<m:Button text="Save Draft" press="onDraft" enabled="{= !!${UIValidation>/hasUIValidationError}}" visible="{WarrantyClaim>/CanEdit}"/>
+				<m:Button text="Save Draft" press="onDraft" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button text="Cancel" press="onCancel"/>
 				<m:Button text="Validate" press="onValidate" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button 
 					text="{= ${WarrantyClaim>/CurrentVersionNumber} === '0001' ? 'Submit' : 'Resubmit'}"
+					enabled="{= !${UIValidation>/hasUIValidationError} || ${WarrantyClaim>/Validate} === 'no'}"
 					press="onSubmit" 
 					type="Emphasized" 
 					visible="{WarrantyClaim>/CanEdit}"

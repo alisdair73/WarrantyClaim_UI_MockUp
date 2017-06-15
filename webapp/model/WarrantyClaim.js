@@ -251,6 +251,7 @@ sap.ui.define([
 
 			for (i = 0; i < this.warrantyClaim.Labour.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Labour[i];
+				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
 				warrantyClaimItem.Description = "";
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}

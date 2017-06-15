@@ -25,9 +25,12 @@ sap.ui.define([
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
 			
+			//set the validation model
+			this.setModel(models.createUIValidationModel(),"UIValidation");
+			
 			//set the initial Warranty Model
 			this.setModel(WarrantyClaim.createWarrantyClaimModel(),"WarrantyClaim");
-			
+			                     
 			// call the base component's init function and create the App view
 			//UIComponent.prototype.init.apply(this, arguments);
 				

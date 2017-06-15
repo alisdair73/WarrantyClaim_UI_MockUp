@@ -21,6 +21,7 @@ sap.ui.define([
 				"busy": false,
 				"delay": 0,
 				"readOnly": false,
+				"Validate":"yes",
 				"warrantyUI": {
 					"dealerNumber":"",
 					"dealerName":"",
@@ -35,7 +36,9 @@ sap.ui.define([
 			});
 			this.setModel(oViewModel, "ViewHelper");
 			
-			sap.ui.getCore().setModel(new JSONModel({"hasUIValidationError": false}),"UIValidation");
+			//MATT - With this code it works ok (remove the Component stuff)
+/*			sap.ui.getCore().setModel(new JSONModel({"hasUIValidationError": false}),"UIValidation");
+			this.getView().setModel(sap.ui.getCore().getModel("UIValidation"),"UIValidation");*/
 			
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
 

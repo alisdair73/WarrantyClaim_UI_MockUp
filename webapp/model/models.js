@@ -11,7 +11,11 @@ sap.ui.define([
 			oModel.setDefaultBindingMode("OneWay");
 			return oModel;
 		},
-		
+
+		createUIValidationModel: function(){
+			return new JSONModel({"hasUIValidationError": false});
+		},
+
 		createNewWarrantyItem: function(itemType){
 			return new JSONModel({
 				"ClaimNumber":"",

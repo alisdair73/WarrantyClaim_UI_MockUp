@@ -18,7 +18,7 @@ sap.ui.define([
 				"OperationCode":"",
 				"OperationCodeDescription":"",
 				"OperationCodes":[],
-				"RequestedHours":0,
+				"RequestedHours":"0",
 				"Description":""
 			}) , "AdditionalLONHelper");
 		},

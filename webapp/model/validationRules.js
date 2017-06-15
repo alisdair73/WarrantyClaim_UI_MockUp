@@ -14,7 +14,7 @@ sap.ui.define([
 			}
 		); 
 		
-		sap.ui.getCore().getModel("UIValidation").setProperty("/hasUIValidationError",uiMessages.length > 0);
+//		this.getModel("UIValidation").setProperty("/hasUIValidationError",uiMessages.length > 0);
     };
 
 	var	_doesMessageExistInMessageManager = function (messageID){

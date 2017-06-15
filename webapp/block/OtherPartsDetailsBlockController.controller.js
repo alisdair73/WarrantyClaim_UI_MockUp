@@ -32,8 +32,8 @@ sap.ui.define([
 				sap.ui.model.FilterOperator.EQ, 
 				false
 			));
-			
 			this.getView().byId("partsTable").getBinding("items").filter(filters);
+			
 		},		
 		onValueHelpSearch: function(event) {
 			

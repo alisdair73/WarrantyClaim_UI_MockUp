@@ -150,6 +150,10 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			
 			var recallGroup = this.getView().getModel("RecallGroup");
 			
+			//Need to remove all items from the tables - this requires the setting of the deletion flag, rather
+			//than clearing the array - as once saved, the backend will need to clean these up..
+			
+			
 			var recallItems = [];
 			var subletItems = [];
 			var labourItems = [];

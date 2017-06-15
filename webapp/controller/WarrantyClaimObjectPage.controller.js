@@ -36,7 +36,6 @@ sap.ui.define([
 			});
 			this.setModel(oViewModel, "ViewHelper");
 			
-			//MATT - With this code it works ok (remove the Component stuff)
 /*			sap.ui.getCore().setModel(new JSONModel({"hasUIValidationError": false}),"UIValidation");
 			this.getView().setModel(sap.ui.getCore().getModel("UIValidation"),"UIValidation");*/
 			

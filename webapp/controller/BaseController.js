@@ -1,8 +1,9 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
-	"sap/ui/core/format/DateFormat"
-], function(Controller, JSONModel, DateFormat) {
+	"sap/ui/core/format/DateFormat",
+	"sap/ui/core/message/Message"
+], function(Controller, JSONModel, DateFormat, Message) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.controller.BaseController", {
@@ -124,6 +125,71 @@ sap.ui.define([
 					}
 				}
 			);
-		}
+		},
+		
+		logValidationMessage:function(isValid, fieldId, modelName, target){
+			this._removeErrorMessageFromMessageManager("UI_" + fieldId);
+			if(!isValid){
+			
+				var messageTarget = target ? target : "/" + fieldId; 
+			
+				this._addErrorMessageToMessageManager(
+					"UI_" + fieldId,
+					this.getView().getModel(modelName ? modelName : "WarrantyClaim"),
+					this.getView().getModel("i18n").getResourceBundle().getText(
+						"mandatoryField",[
+							this.getView().byId(fieldId + "_label").getText()]),
+					messageTarget + "/value"
+				);
+			}
+		},
+		
+		//Private Methods
+    	_updateUIErrorFlag:function(){
+    	
+/*			var uiMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
+	  			function(uiMessage){
+					return uiMessage.id.match("UI");
+				}
+			); */
+//			this.getModel("UIValidation").setProperty("/hasUIValidationError",uiMessages.length > 0);
+    	},
+
+		_doesMessageExistInMessageManager: function (messageID){
+			var registeredMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
+  				function(registeredMessage){
+					return registeredMessage.id ===  messageID;
+				}
+			);
+    		
+    		if(registeredMessages.length > 0){
+    			return registeredMessages[0];
+    		}  
+		},	
+	
+		_removeErrorMessageFromMessageManager:function(messageID){
+			
+			var message = this._doesMessageExistInMessageManager(messageID);
+			if(message){
+				sap.ui.getCore().getMessageManager().removeMessages(message);
+			}
+			this._updateUIErrorFlag();
+		},
+		
+		_addErrorMessageToMessageManager:function(messageID, messageProcessor, messageText, messageTarget){
+			
+			if( !this._doesMessageExistInMessageManager(messageID)){
+			
+				var message = new Message({
+					"id": messageID,
+	            	"message": messageText,
+	                "type": 'Error',
+	                "target": messageTarget,
+	                "processor": messageProcessor
+	        	});
+      			sap.ui.getCore().getMessageManager().addMessages(message);
+      			this._updateUIErrorFlag();
+			}
+		}		
 	});
 });

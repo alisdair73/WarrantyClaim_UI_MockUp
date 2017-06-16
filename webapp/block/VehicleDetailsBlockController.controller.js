@@ -1,14 +1,17 @@
-sap.ui.define(["sap/ui/core/mvc/Controller",
+sap.ui.define([
+//"sap/ui/core/mvc/Controller",
+"WarrantyClaim_MockUp/controller/BaseController",
 "sap/ui/model/Filter",
 "WarrantyClaim_MockUp/model/models",
 "WarrantyClaim_MockUp/model/valueStateFormatter",
 "sap/ui/model/json/JSONModel",
 "WarrantyClaim_MockUp/model/RecallProductGroup",
-"sap/m/MessageToast"
-], function(Controller, Filter, Models, valueStateFormatter,JSONModel, Recall, MessageToast) {
+"sap/m/MessageToast",
+"WarrantyClaim_MockUp/model/WarrantyClaim"
+], function(BaseController, Filter, Models, valueStateFormatter,JSONModel, Recall, MessageToast, WarrantyClaim) {
 	"use strict";
 
-	return Controller.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
+	return BaseController.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
 
     	valueStateFormatter: valueStateFormatter,
 
@@ -17,9 +20,24 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		},
 		
 		onVINChanged: function(event){
+			//VIN must be in Upper Case
+			this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",
+				this.getView().getModel("WarrantyClaim").getProperty("/VIN/value").toUpperCase()
+			);
+			
         	//Add the VIN to the PWA Filter
     		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
 			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
+			
+			this.logValidationMessage( WarrantyClaim.validateVIN(), "VIN");
+		},
+		
+		onEngineNumberChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateEngineNumber(), "EngineNumber");
+		},
+		
+		onDealerContactChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateDealerContact(), "DealerContact");
 		},
 		
 		onPWAValueHelpRequest: function(event){
@@ -137,7 +155,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 					success: this._handleRecallItems.bind(this),
 					error: function() {
 					  //No Parts???
-					}.bind(this)
+					}
 				}
 			);
 		},
@@ -149,14 +167,13 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		onTransferMaterials  : function(){
 			
 			var recallGroup = this.getView().getModel("RecallGroup");
+			var recallItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
+			var subletItems = this.getView().getModel("WarrantyClaim").getProperty("/Sublet");
+			var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
 			
-			//Need to remove all items from the tables - this requires the setting of the deletion flag, rather
-			//than clearing the array - as once saved, the backend will need to clean these up..
-			
-			
-			var recallItems = [];
-			var subletItems = [];
-			var labourItems = [];
+			this._setDeletedFlagForAllItems(recallItems);
+			this._setDeletedFlagForAllItems(subletItems);
+			this._setDeletedFlagForAllItems(labourItems);
 			
 			var labourItem = Models.createNewWarrantyItem("FR");
 			if(recallGroup.getProperty("/inspect/selected")){
@@ -174,8 +191,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
 			
 			if(recallGroup.getProperty("/inspect/selected")){
-				this.getView().getModel("WarrantyClaim").setProperty("/Parts", []); //Clear Parts
-				this.getView().getModel("WarrantyClaim").setProperty("/Sublet", []); //Clear Sublet??
+				sap.ui.getCore().getEventBus().publish("Recall","Transferred");
 				this._recallDialog.close();
 				return; //Only Inspection to be performed...
 			}
@@ -228,6 +244,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			});
 
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", recallItems);
+			sap.ui.getCore().getEventBus().publish("Recall","Transferred");
 			MessageToast.show("Recall Items have been transferred to the Warranty.");
 			
 			if (this._recallDialog && this._recallDialog.isOpen()){
@@ -246,7 +263,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		
 		toUpperCase: function(event){
     		var value = event.getParameter('newValue');     
-    		this.getView().getModel("WarrantyClaim").setProperty("/VIN",value.toUpperCase());
+    		this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",value.toUpperCase());
 		},
 		
     	_salesOrgChanged: function(channel, event, data){
@@ -288,6 +305,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				//Only one option - automatically transfer data
 				this.onTransferMaterials();
 			}
+    	},
+    	
+    	_setDeletedFlagForAllItems: function(items){
+    		items.forEach(function(item){
+				item.Deleted = true;	
+			});
     	}
 	});
 

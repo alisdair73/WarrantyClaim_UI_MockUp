@@ -10,6 +10,8 @@ sap.ui.define([
 		
 		onInit: function(){
 			
+			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applyLONTableFilter.bind(this),this);
+			
 			this.getView().setModel(new JSONModel({
 				"Assembly":"",
 				"SubAssembly":"",
@@ -207,7 +209,28 @@ sap.ui.define([
 		
 		onCancelAdditionaLON: function(){
 			this._additionalLONDialog.close();
-		}	
+		},
+		
+		deleteLON: function(event) {
+
+			// get the data for the deleted row
+			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
+			this.getView().getModel("WarrantyClaim").setProperty(path + "/Deleted", true);
+			this._applyLONTableFilter();
+		},
+		
+		_applyLONTableFilter: function(){
+			
+			var filters = [];
+
+			filters.push(
+				new Filter(
+					"Deleted",
+					sap.ui.model.FilterOperator.EQ, 
+					false
+			));
+			this.getView().byId("LONTable").getBinding("items").filter(filters);
+		}
 	});
 
 });

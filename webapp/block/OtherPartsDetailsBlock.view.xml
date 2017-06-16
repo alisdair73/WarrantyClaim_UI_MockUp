@@ -65,7 +65,7 @@
 	                	<Button icon="sap-icon://edit" press="editItem" visible="false"/>
 	                	<Button 
 	                		icon="sap-icon://delete" 
-	                		press="deleteItem" 
+	                		press="deletePart" 
 	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>IsMCPN} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 	                	/>
 	                </l:HorizontalLayout>

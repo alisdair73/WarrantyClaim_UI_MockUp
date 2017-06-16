@@ -10,6 +10,7 @@
 		multiSelect="false">
 		<StandardListItem
 			title="{materialNo}"
-			description="{description}" />
+			description="{description}" 
+		/>
 	</SelectDialog>
 </core:FragmentDefinition>

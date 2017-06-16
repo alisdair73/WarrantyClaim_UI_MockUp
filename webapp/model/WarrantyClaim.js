@@ -1,11 +1,12 @@
 sap.ui.define([
 	"sap/ui/model/json/JSONModel",
-	"sap/ui/core/format/NumberFormat"
-], function(JSONModel,NumberFormat) {
+	"sap/ui/core/format/NumberFormat",
+	"WarrantyClaim_MockUp/model/validationRules"
+], function(JSONModel,NumberFormat,Rule) {
 	"use strict";
 
 	return {
-		oDataModel: null, 
+		oDataModel: null,
 		warrantyClaim: {},
 		warrantyClaimOriginal: {},
 		
@@ -17,10 +18,10 @@ sap.ui.define([
 				"ClaimTypeDescription": "",
 				"ClaimTypeGroup": "",
 				"Dealer":"",
-				"DealerContact": "",
-				"EngineNumber": "",
+				"DealerContact": { "value":"", "valid":true},
+				"EngineNumber": { "value":"", "valid":true},
 				"AuthorisationNumber": "",
-				"VIN": "",
+				"VIN": { "value":"", "valid":true},
 				"RecallNumber": "",
 				"RepairOrderNumber": "",
 				"TotalCostOfClaim":"0",
@@ -128,10 +129,10 @@ sap.ui.define([
 			this.warrantyClaim.ClaimType = oWarrantyClaim.ClaimType;
 			this.warrantyClaim.ClaimTypeDescription = oWarrantyClaim.ClaimTypeDescription;
 			this.warrantyClaim.ClaimTypeGroup = oWarrantyClaim.ClaimTypeGroup;
-			this.warrantyClaim.DealerContact = oWarrantyClaim.DealerContact;
-			this.warrantyClaim.EngineNumber = oWarrantyClaim.EngineNumber;
+			this.warrantyClaim.DealerContact.value = oWarrantyClaim.DealerContact;
+			this.warrantyClaim.EngineNumber.value = oWarrantyClaim.EngineNumber;
 			this.warrantyClaim.AuthorisationNumber = oWarrantyClaim.AuthorisationNumber;
-			this.warrantyClaim.VIN = oWarrantyClaim.VIN;
+			this.warrantyClaim.VIN.value = oWarrantyClaim.VIN;
 			this.warrantyClaim.RecallNumber = oWarrantyClaim.RecallNumber;
 			this.warrantyClaim.RepairOrderNumber = oWarrantyClaim.RepairOrderNumber;
 			this.warrantyClaim.TotalCostOfClaim = costFormat.format(oWarrantyClaim.TotalCostOfClaim);
@@ -211,10 +212,10 @@ sap.ui.define([
 			};
 			warrantyClaim.ClaimNumber = this.warrantyClaim.ClaimNumber;
 			warrantyClaim.ClaimType = this.warrantyClaim.ClaimType;
-			warrantyClaim.DealerContact = this.warrantyClaim.DealerContact;
-			warrantyClaim.EngineNumber = this.warrantyClaim.EngineNumber;
+			warrantyClaim.DealerContact = this.warrantyClaim.DealerContact.value;
+			warrantyClaim.EngineNumber = this.warrantyClaim.EngineNumber.value;
 			warrantyClaim.AuthorisationNumber = this.warrantyClaim.AuthorisationNumber;
-			warrantyClaim.VIN = this.warrantyClaim.VIN;
+			warrantyClaim.VIN = this.warrantyClaim.VIN.value;
 			warrantyClaim.RecallNumber = this.warrantyClaim.RecallNumber;
 			warrantyClaim.RepairOrderNumber = this.warrantyClaim.RepairOrderNumber;
 			warrantyClaim.DateOfRepair = this.warrantyClaim.DateOfRepair;
@@ -246,6 +247,11 @@ sap.ui.define([
 				warrantyClaimItem = this.warrantyClaim.Parts[i];
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
 				warrantyClaimItem.Description = "";
+				
+				//Don't send deleted items that aren't persisted
+				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
+				  continue;
+				}
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 
@@ -253,14 +259,24 @@ sap.ui.define([
 				warrantyClaimItem = this.warrantyClaim.Labour[i];
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
 				warrantyClaimItem.Description = "";
+				
+				//Don't send deleted items that aren't persisted
+				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
+				  continue;
+				}
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			
 			for (i = 0; i < this.warrantyClaim.Sublet.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Sublet[i];
 				delete warrantyClaimItem.path;
-				warrantyClaimItem.Description = "";
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
+				warrantyClaimItem.Description = "";
+				
+				//Don't send deleted items that aren't persisted
+				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
+				  continue;
+				}
 				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
 			}
 			
@@ -278,6 +294,85 @@ sap.ui.define([
 			this.warrantyClaimOriginal = jQuery.extend(true, {}, this.warrantyClaim);
 			this.warrantyClaimOriginal.changed = false;
 			this.oDataModel.setData(this.warrantyClaim);			
+		},
+		
+//		Validation Rules
+		validateVIN:function(){
+			this.warrantyClaim.VIN.valid = 
+				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.VIN.value, "VIN"); 
+			return this.warrantyClaim.VIN.valid;
+		},
+		
+		validateEngineNumber: function(){
+			this.warrantyClaim.EngineNumber.valid = 
+				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.EngineNumber.value, "EngineNumber");
+			return this.warrantyClaim.EngineNumber.valid;
+		},
+		
+		validateFailureMeasure: function(){
+			
+			this.warrantyClaim.FailureMeasure.valid = false;
+			
+			if(Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.FailureMeasure.value, "FailureMeasure")){ 
+				this.warrantyClaim.FailureMeasure.valid = 
+					Rule.validateFailureMeasure(this.warrantyClaim.FailureMeasure.value);  
+			}
+			return this.warrantyClaim.EngineNumber.valid;
+		},
+	
+		validateFailureDate: function(){
+			
+			this.warrantyClaim.DateOfFailure.valid = false;
+			
+			if(Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfFailure.value, "DateOfFailure")){ 
+				if(Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfFailure.value, "DateOfFailure")){
+					this.warrantyClaim.DateOfFailure.valid = Rule.validateFailureDate(this.warrantyClaim.DateOfFailure.value);
+				}
+			}
+			return this.warrantyClaim.DateOfFailure.valid;
+		},
+
+		validateRepairDate: function(){
+			
+			this.warrantyClaim.DateOfRepair.valid = false;
+			
+			if(Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfRepair.value, "DateOfRepair")){ 
+				if(Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfRepair.value, "DateOfRepair")){
+					this.warrantyClaim.DateOfRepair.valid = Rule.validateRepairDate(this.warrantyClaim.DateOfRepair.value);  
+				}
+			}
+			return this.warrantyClaim.DateOfFailure.valid;
+		},
+			
+		validateRepairOrderNumber: function(){
+			this.warrantyClaim.RepairOrderNumber.valid = 
+				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.RepairOrderNumber.value, "RepairOrderNumber");
+			return this.warrantyClaim.RepairOrderNumber.valid;
+		},
+		
+		
+		// Claim Type Specific Rules
+		
+		
+		validateDealerContact: function(){
+				
+			this.warrantyClaim.DealerContact.valid = true;	
+				
+			switch(this.warrantyClaim.ClaimTypeGroup){
+				case "NORMAL":
+				case "GOODWILL":
+				case "PARTS":
+					this.warrantyClaim.DealerContact.valid = 
+						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DealerContact.value, "DealerContact");
+					break;
+			}
+			return this.warrantyClaim.DealerContact.valid;
 		}
+		
+
+		
+		
+		
+		
 	};
 });

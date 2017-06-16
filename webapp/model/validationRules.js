@@ -152,7 +152,7 @@ sap.ui.define([
 		
 		validateRequiredFieldIsPopulated: function(fieldValue, fieldId, view, processor, target){
 			
-			_removeErrorMessageFromMessageManager("UI_" + fieldId);
+		//	_removeErrorMessageFromMessageManager("UI_" + fieldId);
 			
 			if (fieldValue){
 				if (fieldValue !== ""){
@@ -160,7 +160,7 @@ sap.ui.define([
 				}
 			}
 			
-			var messageProcessor = processor ? view.getModel(processor) : view.getModel("WarrantyClaim"); 
+/*			var messageProcessor = processor ? view.getModel(processor) : view.getModel("WarrantyClaim"); 
 			var messageTarget = target ? target : "/" + fieldId; 
 			
 			_addErrorMessageToMessageManager(
@@ -168,7 +168,7 @@ sap.ui.define([
 				messageProcessor,
 				view.getModel("i18n").getResourceBundle().getText("mandatoryField",[view.byId(fieldId + "_label").getText()]),
 				messageTarget
-			);
+			);*/
 			
 			return false;
 		},

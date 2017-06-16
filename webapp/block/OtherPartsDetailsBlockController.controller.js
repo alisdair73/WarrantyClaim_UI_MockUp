@@ -7,6 +7,10 @@ sap.ui.define([
 
 	return Controller.extend("WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController", {
 		
+		onInit: function(){
+			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applyPartTableFilter.bind(this),this);
+		},
+				
 		addItem: function(){
 			
 			// Create the dialog if it isn't already
@@ -19,22 +23,15 @@ sap.ui.define([
 			this._partsDialog.open();
 		},
 		
-		deleteItem: function(event) {
+		deletePart: function(event) {
 
 			// get the data for the deleted row
 			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
 			this.getView().getModel("WarrantyClaim").setProperty(path + "/Deleted", true);
 
-           	var filters = [];
-
-			filters.push(new Filter(
-				"Deleted",
-				sap.ui.model.FilterOperator.EQ, 
-				false
-			));
-			this.getView().byId("partsTable").getBinding("items").filter(filters);
-			
+			this._applyPartTableFilter();
 		},		
+		
 		onValueHelpSearch: function(event) {
 			
 			var searchValue = event.getParameter("value");
@@ -66,6 +63,19 @@ sap.ui.define([
 
 			// update the model
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
+		},
+		
+		_applyPartTableFilter: function(){
+			
+			var filters = [];
+
+			filters.push(
+				new Filter(
+					"Deleted",
+					sap.ui.model.FilterOperator.EQ, 
+					false
+			));
+			this.getView().byId("partsTable").getBinding("items").filter(filters);
 		}
 	});
 

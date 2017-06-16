@@ -1,12 +1,17 @@
 sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"WarrantyClaim_MockUp/model/models",
-	"sap/ui/model/json/JSONModel"
-], function(BaseController, Models, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/model/Filter"
+], function(BaseController, Models, JSONModel, Filter) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.SubletDetailsBlockController", {
 
+		onInit: function(){
+			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applySubletTableFilter.bind(this),this);
+		},
+		
     	readSubletCatalog: function(){
 			this.readCatalog("ZSUBL","SubletCodes",1);
 		},
@@ -45,19 +50,12 @@ sap.ui.define([
 			this._subletDialog.open();
     	},
     	
-    	deleteSublet: function(event) {
-
-			var sublets = this.getView().getModel("WarrantyClaim").getProperty("/Sublet");
+		deleteSublet: function(event) {
 
 			// get the data for the deleted row
 			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
-
-            var itemIndex = path.split("/")[2];
-
-			// delete the line using the path to work out the index
-			sublets.splice(itemIndex, 1);
-			this.getView().getModel("WarrantyClaim").setProperty("/Sublet", sublets);
-
+			this.getView().getModel("WarrantyClaim").setProperty(path + "/Deleted", true);
+			this._applySubletTableFilter();
 		},
     	
     	handleOK: function(){
@@ -79,8 +77,19 @@ sap.ui.define([
     	
     	handleClose: function(){
     		this._subletDialog.close();
-    	}
-    
-	});
+    	},
+    	
+		_applySubletTableFilter: function(){
+			
+			var filters = [];
 
+			filters.push(
+				new Filter(
+					"Deleted",
+					sap.ui.model.FilterOperator.EQ, 
+					false
+			));
+			this.getView().byId("SubletTable").getBinding("items").filter(filters);
+		}
+	});
 });

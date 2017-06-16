@@ -20,17 +20,16 @@
 				<Label id="VIN_label" text="VIN/Serial Number" required="true" labelFor="VIN"/>
 				<Input 
 					id="VIN" 
-					value="{WarrantyClaim>VIN}"
+					value="{WarrantyClaim>VIN/value}"
 					required="true"
 					editable="{WarrantyClaim>CanEdit}"
-					liveChange="toUpperCase"
 					showSuggestion="true"
 					showTableSuggestionValueHelp="false"
 					suggestionItemSelected="onDealerVINSelection"
 					change="onVINChanged"
 					suggestionRows="{/VINSet}"
 					maxSuggestionWidth="500px"
-					valueState="{path: 'WarrantyClaim>VIN', formatter: '.valueStateFormatter.vin'}"
+					valueState="{= ${WarrantyClaim>VIN/valid} ? 'None':'Error'}"
 				>
 					<suggestionColumns>
 						<Column>
@@ -53,10 +52,11 @@
 				<Label id="EngineNumber_label" text="Engine Number" required="true" labelFor="EngineNumber"/>
 				<Input  
 					id="EngineNumber" 
-					value="{WarrantyClaim>EngineNumber}" 
+					value="{WarrantyClaim>EngineNumber/value}" 
 					editable="{WarrantyClaim>CanEdit}" 
 					required="true"
-					valueState="{path: 'WarrantyClaim>EngineNumber', formatter: '.valueStateFormatter.engineNumber'}"
+					change="onEngineNumberChanged"
+					valueState="{= ${WarrantyClaim>EngineNumber/valid} ? 'None':'Error'}"
 				/>
 				
 				<core:Title text="Dealer" />
@@ -68,8 +68,9 @@
 				/>
 				<Input 
 					id="DealerContact" 
-					value="{WarrantyClaim>DealerContact}"
-					valueState="{ parts: [{path: 'WarrantyClaim>DealerContact'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.dealerContact'}"
+					value="{WarrantyClaim>DealerContact/value}"
+					change="onDealerContactChanged"
+					valueState="{= ${WarrantyClaim>DealerContact/valid} ? 'None':'Error'}"
 					required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL'}"
 					editable="{WarrantyClaim>CanEdit}"
 					showSuggestion="true"

@@ -7,6 +7,7 @@
 		visible="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' }"
 	/>
 	<Table 
+		id="SubletTable"
 		items="{WarrantyClaim>/Sublet}" 
 		showOverlay="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' &amp;&amp; !${WarrantyClaim>/PartsInstalledByDealer}}"
 	>
@@ -38,7 +39,11 @@
 	                <Text text="{WarrantyClaim>Description}"/>
 	                <l:HorizontalLayout>
 	                	<Button icon="sap-icon://edit" press="editSublet" visible="{WarrantyClaim>/CanEdit}"/>
-	                	<Button icon="sap-icon://delete" press="deleteSublet" visible="{WarrantyClaim>/CanEdit}"/>
+	                	<Button 
+	                		icon="sap-icon://delete" 
+	                		press="deleteSublet" 
+	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+	                	/>
 	                </l:HorizontalLayout>
 	            </cells>
 	        </ColumnListItem>

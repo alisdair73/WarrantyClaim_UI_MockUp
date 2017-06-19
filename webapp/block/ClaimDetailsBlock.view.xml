@@ -20,10 +20,12 @@
 				id="FailureMeasure" 
 				type="Number"
 				required="true"
-				value="{WarrantyClaim>FailureMeasure}"				
-				valueState="{path: 'WarrantyClaim>FailureMeasure', formatter:'.valueStateFormatter.failureMeasure' }"
+				value="{WarrantyClaim>FailureMeasure/value}"	
+				change="onFailureMeasureChanged"
+				valueState="{= ${WarrantyClaim>FailureMeasure/valid} ? 'None':'Error'}"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
+			
 			<Label id="DateOfFailure_label" text="Date of Failure" required="true" labelFor="DateOfFailure"/>
 			<DatePicker 
 				id="DateOfFailure" 
@@ -38,19 +40,20 @@
 			<Label id="RepairOrderNumber_label" text="Repair Order Number" required="true" labelFor="repairOrderNumber"/>
 			<Input 
 				id="RepairOrderNumber" 
-				value="{WarrantyClaim>RepairOrderNumber}" 
+				value="{WarrantyClaim>RepairOrderNumber/value}" 
 				editable="{WarrantyClaim>CanEdit}"
-				valueState="{path: 'WarrantyClaim>RepairOrderNumber', formatter:'.valueStateFormatter.repairOrderNumber' }"
+				change="onRepairOrderNumberChanged"
+				valueState="{= ${WarrantyClaim>RepairOrderNumber/valid} ? 'None':'Error'}"
 			/>
 			
 			<Label id="DateOfRepair_label" text="Date of Repair" required="true" labelFor="DateOfRepair"/>
 			<DatePicker 
 				id="DateOfRepair" 
-				change="onChangeDatePicker"
 				displayFormat="medium" 
 				required="true"
-				dateValue="{WarrantyClaim>DateOfRepair}" 
-				valueState="{path: 'WarrantyClaim>DateOfRepair', formatter:'.valueStateFormatter.repairDate' }"
+				dateValue="{WarrantyClaim>DateOfRepair/value}" 
+				change="onDateOfRepairChanged"
+				valueState="{= ${WarrantyClaim>DateOfRepair/valid} ? 'None':'Error'}"
 				editable="{WarrantyClaim>CanEdit}"
 				/>
 			<core:Title text="Main Causal Part" />
@@ -135,8 +138,9 @@
 						{ path : 'Relationship', operator : 'EQ', value1 : 'Technician'}
 					]
 				}"
-				selectedKey="{WarrantyClaim>Technician}"
-				valueState="{ parts: [{path: 'WarrantyClaim>Technician'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.technician'}"
+				selectedKey="{WarrantyClaim>Technician/value}"
+				selectionChange="onTechnicianChanged"
+				valueState="{= ${WarrantyClaim>Technician/valid} ? 'None':'Error'}"
 			>
 				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
 			</ComboBox>	
@@ -160,8 +164,9 @@
 						{ path : 'Relationship', operator : 'EQ', value1 : 'Service Advisor'}
 					]					
 				}"
-				selectedKey="{WarrantyClaim>ServiceAdvisor}"
-				valueState="{ parts: [{path: 'WarrantyClaim>ServiceAdvisor'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.serviceAdvisor'}"
+				selectedKey="{WarrantyClaim>ServiceAdvisor/value}"
+				selectionChange="onServiceAdvisorChanged"
+				valueState="{= ${WarrantyClaim>ServiceAdvisor/valid} ? 'None':'Error'}"
 			>
 				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
 			</ComboBox>	
@@ -186,23 +191,20 @@
 				<Input 
 					id="OldSerialNumber" 
 					placeholder="Old Serial Number" 
-					value="{WarrantyClaim>OldSerialNumber}" 
+					value="{WarrantyClaim>OldSerialNumber/value}" 
 					editable="{WarrantyClaim>CanEdit}" 
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
-					valueState="{ parts: [{path: 'WarrantyClaim>OldSerialNumber'}, 
-						{path: 'ViewHelper>/warrantyUI/serialNumberIsMandatory'},
-						{path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.oldSerialNumber'}"
-
+					change="onOldSerialNumberChanged"
+					valueState="{= ${WarrantyClaim>OldSerialNumber/valid} ? 'None':'Error'}"
 				/>
 				<Input 
 					id="NewSerialNumber" 
 					placeholder="New Serial Number" 
-					value="{WarrantyClaim>NewSerialNumber}" 
+					value="{WarrantyClaim>NewSerialNumber/value}" 
 					editable="{WarrantyClaim>CanEdit}" 
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"	
-					valueState="{ parts: [{path: 'WarrantyClaim>NewSerialNumber'}, 
-						{path: 'ViewHelper>/warrantyUI/serialNumberIsMandatory'},
-						{path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.newSerialNumber'}"
+					change="onNewSerialNumberChanged"
+					valueState="{= ${WarrantyClaim>NewSerialNumber/valid} ? 'None':'Error'}"
 				/>
 			</f:content>
 		</f:SimpleForm>
@@ -228,28 +230,29 @@
 				/>
 				<DatePicker 
 					id="PartsInstallDate" 
-					change="onChangeDatePicker"
 					displayFormat="medium" 
-					dateValue="{WarrantyClaim>PartsInstallDate}" 
+					dateValue="{WarrantyClaim>PartsInstallDate/value}" 
 					editable="{WarrantyClaim>CanEdit}"
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
-					valueState="{ parts: [{path: 'WarrantyClaim>PartsInstallDate'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.installDate'}"
+					change="onPartsInstallDateChanged"
+					valueState="{= ${WarrantyClaim>PartsInstallDate/valid} ? 'None':'Error'}"
 				/>
 				<Label 
 					id="PartsInstallKM_label"
 					text="Part Install KM" 
-					labelFor="partInstallKM" 
+					labelFor="PartsInstallKM" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 				/>
 				<Input 
 					id="PartsInstallKM" 
 					type="Number"
-					value="{WarrantyClaim>PartsInstallKM}"
+					value="{WarrantyClaim>PartsInstallKm/value}"
 					editable="{WarrantyClaim>CanEdit}" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
-					valueState="{ parts: [{path: 'WarrantyClaim>PartsInstallKM'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.installKM'}"
+					change="onPartsInstallKmChanged"
+					valueState="{= ${WarrantyClaim>PartsInstallKm/valid} ? 'None':'Error'}"
 				/>
 				<Label 
 					id="OriginalInvoiceNumber_label"
@@ -260,11 +263,12 @@
 				/>
 				<Input 
 					id="OriginalInvoiceNumber" 
-					value="{WarrantyClaim>OriginalInvoiceNumber}" 
+					value="{WarrantyClaim>OriginalInvoiceNumber/value}" 
 					editable="{WarrantyClaim>CanEdit}" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
-					valueState="{ parts: [{path: 'WarrantyClaim>OriginalInvoiceNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.invoiceNumber'}"
+					change="onOriginalInvoiceNumberChanged"
+					valueState="{= ${WarrantyClaim>OriginalInvoiceNumber/valid} ? 'None':'Error'}"
 				/>
 			</f:content>
 		</f:SimpleForm>

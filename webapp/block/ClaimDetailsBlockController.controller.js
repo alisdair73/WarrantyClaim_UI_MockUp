@@ -2,19 +2,13 @@ sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/Filter",
 	"WarrantyClaim_MockUp/model/models",
-	"WarrantyClaim_MockUp/model/valueStateFormatter",
-	"WarrantyClaim_MockUp/model/validationRules"
-	
-], function(BaseController,Filter, Models, valueStateFormatter, Rule) {
+	"WarrantyClaim_MockUp/model/WarrantyClaim"
+], function(BaseController,Filter, Models, WarrantyClaim) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.ClaimDetailsBlockController", {
 		
-		valueStateFormatter: valueStateFormatter,
-		
-		onInit: function(){
-			//sap.ui.getCore().getEventBus().subscribe("RecallNumber","Changed",this._recallNumberChanged.bind(this),this);
-		},
+//		valueStateFormatter: valueStateFormatter,
 		
 		addMCPN: function(){
 			
@@ -78,19 +72,46 @@ sap.ui.define([
 			
 			// update the model
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
-		}
+		},
 		
-/*    	_recallNumberChanged: function(channel, event, data){
-    		
-    		var oldSerialNumber = this.getView().getModel("WarrantyClaim").getProperty("/OldSerialNumber");
-    		var newSerialNumber = this.getView().getModel("WarrantyClaim").getProperty("/NewSerialNumber");
-    	
-    		this.getView().byId("OldSerialNumber").setValueState(
-    			Rule.validateSerialNumbersArePopulated(oldSerialNumber, "OldSerialNumber", this.getView()) ? "None" : "Error"
-    		);
-    		this.getView().byId("NewSerialNumber").setValueState(
-    			Rule.validateSerialNumbersArePopulated(newSerialNumber, "NewSerialNumber", this.getView()) ? "None" : "Error"
-    		);
-    	}*/
+		onFailureMeasureChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateFailureMeasure(), "FailureMeasure");
+		},
+		
+		onRepairOrderNumberChanged: function(){
+		this.logValidationMessage( WarrantyClaim.validateRepairOrderNumber(), "RepairOrderNumber");
+		},
+
+		onDateOfRepairChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateDateOfRepair(), "DateOfRepair");
+		},	
+
+		onTechnicianChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateTechnician(), "Technician");
+		},
+
+		onServiceAdvisorChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateServiceAdvisor(), "ServiceAdvisor");	
+		},
+
+		onOldSerialNumberChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateOldSerialNumber(), "OldSerialNumber");	
+		},
+
+		onNewSerialNumberChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateNewSerialNumber(), "NewSerialNumber");
+		},
+
+		onPartsInstallDateChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validatePartsInstallDate(), "PartsInstallDate");	
+		},  
+
+		onPartsInstallKmChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validatePartsInstallKm(), "PartsInstallKm");	
+		},
+		
+		onOriginalInvoiceNumberChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateOriginalInvoiceNumber(), "OriginalInvoiceNumber");
+		}
 	});
 });

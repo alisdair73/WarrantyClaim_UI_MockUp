@@ -1,13 +1,13 @@
 sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/json/JSONModel",
-	"WarrantyClaim_MockUp/model/valueStateFormatter"
-], function(BaseController, JSONModel, valueStateFormatter) {
+	"WarrantyClaim_MockUp/model/WarrantyClaim"
+], function(BaseController, JSONModel, WarrantyClaim) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.CustomerConcernBlockController", {
 		
-		valueStateFormatter: valueStateFormatter,
+	//	valueStateFormatter: valueStateFormatter,
 		
 		onInit: function(){
 			
@@ -26,13 +26,23 @@ sap.ui.define([
 		
 		onSymptomCodeSelectedL1: function(oEvent){
 			this._updateL2Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
-			this.getModel("WarrantyClaim").setProperty("/SymptomCode","");
+			this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
+			this.getModel("WarrantyClaim").setProperty("/SymptomCode/valid",false);
 			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2","");
 		},
 		
 		onSymptomCodeSelectedL2: function(oEvent){
 			this._updateL3Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
-			this.getModel("WarrantyClaim").setProperty("/SymptomCode","");
+			this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
+			this.getModel("WarrantyClaim").setProperty("/SymptomCode/valid",false);
+		},
+		
+		onCustomerConcernChanged: function() {
+			this.logValidationMessage( WarrantyClaim.validateCustomerConcern(), "CustomerConcern");
+		},
+		
+		onSymptomCodeChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateSymptomCode(), "SymptomCode");
 		},
 		
 		_symptomCatalogLoaded: function(sChannelId, sEventId, oData){

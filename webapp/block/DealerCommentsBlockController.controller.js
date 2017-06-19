@@ -1,13 +1,13 @@
 sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/json/JSONModel",
-	"WarrantyClaim_MockUp/model/valueStateFormatter"
-], function(BaseController, JSONModel, valueStateFormatter) {
+	"WarrantyClaim_MockUp/model/WarrantyClaim"
+], function(BaseController, JSONModel, WarrantyClaim) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.DealerCommentsBlockController", {
 
-		valueStateFormatter: valueStateFormatter,
+	//	valueStateFormatter: valueStateFormatter,
 
 		onInit: function(){
 			
@@ -25,12 +25,21 @@ sap.ui.define([
 		
 		onDefectCodeSelectedL1: function(oEvent){
 			this._updateL2Defects(oEvent.getParameter("selectedItem").mProperties.key);
-			this.getModel("WarrantyClaim").setProperty("/DefectCode","");
+			this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
+			this.getModel("WarrantyClaim").setProperty("/DefectCode/valid",false);
 		},		
+		
+		onDefectCodeChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateDefectCode(), "DefectCode");
+		},
+		
+		onDealerCommentsChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateDealerComments(), "DealerComments");
+		},
 		
 		_defectCatalogLoaded: function(sChannelId, sEventId, oData){
 			if(this.getModel("WarrantyClaim").getProperty("/DefectCode")){
-				var defectCodeLevels = this.getModel("WarrantyClaim").getProperty("/DefectCode").split("-");
+				var defectCodeLevels = this.getModel("WarrantyClaim").getProperty("/DefectCode/value").split("-");
 				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1",defectCodeLevels[0]);
 				this._updateL2Defects(this.getModel("ViewHelper").getProperty("/warrantyUI/defectCodeL1"));
 			}

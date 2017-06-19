@@ -3,17 +3,14 @@ sap.ui.define([
 "WarrantyClaim_MockUp/controller/BaseController",
 "sap/ui/model/Filter",
 "WarrantyClaim_MockUp/model/models",
-"WarrantyClaim_MockUp/model/valueStateFormatter",
 "sap/ui/model/json/JSONModel",
 "WarrantyClaim_MockUp/model/RecallProductGroup",
 "sap/m/MessageToast",
 "WarrantyClaim_MockUp/model/WarrantyClaim"
-], function(BaseController, Filter, Models, valueStateFormatter,JSONModel, Recall, MessageToast, WarrantyClaim) {
+], function(BaseController, Filter, Models, JSONModel, Recall, MessageToast, WarrantyClaim) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
-
-    	valueStateFormatter: valueStateFormatter,
 
 		onInit: function(){
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
@@ -38,6 +35,14 @@ sap.ui.define([
 		
 		onDealerContactChanged: function(){
 			this.logValidationMessage( WarrantyClaim.validateDealerContact(), "DealerContact");
+		},
+		
+		onAuthorisationNumberChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateAuthorisationNumber(), "AuthorisationNumber");
+		},
+		
+		onRecallNumberChanged: function(){
+			this.logValidationMessage( WarrantyClaim.validateRecallNumber(), "RecallNumber");
 		},
 		
 		onPWAValueHelpRequest: function(event){

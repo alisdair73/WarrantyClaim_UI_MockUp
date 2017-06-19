@@ -25,9 +25,10 @@
 											rows="10" 
 											cols="120" 
 											placeholder="Dealer Comments" 
-											value="{WarrantyClaim>DealerComments}"
+											value="{WarrantyClaim>DealerComments/value}"
 											editable="{WarrantyClaim>CanEdit}"	
-											valueState="{ parts: [{path: 'WarrantyClaim>DealerComments'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.dealerComments'}"
+											change="onDealerCommentsChanged"
+											valueState="{= ${WarrantyClaim>DealerComments/valid} ? 'None':'Error'}"
 										/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
@@ -46,13 +47,10 @@
 											editable="{WarrantyClaim>CanEdit}"
 											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
-											items="{
-												path: 'DefectCodes>/'
-											}"
+											items="{DefectCodes>/}"
 											loadItems="readDefectCatalog"
 											selectionChange="onDefectCodeSelectedL1"
 											selectedKey="{ViewHelper>/warrantyUI/defectCodeL1}"
-											valueState="{ parts: [{path: 'ViewHelper>/warrantyUI/defectCodeL1'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.defectCodeL1'}"
 										>
 											<core:ListItem key="{DefectCodes>code}" text="{DefectCodes>text}"/>
 										</ComboBox>	
@@ -68,11 +66,10 @@
 											editable="{WarrantyClaim>CanEdit}"
 											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
-											items="{
-												path: 'DefectCodesHelper>/DefectsL2'
-											}"
-											selectedKey="{WarrantyClaim>DefectCode}"
-											valueState="{ parts: [{path: 'WarrantyClaim>DefectCode'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.defectCodeL2'}"
+											items="{DefectCodesHelper>/DefectsL2}"
+											selectedKey="{WarrantyClaim>DefectCode/value}"
+											selectionChange="onDefectCodeChanged"
+											valueState="{= ${WarrantyClaim>DefectCode/valid} ? 'None':'Error'}"
 										>
 											<core:ListItem key="{DefectCodesHelper>code}" 
 												text="{DefectCodesHelper>text} ({=${DefectCodesHelper>code}.substr(4,5)})"/>

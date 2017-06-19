@@ -90,10 +90,11 @@
 				/>
 				<Input 
 					id="AuthorisationNumber" 
-					value="{WarrantyClaim>AuthorisationNumber}"	
+					value="{WarrantyClaim>AuthorisationNumber/value}"	
 					editable="{WarrantyClaim>CanEdit}"
 					showValueHelp="true" 
-					valueState="{ parts: [{path: 'WarrantyClaim>AuthorisationNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.pwa'}"
+					change="onAuthorisationNumberChanged"
+					valueState="{= ${WarrantyClaim>AuthorisationNumber/valid} ? 'None':'Error'}"
 					valueHelpRequest="onPWAValueHelpRequest"
 					showSuggestion="true"
 					suggestionItemSelected="onPWASelection"
@@ -129,8 +130,9 @@
 				<Input 
 					id="RecallNumber" 
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
-					value="{WarrantyClaim>RecallNumber}"
-					valueState="{ parts: [{path: 'WarrantyClaim>RecallNumber'}, {path: 'WarrantyClaim>ClaimTypeGroup'}], formatter: '.valueStateFormatter.recallNumber'}"
+					value="{WarrantyClaim>RecallNumber/value}"
+					change="onRecallNumberChanged"
+					valueState="{= ${WarrantyClaim>RecallNumber/valid} ? 'None':'Error'}"
 					editable="{WarrantyClaim>CanEdit}"
 					showValueHelp="true" 
 					valueHelpRequest="onRecallValueHelpRequest"

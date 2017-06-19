@@ -62,6 +62,24 @@
 					</ObjectPageSubSection>
 				</subSections>
 			</ObjectPageSection>
+			<ObjectPageSection id="customerConcern" title="CONCERN">
+				<subSections>
+					<ObjectPageSubSection id="customerConcern_sub1" title="CONCERN" mode="Expanded">
+						<blocks>
+							<claimBlocks:CustomerConcernBlock id="customerConcernBlock"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection id="dealerComments" title="DEALER">
+				<subSections>
+					<ObjectPageSubSection id="dealerComments_sub1" title="DEALER" mode="Expanded">
+						<blocks>
+							<claimBlocks:DealerCommentsBlock id="dealerCommentsBlock"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
 			<ObjectPageSection id="LON" title="LABOUR">
 				<subSections>
 					<ObjectPageSubSection id="LON_sub1" title="LABOUR" mode="Expanded">
@@ -80,24 +98,6 @@
 					</ObjectPageSubSection>
 				</subSections>
 			</ObjectPageSection>
-			<ObjectPageSection id="customerConcern" title="CONCERN">
-				<subSections>
-					<ObjectPageSubSection id="customerConcern_sub1" title="CONCERN" mode="Expanded">
-						<blocks>
-							<claimBlocks:CustomerConcernBlock id="customerConcernBlock"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
-			<ObjectPageSection id="dealerComments" title="DEALER">
-				<subSections>
-					<ObjectPageSubSection id="dealerComments_sub1" title="DEALER" mode="Expanded">
-						<blocks>
-							<claimBlocks:DealerCommentsBlock id="dealerCommentsBlock"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>				
 			<ObjectPageSection id="hondaAssessmentResults" title="RESULTS" visible="{= ${WarrantyClaim>/CurrentVersionNumber} !== '0001'}">
 				<subSections>
 					<ObjectPageSubSection id="hondaAssessmentResults_sub1" title="RESULTS" mode="Expanded">

@@ -26,19 +26,21 @@ sap.ui.define([
 		onDefectCodeSelectedL1: function(oEvent){
 			this._updateL2Defects(oEvent.getParameter("selectedItem").mProperties.key);
 			this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
-			this.getModel("WarrantyClaim").setProperty("/DefectCode/valid",false);
+		//	this.getModel("WarrantyClaim").setProperty("/DefectCode/valid",false);
 		},		
 		
 		onDefectCodeChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateDefectCode(), "DefectCode");
+			WarrantyClaim.validateDefectCode();
+			this.logValidationMessage("DefectCode");
 		},
 		
 		onDealerCommentsChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateDealerComments(), "DealerComments");
+			WarrantyClaim.validateDealerComments();
+			this.logValidationMessage("DealerComments");
 		},
 		
 		_defectCatalogLoaded: function(sChannelId, sEventId, oData){
-			if(this.getModel("WarrantyClaim").getProperty("/DefectCode")){
+			if(this.getModel("WarrantyClaim").getProperty("/DefectCode/value")){
 				var defectCodeLevels = this.getModel("WarrantyClaim").getProperty("/DefectCode/value").split("-");
 				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1",defectCodeLevels[0]);
 				this._updateL2Defects(this.getModel("ViewHelper").getProperty("/warrantyUI/defectCodeL1"));

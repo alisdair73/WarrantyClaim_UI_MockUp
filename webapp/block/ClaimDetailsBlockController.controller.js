@@ -75,43 +75,53 @@ sap.ui.define([
 		},
 		
 		onFailureMeasureChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateFailureMeasure(), "FailureMeasure");
+			WarrantyClaim.validateFailureMeasure();
+			this.logValidationMessage("FailureMeasure");
 		},
 		
 		onRepairOrderNumberChanged: function(){
-		this.logValidationMessage( WarrantyClaim.validateRepairOrderNumber(), "RepairOrderNumber");
+			WarrantyClaim.validateRepairOrderNumber();
+			this.logValidationMessage("RepairOrderNumber");
 		},
 
 		onDateOfRepairChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateDateOfRepair(), "DateOfRepair");
+			WarrantyClaim.validateDateOfRepair();
+			this.logValidationMessage("DateOfRepair");
 		},	
 
 		onTechnicianChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateTechnician(), "Technician");
+			WarrantyClaim.validateTechnician();
+			this.logValidationMessage("Technician");
 		},
 
 		onServiceAdvisorChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateServiceAdvisor(), "ServiceAdvisor");	
+			WarrantyClaim.validateServiceAdvisor();
+			this.logValidationMessage("ServiceAdvisor");	
 		},
 
 		onOldSerialNumberChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateOldSerialNumber(), "OldSerialNumber");	
+			WarrantyClaim.validateOldSerialNumber();
+			this.logValidationMessage("OldSerialNumber");	
 		},
 
 		onNewSerialNumberChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateNewSerialNumber(), "NewSerialNumber");
+			WarrantyClaim.validateNewSerialNumber();
+			this.logValidationMessage("NewSerialNumber");
 		},
 
 		onPartsInstallDateChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validatePartsInstallDate(), "PartsInstallDate");	
+			WarrantyClaim.validatePartsInstallDate();
+			this.logValidationMessage("PartsInstallDate");	
 		},  
 
 		onPartsInstallKmChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validatePartsInstallKm(), "PartsInstallKm");	
+			WarrantyClaim.validatePartsInstallKm();
+			this.logValidationMessage("PartsInstallKm");	
 		},
 		
 		onOriginalInvoiceNumberChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateOriginalInvoiceNumber(), "OriginalInvoiceNumber");
+			WarrantyClaim.validateOriginalInvoiceNumber();
+			this.logValidationMessage("OriginalInvoiceNumber");
 		}
 	});
 });

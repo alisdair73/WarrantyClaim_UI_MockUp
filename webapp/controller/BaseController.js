@@ -127,18 +127,26 @@ sap.ui.define([
 			);
 		},
 		
-		logValidationMessage:function(isValid, fieldId, modelName, target){
+		//Model Name and Target are optional for reference to helper models 
+		//that are screen bound.
+		logValidationMessage:function(fieldId, modelName, target){
+			
 			this._removeErrorMessageFromMessageManager("UI_" + fieldId);
-			if(!isValid){
 			
-				var messageTarget = target ? target : "/" + fieldId; 
+			var model = this.getView().getModel(modelName ? modelName : "WarrantyClaim");
+			var messageTarget = target ? target : "/" + fieldId;
+			var field = model.getProperty(messageTarget);
 			
+			if(!field.ruleResult.valid){
+				 
 				this._addErrorMessageToMessageManager(
 					"UI_" + fieldId,
-					this.getView().getModel(modelName ? modelName : "WarrantyClaim"),
+					model,
 					this.getView().getModel("i18n").getResourceBundle().getText(
-						"mandatoryField",[
-							this.getView().byId(fieldId + "_label").getText()]),
+						field.ruleResult.errorTextID,[
+							this.getView().byId(fieldId + "_label").getText()
+						]
+					),
 					messageTarget + "/value"
 				);
 			}

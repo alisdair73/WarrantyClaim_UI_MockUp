@@ -29,7 +29,7 @@
 					change="onVINChanged"
 					suggestionRows="{/VINSet}"
 					maxSuggestionWidth="500px"
-					valueState="{= ${WarrantyClaim>VIN/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>VIN/ruleResult/valid} ? 'None':'Error'}"
 				>
 					<suggestionColumns>
 						<Column>
@@ -56,7 +56,7 @@
 					editable="{WarrantyClaim>CanEdit}" 
 					required="true"
 					change="onEngineNumberChanged"
-					valueState="{= ${WarrantyClaim>EngineNumber/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>EngineNumber/ruleResult/valid} ? 'None':'Error'}"
 				/>
 				
 				<core:Title text="Dealer" />
@@ -70,7 +70,7 @@
 					id="DealerContact" 
 					value="{WarrantyClaim>DealerContact/value}"
 					change="onDealerContactChanged"
-					valueState="{= ${WarrantyClaim>DealerContact/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>DealerContact/ruleResult/valid} ? 'None':'Error'}"
 					required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL'}"
 					editable="{WarrantyClaim>CanEdit}"
 					showSuggestion="true"
@@ -94,7 +94,7 @@
 					editable="{WarrantyClaim>CanEdit}"
 					showValueHelp="true" 
 					change="onAuthorisationNumberChanged"
-					valueState="{= ${WarrantyClaim>AuthorisationNumber/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>AuthorisationNumber/ruleResult/valid} ? 'None':'Error'}"
 					valueHelpRequest="onPWAValueHelpRequest"
 					showSuggestion="true"
 					suggestionItemSelected="onPWASelection"
@@ -132,7 +132,7 @@
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 					value="{WarrantyClaim>RecallNumber/value}"
 					change="onRecallNumberChanged"
-					valueState="{= ${WarrantyClaim>RecallNumber/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>RecallNumber/ruleResult/valid} ? 'None':'Error'}"
 					editable="{WarrantyClaim>CanEdit}"
 					showValueHelp="true" 
 					valueHelpRequest="onRecallValueHelpRequest"

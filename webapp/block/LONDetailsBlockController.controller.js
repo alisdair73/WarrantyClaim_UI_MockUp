@@ -39,7 +39,7 @@ sap.ui.define([
 				new Filter(
 					"VIN",
 					sap.ui.model.FilterOperator.EQ, 
-					this.getView().getModel("WarrantyClaim").getProperty("/VIN")
+					this.getView().getModel("WarrantyClaim").getProperty("/VIN/value")
 			));
 			filters.push(
 				new Filter(
@@ -78,7 +78,7 @@ sap.ui.define([
 		
 		loadAdditionalLONCatalog: function(){
 
-        	var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN");
+        	var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN/value");
 			var mcpn = this.getView().getModel("WarrantyClaim").getProperty("/Parts/0/PartNumber");
 
 			this.getView().getModel().read(
@@ -170,7 +170,7 @@ sap.ui.define([
 			newLONItem.setProperty("/Description",this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCodeDescription"));
 			
 			if (this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode").substr(4,2) === "99"){
-				//If this is a "Streight Time" LON then copy addition description to Dealer Comments section 				
+				//If this is a "Straight Time" LON then copy addition description to Dealer Comments section 				
 				
 				var now = new Date();
                 var displayDateTime = now.getDate() + "/" + now.getMonth()+ "/" + now.getFullYear() + ' ' + now.getHours() + ":" + now.getMinutes();
@@ -179,13 +179,13 @@ sap.ui.define([
 					this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode") + ", " +
 					this.getView().getModel("AdditionalLONHelper").getProperty("/Description");
 				
-				if(this.getView().getModel("WarrantyClaim").getProperty("/DealerComments") !== ""){
+				if(this.getView().getModel("WarrantyClaim").getProperty("/DealerComments/value") !== ""){
 					//Add a Line
 					additionalLONComments = "\n\n" + additionalLONComments;
 				}
 				
-				this.getView().getModel("WarrantyClaim").setProperty("/DealerComments", 
-					this.getView().getModel("WarrantyClaim").getProperty("/DealerComments") + additionalLONComments);
+				this.getView().getModel("WarrantyClaim").setProperty("/DealerComments/value", 
+					this.getView().getModel("WarrantyClaim").getProperty("/DealerComments/value") + additionalLONComments);
 			}
 			
 			labourItems.push(newLONItem.getProperty("/"));

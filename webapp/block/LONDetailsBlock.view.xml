@@ -20,9 +20,9 @@
 	    <items>
 	        <ColumnListItem id="__item0" vAlign="Middle">
 	            <cells>
-	                <Text text="{WarrantyClaim>ItemKey}" id="__text5"/>
-	                <Text text="{WarrantyClaim>Description}" id="__text6"/>
-	                <Text text="{WarrantyClaim>Quantity}" id="__text7"/>
+	                <Text text="{WarrantyClaim>ItemKey}" />
+	                <Text text="{WarrantyClaim>Description}" />
+	                <Text text="{WarrantyClaim>Quantity}" />
 	                <Button 
 	                	icon="sap-icon://delete" 
 	                	press="deleteLON" 
@@ -34,17 +34,17 @@
 	    <columns>
 	        <Column id="__column0" width="30em">
 	            <header>
-	                <Label text="LON" id="__label0"/>
+	                <Label text="LON" />
 	            </header>
 	        </Column>
 	        <Column id="__column1" width="30em">
 	            <header>
-	                <Label text="Description" id="__label1"/>
+	                <Label text="Description" />
 	            </header>
 	        </Column>
 	        <Column id="__column2" width="5em">
 	            <header>
-	                <Label text="Time" id="__label2"/>
+	                <Label text="Time" />
 	            </header>
 	        </Column>
 	        <Column id="__column3" width="5em" hAlign="End"/>

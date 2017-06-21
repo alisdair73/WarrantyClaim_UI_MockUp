@@ -16,7 +16,7 @@ sap.ui.define([], function() {
 					validated = false;
 				}
 			}
-			return validated;
+			return {"valid": validated, "errorTextID":"DateOfFailure"};
 		},
 		
 		validateRepairDate: function(repairDate, failureDate) {
@@ -32,7 +32,7 @@ sap.ui.define([], function() {
 					validated = false;
 				}
 			}
-			return validated;
+			return {"valid": validated, "errorTextID":"DateOfRepair"};
 		},
 		
 //		Failure KM - Must be between 0 and 1000000
@@ -46,7 +46,7 @@ sap.ui.define([], function() {
 				}
 			}
 			
-			return validated; 
+			return {"valid": validated, "errorTextID":"FailureMeasure_BadRange"};
 		},
 		
 		validateDateIsNotFutureDate: function(fieldValue){
@@ -63,17 +63,19 @@ sap.ui.define([], function() {
 					validated = false;
 				}
 			}
-			return validated;
+			return {"valid": validated, "errorTextID":"noFutureDates"};
 		},
 		
 		validateRequiredFieldIsPopulated: function(fieldValue){
 			
+			var validated = false;
+			
 			if (fieldValue){
 				if (fieldValue !== ""){
-                  return true;
+                  validated = true;
 				}
 			}
-			return false;
+			return {"valid": validated, "errorTextID":"mandatoryField"};
 		},
 		
 		validateSerialNumbersArePopulated: function(fieldValue){

@@ -22,7 +22,7 @@
 				required="true"
 				value="{WarrantyClaim>FailureMeasure/value}"	
 				change="onFailureMeasureChanged"
-				valueState="{= ${WarrantyClaim>FailureMeasure/valid} ? 'None':'Error'}"
+				valueState="{= ${WarrantyClaim>FailureMeasure/ruleResult/valid} ? 'None':'Error'}"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
 			
@@ -43,7 +43,7 @@
 				value="{WarrantyClaim>RepairOrderNumber/value}" 
 				editable="{WarrantyClaim>CanEdit}"
 				change="onRepairOrderNumberChanged"
-				valueState="{= ${WarrantyClaim>RepairOrderNumber/valid} ? 'None':'Error'}"
+				valueState="{= ${WarrantyClaim>RepairOrderNumber/ruleResult/valid} ? 'None':'Error'}"
 			/>
 			
 			<Label id="DateOfRepair_label" text="Date of Repair" required="true" labelFor="DateOfRepair"/>
@@ -53,7 +53,7 @@
 				required="true"
 				dateValue="{WarrantyClaim>DateOfRepair/value}" 
 				change="onDateOfRepairChanged"
-				valueState="{= ${WarrantyClaim>DateOfRepair/valid} ? 'None':'Error'}"
+				valueState="{= ${WarrantyClaim>DateOfRepair/ruleResult/valid} ? 'None':'Error'}"
 				editable="{WarrantyClaim>CanEdit}"
 				/>
 			<core:Title text="Main Causal Part" />
@@ -140,7 +140,7 @@
 				}"
 				selectedKey="{WarrantyClaim>Technician/value}"
 				selectionChange="onTechnicianChanged"
-				valueState="{= ${WarrantyClaim>Technician/valid} ? 'None':'Error'}"
+				valueState="{= ${WarrantyClaim>Technician/ruleResult/valid} ? 'None':'Error'}"
 			>
 				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
 			</ComboBox>	
@@ -166,7 +166,7 @@
 				}"
 				selectedKey="{WarrantyClaim>ServiceAdvisor/value}"
 				selectionChange="onServiceAdvisorChanged"
-				valueState="{= ${WarrantyClaim>ServiceAdvisor/valid} ? 'None':'Error'}"
+				valueState="{= ${WarrantyClaim>ServiceAdvisor/ruleResult/valid} ? 'None':'Error'}"
 			>
 				<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" additionalText = "({EmployeeNumber})"/>
 			</ComboBox>	
@@ -195,7 +195,7 @@
 					editable="{WarrantyClaim>CanEdit}" 
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 					change="onOldSerialNumberChanged"
-					valueState="{= ${WarrantyClaim>OldSerialNumber/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>OldSerialNumber/ruleResult/valid} ? 'None':'Error'}"
 				/>
 				<Input 
 					id="NewSerialNumber" 
@@ -204,7 +204,7 @@
 					editable="{WarrantyClaim>CanEdit}" 
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"	
 					change="onNewSerialNumberChanged"
-					valueState="{= ${WarrantyClaim>NewSerialNumber/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>NewSerialNumber/ruleResult/valid} ? 'None':'Error'}"
 				/>
 			</f:content>
 		</f:SimpleForm>
@@ -236,7 +236,7 @@
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					change="onPartsInstallDateChanged"
-					valueState="{= ${WarrantyClaim>PartsInstallDate/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>PartsInstallDate/ruleResult/valid} ? 'None':'Error'}"
 				/>
 				<Label 
 					id="PartsInstallKM_label"
@@ -252,7 +252,7 @@
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					change="onPartsInstallKmChanged"
-					valueState="{= ${WarrantyClaim>PartsInstallKm/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>PartsInstallKm/ruleResult/valid} ? 'None':'Error'}"
 				/>
 				<Label 
 					id="OriginalInvoiceNumber_label"
@@ -268,7 +268,7 @@
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					change="onOriginalInvoiceNumberChanged"
-					valueState="{= ${WarrantyClaim>OriginalInvoiceNumber/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>OriginalInvoiceNumber/ruleResult/valid} ? 'None':'Error'}"
 				/>
 			</f:content>
 		</f:SimpleForm>

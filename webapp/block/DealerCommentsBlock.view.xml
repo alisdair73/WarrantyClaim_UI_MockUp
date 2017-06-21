@@ -28,7 +28,7 @@
 											value="{WarrantyClaim>DealerComments/value}"
 											editable="{WarrantyClaim>CanEdit}"	
 											change="onDealerCommentsChanged"
-											valueState="{= ${WarrantyClaim>DealerComments/valid} ? 'None':'Error'}"
+											valueState="{= ${WarrantyClaim>DealerComments/ruleResult/valid} ? 'None':'Error'}"
 										/>
 									</l:VerticalLayout>
 									<l:VerticalLayout width="100%">
@@ -69,7 +69,7 @@
 											items="{DefectCodesHelper>/DefectsL2}"
 											selectedKey="{WarrantyClaim>DefectCode/value}"
 											selectionChange="onDefectCodeChanged"
-											valueState="{= ${WarrantyClaim>DefectCode/valid} ? 'None':'Error'}"
+											valueState="{= ${WarrantyClaim>DefectCode/ruleResult/valid} ? 'None':'Error'}"
 										>
 											<core:ListItem key="{DefectCodesHelper>code}" 
 												text="{DefectCodesHelper>text} ({=${DefectCodesHelper>code}.substr(4,5)})"/>

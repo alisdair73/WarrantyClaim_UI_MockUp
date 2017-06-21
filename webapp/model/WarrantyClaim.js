@@ -19,33 +19,33 @@ sap.ui.define([
 				"ClaimTypeDescription": "",
 				"ClaimTypeGroup": "",
 				"Dealer":"",
-				"DealerContact": { "value":"", "valid":true},
-				"EngineNumber": { "value":"", "valid":true},
-				"AuthorisationNumber": { "value":"", "valid":true},
-				"VIN": { "value":"", "valid":true},
-				"RecallNumber": { "value":"", "valid":true},
-				"RepairOrderNumber": { "value":"", "valid":true},
+				"DealerContact": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"EngineNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"AuthorisationNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"VIN": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"RecallNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"RepairOrderNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"TotalCostOfClaim":"0",
 				"ClaimCurrency":"AUD",
-				"DateOfRepair": { "value":null, "valid":true},
+				"DateOfRepair": { "value":null, "ruleResult":{"valid": true, "errorTextID":""}},
 				"DateOfFailure": null,
-				"FailureMeasure": { "value":"", "valid":true},
+				"FailureMeasure": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"MilIndicator": false,
 				"DTC1": "",
 				"DTC2": "",
 				"DTC3": "",
-				"Technician": { "value":"", "valid":true},
-				"ServiceAdvisor": { "value":"", "valid":true},
-				"OldSerialNumber": { "value":"", "valid":true},
-				"NewSerialNumber": { "value":"", "valid":true},
-				"PartsInstallDate": { "value":null, "valid":true},
-				"PartsInstallKm": { "value":"0", "valid":true},
+				"Technician": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"ServiceAdvisor": { "value":"","ruleResult":{"valid": true, "errorTextID":""}},
+				"OldSerialNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"NewSerialNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"PartsInstallDate": { "value":null, "ruleResult":{"valid": true, "errorTextID":""}},
+				"PartsInstallKm": { "value":"0", "ruleResult":{"valid": true, "errorTextID":""}},
 				"PartsInstalledByDealer": false,
-				"OriginalInvoiceNumber":{ "value":"", "valid":true},
-				"DealerComments":{ "value":"", "valid":true},
-				"DefectCode":{ "value":"", "valid":true},
-				"CustomerConcern":{ "value":"", "valid":true},
-				"SymptomCode":{ "value":"", "valid":true},
+				"OriginalInvoiceNumber":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"DealerComments":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"DefectCode":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"CustomerConcern":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"SymptomCode":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"CurrentVersionNumber":"0001",
 				"CurrentVersionCategory":"IC",
 				"TotalMaterial":"0",
@@ -298,65 +298,72 @@ sap.ui.define([
 		},
 		
 //		Validation Rules
+
+
+//NB - Need to modify to work with the ruleResult return - update the model with the result tuple...
+
+
+
 		validateVIN:function(){
-			this.warrantyClaim.VIN.valid = 
+			this.warrantyClaim.VIN.ruleResult = 
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.VIN.value); 
-			return this.warrantyClaim.VIN.valid;
 		},
 		
 		validateEngineNumber: function(){
-			this.warrantyClaim.EngineNumber.valid = 
+			this.warrantyClaim.EngineNumber.ruleResult = 
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.EngineNumber.value);
-			return this.warrantyClaim.EngineNumber.valid;
 		},
 		
 		validateFailureMeasure: function(){
 			
-			this.warrantyClaim.FailureMeasure.valid = false;
+			this.warrantyClaim.FailureMeasure.ruleResult = 
+			  Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.FailureMeasure.value);
 			
-			if(Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.FailureMeasure.value)){ 
-				this.warrantyClaim.FailureMeasure.valid = 
+			if(this.warrantyClaim.FailureMeasure.ruleResult.valid){ 
+				this.warrantyClaim.FailureMeasure.ruleResult = 
 					Rule.validateFailureMeasure(this.warrantyClaim.FailureMeasure.value);  
 			}
-			return this.warrantyClaim.FailureMeasure.valid;
 		},
 	
 		validateDateOfFailure: function(){
-			
-			this.warrantyClaim.DateOfFailure.valid = false;
-			
+		
 			//Convert the DateTime to Date
 			this.warrantyClaim.DateOfFailure.value = this._convertDateTimeToDateOnly(this.warrantyClaim.DateOfFailure.value);
+		
+			this.warrantyClaim.DateOfFailure.ruleResult = 
+				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfFailure.value);
 			
-			if(Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfFailure.value)){ 
-				if(Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfFailure.value)){
-					this.warrantyClaim.DateOfFailure.valid = 
+			if(this.warrantyClaim.DateOfFailure.ruleResult.valid){ 
+				this.warrantyClaim.DateOfFailure.ruleResult = 
+					Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfFailure.value);
+				if(this.warrantyClaim.DateOfFailure.ruleResult.valid){
+					this.warrantyClaim.DateOfFailure.ruleResult = 
 						Rule.validateFailureDate(this.warrantyClaim.DateOfFailure.value, this.warrantyClaim.DateOfRepair.value);
 				}
 			}
-			return this.warrantyClaim.DateOfFailure.valid;
 		},
 
 		validateDateOfRepair: function(){
 		
-			this.warrantyClaim.DateOfRepair.valid = false;
-		
 			//Convert the DateTime to Date
 			this.warrantyClaim.DateOfRepair.value = this._convertDateTimeToDateOnly(this.warrantyClaim.DateOfRepair.value);
+		
+			this.warrantyClaim.DateOfRepair.ruleResult = 
+				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfRepair.value);
 			
-			if(Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfRepair.value)){ 
-				if(Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfRepair.value)){
-					this.warrantyClaim.DateOfRepair.valid = 
+			if(this.warrantyClaim.DateOfRepair.ruleResult.valid){ 
+				this.warrantyClaim.DateOfRepair.ruleResult = 
+					Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfRepair.value);
+				if(this.warrantyClaim.DateOfRepair.ruleResult.valid){
+					this.warrantyClaim.DateOfRepair.ruleResult = 
 						Rule.validateRepairDate(this.warrantyClaim.DateOfRepair.value, this.warrantyClaim.DateOfFailure);  
 				}
 			}
-			return this.warrantyClaim.DateOfFailure.valid;
 		},
 			
 		validateRepairOrderNumber: function(){
-			this.warrantyClaim.RepairOrderNumber.valid = 
+			this.warrantyClaim.RepairOrderNumber.ruleResult = 
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.RepairOrderNumber.value);
-			return this.warrantyClaim.RepairOrderNumber.valid;
 		},
 		
 //			
@@ -365,198 +372,156 @@ sap.ui.define([
 		
 		validateDealerContact: function(){
 				
-			this.warrantyClaim.DealerContact.valid = true;	
-				
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":
-					this.warrantyClaim.DealerContact.valid = 
+					this.warrantyClaim.DealerContact.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DealerContact.value);
 					break;
 			}
-			return this.warrantyClaim.DealerContact.valid;
 		},
 		
 		validateTechnician: function(){
 				
-			this.warrantyClaim.Technician.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":	
-					this.warrantyClaim.Technician.valid =  Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.Technician.value);
+					this.warrantyClaim.Technician.ruleResult =  
+						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.Technician.value);
 					break;
 			}
-			
-			return this.warrantyClaim.Technician.valid;
 		},
 			
 		validateServiceAdvisor: function(){
 			
-			this.warrantyClaim.ServiceAdvisor.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":
-					this.warrantyClaim.ServiceAdvisor.valid =
+					this.warrantyClaim.ServiceAdvisor.ruleResult =
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.ServiceAdvisor.value);
 					break;
 			}
-			return this.warrantyClaim.ServiceAdvisor.valid;
 		},
 			
 		validateCustomerConcern: function(){
-			
-			this.warrantyClaim.CustomerConcern.valid = true;
-			
+
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":
-					this.warrantyClaim.CustomerConcern.valid =
+					this.warrantyClaim.CustomerConcern.ruleResult =
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.CustomerConcern.value);
 					break;
 			}
-			return this.warrantyClaim.CustomerConcern.valid;
 		},
 			
 		validateSymptomCode: function(){
 			
-			this.warrantyClaim.SymptomCode.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":
-					this.warrantyClaim.SymptomCode.valid = 
+					this.warrantyClaim.SymptomCode.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.SymptomCode.value);
 					break;
 			}
-			return this.warrantyClaim.SymptomCode.valid;
 		},
 			
 		validateDealerComments: function(){
 			
-			this.warrantyClaim.DealerComments.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":
-					this.warrantyClaim.DealerComments.valid = 
+					this.warrantyClaim.DealerComments.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DealerComments.value);
 					break;
 			}
-			return this.warrantyClaim.DealerComments.valid;
 		},
 			
 		validateDefectCode: function(){
-			
-			this.warrantyClaim.DefectCode.valid = true;
-			
+
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":
-					this.warrantyClaim.DefectCode.valid = 
+					this.warrantyClaim.DefectCode.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DefectCode.value);
 					break;
 			}
-			return this.warrantyClaim.DefectCode.valid;
 		},
 			
 		validateAuthorisationNumber: function(){
 			
-			this.warrantyClaim.AuthorisationNumber.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "GOODWILL":
-					this.warrantyClaim.AuthorisationNumber.valid = 
+					this.warrantyClaim.AuthorisationNumber.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.AuthorisationNumber.value);
 					break;
 			}
-			return this.warrantyClaim.AuthorisationNumber.valid;
 		},
 			
 		validatePartsInstallDate: function(){
 			
-			this.warrantyClaim.PartsInstallDate.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "PARTS":
-					this.warrantyClaim.PartsInstallDate.valid = 
+					this.warrantyClaim.PartsInstallDate.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.PartsInstallDate.value);
 					break;
 			}
-			return this.warrantyClaim.PartsInstallDate.valid;
 		},
 			
 		validatePartsInstallKM: function(){
 			
-			this.warrantyClaim.PartsInstallKM.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "PARTS":
-					this.warrantyClaim.PartsInstallKM.valid = 
+					this.warrantyClaim.PartsInstallKM.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.PartsInstallKM.value);
 					break;
 			}
-			return this.warrantyClaim.PartsInstallKM.valid;
 		},
 			
 		validateOriginalInvoiceNumber: function(){
 			
-			this.warrantyClaim.OriginalInvoiceNumber.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "PARTS":
-					this.warrantyClaim.OriginalInvoiceNumber.valid = 
+					this.warrantyClaim.OriginalInvoiceNumber.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.OriginalInvoiceNumber.value);
 					break;
 			}
-			return this.warrantyClaim.OriginalInvoiceNumber.valid;
 		},
 			
 		validateRecallNumber: function(){
 			
-			this.warrantyClaim.RecallNumber.valid = true;
-			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "RECALL":
-					this.warrantyClaim.RecallNumber.valid = 
+					this.warrantyClaim.RecallNumber.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.RecallNumber.value);
 					break;
 			}
-			return this.warrantyClaim.RecallNumber.valid;
 		},
 			
 		validateOldSerialNumber: function(){
 			
-			this.warrantyClaim.OldSerialNumber.valid = true;
-			
     		switch(this.warrantyClaim.ClaimTypeGroup){
 				case "RECALL":
-					this.warrantyClaim.OldSerialNumber.valid = 
+					this.warrantyClaim.OldSerialNumber.ruleResult = 
 						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.OldSerialNumber.value);
 					break;
 			}
-			return this.warrantyClaim.OldSerialNumber.valid;
 		},
 			
 		validateNewSerialNumber: function(){
 			
-			this.warrantyClaim.NewSerialNumber.valid = true;
-			
     		switch(this.warrantyClaim.ClaimTypeGroup){
 				case "RECALL":
-					this.warrantyClaim.NewSerialNumber.valid = 
+					this.warrantyClaim.NewSerialNumber.ruleResult = 
 						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.NewSerialNumber.value);
 					break;
 			}
-			return this.warrantyClaim.NewSerialNumber.valid;
 		},
 		
 		_convertDateTimeToDateOnly: function(dateTime) {

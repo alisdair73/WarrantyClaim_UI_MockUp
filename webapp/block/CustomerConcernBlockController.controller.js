@@ -26,28 +26,36 @@ sap.ui.define([
 		
 		onSymptomCodeSelectedL1: function(oEvent){
 			this._updateL2Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
+			
 			this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
-			this.getModel("WarrantyClaim").setProperty("/SymptomCode/valid",false);
+			WarrantyClaim.validateSymptomCode();
+			this.logValidationMessage("SymptomCode");
+			
 			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2","");
 		},
 		
 		onSymptomCodeSelectedL2: function(oEvent){
 			this._updateL3Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
+			
 			this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
-			this.getModel("WarrantyClaim").setProperty("/SymptomCode/valid",false);
+			WarrantyClaim.validateSymptomCode();
+			this.logValidationMessage("SymptomCode");
+			
 		},
 		
 		onCustomerConcernChanged: function() {
-			this.logValidationMessage( WarrantyClaim.validateCustomerConcern(), "CustomerConcern");
+			WarrantyClaim.validateCustomerConcern();
+			this.logValidationMessage("CustomerConcern");
 		},
 		
 		onSymptomCodeChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateSymptomCode(), "SymptomCode");
+			WarrantyClaim.validateSymptomCode();
+			this.logValidationMessage("SymptomCode");
 		},
 		
 		_symptomCatalogLoaded: function(sChannelId, sEventId, oData){
-			if(this.getModel("WarrantyClaim").getProperty("/SymptomCode")){
-				var symptomCodeLevels = this.getModel("WarrantyClaim").getProperty("/SymptomCode").split("-");
+			if(this.getModel("WarrantyClaim").getProperty("/SymptomCode/value")){
+				var symptomCodeLevels = this.getModel("WarrantyClaim").getProperty("/SymptomCode/value").split("-");
 				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1",symptomCodeLevels[0]);
 				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2",symptomCodeLevels[0] + '-' + symptomCodeLevels[1]);
 				this._updateL2Symptoms(this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL1"));

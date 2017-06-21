@@ -26,23 +26,28 @@ sap.ui.define([
     		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
 			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
 			
-			this.logValidationMessage( WarrantyClaim.validateVIN(), "VIN");
+			WarrantyClaim.validateVIN();
+			this.logValidationMessage("VIN");
 		},
 		
 		onEngineNumberChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateEngineNumber(), "EngineNumber");
+			WarrantyClaim.validateEngineNumber();
+			this.logValidationMessage("EngineNumber");
 		},
 		
 		onDealerContactChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateDealerContact(), "DealerContact");
+			WarrantyClaim.validateDealerContact();
+			this.logValidationMessage("DealerContact");
 		},
 		
 		onAuthorisationNumberChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateAuthorisationNumber(), "AuthorisationNumber");
+			WarrantyClaim.validateAuthorisationNumber();
+			this.logValidationMessage("AuthorisationNumber");
 		},
 		
 		onRecallNumberChanged: function(){
-			this.logValidationMessage( WarrantyClaim.validateRecallNumber(), "RecallNumber");
+			WarrantyClaim.validateRecallNumber()
+			this.logValidationMessage("RecallNumber");
 		},
 		
 		onPWAValueHelpRequest: function(event){

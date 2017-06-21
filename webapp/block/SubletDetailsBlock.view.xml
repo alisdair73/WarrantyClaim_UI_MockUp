@@ -66,7 +66,7 @@
 	        </Column>
 	        <Column id="__column3" width="5em">
 	            <header>
-	                <Label text="Costs" id="__label3"/>
+	                <Label text="Costs (Pre GST)" id="__label3"/>
 	            </header>
 	        </Column>
 	        <Column id="__column4" width="15em">

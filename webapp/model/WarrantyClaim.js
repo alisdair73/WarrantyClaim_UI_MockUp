@@ -296,14 +296,10 @@ sap.ui.define([
 			this.warrantyClaimOriginal.changed = false;
 			this.oDataModel.setData(this.warrantyClaim);			
 		},
-		
+
+//		
 //		Validation Rules
-
-
-//NB - Need to modify to work with the ruleResult return - update the model with the result tuple...
-
-
-
+//
 		validateVIN:function(){
 			this.warrantyClaim.VIN.ruleResult = 
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.VIN.value); 
@@ -522,6 +518,10 @@ sap.ui.define([
 						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.NewSerialNumber.value);
 					break;
 			}
+		},
+		
+		validateAll: function() {
+			
 		},
 		
 		_convertDateTimeToDateOnly: function(dateTime) {

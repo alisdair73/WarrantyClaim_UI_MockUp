@@ -2,8 +2,9 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/Filter",
 	"WarrantyClaim_MockUp/model/models",
-	"sap/ui/model/json/JSONModel"
-], function(Controller, Filter, Models, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"sap/m/MessageToast"
+], function(Controller, Filter, Models, JSONModel, MessageToast) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.LONDetailsBlockController", {
@@ -11,6 +12,8 @@ sap.ui.define([
 		onInit: function(){
 			
 			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applyLONTableFilter.bind(this),this);
+			
+			this.getView().setModel(new JSONModel({"HasLON":false}) , "LONHelper");
 			
 			this.getView().setModel(new JSONModel({
 				"Assembly":"",
@@ -47,10 +50,19 @@ sap.ui.define([
 					sap.ui.model.FilterOperator.EQ, 
 					this.getView().getModel("WarrantyClaim").getProperty("/Parts/0/PartNumber")
 			));			
-			sap.ui.getCore().byId("LONCatalog").getBinding("items").filter(filters);
+			sap.ui.getCore().byId("LONCatalog").getBinding("items").filter(filters).attachDataReceived(this._hasLON.bind(this));
  			
 			// Display the popup dialog for adding parts
 			this._LONDialog.open();
+		},
+		
+		_hasLON: function(filteredData){
+			
+			this.getView().getModel("LONHelper").setProperty("/HasLON",false);
+			
+			if(filteredData.getParameter("data") && filteredData.getParameter("data").results.length > 0){
+				this.getView().getModel("LONHelper").setProperty("/HasLON",true);
+			}
 		},
 		
 		onCancelCheckLON: function(){
@@ -60,6 +72,11 @@ sap.ui.define([
 		onAddLON: function(){
 			
 			var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
+			
+			if(sap.ui.getCore().byId("LONCatalog").getSelectedItems().length === 0){
+				MessageToast.show("Please select a LON code from the list.");
+				return;
+			}
 			
 			for(var i=0; i<sap.ui.getCore().byId("LONCatalog").getSelectedItems().length; i++){
 				
@@ -72,6 +89,7 @@ sap.ui.define([
 				newLONItem.setProperty("/Quantity",selectedLON.Hours);
 				labourItems.push(newLONItem.getProperty("/"));
 			}
+			
 			this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 			this._LONDialog.close();
 		},

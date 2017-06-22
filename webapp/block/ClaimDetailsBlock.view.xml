@@ -61,9 +61,10 @@
 			<Input 
 				id="MCPN" 
 				required="true"
-				value="{WarrantyClaim>/Parts/0/PartNumber}"	
-				editable="{WarrantyClaim>CanEdit}"
-				description="{WarrantyClaim>/Parts/0/Description}"
+				value="{MCPNHelper>/MCPN}"	
+				description="{MCPNHelper>/Description}"
+				change="onMCPNChanged"
+				editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 				showValueHelp="true"
 				showSuggestion="true"
 				suggest="onPartSuggest"
@@ -93,14 +94,16 @@
 				id="MCPNQuantity" 
 				type="Number"
 				required="true"
+				change="onMCPNChanged"
 				value="{
-					path: 'WarrantyClaim>/Parts/0/Quantity',
+					path: 'MCPNHelper>/Quantity',
 					type: 'sap.ui.model.type.Float',
 					formatOptions: {
 						maxFractionDigits: 0
 					}
 				}"
-				editable="{WarrantyClaim>CanEdit}"
+				enabled="{MCPNHelper>/QuantityEnabled}"
+				editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 			/>
 			<core:Title text="MIL" />
 			<Label text="MIL ON"/>

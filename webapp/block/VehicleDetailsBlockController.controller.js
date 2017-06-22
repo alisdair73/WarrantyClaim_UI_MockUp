@@ -46,7 +46,7 @@ sap.ui.define([
 		},
 		
 		onRecallNumberChanged: function(){
-			WarrantyClaim.validateRecallNumber()
+			WarrantyClaim.validateRecallNumber();
 			this.logValidationMessage("RecallNumber");
 		},
 		
@@ -146,13 +146,12 @@ sap.ui.define([
 				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
 			}
 
-			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber",dataObject.ExternalRecallNumber);
+			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber/value",dataObject.ExternalRecallNumber);
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/internalRecallNumber",dataObject.InternalRecallNumber);
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
-//			sap.ui.getCore().getEventBus().publish("RecallNumber","Changed",{"IsMandatory":dataObject.SerialNumberIsMandatory});
-			
+
 			//Load the details of the Recall
-			var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN");
+			var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN/value");
 			var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
 			
 			this.getView().getModel().read(
@@ -172,6 +171,8 @@ sap.ui.define([
 		
 		onRecallProductGroupCancel: function(){
 			this._recallDialog.close();
+			this._recallDialog.destroy(true);
+			this._recallDialog = null;
 		},
 		
 		onTransferMaterials  : function(){
@@ -223,6 +224,15 @@ sap.ui.define([
 			MCPN.setProperty("/IsMCPN", true);
 			recallItems.push(MCPN.getProperty("/"));
 			
+			//Update the MCPN Field too
+			sap.ui.getCore().getEventBus().publish("MCPN","Changed",
+				{
+					"MCPN": recallGroup.getProperty("/MCP/materialNumber"), 
+					"Description": recallGroup.getProperty("/MCP/materialDescription"),
+					"Quantity": recallGroup.getProperty("/MCP/quantity")
+				}
+			);
+			
 			//Replace/Repair Selected by Dealer - Transfer Parts/Labour/Sublet
 			var selectedGroupIndex = this.getView().getModel("RecallGroup").getProperty("/selectedGroup").findIndex(function(groupSelected){
 				return groupSelected;
@@ -259,6 +269,8 @@ sap.ui.define([
 			
 			if (this._recallDialog && this._recallDialog.isOpen()){
 				this._recallDialog.close();
+				this._recallDialog.destroy(true);
+				this._recallDialog = null;
 			}
 		},		
 		
@@ -289,9 +301,9 @@ sap.ui.define([
 			filters.push(new Filter("SalesOrg", sap.ui.model.FilterOperator.EQ, 
 				this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")));
 		
-			if(this.getView().getModel("WarrantyClaim").getProperty("/VIN") !== ""){
+			if(this.getView().getModel("WarrantyClaim").getProperty("/VIN/value") !== ""){
     			filters.push(new Filter("VIN", sap.ui.model.FilterOperator.EQ, 
-					this.getView().getModel("WarrantyClaim").getProperty("/VIN")));
+					this.getView().getModel("WarrantyClaim").getProperty("/VIN/value")));
 			}
 			return filters;
     	},

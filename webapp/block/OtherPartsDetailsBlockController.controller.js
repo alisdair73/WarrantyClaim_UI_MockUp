@@ -32,6 +32,23 @@ sap.ui.define([
 			this._applyPartTableFilter();
 		},		
 		
+		onPartQuantityChanged: function(event){
+			var bindingPath = event.getSource().getBindingContext("WarrantyClaim").getPath();
+			
+			//Update the MCPN Field too
+			if(this.getView().getModel("WarrantyClaim").getProperty(bindingPath + "/IsMCPN") === true){
+				
+				sap.ui.getCore().getEventBus().publish("MCPN","Changed",
+					{
+						"MCPN": this.getView().getModel("WarrantyClaim").getProperty(bindingPath + "/PartNumber"), 
+						"Description": this.getView().getModel("WarrantyClaim").getProperty(bindingPath + "/Description"), 
+						"Quantity": this.getView().getModel("WarrantyClaim").getProperty(bindingPath + "/Quantity")
+					}
+				);
+			}			
+			
+		},
+		
 		onValueHelpSearch: function(event) {
 			
 			var searchValue = event.getParameter("value");
@@ -45,24 +62,24 @@ sap.ui.define([
 		
 		onPartSelected: function(event){
 
-			var selectedContexts = event.getParameter("selectedContexts");
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
+			var part = event.getParameter("selectedItem").getBindingContext().getObject();
 
-			for (var i = 0; i < selectedContexts.length; i++) {
-				var item = selectedContexts[i].getModel().getProperty(selectedContexts[i].getPath());
-				
-				// add the new part
-				var warrantyItem = Models.createNewWarrantyItem("MAT");
-				warrantyItem.setProperty("/PartNumber", item.materialNo);
-				warrantyItem.setProperty("/Description", item.description);
-				warrantyItem.setProperty("/PartRequested", "S");
-				warrantyItem.setProperty("/IsMCPN", warrantyItems.length === 0 ? true : false);
-				
-				warrantyItems.push(warrantyItem.getProperty("/"));
-			}
+			// add the new part
+			var warrantyItem = Models.createNewWarrantyItem("MAT");
+			warrantyItem.setProperty("/PartNumber", part.materialNo);
+			warrantyItem.setProperty("/Description", part.description);
+			warrantyItem.setProperty("/PartRequested", "S");
+			warrantyItem.setProperty("/IsMCPN", warrantyItems.length === 0 ? true : false);
+			warrantyItems.push(warrantyItem.getProperty("/"));
 
 			// update the model
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
+			
+			//Update the MCPN Field too
+			if(warrantyItem.getProperty("/IsMCPN")){
+				sap.ui.getCore().getEventBus().publish("MCPN","Changed",{"MCPN":part.materialNo, "Description":part.description, "Quantity":"0"});
+			}
 		},
 		
 		_applyPartTableFilter: function(){

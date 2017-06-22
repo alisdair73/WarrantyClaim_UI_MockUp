@@ -17,58 +17,6 @@ sap.ui.define([
 			});
 		},
 		
-/*		_applyReplacementSelectionRuleForMaterial: function(rule){
-			
-			var groups = rule.split("-");
-			var tableRow = [];
-			var tableCell = {};
-			
-	        groups.forEach(function(group, index){
-	        	
-	        	tableCell = {	
-					"isRadioButton": false,
-					"isStepInput": false,
-					"stepInput": {"minValue": 0, "maxValue": 0, "quantity":0},
-					"radioButton": {"selected": false, "group":""}
-				};
-				
-	          var materialConfig = group.split(".");
-	          var inGroup = materialConfig[0];
-	          var subgroup = materialConfig[1];
-	          var optional = materialConfig[2];
-	          var quantity = materialConfig[3];
-	          
-	          if(inGroup !== "0"){
-	          	if(subgroup === "A"){
-	          		//Entry Field
-	          		var minValue = 0;
-	          		if(optional !== "O"){
-	          			minValue = 1;
-	          		}
-	          		
-	          		var maxValue = minValue;
-	          		if(quantity.indexOf("*") === -1){
-	          			maxValue = parseInt(quantity);
-	          		} else {
-	          			maxValue = parseInt(quantity.substring(0, quantity.indexOf("*")));	          		
-	          			minValue = maxValue;
-	          		}
-	          		//Create the Step Input with Min and Max
-	          		tableCell.isStepInput = true;
-	          		tableCell.stepInput.minValue = minValue;
-	          		tableCell.stepInput.maxValue = maxValue;
-	          		
-	          	} else {
-	          		tableCell.isRadioButton = true;
-	          		tableCell.radioButton.group = "G" + index + subgroup;
-	          	}
-	          }
-	          
-	          tableRow.push(tableCell);
-	        });
-			return tableRow;
-		},*/
-		
 		_buildColumnList: function(){
 
 			var recallItemsTable = this.getView().byId("recallItems");

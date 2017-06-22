@@ -13,7 +13,7 @@
 					icon="sap-icon://task" 
 					press="onCheckLON" 
 					enabled="{= ${WarrantyClaim>/Parts/0/PartNumber} !== '' &amp;&amp; ${WarrantyClaim>/VIN} !== ''}"
-					visible="{WarrantyClaim>/CanEdit}"
+					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 				/>
 			</Toolbar>
 		</headerToolbar>

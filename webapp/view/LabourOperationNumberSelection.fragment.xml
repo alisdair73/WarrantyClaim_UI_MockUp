@@ -1,12 +1,10 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<Dialog title="Select Claim Type">
+	<Dialog title="Select LON">
 		<content>
 			<Table 
 				id="LONCatalog"
 				mode="MultiSelect"
-				items="{
-					path: '/LabourOperationNumberSet'
-				}"
+				items="{/LabourOperationNumberSet}"
 				noDataText="No LON codes found for VIN and MCPN"
 			>
 				<headerToolbar>
@@ -44,7 +42,7 @@
 		</content>
 		
 		<buttons>
-			<Button text="Add LON" press="onAddLON" icon="sap-icon://add-activity"/>
+			<Button text="Add LON" press="onAddLON" icon="sap-icon://add-activity" visible="{LONHelper>/HasLON}"/>
 			<Button text="Additional LON" press="onAdditionalLON" icon="sap-icon://create"/>
 			<Button text="Cancel" press="onCancelCheckLON" icon="sap-icon://sys-cancel"/>
 		</buttons>

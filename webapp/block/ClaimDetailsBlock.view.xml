@@ -56,55 +56,6 @@
 				valueState="{= ${WarrantyClaim>DateOfRepair/ruleResult/valid} ? 'None':'Error'}"
 				editable="{WarrantyClaim>CanEdit}"
 				/>
-			<core:Title text="Main Causal Part" />
-			<Label text="MCPN" required="true" labelFor="MCPN"/>
-			<Input 
-				id="MCPN" 
-				required="true"
-				value="{MCPNHelper>/MCPN}"	
-				description="{MCPNHelper>/Description}"
-				change="onMCPNChanged"
-				editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
-				showValueHelp="true"
-				showSuggestion="true"
-				suggest="onPartSuggest"
-				suggestionItemSelected="onPartSelected"
-				suggestionRows="{/ZDPE_C_MATERIALS}"
-				valueHelpRequest="addMCPN"
-			>
-				<suggestionColumns>
-					<Column>
-						<Text text="Part No." />
-					</Column>
-					<Column>
-						<Text text="Description" />
-					</Column>
-				</suggestionColumns>
-				<suggestionRows>
-					<ColumnListItem>
-						<cells>
-							<Label text="{materialNo}" />
-							<Label text="{description}" />
-						</cells>
-					</ColumnListItem>
-				</suggestionRows>									
-			</Input>
-			<Label text="MCPN Quantity" required="true" labelFor="MCPNQuantity"/>
-			<Input 
-				id="MCPNQuantity" 
-				type="Number"
-				required="true"
-				change="onMCPNChanged"
-				value="{
-					path: 'MCPNHelper>/Quantity',
-					type: 'sap.ui.model.type.Float',
-					formatOptions: {
-						maxFractionDigits: 0
-					}
-				}"
-				enabled="{MCPNHelper>/QuantityEnabled}"
-				editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
-			/>
 			<core:Title text="MIL" />
 			<Label text="MIL ON"/>
 			<CheckBox id="MIL_ON" class="sapUiSmallMarginEnd" selected="{WarrantyClaim>MilIndicator}" select="onMILSelected" editable="{WarrantyClaim>CanEdit}"/>

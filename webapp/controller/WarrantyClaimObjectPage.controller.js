@@ -276,8 +276,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-		
-			//claimNumber = "2016111384";
+			claimNumber = "1100000014";
 			//claimNumber = "100000000567"; //MOCK Record
 			
 			var entityPath = "";
@@ -354,8 +353,13 @@ sap.ui.define([
 			this.readCatalog("ZSYM1","SymptomCodes");
 			this.readCatalog("ZDEF1","DefectCodes");
 			
+			//Alert Subscribers that a Warranty has been loaded
+			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Loaded");
+			
 			//Notify any subscribers to Sales Organisation Changes
-			sap.ui.getCore().getEventBus().publish("SalesOrg","Changed",{"SalesOrg":this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")});
+			sap.ui.getCore().getEventBus().publish("SalesOrg","Changed",
+				{"SalesOrg":this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")}
+			);
 		},		
 		
 		_onMetadataLoaded: function() {

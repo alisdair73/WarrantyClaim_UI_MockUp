@@ -95,9 +95,9 @@ sap.ui.define([
 					var warrantyClaimItem = jsonModel.WarrantyClaimItems.results[i];
 					switch(warrantyClaimItem.ItemType) {
     					case "MAT":
-    						if(this.warrantyClaim.Parts.length === 0){
+/*    						if(this.warrantyClaim.Parts.length === 0){
     							warrantyClaimItem.IsMCPN = true;
-    						}
+    						}*/
     						this.warrantyClaim.Parts.push(warrantyClaimItem);
 				        	break;
 				    	case "FR":
@@ -178,10 +178,10 @@ sap.ui.define([
 					var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
 					switch(oWarrantyClaimItem.ItemType) {
     					case "MAT":
-    						oWarrantyClaimItem.IsMCPN = false;
+/*    						oWarrantyClaimItem.IsMCPN = false;
     						if(this.warrantyClaim.Parts.length === 0){
     							oWarrantyClaimItem.IsMCPN = true;
-    						}
+    						}*/
     						this.warrantyClaim.Parts.push(oWarrantyClaimItem);
 				        	break;
 				    	case "FR":

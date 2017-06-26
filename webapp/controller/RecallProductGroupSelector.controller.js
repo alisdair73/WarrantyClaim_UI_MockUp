@@ -102,6 +102,7 @@ sap.ui.define([
 								"min":"{RecallItems>groups/" + index + "/stepInput/minValue}",
 								"max":"{RecallItems>groups/" + index + "/stepInput/maxValue}",
 								"value":"{RecallItems>groups/" + index + "/stepInput/quantity}",
+								"editable":"{= ${RecallGroup>/selectedGroup/" + index + "}}",
 								"enabled":"{= ${RecallGroup>/selectedGroup/" + index + "}}"
 							})
 						);

@@ -1,5 +1,7 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout"
-	controllerName="WarrantyClaim_MockUp.block.LONDetailsBlockController">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" 
+	xmlns:l="sap.ui.layout" 
+	controllerName="WarrantyClaim_MockUp.block.LONDetailsBlockController"
+>
 	<Table 
 		items="{WarrantyClaim>/Labour}" 
 		id="LONTable" 

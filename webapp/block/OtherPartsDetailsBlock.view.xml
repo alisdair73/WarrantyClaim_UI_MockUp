@@ -1,5 +1,80 @@
-<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core"
- xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" 
+	xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form" 
+	xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController"
+>
+	<VBox class="sapUiSmallMargin">
+		<f:SimpleForm id="MCPNForm"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanL="2"
+			labelSpanM="12"
+			adjustLabelSpan="false"
+			emptySpanL="0"
+			emptySpanM="0"
+			columnsL="1"
+			columnsM="2"
+		>
+			<f:content>
+				<core:Title text="Main Causal Part" />
+				<Label text="MCPN" required="true" labelFor="MCPN"/>
+				<Input 
+					id="MCPN" 
+					required="true"
+					value="{MCPNHelper>/MCPN}"	
+					description="{MCPNHelper>/Description}"
+					change="onMCPNChanged"
+					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+					showValueHelp="true"
+					showSuggestion="true"
+					suggest="onPartSuggest"
+					suggestionItemSelected="onPartSelected"
+					suggestionRows="{/ZDPE_C_MATERIALS}"
+					valueHelpRequest="addMCPN"
+				>
+					<layoutData>
+						<l:GridData span="L6" />
+					</layoutData>
+					<suggestionColumns>
+						<Column>
+							<Text text="Part No." />
+						</Column>
+						<Column>
+							<Text text="Description" />
+						</Column>
+					</suggestionColumns>
+					<suggestionRows>
+						<ColumnListItem>
+							<cells>
+								<Label text="{materialNo}" />
+								<Label text="{description}" />
+							</cells>
+						</ColumnListItem>
+					</suggestionRows>									
+				</Input>
+				<Label text="Quantity" required="true" labelFor="MCPNQuantity"/>
+				<Input 
+					id="MCPNQuantity" 
+					type="Number"
+					required="true"
+					change="onMCPNChanged"
+					value="{
+						path: 'MCPNHelper>/Quantity',
+						type: 'sap.ui.model.type.Float',
+						formatOptions: {
+							maxFractionDigits: 0
+						}
+					}"
+					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+				>
+					<layoutData>
+						<l:GridData span="L2" />
+					</layoutData>
+				</Input>
+			</f:content>
+		</f:SimpleForm>	
+	</VBox>
+
 	<Table 
 		items="{WarrantyClaim>/Parts}"
 		id="partsTable" 
@@ -11,16 +86,13 @@
 				<Button 
 					text="Add parts" 
 					icon="sap-icon://add" 
-					press="addItem" 
+					press="addPart" 
 					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 				/>
 			</Toolbar>
 		</headerToolbar>
 	    <items>
 	        <ColumnListItem vAlign="Middle">
-	        	<customData>
-    				<core:CustomData key="isMCPN" value="{= ${WarrantyClaim>IsMCPN}? 'X':''}" writeToDom="true"/>
-				</customData>
 	            <cells>
 	            	<Text text="{WarrantyClaim>PartNumber}"/>
 	                <Text text="{WarrantyClaim>Description}"/>
@@ -46,7 +118,6 @@
 									maxFractionDigits: 3
 								}
 							}" 
-							change="onPartQuantityChanged"
 							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 	                		visible="{= !${WarrantyClaim>isMCPN} &amp;&amp; ${WarrantyClaim>/CanEdit}}"
 	            		/>
@@ -63,10 +134,6 @@
 							enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4'}"
 						/>
 					</ComboBox>	
-	                <l:HorizontalLayout>
-	                	<!-- <core:Icon src="sap-icon://broken-link" visible="{WarrantyClaim>isMCPN}" tooltip="Main Causal Part Number"/> -->
-	                	<RadioButton groupName="MCPN" selected="{WarrantyClaim>IsMCPN}" editable="false"/>
-	                </l:HorizontalLayout>
 	                <l:HorizontalLayout>
 	                	<Button 
 	                		icon="sap-icon://delete" 
@@ -96,11 +163,6 @@
 	        <Column >
 	            <header>
 	                <Label text="Part Status"/>
-	            </header>
-	        </Column>
-	        <Column  width="7em">
-	            <header>
-	                <Label text="MCPN"/>
 	            </header>
 	        </Column>
 	     	<Column width="7em" hAlign="End"/>

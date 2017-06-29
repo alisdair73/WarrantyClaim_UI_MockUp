@@ -10,12 +10,18 @@ sap.ui.define([
 		
 		onInit: function(){
 			
+/*			this.byId("MCPN").setFilterFunction(function(sTerm, oItem) {
+				// A case-insensitive 'string contains' style filter
+				//return oItem.getText().match(new RegExp(sTerm, "i"));
+				return true;
+			}); */
+			
 			this.getView().setModel(
 				new JSONModel({"MCPN":"","Description":"","Quantity": "0"}),
 				"MCPNHelper"
 			);
 			
-			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applyPartTableFilter.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._updateMCPN.bind(this),this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._updateMCPN.bind(this),this);
 		},
 				
@@ -33,44 +39,37 @@ sap.ui.define([
 			
 			this._MCPNRequest = true;
 			
-			var warrantyItem = Models.createNewWarrantyItem("MAT");
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 
 			// Update/Add the MCPN
 			if(this.getView().getModel("MCPNHelper").getProperty("/MCPN") !== ""){
 				
-				warrantyItem.setProperty("/PartNumber", this.getView().getModel("MCPNHelper").getProperty("/MCPN"));
-				warrantyItem.setProperty("/Description", this.getView().getModel("MCPNHelper").getProperty("/Description"));
-				warrantyItem.setProperty("/PartRequested", "S");
-				warrantyItem.setProperty("/Quantity", this.getView().getModel("MCPNHelper").getProperty("/Quantity"));
-				warrantyItem.setProperty("/IsMCPN",true);
-				
 				//Are we adding or Modifying the MCP?
-				warrantyItems.forEach(function(candidateMCP){
-					if(candidateMCP.IsMCPN){
-						candidateMCP = warrantyItem.getProperty("/");
-					}
+				var indexOfMCPN = warrantyItems.findIndex(function(item){
+					return item.IsMCPN;
 				});
 				
-				//Need to add if not found...
-				
-				if (warrantyItems[0]){
-					if(warrantyItems[0].IsMCPN){
-						warrantyItems[0] = warrantyItem.getProperty("/");
-					} else {
-						warrantyItems.splice(0,0,warrantyItem.getProperty("/"));
-					}
+				if(warrantyItems[indexOfMCPN]){
+					warrantyItems[indexOfMCPN].PartNumber = this.getView().getModel("MCPNHelper").getProperty("/MCPN");
+					warrantyItems[indexOfMCPN].Description = this.getView().getModel("MCPNHelper").getProperty("/Description");
+					warrantyItems[indexOfMCPN].Quantity = this.getView().getModel("MCPNHelper").getProperty("/Quantity");
 				} else {
+					var warrantyItem = Models.createNewWarrantyItem("MAT");
+					warrantyItem.setProperty("/PartNumber", this.getView().getModel("MCPNHelper").getProperty("/MCPN"));
+					warrantyItem.setProperty("/Description", this.getView().getModel("MCPNHelper").getProperty("/Description"));
+					warrantyItem.setProperty("/PartRequested", "S");
+					warrantyItem.setProperty("/Quantity", this.getView().getModel("MCPNHelper").getProperty("/Quantity"));
+					warrantyItem.setProperty("/IsMCPN",true);
 					warrantyItems.push(warrantyItem.getProperty("/"));
 				}
-				
 			}
 			
 			// update the model
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
 			
 			//Make sure the MCPN is hidden in the List
-			this._applyMCPNFilter();			
+			this._applyPartTableFilter();
+			//this._applyMCPNFilter();			
 			
 		},
 			
@@ -85,22 +84,24 @@ sap.ui.define([
 		
 		onValueHelpSearch: function(event) {
 			
-			var searchValue = event.getParameter("value");
+			var searchString = event.getParameter("value");
 			var filters = [];
 			filters.push(new Filter([
-				new Filter("materialNo", sap.ui.model.FilterOperator.Contains, searchValue),
-				new Filter("description", sap.ui.model.FilterOperator.Contains, searchValue)
+				new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, searchString),
+				new Filter("description", sap.ui.model.FilterOperator.Contains, searchString)
 			], false));
 			event.getSource().getBinding("items").filter(filters);
 		},
 		
 		onPartSuggest: function(event){
 			
-			var partSearch = event.getParameter("suggestValue");
+			var searchString = event.getParameter("suggestValue");
 			var filters = [];
-			if (partSearch) {
-				filters.push(
-					new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, partSearch));
+			if (searchString) {
+				filters.push(new Filter([
+					new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, searchString),
+					new Filter("description", sap.ui.model.FilterOperator.Contains, searchString)
+				], false));
 			}
 			event.getSource().getBinding("suggestionRows").filter(filters);
 		},
@@ -149,22 +150,17 @@ sap.ui.define([
 		_applyPartTableFilter: function(){
 			
 			var filters = [];
-
-			filters.push(
-				new Filter(
-					"Deleted",
-					sap.ui.model.FilterOperator.EQ, 
-					false
-			));
+			filters.push(new Filter("Deleted",sap.ui.model.FilterOperator.EQ, false));
+			filters.push(new Filter("IsMCPN",sap.ui.model.FilterOperator.EQ, false));
 			this.getView().byId("partsTable").getBinding("items").filter(filters);
 		},
 		
-		_applyMCPNFilter: function(){
+/*		_applyMCPNFilter: function(){
 			
 			var filters = [];
 			filters.push(new Filter("IsMCPN",sap.ui.model.FilterOperator.EQ, false));
 			this.getView().byId("partsTable").getBinding("items").filter(filters);
-		},
+		}, */
 		
 		_updateMCPN: function(){
 			
@@ -172,13 +168,14 @@ sap.ui.define([
 				
 				if(part.IsMCPN){
 					this.getView().getModel("MCPNHelper").setProperty("/MCPN",part.PartNumber);
-					this.getView().getModel("MCPNHelper").setProperty("/Description",part.Quantity);	
+					this.getView().getModel("MCPNHelper").setProperty("/Quantity",part.Quantity);	
 					this.getView().getModel("MCPNHelper").setProperty("/Description",part.Description);
 				}
 			}.bind(this));
 			
 			//Make sure the MCPN is hidden in the List
-			this._applyMCPNFilter();
+			this._applyPartTableFilter();
+			//this._applyMCPNFilter();
 		}
 	});
 

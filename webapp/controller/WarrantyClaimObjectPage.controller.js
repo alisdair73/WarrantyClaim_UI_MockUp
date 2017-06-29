@@ -77,8 +77,7 @@ sap.ui.define([
 			this._claimTypeSelection.close();
 		},
 
-		handleClose: function(oEvent){
-			
+		handleClose: function(){
 			this.navigateToLaunchpad();
 			this._claimTypeSelection.close();
 		},
@@ -158,10 +157,6 @@ sap.ui.define([
 				}
 			}
 			
-/*			salesOrganisations.sort(function(a,b){
-				return ((a.CompanyCodeName < b.CompanyCodeName) ? -1 : ((a.CompanyCodeName > b.CompanyCodeName) ? 1 : 0));
-			});*/
-			
 			// Set the default as the first entry in the list
 			this.getView().getModel("WarrantyClaim").setProperty("/CompanyCode",salesOrganisations[0].CompanyCode);
 			this.getView().getModel("WarrantyClaim").setProperty("/SalesOrganisation",salesOrganisations[0].SalesOrg);
@@ -187,10 +182,6 @@ sap.ui.define([
 								this._claimTypeSelection.open();
 								this._filterClaimType(this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation"));
 							}
-						}.bind(this),
-						error: function() {
-							//this._busyDialog.close();
-							//this._showNoDealershipDialog();
 						}.bind(this)
 					}
 				);
@@ -214,26 +205,24 @@ sap.ui.define([
 					var errorDetail = JSON.parse(error.responseText);
 					this._addMessagesToHeader(errorDetail.error.innererror.errordetails);
 					
-//REMOVE THE DUPLICATED LEAD MESSAGE - "SY/530"
-			var registeredMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
-  				function(registeredMessage){
-					return registeredMessage.code === 'SY/530';
-				}
-			);
-    		
-    		if(registeredMessages.length > 0){
-    			sap.ui.getCore().getMessageManager().removeMessages(registeredMessages[0]);
-    		}  
-//////////////
-					
-					
+					//REMOVE THE DUPLICATED LEAD MESSAGE - "SY/530"
+					var registeredMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
+		  				function(registeredMessage){
+							return registeredMessage.code === 'SY/530';
+						}
+					);
+		    		
+		    		if(registeredMessages.length > 0){
+		    			sap.ui.getCore().getMessageManager().removeMessages(registeredMessages[0]);
+		    		}  
+					//////////////
 					break;
 			}
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
 		
-		_onCreateWarrantyMatched: function(oEvent) {
+		_onCreateWarrantyMatched: function() {
 			
 			this.getModel().metadataLoaded().then(function() {
 			
@@ -268,15 +257,15 @@ sap.ui.define([
 			 */
 			var claimNumber = "";
 			if (this.getOwnerComponent().getComponentData() &&
-				this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim &&
-				this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim[0]) {
+				this.getOwnerComponent().getComponentData().startupParameters.DealerWarrantyClaim &&
+				this.getOwnerComponent().getComponentData().startupParameters.DealerWarrantyClaim[0]) {
 				
 				//Get the Claim from the backend
-				claimNumber = this.getOwnerComponent().getComponentData().startupParameters.WarrantyClaim[0];
+				claimNumber = this.getOwnerComponent().getComponentData().startupParameters.DealerWarrantyClaim[0];
 			}
 			
 			//Testing
-			claimNumber = "1100000014";
+			//claimNumber = "1100000066";
 			//claimNumber = "100000000567"; //MOCK Record
 			
 			var entityPath = "";
@@ -376,11 +365,11 @@ sap.ui.define([
 		_translateMessageTypes: function(messageType){
 			
 			switch(messageType){
-				case 'error':
+				case "error":
 					return sap.ui.core.MessageType.Error;
-				case 'info':
+				case "info":
 					return sap.ui.core.MessageType.Information;
-				case 'warning':
+				case "warning":
 					return sap.ui.core.MessageType.Warning;
 				default:
 					return sap.ui.core.MessageType.Success;

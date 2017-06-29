@@ -1,9 +1,8 @@
 sap.ui.define([
 	"sap/ui/model/json/JSONModel",
-	"sap/ui/core/format/NumberFormat",
 	"WarrantyClaim_MockUp/model/validationRules",
 	"sap/ui/core/format/DateFormat"
-], function(JSONModel,NumberFormat,Rule, DateFormat) {
+], function(JSONModel,Rule, DateFormat) {
 	"use strict";
 
 	return {
@@ -11,13 +10,14 @@ sap.ui.define([
 		warrantyClaim: {},
 		warrantyClaimOriginal: {},
 		
-		createWarrantyClaimModel: function(oData) {
+		createWarrantyClaimModel: function() {
 			this.warrantyClaim = {
 				"ClaimNumber": "",
 				"ClaimType": "",
 				"ObjectType":"",
 				"ClaimTypeDescription": "",
 				"ClaimTypeGroup": "",
+				"SubmittedOn":null,
 				"Dealer":"",
 				"DealerContact": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"EngineNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
@@ -73,6 +73,7 @@ sap.ui.define([
 		
 			this.warrantyClaim.ClaimNumber = jsonModel.ClaimNumber;
 			this.warrantyClaim.ClaimCurrency = jsonModel.ClaimCurrency;
+			this.warrantyClaim.SubmittedOn = jsonModel.SubmittedOn;
 			this.warrantyClaim.TotalMaterial = jsonModel.TotalMaterial;
 			this.warrantyClaim.TotalExternalServices = jsonModel.TotalExternalServices;
 			this.warrantyClaim.TotalLabour = jsonModel.TotalLabour;
@@ -119,12 +120,6 @@ sap.ui.define([
 			var oODataModel = oSource.getModel();
 			var sPath = oSource.getPath();
 			var oWarrantyClaim = oODataModel.getObject(sPath);
-			
-			var formatOptions = {
-				minFractionDigits: 2,
-				maxFractionDigits: 2
-			};
-			var costFormat = NumberFormat.getFloatInstance(formatOptions);
 
 			this.warrantyClaim.ClaimNumber = oWarrantyClaim.ClaimNumber;
 			this.warrantyClaim.ClaimType = oWarrantyClaim.ClaimType;
@@ -136,7 +131,7 @@ sap.ui.define([
 			this.warrantyClaim.VIN.value = oWarrantyClaim.VIN;
 			this.warrantyClaim.RecallNumber.value = oWarrantyClaim.RecallNumber;
 			this.warrantyClaim.RepairOrderNumber.value = oWarrantyClaim.RepairOrderNumber;
-			this.warrantyClaim.TotalCostOfClaim = costFormat.format(oWarrantyClaim.TotalCostOfClaim);
+			this.warrantyClaim.TotalCostOfClaim = oWarrantyClaim.TotalCostOfClaim;
 			this.warrantyClaim.ClaimCurrency = oWarrantyClaim.ClaimCurrency;
 			this.warrantyClaim.SubmittedOn = oWarrantyClaim.SubmittedOn;
 			this.warrantyClaim.DateOfRepair.value = oWarrantyClaim.DateOfRepair;
@@ -386,6 +381,9 @@ sap.ui.define([
 				case "PARTS":	
 					this.warrantyClaim.Technician.ruleResult =  
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.Technician.value);
+					if(!this.warrantyClaim.Technician.ruleResult.valid){
+						this.warrantyClaim.Technician.ruleResult.errorTextID = "invalidTechnician";
+					}
 					break;
 			}
 		},
@@ -398,6 +396,9 @@ sap.ui.define([
 				case "PARTS":
 					this.warrantyClaim.ServiceAdvisor.ruleResult =
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.ServiceAdvisor.value);
+/*					if(!this.warrantyClaim.Technician.ruleResult.valid){
+						this.warrantyClaim.Technician.ruleResult.errorTextID = "invalidAdvisor";
+					}*/
 					break;
 			}
 		},

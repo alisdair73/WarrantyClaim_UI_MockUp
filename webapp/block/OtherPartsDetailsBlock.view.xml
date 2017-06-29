@@ -18,40 +18,41 @@
 			<f:content>
 				<core:Title text="Main Causal Part" />
 				<Label text="MCPN" required="true" labelFor="MCPN"/>
-				<Input 
-					id="MCPN" 
-					required="true"
-					value="{MCPNHelper>/MCPN}"	
-					description="{MCPNHelper>/Description}"
-					change="onMCPNChanged"
-					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
-					showValueHelp="true"
-					showSuggestion="true"
-					suggest="onPartSuggest"
-					suggestionItemSelected="onPartSelected"
-					suggestionRows="{/ZDPE_C_MATERIALS}"
-					valueHelpRequest="addMCPN"
-				>
-					<layoutData>
-						<l:GridData span="L6" />
-					</layoutData>
-					<suggestionColumns>
-						<Column>
-							<Text text="Part No." />
-						</Column>
-						<Column>
-							<Text text="Description" />
-						</Column>
-					</suggestionColumns>
-					<suggestionRows>
-						<ColumnListItem>
-							<cells>
-								<Label text="{materialNo}" />
-								<Label text="{description}" />
-							</cells>
-						</ColumnListItem>
-					</suggestionRows>									
-				</Input>
+		        <Input 
+		          id="MCPN" 
+		          required="true"
+		          value="{MCPNHelper>/MCPN}"  
+		          description="{MCPNHelper>/Description}"
+		          change="onMCPNChanged"
+		          editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+		          showValueHelp="true"
+		          showSuggestion="true"
+		          filterSuggests="false"
+		          suggest="onPartSuggest"
+		          suggestionItemSelected="onPartSelected"
+		          suggestionRows="{/ZDPE_C_MATERIALS}"
+		          valueHelpRequest="addMCPN"
+		        >
+		          <layoutData>
+		            <l:GridData span="L6" />
+		          </layoutData>
+		          <suggestionColumns>
+		            <Column>
+		              <Text text="Part No." />
+		            </Column>
+		            <Column>
+		              <Text text="Description" />
+		            </Column>
+		          </suggestionColumns>
+		          <suggestionRows>
+		            <ColumnListItem>
+		              <cells>
+		                <Label text="{materialNo}" />
+		                <Label text="{description}" />
+		              </cells>
+		            </ColumnListItem>
+		          </suggestionRows>                 
+		        </Input>
 				<Label text="Quantity" required="true" labelFor="MCPNQuantity"/>
 				<Input 
 					id="MCPNQuantity" 

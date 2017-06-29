@@ -30,6 +30,16 @@ sap.ui.define([
 			this.logValidationMessage("VIN");
 		},
 		
+		onVINSuggest: function(event){
+			
+			var searchString = event.getParameter("suggestValue");
+			var filters = [];
+			if (searchString) {
+				filters.push(new Filter("VIN", sap.ui.model.FilterOperator.StartsWith, searchString));
+			}
+			event.getSource().getBinding("suggestionRows").filter(filters);
+		},		
+		
 		onEngineNumberChanged: function(){
 			WarrantyClaim.validateEngineNumber();
 			this.logValidationMessage("EngineNumber");
@@ -79,13 +89,15 @@ sap.ui.define([
 				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
 			}
 			
-			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber",dataObject.PWANumber);
-			this.getView().getModel("WarrantyClaim").setProperty("/VIN",dataObject.VIN);
-			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber",dataObject.EngineNumber);
+			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber/value",dataObject.PWANumber);
+			this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",dataObject.VIN);
+			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value",dataObject.EngineNumber);
 			
 			if (dataObject.MCPN){
 				
-				var parts = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
+				//Add the MCPN
+				
+/*				var parts = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 
 				if(parts.length === 0){
 					var warrantyItem = Models.createNewWarrantyItem("MAT");
@@ -100,7 +112,7 @@ sap.ui.define([
 					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/PartNumber",dataObject.MCPN);
 					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/Description",dataObject.MCPNDescription);
 					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/Quantity",1); //???
-				}
+				} */
 			}
 		},
 		
@@ -221,17 +233,18 @@ sap.ui.define([
 			MCPN.setProperty("/PartNumber", recallGroup.getProperty("/MCP/materialNumber"));
 			MCPN.setProperty("/Description", recallGroup.getProperty("/MCP/materialDescription"));
 			MCPN.setProperty("/Quantity",recallGroup.getProperty("/MCP/quantity"));
+			MCPN.setProperty("/PartRequested", "S");
 			MCPN.setProperty("/IsMCPN", true);
 			recallItems.push(MCPN.getProperty("/"));
 			
 			//Update the MCPN Field too
-			sap.ui.getCore().getEventBus().publish("MCPN","Changed",
+	/*		sap.ui.getCore().getEventBus().publish("MCPN","Changed",
 				{
 					"MCPN": recallGroup.getProperty("/MCP/materialNumber"), 
 					"Description": recallGroup.getProperty("/MCP/materialDescription"),
 					"Quantity": recallGroup.getProperty("/MCP/quantity")
 				}
-			);
+			);*/
 			
 			//Replace/Repair Selected by Dealer - Transfer Parts/Labour/Sublet
 			var selectedGroupIndex = this.getView().getModel("RecallGroup").getProperty("/selectedGroup").findIndex(function(groupSelected){
@@ -245,6 +258,7 @@ sap.ui.define([
 				var recallItem = Models.createNewWarrantyItem("MAT");
 				recallItem.setProperty("/PartNumber", materialToTransfer.materialNumber);
 				recallItem.setProperty("/Description", materialToTransfer.materialDescription);
+				recallItem.setProperty("/PartRequested", "S");
 				
 				var selectedGroup = materialToTransfer.groups[selectedGroupIndex];
 				

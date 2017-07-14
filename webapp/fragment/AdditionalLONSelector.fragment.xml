@@ -75,7 +75,10 @@
 										path: 'AdditionalLONHelper>/OperationCodes'
 									}"
 								>
-									<core:ListItem key="{AdditionalLONHelper>LON_CODE}" text="{AdditionalLONHelper>DESCRIPTION}"/>
+									<core:ListItem 
+										key="{AdditionalLONHelper>LON_CODE}" 
+										text="{AdditionalLONHelper>DESCRIPTION}"
+									/>
 								</ComboBox>	
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>

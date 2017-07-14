@@ -134,12 +134,6 @@
 					text="{message>/length}" 
 					type="Emphasized" 
 					press="openMessages"/>
-				<m:SegmentedButton width="300px" selectedKey="{WarrantyClaim>/Validate}">
-					<m:items>
-						<m:SegmentedButtonItem text="Validate UI" key="yes" />
-						<m:SegmentedButtonItem text="Don't Validate UI" key="no"/>
-					</m:items>
-				</m:SegmentedButton>					
 				<m:ToolbarSpacer/>
 				<m:Button text="Save Draft" press="onDraft" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button text="Cancel" press="onCancel"/>

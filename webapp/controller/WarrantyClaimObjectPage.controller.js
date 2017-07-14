@@ -7,9 +7,10 @@ sap.ui.define([
         "WarrantyClaim_MockUp/model/WarrantyClaim",
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
-        "sap/m/MessageStrip"
+        "sap/m/MessageStrip",
+        "sap/m/MessageBox"
 	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
-					NumberFormat, MessageStrip) {
+					NumberFormat, MessageStrip, MessageBox) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -265,7 +266,8 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "1100000066";
+			//claimNumber = "1110000005";
+			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			
 			var entityPath = "";
@@ -292,9 +294,6 @@ sap.ui.define([
 		_bindView: function(entityPath) {
 			// Set busy indicator during view binding
 			var oViewModel = this.getModel("ViewHelper");
-
-			// If the view was not bound yet its not busy, only if the binding requests data it is set to busy again
-			//oViewModel.setProperty("/busy", false);
 
 			this.getView().bindElement({
 				path: entityPath,
@@ -330,9 +329,32 @@ sap.ui.define([
 		},
 		
 		_onBindingChange: function(oData) {
-			//Check if there is any data first
-			WarrantyClaim.updateWarrantyClaimFromOdata(oData);
 			
+			//Check if there is any data first
+			var model = oData.getSource().getModel();
+			var path = oData.getSource().getPath() + "/";
+            var messages = model.getMessagesByPath(path);
+		
+			if(messages){
+				//There was an Error with the oData response
+				if(messages[0]){
+					MessageBox.error(
+						messages[0].message,
+					{
+						id : "errorMessageBox",
+						actions : [MessageBox.Action.CLOSE],
+						onClose : function () {
+							this.navigateToLaunchpad();
+						}.bind(this)
+					}
+				);
+				}
+				return;
+			}
+			
+			//Process the retrieved Warranty
+			WarrantyClaim.updateWarrantyClaimFromOdata(oData);
+			//mMessages...
 			var claimTypeGroup = this.getModel("WarrantyClaim").getProperty("/ClaimTypeGroup");
 			var customerConcernSection = this.getView().byId("customerConcern");
 			if(claimTypeGroup === 'RECALL'){

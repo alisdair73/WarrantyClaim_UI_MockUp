@@ -31,9 +31,10 @@
 			<DatePicker 
 				id="DateOfFailure" 
 				required="true"
-				change="onChangeDatePicker"
+				change="onDateOfFailureChanged"
 				displayFormat="medium" 
-				dateValue="{WarrantyClaim>DateOfFailure}"
+				dateValue="{WarrantyClaim>DateOfFailure/value}"
+				valueState="{= ${WarrantyClaim>DateOfFailure/ruleResult/valid} ? 'None':'Error'}"
 				editable="{WarrantyClaim>CanEdit}"
 			/>
 			

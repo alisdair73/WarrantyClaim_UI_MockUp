@@ -15,8 +15,8 @@ sap.ui.define([
 				"DefectsL2":[]
 			}) , "DefectCodesHelper");
 			
-			var eventBus = sap.ui.getCore().getEventBus();
-			eventBus.subscribe("ZDEF1","CatalogLoaded",this._defectCatalogLoaded.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("ZDEF1","CatalogLoaded",this._defectCatalogLoaded.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
 		},
 		
 		readDefectCatalog: function(){
@@ -57,7 +57,12 @@ sap.ui.define([
 			    return;
 			  }
 			}			
-		}
+		},
+		
+    	_refreshValidationMessages: function(){
+			this.logValidationMessage("DefectCode");
+			this.logValidationMessage("DealerComments");
+    	}
 	});
 
 });

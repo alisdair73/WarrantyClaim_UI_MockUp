@@ -26,7 +26,6 @@
 					showSuggestion="true"
 					suggest="onVINSuggest"
 					showTableSuggestionValueHelp="false"
-					suggestionItemSelected="onDealerVINSelection"
 					maxLength="35"
 					change="onVINChanged"
 					suggestionRows="{/VINSet}"
@@ -102,6 +101,7 @@
 					valueState="{= ${WarrantyClaim>AuthorisationNumber/ruleResult/valid} ? 'None':'Error'}"
 					valueHelpRequest="onPWAValueHelpRequest"
 					showSuggestion="true"
+					suggest="onPWASuggest"
 					suggestionItemSelected="onPWASelection"
 					maxSuggestionWidth="500px"
 					suggestionRows="{/PriorWorkApprovalSet}">

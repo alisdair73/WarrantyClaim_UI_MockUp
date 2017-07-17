@@ -36,10 +36,6 @@ sap.ui.define([
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
-			
-/*			sap.ui.getCore().setModel(new JSONModel({"hasUIValidationError": false}),"UIValidation");
-			this.getView().setModel(sap.ui.getCore().getModel("UIValidation"),"UIValidation");*/
-			
 			this.getRouter().getRoute("createWarranty").attachPatternMatched(this._onCreateWarrantyMatched, this);
 
 			//Is this needed???
@@ -88,11 +84,16 @@ sap.ui.define([
 		},
 		
 		onSubmit: function(){
-			this._doWarrantyAction("SubmitWarranty");
+			if(this._canExecuteAction()){
+				this._doWarrantyAction("SubmitWarranty");
+			}
 		},
 		
 		onValidate: function(){
-			this._doWarrantyAction("ValidateWarranty");
+			
+			if(this._canExecuteAction()){
+				this._doWarrantyAction("ValidateWarranty");
+			}
 		},
 		
 		onCancel: function(){
@@ -342,6 +343,7 @@ sap.ui.define([
 						messages[0].message,
 					{
 						id : "errorMessageBox",
+						
 						actions : [MessageBox.Action.CLOSE],
 						onClose : function () {
 							this.navigateToLaunchpad();
@@ -414,6 +416,29 @@ sap.ui.define([
 			}
 			var objectLayout = this.getView().byId("WarrantyClaimLayout");
 			objectLayout.scrollToSection(this.getView().byId("vehicleDetails_sub1").getId(), 0, -200);
+		},
+		
+		_canExecuteAction: function(){
+			
+			//Run all UI Validation Rules
+			WarrantyClaim.validateAll();
+			
+			//If there are any Frontend Issues - then don't call Action...
+			if(WarrantyClaim.hasFrontendValidationError()){
+				WarrantyClaim.resetChanges();
+				sap.ui.getCore().getEventBus().publish("Validation","Refresh");
+				
+				var errorMessage = {
+					"message":"Please correct the data validation errors.",
+					"severity":"error"
+				};
+				
+				this._addMessagesToHeader([errorMessage]);
+				return false;
+			} else {
+				return true;
+			}	
+
 		}
 	});
 });

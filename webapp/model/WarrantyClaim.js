@@ -28,7 +28,7 @@ sap.ui.define([
 				"TotalCostOfClaim":"0",
 				"ClaimCurrency":"AUD",
 				"DateOfRepair": { "value":null, "ruleResult":{"valid": true, "errorTextID":""}},
-				"DateOfFailure": null,
+				"DateOfFailure": { "value":null, "ruleResult":{"valid": true, "errorTextID":""}},
 				"FailureMeasure": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"MilIndicator": false,
 				"DTC1": "",
@@ -135,7 +135,7 @@ sap.ui.define([
 			this.warrantyClaim.ClaimCurrency = oWarrantyClaim.ClaimCurrency;
 			this.warrantyClaim.SubmittedOn = oWarrantyClaim.SubmittedOn;
 			this.warrantyClaim.DateOfRepair.value = oWarrantyClaim.DateOfRepair;
-			this.warrantyClaim.DateOfFailure = oWarrantyClaim.DateOfFailure;
+			this.warrantyClaim.DateOfFailure.value = oWarrantyClaim.DateOfFailure;
 			this.warrantyClaim.FailureMeasure.value = oWarrantyClaim.FailureMeasure;
 			this.warrantyClaim.MilIndicator = oWarrantyClaim.MilIndicator;
 			this.warrantyClaim.DTC1 = oWarrantyClaim.DTC1;
@@ -215,7 +215,7 @@ sap.ui.define([
 			warrantyClaim.RecallNumber = this.warrantyClaim.RecallNumber.value;
 			warrantyClaim.RepairOrderNumber = this.warrantyClaim.RepairOrderNumber.value;
 			warrantyClaim.DateOfRepair = this.warrantyClaim.DateOfRepair.value;
-			warrantyClaim.DateOfFailure = this.warrantyClaim.DateOfFailure;
+			warrantyClaim.DateOfFailure = this.warrantyClaim.DateOfFailure.value;
 			warrantyClaim.FailureMeasure = this.warrantyClaim.FailureMeasure.value.toString();
 			warrantyClaim.MilIndicator = this.warrantyClaim.MilIndicator;
 			warrantyClaim.DTC1 = this.warrantyClaim.DTC1;
@@ -319,36 +319,44 @@ sap.ui.define([
 		validateDateOfFailure: function(){
 		
 			//Convert the DateTime to Date
-			this.warrantyClaim.DateOfFailure.value = this._convertDateTimeToDateOnly(this.warrantyClaim.DateOfFailure.value);
-		
-			this.warrantyClaim.DateOfFailure.ruleResult = 
-				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfFailure.value);
+			if (this.warrantyClaim.DateOfFailure.value){
+				this.warrantyClaim.DateOfFailure.value = this._convertDateTimeToDateOnly(this.warrantyClaim.DateOfFailure.value);
 			
-			if(this.warrantyClaim.DateOfFailure.ruleResult.valid){ 
 				this.warrantyClaim.DateOfFailure.ruleResult = 
-					Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfFailure.value);
-				if(this.warrantyClaim.DateOfFailure.ruleResult.valid){
+					Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfFailure.value);
+				
+				if(this.warrantyClaim.DateOfFailure.ruleResult.valid){ 
 					this.warrantyClaim.DateOfFailure.ruleResult = 
-						Rule.validateFailureDate(this.warrantyClaim.DateOfFailure.value, this.warrantyClaim.DateOfRepair.value);
+						Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfFailure.value);
+					if(this.warrantyClaim.DateOfFailure.ruleResult.valid){
+						this.warrantyClaim.DateOfFailure.ruleResult = 
+							Rule.validateFailureDate(this.warrantyClaim.DateOfFailure.value, this.warrantyClaim.DateOfRepair.value);
+					}
 				}
+			} else {
+				this.warrantyClaim.DateOfFailure.ruleResult = {"valid": false, "errorTextID":"mandatoryField"};
 			}
 		},
 
 		validateDateOfRepair: function(){
 		
 			//Convert the DateTime to Date
-			this.warrantyClaim.DateOfRepair.value = this._convertDateTimeToDateOnly(this.warrantyClaim.DateOfRepair.value);
-		
-			this.warrantyClaim.DateOfRepair.ruleResult = 
-				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfRepair.value);
+			if (this.warrantyClaim.DateOfRepair.value){
+				this.warrantyClaim.DateOfRepair.value = this._convertDateTimeToDateOnly(this.warrantyClaim.DateOfRepair.value);
 			
-			if(this.warrantyClaim.DateOfRepair.ruleResult.valid){ 
 				this.warrantyClaim.DateOfRepair.ruleResult = 
-					Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfRepair.value);
-				if(this.warrantyClaim.DateOfRepair.ruleResult.valid){
+					Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.DateOfRepair.value);
+				
+				if(this.warrantyClaim.DateOfRepair.ruleResult.valid){ 
 					this.warrantyClaim.DateOfRepair.ruleResult = 
-						Rule.validateRepairDate(this.warrantyClaim.DateOfRepair.value, this.warrantyClaim.DateOfFailure);  
-				}
+						Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfRepair.value);
+					if(this.warrantyClaim.DateOfRepair.ruleResult.valid){
+						this.warrantyClaim.DateOfRepair.ruleResult = 
+							Rule.validateRepairDate(this.warrantyClaim.DateOfRepair.value, this.warrantyClaim.DateOfFailure);  
+					}
+				} 
+			} else {
+				this.warrantyClaim.DateOfRepair.ruleResult = {"valid": false, "errorTextID":"mandatoryField"};
 			}
 		},
 			
@@ -523,6 +531,54 @@ sap.ui.define([
 		
 		validateAll: function() {
 			
+			this.validateVIN();
+			this.validateEngineNumber();
+			this.validateFailureMeasure();
+			this.validateDateOfFailure();
+			this.validateDateOfRepair();
+			this.validateRepairOrderNumber();
+			this.validateDealerContact();
+			this.validateTechnician();
+			this.validateServiceAdvisor();
+			this.validateCustomerConcern();
+			this.validateSymptomCode();
+			this.validateDealerComments();
+			this.validateDefectCode();
+			this.validateAuthorisationNumber();
+			this.validatePartsInstallDate();
+			this.validatePartsInstallKM();
+			this.validateOriginalInvoiceNumber();
+			this.validateRecallNumber();
+			this.validateOldSerialNumber();
+			this.validateNewSerialNumber();
+		},
+		
+		hasFrontendValidationError: function(){
+			
+			if(this.warrantyClaim.VIN.ruleResult.valid &&
+				this.warrantyClaim.EngineNumber.ruleResult.valid &&
+				this.warrantyClaim.FailureMeasure.ruleResult.valid &&
+				this.warrantyClaim.DateOfFailure.ruleResult.valid &&
+				this.warrantyClaim.DateOfRepair.ruleResult.valid &&
+				this.warrantyClaim.RepairOrderNumber.ruleResult.valid && 
+				this.warrantyClaim.DealerContact.ruleResult.valid &&
+				this.warrantyClaim.Technician.ruleResult.valid &&
+				this.warrantyClaim.ServiceAdvisor.ruleResult.valid &&
+				this.warrantyClaim.CustomerConcern.ruleResult.valid &&
+				this.warrantyClaim.SymptomCode.ruleResult.valid &&
+				this.warrantyClaim.DealerComments.ruleResult.valid && 
+				this.warrantyClaim.DefectCode.ruleResult.valid &&
+				this.warrantyClaim.AuthorisationNumber.ruleResult.valid &&
+				this.warrantyClaim.PartsInstallDate.ruleResult.valid &&
+				this.warrantyClaim.PartsInstallKM.ruleResult.valid && 
+				this.warrantyClaim.OriginalInvoiceNumber.ruleResult.valid &&
+				this.warrantyClaim.RecallNumber.ruleResult.valid &&
+				this.warrantyClaim.OldSerialNumber.ruleResult.valid && 
+				this.warrantyClaim.NewSerialNumber.ruleResult.valid){
+				
+				return false;		
+			} 
+			return true;
 		},
 		
 		_convertDateTimeToDateOnly: function(dateTime) {

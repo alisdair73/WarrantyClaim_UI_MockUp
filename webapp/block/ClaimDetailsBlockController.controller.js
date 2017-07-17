@@ -7,6 +7,10 @@ sap.ui.define([
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.ClaimDetailsBlockController", {
 		
+		onInit: function(){
+			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
+		},
+		
 		onFailureMeasureChanged: function(){
 			WarrantyClaim.validateFailureMeasure();
 			this.logValidationMessage("FailureMeasure");
@@ -17,6 +21,11 @@ sap.ui.define([
 			this.logValidationMessage("RepairOrderNumber");
 		},
 
+		onDateOfFailureChanged: function(){
+			WarrantyClaim.validateDateOfFailure();
+			this.logValidationMessage("DateOfFailure");
+		},
+		
 		onDateOfRepairChanged: function(){
 			WarrantyClaim.validateDateOfRepair();
 			this.logValidationMessage("DateOfRepair");
@@ -55,7 +64,21 @@ sap.ui.define([
 		onOriginalInvoiceNumberChanged: function(){
 			WarrantyClaim.validateOriginalInvoiceNumber();
 			this.logValidationMessage("OriginalInvoiceNumber");
-		}
+		},
+		
+		 _refreshValidationMessages: function(){
+			this.logValidationMessage("FailureMeasure");
+			this.logValidationMessage("RepairOrderNumber");
+			this.logValidationMessage("DateOfRepair");
+			this.logValidationMessage("DateOfFailure");
+			this.logValidationMessage("Technician");
+			this.logValidationMessage("ServiceAdvisor");	
+			this.logValidationMessage("OldSerialNumber");	
+			this.logValidationMessage("NewSerialNumber");
+			this.logValidationMessage("PartsInstallDate");	
+			this.logValidationMessage("PartsInstallKm");	
+			this.logValidationMessage("OriginalInvoiceNumber");  
+    	}
 		
 	});
 });

@@ -16,8 +16,8 @@ sap.ui.define([
 				"SymptomsL3":[]
 			}) , "SymptomCodesHelper");
 			
-			var eventBus = sap.ui.getCore().getEventBus();
-			eventBus.subscribe("ZSYM1","CatalogLoaded",this._symptomCatalogLoaded.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("ZSYM1","CatalogLoaded",this._symptomCatalogLoaded.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
 		},
 		
 		readSymptomCatalog: function(){
@@ -86,7 +86,12 @@ sap.ui.define([
 			    return;
 			  }
 			}
-		}
+		},
+		
+    	_refreshValidationMessages: function(){
+			this.logValidationMessage("SymptomCode");
+			this.logValidationMessage("CustomerConcern");
+    	}
 	});
 
 });

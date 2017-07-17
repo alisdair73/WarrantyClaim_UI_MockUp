@@ -1,13 +1,13 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
+	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/Filter",
 	"WarrantyClaim_MockUp/model/models",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageToast"
-], function(Controller, Filter, Models, JSONModel, MessageToast) {
+], function(BaseController, Filter, Models, JSONModel, MessageToast) {
 	"use strict";
 
-	return Controller.extend("WarrantyClaim_MockUp.block.LONDetailsBlockController", {
+	return BaseController.extend("WarrantyClaim_MockUp.block.LONDetailsBlockController", {
 		
 		onInit: function(){
 			
@@ -44,12 +44,15 @@ sap.ui.define([
 					sap.ui.model.FilterOperator.EQ, 
 					this.getView().getModel("WarrantyClaim").getProperty("/VIN/value")
 			));
-			filters.push(
-				new Filter(
-					"MCPN",
-					sap.ui.model.FilterOperator.EQ, 
-					this.getView().getModel("WarrantyClaim").getProperty("/Parts/0/PartNumber")
-			));			
+			
+			this.getView().getModel("WarrantyClaim").getProperty("/Parts").forEach(function(part){
+				if(part.IsMCPN){
+					filters.push(
+						new Filter("MCPN", sap.ui.model.FilterOperator.EQ, part.PartNumber)
+					);
+				}
+			});
+			
 			sap.ui.getCore().byId("LONCatalog").getBinding("items").filter(filters).attachDataReceived(this._hasLON.bind(this));
  			
 			// Display the popup dialog for adding parts
@@ -104,7 +107,9 @@ sap.ui.define([
 				{
 					success: function(JSONData){
 						var additionalLON = JSON.parse(JSONData);
-						this.getView().setModel(new JSONModel(additionalLON),"AdditionalLON");
+						this.getView().setModel(new JSONModel(additionalLON.Catalog[0].nodes),"AdditionalLON");
+						this.getView().setModel(new JSONModel(additionalLON.Catalog[1].nodes),"OperationTypes");
+						this.getView().setModel(new JSONModel(additionalLON.LONCodes.LON_CODES),"OperationCodes");
 						this.getView().getModel("ViewHelper").setProperty("/busy", false);
 						
 					}.bind(this),
@@ -119,13 +124,13 @@ sap.ui.define([
 
 			var additionalLON = this.getView().getModel("AdditionalLON").getData();
 
-			for(var i=0; i< additionalLON.LON.ASSEMBLY_SYSTEMS.length; i++){
-			  if (additionalLON.LON.ASSEMBLY_SYSTEMS[i].CODE === oEvent.getParameter("selectedItem").mProperties.key){
+			for(var i=0; i< additionalLON.length; i++){
+			  if (additionalLON[i].code === oEvent.getParameter("selectedItem").mProperties.key){
 			  	this.getView().getModel("AdditionalLONHelper").setProperty("/SubAssembly","");
 			  	this.getView().getModel("AdditionalLONHelper").setProperty("/OperationCode","");
 			  	this.getView().getModel("AdditionalLONHelper").setProperty("/RequestedHours","0");
 			  	this.getView().getModel("AdditionalLONHelper").setProperty("/Description","");
-			    this.getView().getModel("AdditionalLONHelper").setProperty("/SubAssemblies",additionalLON.LON.ASSEMBLY_SYSTEMS[i].SUBASSEMBLY_SYSTEMS);
+			    this.getView().getModel("AdditionalLONHelper").setProperty("/SubAssemblies", additionalLON[i].nodes);
 			    this._setOperationCodes();
 			    return;
 			  }
@@ -157,10 +162,27 @@ sap.ui.define([
 			var operationType = this.getView().getModel("AdditionalLONHelper").getProperty("/OperationType");
 			var validLONCodes = [];
 			
-			if(assembly !== "" && subAssembly !== "" && operationType !== ""){
+			var assemblyCode = "";
+			var subAssemblyCode = "";
+			var operationTypeCode = "";
 			
-				var LONPrefix = assembly + subAssembly + operationType;
-				var candidateLONCodes = this.getView().getModel("AdditionalLON").getProperty("/LON/LON_CODES");
+			if(assembly.split("-")[1]){
+				assemblyCode = assembly.split("-")[1];
+			}
+			
+			if(subAssembly.split("-")[2]){
+				subAssemblyCode = subAssembly.split("-")[2];
+			}
+			
+			if(operationType.split("-")[1]){
+				operationTypeCode = operationType.split("-")[1];
+			}
+			
+			
+			if(assemblyCode !== "" && subAssemblyCode !== "" && operationTypeCode !== ""){
+			
+				var LONPrefix = assemblyCode + subAssemblyCode + operationTypeCode;
+				var candidateLONCodes = this.getView().getModel("OperationCodes").getProperty("/");
 			
 				validLONCodes = candidateLONCodes.filter(function(LONCode){
 					return LONCode.LON_CODE.substr(0, 4) === LONPrefix; 

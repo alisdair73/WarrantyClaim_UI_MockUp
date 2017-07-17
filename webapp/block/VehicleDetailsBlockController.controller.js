@@ -14,6 +14,7 @@ sap.ui.define([
 
 		onInit: function(){
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
 		},
 		
 		onVINChanged: function(event){
@@ -60,26 +61,6 @@ sap.ui.define([
 			this.logValidationMessage("RecallNumber");
 		},
 		
-		onPWAValueHelpRequest: function(event){
-			if (!this._PWAValueHelpDialog) {
-				this._PWAValueHelpDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.PriorWorkApprovalSelection", this);
-				this.getView().addDependent(this._PWAValueHelpDialog);
-			}
-			sap.ui.getCore().byId("PWASelectionList").getBinding("items").filter(this._getFilter());
-			
-			// Display the popup dialog for adding parts
-			this._PWAValueHelpDialog.open();
-		},
-
-        onPWASelectionSearch: function(event){
-        	var searchValue = event.getParameter("value");
-			var filters = [];
-			filters.push(new Filter("AuthorisationNumber",sap.ui.model.FilterOperator.Contains, searchValue));
-			filters.push(new Filter("VIN",sap.ui.model.FilterOperator.Contains, searchValue));
-			filters.push(new Filter("EngineNumber",sap.ui.model.FilterOperator.Contains, searchValue));
-			event.getSource().getBinding("items").filter(filters);
-        },
-        
 		onPWASelection: function(event){
 			
 			var dataObject = null;
@@ -90,7 +71,6 @@ sap.ui.define([
 			}
 			
 			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber/value",dataObject.PWANumber);
-			this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",dataObject.VIN);
 			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value",dataObject.EngineNumber);
 			
 			if (dataObject.MCPN){
@@ -115,9 +95,15 @@ sap.ui.define([
 				} */
 			}
 		},
-		
-		onPWASelectionClose: function(){
-			this._PWAValueHelpDialog.close();
+
+		onPWASuggest: function(event){
+			
+			var PWASearch = event.getParameter("suggestValue");
+			var filters = this._getFilter();
+			if (PWASearch) {
+				filters.push(new Filter("PWANumber", sap.ui.model.FilterOperator.StartsWith, PWASearch));
+			}
+			event.getSource().getBinding("suggestionRows").filter(filters);
 		},
 		
 		onRecallSuggest: function(event){
@@ -128,6 +114,17 @@ sap.ui.define([
 				filters.push(new Filter("ExternalRecallNumber", sap.ui.model.FilterOperator.StartsWith, recallSearch));
 			}
 			event.getSource().getBinding("suggestionRows").filter(filters);
+		},
+		
+		onPWAValueHelpRequest: function(event){
+			if (!this._PWAValueHelpDialog) {
+				this._PWAValueHelpDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.PriorWorkApprovalSelection", this);
+				this.getView().addDependent(this._PWAValueHelpDialog);
+			}
+			sap.ui.getCore().byId("PWASelectionList").getBinding("items").filter(this._getFilter());
+			
+			// Display the popup dialog for adding parts
+			this._PWAValueHelpDialog.open();
 		},
 		
 		onRecallValueHelpRequest: function(event){
@@ -141,6 +138,13 @@ sap.ui.define([
 			this._RecallValueHelpDialog.open();
 		},
 		
+        onPWASelectionSearch: function(event){
+        	var searchValue = event.getParameter("value");
+			var filters = [];
+			filters.push(new Filter("PWANumber",sap.ui.model.FilterOperator.Contains, searchValue));
+			event.getSource().getBinding("items").filter(filters);
+        },
+        
         onRecallSelectionSearch: function(event){
         	var searchValue = event.getParameter("value");
 			var filters = [];
@@ -292,11 +296,6 @@ sap.ui.define([
 			this._RecallValueHelpDialog.close();
 		},
 		
-		onDealerVINSelection: function(event){
-//			var dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
-//			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber",dataObject.EngineNumber);
-		},
-		
 		toUpperCase: function(event){
     		var value = event.getParameter('newValue');     
     		this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",value.toUpperCase());
@@ -347,6 +346,14 @@ sap.ui.define([
     		items.forEach(function(item){
 				item.Deleted = true;	
 			});
+    	},
+    	
+    	_refreshValidationMessages: function(){
+    		this.logValidationMessage("VIN");
+			this.logValidationMessage("EngineNumber");
+			this.logValidationMessage("DealerContact");
+			this.logValidationMessage("AuthorisationNumber");
+			this.logValidationMessage("RecallNumber");
     	}
 	});
 

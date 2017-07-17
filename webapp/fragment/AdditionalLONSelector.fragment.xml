@@ -17,10 +17,10 @@
 									selectionChange="onAssemblySelected"
 									selectedKey="{AdditionalLONHelper>/Assembly}"
 									items="{
-										path: 'AdditionalLON>/LON/ASSEMBLY_SYSTEMS'
+										path: 'AdditionalLON>/'
 									}"
 								>
-									<core:ListItem key="{AdditionalLON>CODE}" text="{AdditionalLON>DESCRIPTION}"/>
+									<core:ListItem key="{AdditionalLON>code}" text="{AdditionalLON>text}"/>
 								</ComboBox>	
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>
@@ -38,7 +38,7 @@
 										path: 'AdditionalLONHelper>/SubAssemblies'
 									}"
 								>
-									<core:ListItem key="{AdditionalLONHelper>CODE}" text="{AdditionalLONHelper>DESCRIPTION}"/>
+									<core:ListItem key="{AdditionalLONHelper>code}" text="{AdditionalLONHelper>text}"/>
 								</ComboBox>	
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>
@@ -54,10 +54,10 @@
 									selectionChange="onOperationTypeSelected"
 									selectedKey="{AdditionalLONHelper>/OperationType}"
 									items="{
-										path: 'AdditionalLON>/LON/OPERATION_TYPES'
+										path: 'OperationTypes>/'
 									}"
 								>
-									<core:ListItem key="{AdditionalLON>CODE}" text="{AdditionalLON>DESCRIPTION}"/>
+									<core:ListItem key="{OperationTypes>code}" text="{OperationTypes>text}"/>
 								</ComboBox>	
 		                    </sap.ui.layout.form:fields>
 		                </sap.ui.layout.form:FormElement>

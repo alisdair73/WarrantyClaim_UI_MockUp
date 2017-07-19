@@ -72,6 +72,22 @@
 						<l:GridData span="L2" />
 					</layoutData>
 				</Input>
+				<Label text="Part Status" labelFor="PartStatus"/>
+				<ComboBox
+					width="100%"
+					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+					items="{path:'/PartStatusSet', templateShareable:false}"
+					selectedKey="{MCPNHelper>/PartRequested}"
+				>
+					<core:ListItem 
+						key="{StatusCode}" 
+						text="{Description}" 
+						enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4'}"
+					/>
+					<layoutData>
+						<l:GridData span="L4" />
+					</layoutData>
+				</ComboBox>					
 			</f:content>
 		</f:SimpleForm>	
 	</VBox>

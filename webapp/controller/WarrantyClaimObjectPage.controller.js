@@ -267,7 +267,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "1110000005";
+			//claimNumber = "1100000327";
 			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			
@@ -336,7 +336,7 @@ sap.ui.define([
 			var path = oData.getSource().getPath() + "/";
             var messages = model.getMessagesByPath(path);
 		
-			if(messages){
+			if(messages && messages.length > 0){
 				//There was an Error with the oData response
 				if(messages[0]){
 					MessageBox.error(
@@ -421,13 +421,13 @@ sap.ui.define([
 		_canExecuteAction: function(){
 			
 			//Run all UI Validation Rules
+			sap.ui.getCore().getMessageManager().removeAllMessages();
 			WarrantyClaim.validateAll();
+		//	WarrantyClaim.resetChanges();
+			sap.ui.getCore().getEventBus().publish("Validation","Refresh");
 			
 			//If there are any Frontend Issues - then don't call Action...
 			if(WarrantyClaim.hasFrontendValidationError()){
-				WarrantyClaim.resetChanges();
-				sap.ui.getCore().getEventBus().publish("Validation","Refresh");
-				
 				var errorMessage = {
 					"message":"Please correct the data validation errors.",
 					"severity":"error"

@@ -17,7 +17,12 @@ sap.ui.define([
 			}); */
 			
 			this.getView().setModel(
-				new JSONModel({"MCPN":"","Description":"","Quantity": "0"}),
+				new JSONModel({
+					"MCPN":"",
+					"Description":"",
+					"Quantity": "0",
+					"PartRequested": ""
+				}),
 				"MCPNHelper"
 			);
 			
@@ -57,7 +62,7 @@ sap.ui.define([
 					var warrantyItem = Models.createNewWarrantyItem("MAT");
 					warrantyItem.setProperty("/PartNumber", this.getView().getModel("MCPNHelper").getProperty("/MCPN"));
 					warrantyItem.setProperty("/Description", this.getView().getModel("MCPNHelper").getProperty("/Description"));
-					warrantyItem.setProperty("/PartRequested", "S");
+					warrantyItem.setProperty("/PartRequested", this.getView().getModel("MCPNHelper").getProperty("/PartRequested"));
 					warrantyItem.setProperty("/Quantity", this.getView().getModel("MCPNHelper").getProperty("/Quantity"));
 					warrantyItem.setProperty("/IsMCPN",true);
 					warrantyItems.push(warrantyItem.getProperty("/"));
@@ -119,6 +124,7 @@ sap.ui.define([
 			if(this._MCPNRequest){
 				this.getView().getModel("MCPNHelper").setProperty("/MCPN",dataObject.materialNo);
 				this.getView().getModel("MCPNHelper").setProperty("/Description",dataObject.description);
+				this.getView().getModel("MCPNHelper").setProperty("/PartRequested", "S");
 				this.onMCPNChanged(); //Update the Parts Table
 			} else {
 				

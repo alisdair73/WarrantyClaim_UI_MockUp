@@ -84,7 +84,7 @@
 					</suggestionItems>										
 				</Input>
 	
-				<core:Title text="Authorisation/Recall" />
+				<core:Title text="Authorisation"/>
 				<Label 
 				    id="AuthorisationNumber_label"
 					text="PWA Number" 
@@ -126,14 +126,18 @@
 						</ColumnListItem>
 					</suggestionRows>
 				</Input>
+				
+				<core:Title text="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' ? 'Recall' : '' }"/>
 				<Label 
 					id="RecallNumber_label"
 					text="Recall Number" 
 					labelFor="RecallNumber" 
+					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 				/>
 				<Input 
 					id="RecallNumber" 
+					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 					value="{WarrantyClaim>RecallNumber/value}"
 					change="onRecallNumberChanged"

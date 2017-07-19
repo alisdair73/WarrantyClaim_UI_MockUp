@@ -96,9 +96,6 @@ sap.ui.define([
 					var warrantyClaimItem = jsonModel.WarrantyClaimItems.results[i];
 					switch(warrantyClaimItem.ItemType) {
     					case "MAT":
-/*    						if(this.warrantyClaim.Parts.length === 0){
-    							warrantyClaimItem.IsMCPN = true;
-    						}*/
     						this.warrantyClaim.Parts.push(warrantyClaimItem);
 				        	break;
 				    	case "FR":
@@ -173,10 +170,6 @@ sap.ui.define([
 					var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
 					switch(oWarrantyClaimItem.ItemType) {
     					case "MAT":
-/*    						oWarrantyClaimItem.IsMCPN = false;
-    						if(this.warrantyClaim.Parts.length === 0){
-    							oWarrantyClaimItem.IsMCPN = true;
-    						}*/
     						this.warrantyClaim.Parts.push(oWarrantyClaimItem);
 				        	break;
 				    	case "FR":
@@ -352,7 +345,7 @@ sap.ui.define([
 						Rule.validateDateIsNotFutureDate(this.warrantyClaim.DateOfRepair.value);
 					if(this.warrantyClaim.DateOfRepair.ruleResult.valid){
 						this.warrantyClaim.DateOfRepair.ruleResult = 
-							Rule.validateRepairDate(this.warrantyClaim.DateOfRepair.value, this.warrantyClaim.DateOfFailure);  
+							Rule.validateRepairDate(this.warrantyClaim.DateOfRepair.value, this.warrantyClaim.DateOfFailure.value);  
 					}
 				} 
 			} else {
@@ -570,7 +563,7 @@ sap.ui.define([
 				this.warrantyClaim.DefectCode.ruleResult.valid &&
 				this.warrantyClaim.AuthorisationNumber.ruleResult.valid &&
 				this.warrantyClaim.PartsInstallDate.ruleResult.valid &&
-				this.warrantyClaim.PartsInstallKM.ruleResult.valid && 
+				this.warrantyClaim.PartsInstallKm.ruleResult.valid && 
 				this.warrantyClaim.OriginalInvoiceNumber.ruleResult.valid &&
 				this.warrantyClaim.RecallNumber.ruleResult.valid &&
 				this.warrantyClaim.OldSerialNumber.ruleResult.valid && 

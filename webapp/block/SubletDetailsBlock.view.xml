@@ -1,15 +1,8 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" 
 	xmlns="sap.m" xmlns:l="sap.ui.layout" controllerName="WarrantyClaim_MockUp.block.SubletDetailsBlockController">
-	<CheckBox 
-		selected="{WarrantyClaim>/PartsInstalledByDealer}"
-		text="Installed by Dealer?" 
-		editable="{WarrantyClaim>/CanEdit}" 
-		visible="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' }"
-	/>
 	<Table 
 		id="SubletTable"
 		items="{WarrantyClaim>/Sublet}" 
-		showOverlay="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' &amp;&amp; !${WarrantyClaim>/PartsInstalledByDealer}}"
 	>
 		<headerToolbar>
 			<Toolbar>

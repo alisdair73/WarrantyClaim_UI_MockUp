@@ -5,6 +5,7 @@
 	<Table 
 		items="{WarrantyClaim>/Labour}" 
 		id="LONTable" 
+		showOverlay="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' &amp;&amp; !${WarrantyClaim>/PartsInstalledByDealer}}"
 	>
 		<headerToolbar>
 			<Toolbar>

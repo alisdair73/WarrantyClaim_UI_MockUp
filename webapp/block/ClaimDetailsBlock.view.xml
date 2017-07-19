@@ -127,9 +127,9 @@
 			>
 				<core:Item key="{EmployeeNumber}" text="{FirstName} {LastName}"  />
 			</Select>
-
 		</f:content>
 		</f:SimpleForm>
+		
 		<f:SimpleForm id="ClaimSerial"
 			objectBindings="{WarrantyClaim>/}"
 			editable="true"
@@ -142,6 +142,7 @@
 			columnsL="1"
 			columnsM="2"
 			singleContainerFullSize="false"
+			visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 		>
 			<f:content>
 				<core:Title text="Recall Serial Numbers" />
@@ -168,8 +169,10 @@
 				/>
 			</f:content>
 		</f:SimpleForm>
+		
 		<f:SimpleForm id="ClaimParts"
 			objectBindings="{WarrantyClaim>/}"
+			visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS'}"
 			editable="true"
 			layout="ResponsiveGridLayout"
 			labelSpanL="4"
@@ -214,10 +217,11 @@
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					change="onPartsInstallKmChanged"
 					valueState="{= ${WarrantyClaim>PartsInstallKm/ruleResult/valid} ? 'None':'Error'}"
-				/>
+				/>	
+				<core:Title text="" />
 				<Label 
 					id="OriginalInvoiceNumber_label"
-					text="Original Invoice Number" 
+					text="Invoice Number" 
 					labelFor="originalInvoiceNo" 
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 				/>
@@ -230,6 +234,15 @@
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					change="onOriginalInvoiceNumberChanged"
 					valueState="{= ${WarrantyClaim>OriginalInvoiceNumber/ruleResult/valid} ? 'None':'Error'}"
+				/>	
+				<Label 
+					text="Installed By Dealer?" 
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+				/>				
+				<CheckBox 
+					selected="{WarrantyClaim>/PartsInstalledByDealer}"
+					editable="{WarrantyClaim>/CanEdit}" 
+					visible="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' }"
 				/>
 			</f:content>
 		</f:SimpleForm>

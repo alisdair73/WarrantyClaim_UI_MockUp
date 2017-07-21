@@ -77,7 +77,7 @@ sap.ui.define([], function() {
 			}
 			return {"valid": validated, "errorTextID":"mandatoryField"};
 		},
-		
+
 		validateSerialNumbersArePopulated: function(fieldValue){
 
 /*			if(view.getModel("ViewHelper").getProperty("/warrantyUI/serialNumberIsMandatory")){

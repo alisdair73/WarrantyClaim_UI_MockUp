@@ -27,7 +27,9 @@ sap.ui.define([
 			);
 			
 			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._updateMCPN.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("PWA","Selected",this._updateMCPN.bind(this),this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._updateMCPN.bind(this),this);
+			
 		},
 				
 		addMCPN: function(){
@@ -45,15 +47,14 @@ sap.ui.define([
 			this._MCPNRequest = true;
 			
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
-
+			var indexOfMCPN = warrantyItems.findIndex(function(item){
+				return item.IsMCPN;
+			});
+				
 			// Update/Add the MCPN
 			if(this.getView().getModel("MCPNHelper").getProperty("/MCPN") !== ""){
 				
-				//Are we adding or Modifying the MCP?
-				var indexOfMCPN = warrantyItems.findIndex(function(item){
-					return item.IsMCPN;
-				});
-				
+				//Are we adding or Modifying the MCPN
 				if(warrantyItems[indexOfMCPN]){
 					warrantyItems[indexOfMCPN].PartNumber = this.getView().getModel("MCPNHelper").getProperty("/MCPN");
 					warrantyItems[indexOfMCPN].Description = this.getView().getModel("MCPNHelper").getProperty("/Description");
@@ -66,6 +67,15 @@ sap.ui.define([
 					warrantyItem.setProperty("/Quantity", this.getView().getModel("MCPNHelper").getProperty("/Quantity"));
 					warrantyItem.setProperty("/IsMCPN",true);
 					warrantyItems.push(warrantyItem.getProperty("/"));
+				}
+			} else {
+				this.getView().getModel("MCPNHelper").setProperty("/Description","");
+				this.getView().getModel("MCPNHelper").setProperty("/Quantity",0);
+
+				if(warrantyItems[indexOfMCPN]){
+					warrantyItems[indexOfMCPN].PartNumber = "";
+					warrantyItems[indexOfMCPN].Description = "";
+					warrantyItems[indexOfMCPN].Quantity = 0;
 				}
 			}
 			

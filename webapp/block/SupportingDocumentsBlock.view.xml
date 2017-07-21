@@ -10,9 +10,10 @@
 					<sap.ui.layout.form:FormElement>
 						<sap.ui.layout.form:fields>
 							<UploadCollection
-								id="UploadCollection"
-								uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('{WarrantyClaim>ClaimNumber}')/Attachments"
+								id="warrantyAttachmentCollection"
+								uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('Attachment')/Attachments"
 								multiple="false"
+								instantUpload="false"
 								showSeparators="All"
 								fileDeleted="onFileDeleted"
 								uploadEnabled="{= ${WarrantyClaim>CanEdit} &amp;&amp; ${WarrantyClaim>ClaimNumber} !== ''}"
@@ -22,7 +23,7 @@
 								filenameLengthExceed="onFileSizeExceed"
 								change="onChange"
 								maximumFileSize="25"
-								noDataText="{= ${WarrantyClaim>ClaimNumber} === '' ? 'Warranty Claim must be saved before adding attachments' : 'No Attachments' }"
+								noDataText="No Attachments"
 								items="{path : 'WarrantyClaim>/Attachments'}"
 								mode="SingleSelectMaster">
 								<toolbar>

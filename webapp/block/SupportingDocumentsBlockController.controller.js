@@ -9,11 +9,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		
 		onInit: function () {
 			// Sets the text to the label
-			this.getView().byId("UploadCollection").addEventDelegate({
+			this.getView().byId("warrantyAttachmentCollection").addEventDelegate({
 				onBeforeRendering : function () {
 					this.getView().byId("attachmentTitle").setText(this._getAttachmentTitleText());
 				}.bind(this)
 			});
+			
+			//Set up Event Listener to Upload Files
+			sap.ui.getCore().getEventBus().subscribe("Warranty","Saved",this._uploadAttachmentCollection.bind(this),this);
 		},
 
 		onUploadComplete: function(oEvent) {
@@ -28,10 +31,20 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		    	"URL": "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('" + ClaimNumber + "')/Attachments('" + fileResponse.d.DocumentID + "')/$value"
 		    };
 		    attachments.push(attachment);
-		    this.getView().getModel("WarrantyClaim").setProperty("/Attachments", attachments);
+		  
+		    var uploadCollection = this.getView().byId("warrantyAttachmentCollection");
+
+		    for (var i = 0; i < uploadCollection.getItems().length; i++) {
+				if (uploadCollection.getItems()[i].getFileName() === fileResponse.d.FileName) {
+					uploadCollection.removeItem(uploadCollection.getItems()[i]);
+					break;
+				}
+			}
+
+		    this.getView().getModel("WarrantyClaim").setProperty("/Attachments", attachments);		    
 		},
 		
-		onUploadTerminated: function(oEvent) {
+		onUploadTerminated: function() {
 		
 /*			var sFileName = oEvent.getParameter("fileName");
 			var oRequestHeaders = oEvent.getParameters().getHeaderParameter();*/
@@ -72,7 +85,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				false
 			));
 			
-			this.getView().byId("UploadCollection").getBinding("items").filter(filters);		    
+			this.getView().byId("warrantyAttachmentCollection").getBinding("items").filter(filters);		    
 		},		
 		
 		onFileSizeExceed : function(oEvent) {
@@ -80,8 +93,14 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		},
 
 		_getAttachmentTitleText: function(){
-			var aItems = this.getView().byId("UploadCollection").getItems();
+			var aItems = this.getView().byId("warrantyAttachmentCollection").getItems();
 			return "Uploaded (" + aItems.length + ")";
+		},
+		
+		_uploadAttachmentCollection: function(){
+			//Start the File Upload
+			var attachmentCollection = this.getView().byId("warrantyAttachmentCollection");
+			attachmentCollection.upload();
 		}
 	});
 

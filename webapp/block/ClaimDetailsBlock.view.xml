@@ -146,7 +146,11 @@
 		>
 			<f:content>
 				<core:Title text="Recall Serial Numbers" />
-				<Label text="Serial Numbers" required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"/>
+				<Label 
+						id="OldSerialNumber_label"
+						text="Old Serial Number" 
+						required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
+				/>
 				<Input 
 					id="OldSerialNumber" 
 					placeholder="Old Serial Number" 
@@ -157,6 +161,11 @@
 					change="onOldSerialNumberChanged"
 					valueState="{= ${WarrantyClaim>OldSerialNumber/ruleResult/valid} ? 'None':'Error'}"
 				/>
+				<Label 
+						id="NewSerialNumber_label"
+						text="New Serial Number" 
+						required="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' &amp;&amp; ${ViewHelper>/warrantyUI/serialNumberIsMandatory}}"
+				/>				
 				<Input 
 					id="NewSerialNumber" 
 					placeholder="New Serial Number" 

@@ -32,7 +32,6 @@
 					icon="{= ${WarrantyClaim>/CanEdit} ? 'sap-icon://unlocked' : 'sap-icon://locked' }"
 				/>
 			</layout:VerticalLayout>
-			<layout:VerticalLayout class="sapUiNoMargin" width="100%" id="messageArea"/>
 		</headerContent>
 		<sections>
 			<ObjectPageSection id="vehicleDetails" title="VEHICLE">

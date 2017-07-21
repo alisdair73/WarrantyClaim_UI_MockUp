@@ -129,7 +129,6 @@ sap.ui.define([
 		
 		_doWarrantyAction: function(actionName){
 			this.getModel("ViewHelper").setProperty("/busy", true);
-			this._clearHeaderMessages();
 			
 			this.getOwnerComponent().getModel().create("/WarrantyClaimSet",
 				WarrantyClaim.convertToODataForUpdate(), 
@@ -192,11 +191,20 @@ sap.ui.define([
 		_onActionSuccess: function(responseData,response){
 			
 			var leadingMessage = JSON.parse(response.headers['sap-message']);
-			MessageToast.show(leadingMessage.message);
+			MessageBox.success(
+				leadingMessage.message + "\nPlease observe any additional notes provided.",
+				{
+					id : "errorMessageBox",
+					actions : [MessageBox.Action.CLOSE],
+					onClose : function () {
+						//this.navigateToLaunchpad();
+					}
+				}	
+			);
 			
-			this._addMessagesToHeader(leadingMessage.details);
 			WarrantyClaim.updateWarrantyClaimFromJSONModel(responseData);
 			
+			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Saved");
 			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
 		
@@ -204,8 +212,19 @@ sap.ui.define([
 			
 			switch(error.statusCode){
 				case "400":
-					var errorDetail = JSON.parse(error.responseText);
-					this._addMessagesToHeader(errorDetail.error.innererror.errordetails);
+					//var errorDetail = JSON.parse(error.responseText);
+					//this._addMessagesToHeader(errorDetail.error.innererror.errordetails);
+					
+					MessageBox.error(
+						"An error occurred while processing the Warranty Claim.",
+						{
+							id : "errorMessageBox",
+							actions : [MessageBox.Action.CLOSE],
+							onClose : function () {
+								//this.navigateToLaunchpad();
+							}
+						}	
+					);
 					
 					//REMOVE THE DUPLICATED LEAD MESSAGE - "SY/530"
 					var registeredMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
@@ -267,7 +286,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "1100000327";
+			//claimNumber = "100000000812";
 			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			
@@ -383,7 +402,7 @@ sap.ui.define([
 		},
 		
 		_clearHeaderMessages: function(){
-			this.getView().byId("messageArea").destroyContent();
+	//		this.getView().byId("messageArea").destroyContent();
 		},
 		
 		_translateMessageTypes: function(messageType){
@@ -402,7 +421,7 @@ sap.ui.define([
 		
 		_addMessagesToHeader: function(messages){
 		
-			var messageArea = this.getView().byId("messageArea");
+/*			var messageArea = this.getView().byId("messageArea");
 			messageArea.destroyContent();
 			
 			for (var i = 0; i < messages.length; i++) {
@@ -415,7 +434,7 @@ sap.ui.define([
 				messageArea.addContent(messageStrip);
 			}
 			var objectLayout = this.getView().byId("WarrantyClaimLayout");
-			objectLayout.scrollToSection(this.getView().byId("vehicleDetails_sub1").getId(), 0, -200);
+			objectLayout.scrollToSection(this.getView().byId("vehicleDetails_sub1").getId(), 0, -200);*/
 		},
 		
 		_canExecuteAction: function(){
@@ -428,12 +447,17 @@ sap.ui.define([
 			
 			//If there are any Frontend Issues - then don't call Action...
 			if(WarrantyClaim.hasFrontendValidationError()){
-				var errorMessage = {
-					"message":"Please correct the data validation errors.",
-					"severity":"error"
-				};
-				
-				this._addMessagesToHeader([errorMessage]);
+				MessageBox.error(
+					"Please correct the data validation errors.",
+					{
+						id : "errorMessageBox",
+						actions : [MessageBox.Action.CLOSE],
+						onClose : function () {
+							//this.navigateToLaunchpad();
+						}
+					}	
+				);
+				//this._addMessagesToHeader([errorMessage]);
 				return false;
 			} else {
 				return true;

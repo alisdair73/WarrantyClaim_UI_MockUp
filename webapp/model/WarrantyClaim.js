@@ -358,6 +358,22 @@ sap.ui.define([
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.RepairOrderNumber.value);
 		},
 		
+		validateMainCausalPartNumber: function(){
+			
+			//Find the MCPN from the Parts Array
+/*			var indexOfMCPN = this.warrantyClaim.Parts.findIndex(function(item){
+				return item.IsMCPN;
+			});
+			
+			if(this.warrantyClaim.Parts[indexOfMCPN]){
+				
+			} else {
+				this.warrantyClaim.DateOfRepair.ruleResult = {"valid": false, "errorTextID":"mandatoryField"};
+			}
+			
+			Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.RepairOrderNumber.value);*/
+		},
+		
 //			
 //          Below rules vary based on Claim Type 			
 //
@@ -476,8 +492,8 @@ sap.ui.define([
 			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "PARTS":
-					this.warrantyClaim.PartsInstallKM.ruleResult = 
-						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.PartsInstallKM.value);
+					this.warrantyClaim.PartsInstallKm.ruleResult = 
+						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.PartsInstallKm.value);
 					break;
 			}
 		},
@@ -507,7 +523,8 @@ sap.ui.define([
     		switch(this.warrantyClaim.ClaimTypeGroup){
 				case "RECALL":
 					this.warrantyClaim.OldSerialNumber.ruleResult = 
-						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.OldSerialNumber.value);
+//						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.OldSerialNumber.value);
+						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.OldSerialNumber.value);
 					break;
 			}
 		},
@@ -517,7 +534,8 @@ sap.ui.define([
     		switch(this.warrantyClaim.ClaimTypeGroup){
 				case "RECALL":
 					this.warrantyClaim.NewSerialNumber.ruleResult = 
-						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.NewSerialNumber.value);
+//						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.NewSerialNumber.value);
+						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.NewSerialNumber.value);
 					break;
 			}
 		},

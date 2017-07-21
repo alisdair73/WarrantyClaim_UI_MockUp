@@ -71,29 +71,37 @@ sap.ui.define([
 			}
 			
 			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber/value",dataObject.PWANumber);
+			this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",dataObject.VIN);
 			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value",dataObject.EngineNumber);
+			this.getView().getModel("WarrantyClaim").setProperty("/DateOfFailure/value",dataObject.DateOfFailure);
+			this.getView().getModel("WarrantyClaim").setProperty("/FailureMeasure/value",dataObject.FailureMeasure);
+			this.getView().getModel("WarrantyClaim").setProperty("/CustomerConcern/value",dataObject.CustomerConcern);
 			
-			if (dataObject.MCPN){
-				
-				//Add the MCPN
-				
-/*				var parts = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
-
-				if(parts.length === 0){
-					var warrantyItem = Models.createNewWarrantyItem("MAT");
-					warrantyItem.setProperty("/PartNumber", dataObject.MCPN);
-					warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
-					warrantyItem.setProperty("/Quantity", 1); //???
-					warrantyItem.setProperty("/IsMCPN", true);
-					parts.push(warrantyItem.getProperty("/"));
-					this.getView().getModel("WarrantyClaim").setProperty("/Parts",parts);
-					
-				} else {
-					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/PartNumber",dataObject.MCPN);
-					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/Description",dataObject.MCPNDescription);
-					this.getView().getModel("WarrantyClaim").setProperty("/Parts/0/Quantity",1); //???
-				} */
+			// Update/Add the MCPN
+			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
+			var indexOfMCPN = warrantyItems.findIndex(function(item){
+				return item.IsMCPN;
+			});
+			
+			//Are we adding or Modifying the MCPN
+			if(warrantyItems[indexOfMCPN]){
+				warrantyItems[indexOfMCPN].PartNumber = dataObject.MCPN;
+				warrantyItems[indexOfMCPN].Description = dataObject.MCPNDescription;
+				warrantyItems[indexOfMCPN].Quantity = 0;
+			} else {
+				var warrantyItem = Models.createNewWarrantyItem("MAT");
+				warrantyItem.setProperty("/PartNumber", dataObject.MCPN);
+				warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
+				warrantyItem.setProperty("/Quantity", 0);
+				warrantyItem.setProperty("/IsMCPN",true);
+				warrantyItems.push(warrantyItem.getProperty("/"));
 			}
+			
+			// update the model
+			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
+			
+			//Let interested controller know
+			sap.ui.getCore().getEventBus().publish("PWA","Selected");
 		},
 
 		onPWASuggest: function(event){

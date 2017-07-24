@@ -142,7 +142,7 @@
 					enabled="{= !${UIValidation>/hasUIValidationError} || ${WarrantyClaim>/Validate} === 'no'}"
 					press="onSubmit" 
 					type="Emphasized" 
-					visible="{WarrantyClaim>/CanEdit}"
+					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${ViewHelper>/warrantyUI/hasBeenValidated}}"
 				/>
 			</m:OverflowToolbar>
 		</footer>

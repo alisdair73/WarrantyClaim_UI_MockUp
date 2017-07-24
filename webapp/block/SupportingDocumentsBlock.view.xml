@@ -16,7 +16,7 @@
 								instantUpload="false"
 								showSeparators="All"
 								fileDeleted="onFileDeleted"
-								uploadEnabled="{= ${WarrantyClaim>CanEdit} &amp;&amp; ${WarrantyClaim>ClaimNumber} !== ''}"
+								uploadEnabled="{WarrantyClaim>CanEdit}"
 								uploadComplete="onUploadComplete"
 								beforeUploadStarts="onBeforeUploadStarts"
 								uploadTerminated="onUploadTerminated"

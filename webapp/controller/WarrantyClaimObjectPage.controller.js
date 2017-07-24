@@ -32,7 +32,8 @@ sap.ui.define([
 					"symptomCodeL2": "",
 					"defectCodeL1": "",
 					"internalRecallNumber":"",
-					"serialNumberIsMandatory": false
+					"serialNumberIsMandatory": false,
+					"hasBeenValidated": false
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
@@ -128,13 +129,16 @@ sap.ui.define([
 		},
 		
 		_doWarrantyAction: function(actionName){
+			
 			this.getModel("ViewHelper").setProperty("/busy", true);
 			
 			this.getOwnerComponent().getModel().create("/WarrantyClaimSet",
 				WarrantyClaim.convertToODataForUpdate(), 
 				{
 					context: null,
-					"success": this._onActionSuccess.bind(this),
+					"success": function(responseData,response){
+						this._onActionSuccess(actionName, responseData, response);
+					}.bind(this),
 					"error": this._onActionError.bind(this),
 					"headers" : { "warrantyaction": actionName },
 					async: true
@@ -188,9 +192,14 @@ sap.ui.define([
 				);
 		},
 		
-		_onActionSuccess: function(responseData,response){
+		_onActionSuccess: function(actionName, responseData, response){
 			
 			var leadingMessage = JSON.parse(response.headers['sap-message']);
+			
+			if(actionName === "ValidateWarranty"){
+				this.getModel("ViewHelper").setProperty("/warrantyUI/hasBeenValidated", true);
+			}
+			
 			MessageBox.success(
 				leadingMessage.message + "\nPlease observe any additional notes provided.",
 				{
@@ -212,9 +221,7 @@ sap.ui.define([
 			
 			switch(error.statusCode){
 				case "400":
-					//var errorDetail = JSON.parse(error.responseText);
-					//this._addMessagesToHeader(errorDetail.error.innererror.errordetails);
-					
+
 					MessageBox.error(
 						"An error occurred while processing the Warranty Claim.",
 						{
@@ -442,7 +449,6 @@ sap.ui.define([
 			//Run all UI Validation Rules
 			sap.ui.getCore().getMessageManager().removeAllMessages();
 			WarrantyClaim.validateAll();
-		//	WarrantyClaim.resetChanges();
 			sap.ui.getCore().getEventBus().publish("Validation","Refresh");
 			
 			//If there are any Frontend Issues - then don't call Action...

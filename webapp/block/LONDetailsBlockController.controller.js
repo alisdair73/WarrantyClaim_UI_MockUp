@@ -12,6 +12,7 @@ sap.ui.define([
 		onInit: function(){
 			
 			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applyLONTableFilter.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applyLONTableFilter.bind(this),this);
 			
 			this.getView().setModel(new JSONModel({"HasLON":false}) , "LONHelper");
 			

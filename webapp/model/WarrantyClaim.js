@@ -9,6 +9,9 @@ sap.ui.define([
 		oDataModel: null,
 		warrantyClaim: {},
 		warrantyClaimOriginal: {},
+		deletedParts: [],
+		deletedLON: [],
+		deletedSublet: [],
 		
 		createWarrantyClaimModel: function() {
 			this.warrantyClaim = {
@@ -69,7 +72,7 @@ sap.ui.define([
 			return this.oDataModel;
 		},
 		
-		updateWarrantyClaimFromJSONModel: function(jsonModel){
+		updateWarrantyClaimFromJSONModel: function(jsonModel, validateMode){
 		
 			this.warrantyClaim.ClaimNumber = jsonModel.ClaimNumber;
 			this.warrantyClaim.ClaimCurrency = jsonModel.ClaimCurrency;
@@ -106,6 +109,11 @@ sap.ui.define([
 			    			break;
 					}
 				}
+            }
+            
+            if(validateMode){
+            	this.warrantyClaim.Labour = this.warrantyClaim.Labour.concat(this.deletedLON);
+            	this.deletedLON = [];
             }
             
             this.resetChanges();
@@ -232,6 +240,11 @@ sap.ui.define([
 			
 			var warrantyClaimItem = null;
 			
+			this.deletedLON = this.warrantyClaim.Labour.filter(function(LONItem){
+					return LONItem.Deleted;
+				}
+			);
+						
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Parts[i];
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();

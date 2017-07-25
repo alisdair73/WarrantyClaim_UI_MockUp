@@ -12,7 +12,7 @@
 				<Title text="Labour Operation Numbers" level="H2"/>
 				<ToolbarSpacer/>
 				<Button 
-					text="Select LON" 
+					text="Add LON" 
 					icon="sap-icon://task" 
 					press="onCheckLON" 
 					enabled="{= ${WarrantyClaim>/Parts/0/PartNumber} !== '' &amp;&amp; ${WarrantyClaim>/VIN} !== ''}"

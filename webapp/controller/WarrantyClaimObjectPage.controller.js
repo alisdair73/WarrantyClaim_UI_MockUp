@@ -199,7 +199,6 @@ sap.ui.define([
 			if(actionName === "ValidateWarranty"){
 				this.getModel("ViewHelper").setProperty("/warrantyUI/hasBeenValidated", true);
 			}
-			
 			MessageBox.success(
 				leadingMessage.message + "\nPlease observe any additional notes provided.",
 				{
@@ -211,8 +210,8 @@ sap.ui.define([
 				}	
 			);
 			
-			WarrantyClaim.updateWarrantyClaimFromJSONModel(responseData);
-			
+			WarrantyClaim.updateWarrantyClaimFromJSONModel(responseData, actionName === "ValidateWarranty");
+		
 			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Saved");
 			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
@@ -293,7 +292,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "100000000812";
+			claimNumber = "1100000408";
 			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			

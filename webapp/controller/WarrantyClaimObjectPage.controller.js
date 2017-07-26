@@ -292,7 +292,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			claimNumber = "1100000408";
+			claimNumber = "1100000413";
 			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			

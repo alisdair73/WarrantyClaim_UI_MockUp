@@ -12,7 +12,7 @@ sap.ui.define([], function() {
 				var dateOfRepair = new Date(repairDate.getFullYear(),repairDate.getMonth(), repairDate.getDate());
 				var dateOfFailure = new Date(failureDate.getFullYear(), failureDate.getMonth(), failureDate.getDate());				
 				
-				if (dateOfFailure.valueOf() >= dateOfRepair.valueOf()){
+				if (dateOfFailure.valueOf() > dateOfRepair.valueOf()){
 					validated = false;
 				}
 			}

@@ -121,8 +121,7 @@
 	                			path: 'WarrantyClaim>Quantity',							
 	                			type: 'sap.ui.model.type.Float',
 								formatOptions: {
-									minFractionDigits: 3,
-									maxFractionDigits: 3
+									maxFractionDigits: 0
 								}
 							}" 
 							visible= "{= ${WarrantyClaim>isMCPN} || !${WarrantyClaim>/CanEdit}}"
@@ -133,8 +132,8 @@
 								path: 'WarrantyClaim>Quantity',
 								type: 'sap.ui.model.type.Float',
 								formatOptions: {
-									minFractionDigits: 3,
-									maxFractionDigits: 3
+									maxFractionDigits: 0,
+									groupingEnabled: false
 								}
 							}" 
 							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"

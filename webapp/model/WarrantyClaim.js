@@ -17,15 +17,17 @@ sap.ui.define([
 			this.warrantyClaim = {
 				"ClaimNumber": "",
 				"ClaimType": "",
-				"ObjectType":"",
+				"ClaimObjectType":"",
 				"ClaimTypeDescription": "",
 				"ClaimTypeGroup": "",
+				"SalesOrganisation":"",
 				"SubmittedOn":null,
 				"Dealer":"",
 				"DealerContact": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"EngineNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"AuthorisationNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"VIN": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"SerialNumber": "",
 				"RecallNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"RepairOrderNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"TotalCostOfClaim":"0",
@@ -129,11 +131,14 @@ sap.ui.define([
 			this.warrantyClaim.ClaimNumber = oWarrantyClaim.ClaimNumber;
 			this.warrantyClaim.ClaimType = oWarrantyClaim.ClaimType;
 			this.warrantyClaim.ClaimTypeDescription = oWarrantyClaim.ClaimTypeDescription;
+			this.warrantyClaim.ClaimObjectType = oWarrantyClaim.ClaimObjectType;
 			this.warrantyClaim.ClaimTypeGroup = oWarrantyClaim.ClaimTypeGroup;
+			this.warrantyClaim.SalesOrganisation = oWarrantyClaim.SalesOrganisation;
 			this.warrantyClaim.DealerContact.value = oWarrantyClaim.DealerContact;
 			this.warrantyClaim.EngineNumber.value = oWarrantyClaim.EngineNumber;
 			this.warrantyClaim.AuthorisationNumber.value = oWarrantyClaim.AuthorisationNumber;
 			this.warrantyClaim.VIN.value = oWarrantyClaim.VIN;
+			this.warrantyClaim.SerialNumber = oWarrantyClaim.SerialNumber;
 			this.warrantyClaim.RecallNumber.value = oWarrantyClaim.RecallNumber;
 			this.warrantyClaim.RepairOrderNumber.value = oWarrantyClaim.RepairOrderNumber;
 			this.warrantyClaim.TotalCostOfClaim = oWarrantyClaim.TotalCostOfClaim;
@@ -209,10 +214,13 @@ sap.ui.define([
 			};
 			warrantyClaim.ClaimNumber = this.warrantyClaim.ClaimNumber;
 			warrantyClaim.ClaimType = this.warrantyClaim.ClaimType;
+			warrantyClaim.ClaimObjectType = this.warrantyClaim.ClaimObjectType;
+			warrantyClaim.SalesOrganisation = this.warrantyClaim.SalesOrganisation;
 			warrantyClaim.DealerContact = this.warrantyClaim.DealerContact.value;
 			warrantyClaim.EngineNumber = this.warrantyClaim.EngineNumber.value;
 			warrantyClaim.AuthorisationNumber = this.warrantyClaim.AuthorisationNumber.value;
 			warrantyClaim.VIN = this.warrantyClaim.VIN.value;
+			warrantyClaim.SerialNumber = this.warrantyClaim.SerialNumber;
 			warrantyClaim.RecallNumber = this.warrantyClaim.RecallNumber.value;
 			warrantyClaim.RepairOrderNumber = this.warrantyClaim.RepairOrderNumber.value;
 			warrantyClaim.DateOfRepair = this.warrantyClaim.DateOfRepair.value;
@@ -554,7 +562,7 @@ sap.ui.define([
 		},
 		
 		validateAll: function() {
-			
+
 			this.validateVIN();
 			this.validateEngineNumber();
 			this.validateFailureMeasure();

@@ -16,7 +16,7 @@
 					icon="sap-icon://task" 
 					press="onCheckLON" 
 					enabled="{= ${WarrantyClaim>/Parts/0/PartNumber} !== '' &amp;&amp; ${WarrantyClaim>/VIN} !== ''}"
-					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL' &amp;&amp; ${WarrantyClaim>/ClaimObjectType} === 'VELO'}"
 				/>
 			</Toolbar>
 		</headerToolbar>
@@ -25,11 +25,37 @@
 	            <cells>
 	                <Text text="{WarrantyClaim>ItemKey}" />
 	                <Text text="{WarrantyClaim>Description}" />
-	                <Text text="{WarrantyClaim>Quantity}" />
+	              
+	                <l:HorizontalLayout>
+	                	<Text 
+	                		text="{
+	                			path: 'WarrantyClaim>Quantity',							
+	                			type: 'sap.ui.model.type.Float',
+								formatOptions: {
+									maxFractionDigits: 0
+								}
+							}" 
+							visible= "{= !${WarrantyClaim>/CanEdit} || ${WarrantyClaim>/ClaimObjectType} === 'VELO'}"
+						/>
+	                	<Input
+	                		type="Number"
+	                		value="{
+								path: 'WarrantyClaim>Quantity',
+								type: 'sap.ui.model.type.Float',
+								formatOptions: {
+									maxFractionDigits: 0,
+									groupingEnabled: false
+								}
+							}" 
+							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimObjectType} === 'SERN'}"
+	            		/>
+	        		</l:HorizontalLayout>	          
+	               
 	                <Button 
 	                	icon="sap-icon://delete" 
 	                	press="deleteLON" 
-	                	visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+	                	visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL' &amp;&amp; ${WarrantyClaim>/ClaimObjectType} === 'VELO'}"
 	                />
 	            </cells>
 	        </ColumnListItem>

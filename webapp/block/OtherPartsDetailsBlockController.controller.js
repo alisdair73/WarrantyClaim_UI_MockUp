@@ -170,14 +170,7 @@ sap.ui.define([
 			filters.push(new Filter("IsMCPN",sap.ui.model.FilterOperator.EQ, false));
 			this.getView().byId("partsTable").getBinding("items").filter(filters);
 		},
-		
-/*		_applyMCPNFilter: function(){
-			
-			var filters = [];
-			filters.push(new Filter("IsMCPN",sap.ui.model.FilterOperator.EQ, false));
-			this.getView().byId("partsTable").getBinding("items").filter(filters);
-		}, */
-		
+
 		_updateMCPN: function(){
 			
 			this.getView().getModel("WarrantyClaim").getProperty("/Parts").forEach(function(part){
@@ -186,6 +179,7 @@ sap.ui.define([
 					this.getView().getModel("MCPNHelper").setProperty("/MCPN",part.PartNumber);
 					this.getView().getModel("MCPNHelper").setProperty("/Quantity",part.Quantity);	
 					this.getView().getModel("MCPNHelper").setProperty("/Description",part.Description);
+					this.getView().getModel("MCPNHelper").setProperty("/PartRequested",part.PartRequested);
 				}
 			}.bind(this));
 			

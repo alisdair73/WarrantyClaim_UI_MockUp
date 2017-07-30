@@ -248,16 +248,7 @@ sap.ui.define([
 			MCPN.setProperty("/PartRequested", "S");
 			MCPN.setProperty("/IsMCPN", true);
 			recallItems.push(MCPN.getProperty("/"));
-			
-			//Update the MCPN Field too
-	/*		sap.ui.getCore().getEventBus().publish("MCPN","Changed",
-				{
-					"MCPN": recallGroup.getProperty("/MCP/materialNumber"), 
-					"Description": recallGroup.getProperty("/MCP/materialDescription"),
-					"Quantity": recallGroup.getProperty("/MCP/quantity")
-				}
-			);*/
-			
+
 			//Replace/Repair Selected by Dealer - Transfer Parts/Labour/Sublet
 			var selectedGroupIndex = this.getView().getModel("RecallGroup").getProperty("/selectedGroup").findIndex(function(groupSelected){
 				return groupSelected;

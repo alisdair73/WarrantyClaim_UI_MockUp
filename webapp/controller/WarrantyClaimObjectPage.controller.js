@@ -8,9 +8,10 @@ sap.ui.define([
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
         "sap/m/MessageStrip",
-        "sap/m/MessageBox"
+        "sap/m/MessageBox",
+        "WarrantyClaim_MockUp/model/models"
 	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
-					NumberFormat, MessageStrip, MessageBox) {
+					NumberFormat, MessageStrip, MessageBox, Models) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -58,7 +59,7 @@ sap.ui.define([
 			var claimType = oEvent.getParameter("listItem").getBindingContext().getObject().Code;
 			var claimTypeDescription = oEvent.getParameter("listItem").getBindingContext().getObject().Description;
 			var claimTypeGroup = oEvent.getParameter("listItem").getBindingContext().getObject().Group;
-			var objectType = oEvent.getParameter("listItem").getBindingContext().getObject().ObjectType;
+			var objectType = oEvent.getParameter("listItem").getBindingContext().getObject().ClaimObjectType;
 			
 			var statusDescription = oEvent.getParameter("listItem").getBindingContext().getObject().InitialStatusDescription;
 			var statusIcon = oEvent.getParameter("listItem").getBindingContext().getObject().InitialStatusIcon;
@@ -66,12 +67,24 @@ sap.ui.define([
 			this.getModel("WarrantyClaim").setProperty("/ClaimType",claimType);
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeDescription", claimTypeDescription);
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeGroup", claimTypeGroup);
-			this.getModel("WarrantyClaim").setProperty("/ObjectType", objectType);
+			this.getModel("WarrantyClaim").setProperty("/ClaimObjectType", objectType);
 			
 			this.getModel("WarrantyClaim").setProperty("/StatusDescription",statusDescription);
 			this.getModel("WarrantyClaim").setProperty("/StatusIcon",statusIcon);
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
+			
+			//Provide a Default LON for SERN
+			if(objectType === "SERN"){
+				var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
+				var newLONItem = Models.createNewWarrantyItem("FR");   
+				newLONItem.setProperty("/ItemKey","100001");
+				newLONItem.setProperty("/Description","Labour Hours");
+				newLONItem.setProperty("/Quantity",0);
+				labourItems.push(newLONItem.getProperty("/"));
+				this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
+			}
+			
 			this._claimTypeSelection.close();
 		},
 
@@ -175,9 +188,19 @@ sap.ui.define([
 					context: null,
 					filters: [new Filter("IsAuthorisationType",sap.ui.model.FilterOperator.EQ, false)],
 					success: function(oData) {
-							//this._busyDialog.close();
 							if (!oData.results.length) {
-								//this._showNoDealershipDialog();
+								
+								MessageBox.error(
+									"No Claim Types are defined for this Dealer",
+									{
+										id : "errorMessageBox",
+										actions : [MessageBox.Action.CLOSE],
+										onClose : function () {
+											this.navigateToLaunchpad();
+										}
+									}	
+								);
+								
 							} else {
 								if (! this._claimTypeSelection) {
 									this._claimTypeSelection = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.ClaimTypeSelection", this);
@@ -292,7 +315,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			claimNumber = "1100000413";
+			//claimNumber = "1100000443";
 			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			

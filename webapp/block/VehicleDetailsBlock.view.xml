@@ -77,7 +77,6 @@
 					required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL'}"
 					editable="{WarrantyClaim>CanEdit}"
 					showSuggestion="true"
-					suggestionItemSelected="onDealerContactSelection"
 					suggestionItems="{/EmployeeSet}">
 					<suggestionItems>
 						<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" />

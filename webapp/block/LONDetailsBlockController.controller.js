@@ -87,6 +87,10 @@ sap.ui.define([
 				var bindingPath = sap.ui.getCore().byId("LONCatalog").getSelectedItems()[i].getBindingContext().getPath();
 				var selectedLON = sap.ui.getCore().byId("LONCatalog").getModel().getProperty(bindingPath);
 				
+				//Rule 1 - Don't add Duplicates
+				
+				
+				
 				var newLONItem = Models.createNewWarrantyItem("FR");   
 				newLONItem.setProperty("/ItemKey",selectedLON.LONCode);
 				newLONItem.setProperty("/Description",selectedLON.Description);

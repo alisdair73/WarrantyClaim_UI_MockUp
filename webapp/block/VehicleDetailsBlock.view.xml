@@ -16,8 +16,15 @@
 			class="editableForm"
 			adjustLabelSpan="false">
 			<f:content>
-				<core:Title text="Vehicle Details" />
-				<Label id="VIN_label" text="VIN/Serial Number" required="true" labelFor="VIN"/>
+				<core:Title 
+					text="{= ${WarrantyClaim>/ClaimObjectType} === 'VELO' ? 'Vehicle Details':'Product Details'}"
+				/>
+				<Label 
+					id="VIN_label" 
+					text="{= ${WarrantyClaim>/ClaimObjectType} === 'VELO' ? 'VIN':'Serial Number'}"
+					required="true" 
+					labelFor="VIN"
+				/>
 				<Input 
 					id="VIN" 
 					value="{WarrantyClaim>VIN/value}"

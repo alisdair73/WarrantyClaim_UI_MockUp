@@ -34,9 +34,16 @@
 			</layout:VerticalLayout>
 		</headerContent>
 		<sections>
-			<ObjectPageSection id="vehicleDetails" title="VEHICLE">
+			<ObjectPageSection 
+				id="vehicleDetails" 
+				title="{= ${WarrantyClaim>/ClaimObjectType} === 'VELO' ? 'VEHICLE':'PRODUCT'}"
+			>
 				<subSections>
-					<ObjectPageSubSection id="vehicleDetails_sub1" title="VEHICLE" mode="Expanded">
+					<ObjectPageSubSection 
+						id="vehicleDetails_sub1" 
+						title="{= ${WarrantyClaim>/ClaimObjectType} === 'VELO' ? 'VEHICLE':'PRODUCT'}"
+						mode="Expanded"
+					>
 						<blocks>
 							<claimBlocks:VehicleDetailsBlock id="vehicleDetailsBlock"/>
 						</blocks>

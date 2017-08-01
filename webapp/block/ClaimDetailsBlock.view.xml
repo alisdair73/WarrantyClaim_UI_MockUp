@@ -15,7 +15,7 @@
 			columnsM="2">
 		<f:content>
 			<core:Title text="Failure Details"/>
-			<Label id="FailureMeasure_label" text="Failure KM" required="true" labelFor="FailureMeasure"/>
+			<Label id="FailureMeasure_label" text="Failure KM/Hrs" required="true" labelFor="FailureMeasure"/>
 			<Input 
 				id="FailureMeasure" 
 				type="Number"

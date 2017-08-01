@@ -139,13 +139,14 @@ sap.ui.define([
 			
 			if(!field.ruleResult.valid){
 				 
+				//Get the Field Name 
+				var fieldName = this.getView().getModel("i18n").getResourceBundle().getText(fieldId);
+				
 				this._addErrorMessageToMessageManager(
 					"UI_" + fieldId,
 					model,
 					this.getView().getModel("i18n").getResourceBundle().getText(
-						field.ruleResult.errorTextID,[
-							this.getView().byId(fieldId + "_label").getText()
-						]
+						field.ruleResult.errorTextID,[fieldName]
 					),
 					messageTarget + "/value"
 				);

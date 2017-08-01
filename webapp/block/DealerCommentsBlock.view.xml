@@ -15,11 +15,6 @@
 										<l:layoutData>
 											<l:GridData span="L8"/>
 										</l:layoutData>
-										<Label 
-											id="DealerComments_label" 
-											text="Dealer Comments" 
-											visible="false"
-										/>
 										<TextArea 
 										    id="DealerComments"
 											rows="10" 

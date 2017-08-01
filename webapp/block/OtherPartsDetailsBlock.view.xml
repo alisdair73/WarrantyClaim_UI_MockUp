@@ -21,10 +21,11 @@
 		        <Input 
 		          id="MCPN" 
 		          required="true"
-		          value="{MCPNHelper>/MCPN}"  
-		          description="{MCPNHelper>/Description}"
+		          value="{WarrantyClaim>/MCPN/value}"  
+		          description="{WarrantyClaim>/Description}"
 		          change="onMCPNChanged"
 		          editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+		          valueState="{= ${WarrantyClaim>/MCPN/ruleResult/valid} ? 'None':'Error'}"
 		          showValueHelp="true"
 		          showSuggestion="true"
 		          filterSuggests="false"
@@ -60,7 +61,7 @@
 					required="true"
 					change="onMCPNChanged"
 					value="{
-						path: 'MCPNHelper>/Quantity',
+						path: 'WarrantyClaim>/Quantity',
 						type: 'sap.ui.model.type.Float',
 						formatOptions: {
 							maxFractionDigits: 0
@@ -72,14 +73,14 @@
 						<l:GridData span="L2" />
 					</layoutData>
 				</Input>
-				<Label text="Part Status" labelFor="PartStatus" visible="{= ${MCPNHelper>/Quantity} > 0 }" required="true"/>
+				<Label text="Part Status" labelFor="PartStatus" visible="{= ${WarrantyClaim>/Quantity} > 0 }" required="true"/>
 				<ComboBox
 					width="100%"
-					visible="{= ${MCPNHelper>/Quantity} > 0 }"
+					visible="{= ${WarrantyClaim>/Quantity} > 0 }"
 					required="true"
 					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 					items="{path:'/PartStatusSet', templateShareable:false}"
-					selectedKey="{MCPNHelper>/PartRequested}"
+					selectedKey="{WarrantyClaim>/PartRequested}"
 				>
 					<core:ListItem 
 						key="{StatusCode}" 

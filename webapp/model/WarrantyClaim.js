@@ -27,6 +27,12 @@ sap.ui.define([
 				"EngineNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"AuthorisationNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"VIN": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				
+				"MCPN":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},	//For frontend only - sent to backend via the Parts collection
+				"Description":"",		//For frontend only - sent to backend via the Parts collection
+				"Quantity": "0",		//For frontend only - sent to backend via the Parts collection
+				"PartRequested": "",	//For frontend only - sent to backend via the Parts collection
+				
 				"SerialNumber": "",
 				"RecallNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"RepairOrderNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
@@ -380,19 +386,8 @@ sap.ui.define([
 		},
 		
 		validateMainCausalPartNumber: function(){
-			
-			//Find the MCPN from the Parts Array
-/*			var indexOfMCPN = this.warrantyClaim.Parts.findIndex(function(item){
-				return item.IsMCPN;
-			});
-			
-			if(this.warrantyClaim.Parts[indexOfMCPN]){
-				
-			} else {
-				this.warrantyClaim.DateOfRepair.ruleResult = {"valid": false, "errorTextID":"mandatoryField"};
-			}
-			
-			Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.RepairOrderNumber.value);*/
+			this.warrantyClaim.MCPN.ruleResult = 
+				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.MCPN.value);
 		},
 		
 //			
@@ -417,11 +412,13 @@ sap.ui.define([
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":	
-					this.warrantyClaim.Technician.ruleResult =  
-						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.Technician.value);
-					if(!this.warrantyClaim.Technician.ruleResult.valid){
-						this.warrantyClaim.Technician.ruleResult.errorTextID = "invalidTechnician";
-					}
+					if(this.warrantyClaim.ClaimObjectType === "VELO"){ //Fields are hidden for Serial Numbers
+						this.warrantyClaim.Technician.ruleResult =  
+							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.Technician.value);
+						if(!this.warrantyClaim.Technician.ruleResult.valid){
+							this.warrantyClaim.Technician.ruleResult.errorTextID = "invalidTechnician";
+						}
+					}		
 					break;
 			}
 		},
@@ -432,11 +429,13 @@ sap.ui.define([
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":
-					this.warrantyClaim.ServiceAdvisor.ruleResult =
-						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.ServiceAdvisor.value);
-/*					if(!this.warrantyClaim.Technician.ruleResult.valid){
-						this.warrantyClaim.Technician.ruleResult.errorTextID = "invalidAdvisor";
-					}*/
+					if(this.warrantyClaim.ClaimObjectType === "VELO"){ //Fields are hidden for Serial Numbers
+						this.warrantyClaim.ServiceAdvisor.ruleResult =
+							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.ServiceAdvisor.value);
+						if(!this.warrantyClaim.ServiceAdvisor.ruleResult.valid){
+							this.warrantyClaim.ServiceAdvisor.ruleResult.errorTextID = "invalidAdvisor";
+						}
+					}
 					break;
 			}
 		},
@@ -583,6 +582,7 @@ sap.ui.define([
 			this.validateRecallNumber();
 			this.validateOldSerialNumber();
 			this.validateNewSerialNumber();
+			this.validateMainCausalPartNumber();
 		},
 		
 		hasFrontendValidationError: function(){
@@ -606,7 +606,8 @@ sap.ui.define([
 				this.warrantyClaim.OriginalInvoiceNumber.ruleResult.valid &&
 				this.warrantyClaim.RecallNumber.ruleResult.valid &&
 				this.warrantyClaim.OldSerialNumber.ruleResult.valid && 
-				this.warrantyClaim.NewSerialNumber.ruleResult.valid){
+				this.warrantyClaim.NewSerialNumber.ruleResult.valid &&
+				this.warrantyClaim.MCPN.ruleResult.valid){
 				
 				return false;		
 			} 

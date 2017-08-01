@@ -26,7 +26,8 @@ sap.ui.define([
 		onDefectCodeSelectedL1: function(oEvent){
 			this._updateL2Defects(oEvent.getParameter("selectedItem").mProperties.key);
 			this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
-		//	this.getModel("WarrantyClaim").setProperty("/DefectCode/valid",false);
+			WarrantyClaim.validateDefectCode();
+			this.logValidationMessage("DefectCode");
 		},		
 		
 		onDefectCodeChanged: function(){

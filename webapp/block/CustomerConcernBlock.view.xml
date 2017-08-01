@@ -15,7 +15,6 @@
 										<l:layoutData>
 											<l:GridData span="L8"/>
 										</l:layoutData>
-										<Label id="CustomerConcern_label" text="Customer Concern" visible="false"/>
 										<TextArea 
 											id="CustomerConcern" 
 											rows="10" 

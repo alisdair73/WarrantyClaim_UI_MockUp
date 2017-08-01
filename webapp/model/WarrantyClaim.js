@@ -386,6 +386,7 @@ sap.ui.define([
 		},
 		
 		validateMainCausalPartNumber: function(){
+			
 			this.warrantyClaim.MCPN.ruleResult = 
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.MCPN.value);
 		},

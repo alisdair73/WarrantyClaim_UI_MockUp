@@ -5,6 +5,7 @@
 				id="LONCatalog"
 				mode="MultiSelect"
 				items="{/LabourOperationNumberSet}"
+				rememberSelections="false"
 				noDataText="No LON codes found for VIN and MCPN"
 			>
 				<headerToolbar>
@@ -40,7 +41,6 @@
 	    		</columns>
 			</Table>
 		</content>
-		
 		<buttons>
 			<Button text="Add LON" press="onAddLON" icon="sap-icon://add-activity" visible="{LONHelper>/HasLON}"/>
 			<Button text="Additional LON" press="onAdditionalLON" icon="sap-icon://create"/>

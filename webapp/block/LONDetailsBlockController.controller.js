@@ -3,8 +3,9 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"WarrantyClaim_MockUp/model/models",
 	"sap/ui/model/json/JSONModel",
-	"sap/m/MessageToast"
-], function(BaseController, Filter, Models, JSONModel, MessageToast) {
+	"sap/m/MessageToast",
+	"sap/m/MessageBox"
+], function(BaseController, Filter, Models, JSONModel, MessageToast, MessageBox) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.LONDetailsBlockController", {
@@ -54,10 +55,11 @@ sap.ui.define([
 				}
 			});
 			
-			sap.ui.getCore().byId("LONCatalog").getBinding("items").filter(filters).attachDataReceived(this._hasLON.bind(this));
- 			
 			// Display the popup dialog for adding parts
 			this._LONDialog.open();
+			sap.ui.getCore().byId("LONCatalog").removeSelections();
+			sap.ui.getCore().byId("LONCatalog").getBinding("items").filter(filters).attachDataReceived(this._hasLON.bind(this));
+			
 		},
 		
 		_hasLON: function(filteredData){
@@ -75,6 +77,7 @@ sap.ui.define([
 		
 		onAddLON: function(){
 			
+			var displayLONRules = false;
 			var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
 			
 			if(sap.ui.getCore().byId("LONCatalog").getSelectedItems().length === 0){
@@ -87,19 +90,79 @@ sap.ui.define([
 				var bindingPath = sap.ui.getCore().byId("LONCatalog").getSelectedItems()[i].getBindingContext().getPath();
 				var selectedLON = sap.ui.getCore().byId("LONCatalog").getModel().getProperty(bindingPath);
 				
-				//Rule 1 - Don't add Duplicates
-				
-				
-				
-				var newLONItem = Models.createNewWarrantyItem("FR");   
-				newLONItem.setProperty("/ItemKey",selectedLON.LONCode);
-				newLONItem.setProperty("/Description",selectedLON.Description);
-				newLONItem.setProperty("/Quantity",selectedLON.Hours);
-				labourItems.push(newLONItem.getProperty("/"));
+				if(this._isOkToAddLON(selectedLON.LONCode)){
+					var newLONItem = Models.createNewWarrantyItem("FR");   
+					newLONItem.setProperty("/ItemKey",selectedLON.LONCode);
+					newLONItem.setProperty("/Description",selectedLON.Description);
+					newLONItem.setProperty("/Quantity",selectedLON.Hours);
+					labourItems.push(newLONItem.getProperty("/"));
+				} else {
+					displayLONRules = true;
+				}
 			}
 			
 			this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 			this._LONDialog.close();
+			
+			if(displayLONRules){
+				this._displayLONRules();
+			}
+		},
+		
+		_displayLONRules: function(){
+			MessageBox.warning(
+				"Some LON Codes were not added.\n" +
+				"Assigned LON Codes cannot contain duplicates, and a\n" +
+				"Claim can only have one 6 digit and one 7 digit LON Code.",
+				{
+					id : "LONMessageBox",
+					title: "Add LON",
+					actions : [MessageBox.Action.CLOSE]
+				}	
+			);
+		},
+		
+		_isOkToAddLON:function(candidateLONCode){
+			
+			var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
+			
+			//Don't add Duplicates
+			var duplicateLON = labourItems.find(function(lon){
+				return lon.ItemKey === candidateLONCode && !lon.Deleted;
+			});
+				
+			if(duplicateLON){
+				return false;
+			} else {
+				
+				//LON list can contain only 1 Six Digit and 1 7 Digit LON
+				//Any 6 Digit LON finishing in 99 (Streight Time) can be ignored
+				if(candidateLONCode.length > 5){
+					switch(candidateLONCode.length){
+						case 6:
+							if(candidateLONCode.slice(4,6) !== "99"){
+							
+								var sixDigitLON = labourItems.find(function(lon){
+									return lon.ItemKey.length === 6 && !lon.Deleted && lon.ItemKey.slice(4,6) !== "99";
+								});
+								
+								if(sixDigitLON && sixDigitLON.ItemKey.slice(4,6) !== "99"){
+									return false;
+								}
+							}
+							break;
+						case 7:
+							var sevenDigitLON = labourItems.find(function(lon){
+								return lon.ItemKey.length === 7 && !lon.Deleted;
+							});
+							if(sevenDigitLON){
+								return false;
+							}
+							break;
+					}
+				}
+			}
+			return true;
 		},
 		
 		loadAdditionalLONCatalog: function(){
@@ -209,34 +272,40 @@ sap.ui.define([
 			
 			var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
 			var newLONItem = Models.createNewWarrantyItem("FR");   
+			var newLONCode = this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode");
 			
-			newLONItem.setProperty("/ItemKey",this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode"));
-			newLONItem.setProperty("/Quantity",this.getView().getModel("AdditionalLONHelper").getProperty("/RequestedHours"));
-			newLONItem.setProperty("/Description",this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCodeDescription"));
+			if(this._isOkToAddLON(newLONCode)){
 			
-			if (this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode").substr(4,2) === "99"){
-				//If this is a "Straight Time" LON then copy addition description to Dealer Comments section 				
+				newLONItem.setProperty("/ItemKey",newLONCode);
+				newLONItem.setProperty("/Quantity",this.getView().getModel("AdditionalLONHelper").getProperty("/RequestedHours"));
+				newLONItem.setProperty("/Description",this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCodeDescription"));
 				
-				var now = new Date();
-                var displayDateTime = now.getDate() + "/" + now.getMonth()+ "/" + now.getFullYear() + ' ' + now.getHours() + ":" + now.getMinutes();
-				
-				var additionalLONComments = displayDateTime + ": Additional LON " + 
-					this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode") + ", " +
-					this.getView().getModel("AdditionalLONHelper").getProperty("/Description");
-				
-				if(this.getView().getModel("WarrantyClaim").getProperty("/DealerComments/value") !== ""){
-					//Add a Line
-					additionalLONComments = "\n\n" + additionalLONComments;
+				if (this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode").substr(4,2) === "99"){
+					//If this is a "Straight Time" LON then copy addition description to Dealer Comments section 				
+					
+					var now = new Date();
+	                var displayDateTime = now.getDate() + "/" + now.getMonth()+ "/" + now.getFullYear() + 
+	                	' ' + now.getHours() + ":" + now.getMinutes();
+					
+					var additionalLONComments = displayDateTime + ": Additional LON " + 
+						this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode") + ", " +
+						this.getView().getModel("AdditionalLONHelper").getProperty("/Description");
+					
+					if(this.getView().getModel("WarrantyClaim").getProperty("/DealerComments/value") !== ""){
+						//Add a Line
+						additionalLONComments = "\n\n" + additionalLONComments;
+					}
+					
+					this.getView().getModel("WarrantyClaim").setProperty("/DealerComments/value", 
+						this.getView().getModel("WarrantyClaim").getProperty("/DealerComments/value") + additionalLONComments);
 				}
 				
-				this.getView().getModel("WarrantyClaim").setProperty("/DealerComments/value", 
-					this.getView().getModel("WarrantyClaim").getProperty("/DealerComments/value") + additionalLONComments);
+				labourItems.push(newLONItem.getProperty("/"));
+				this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
+				this._additionalLONDialog.close();
+			} else {
+				this._displayLONRules();
 			}
-			
-			labourItems.push(newLONItem.getProperty("/"));
-			this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
-			
-			this._additionalLONDialog.close();
 		},
 		
 		onAdditionalLON: function(){

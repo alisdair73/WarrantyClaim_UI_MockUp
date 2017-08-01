@@ -31,6 +31,11 @@ sap.ui.define([
 			
 			this._MCPNRequest = true;
 			
+			this.getView().getModel("WarrantyClaim").setProperty("/MCPN/value",
+				this.getView().getModel("WarrantyClaim").getProperty("/MCPN/value").replace(/[^a-zA-Z0-9]/g, "")
+			);
+			
+			
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 			var indexOfMCPN = warrantyItems.findIndex(function(item){
 				return item.IsMCPN;
@@ -98,10 +103,11 @@ sap.ui.define([
 		onPartSuggest: function(event){
 			
 			var searchString = event.getParameter("suggestValue");
+			var partsFilter = searchString.replace(/[^a-zA-Z0-9]/g, "");
 			var filters = [];
 			if (searchString) {
 				filters.push(new Filter([
-					new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, searchString),
+					new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, partsFilter),
 					new Filter("description", sap.ui.model.FilterOperator.Contains, searchString)
 				], false));
 			}

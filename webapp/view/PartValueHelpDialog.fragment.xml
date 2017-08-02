@@ -4,9 +4,8 @@
 		title="Select Part"
 		class="sapUiPopupWithPadding"
 		items="{/ZDPE_C_MATERIALS}"
-		search="onValueHelpSearch"
-		confirm="onPartSelected"
-		cancel="handleValueHelpClose"
+		search="onValueHelpPartSearch"
+		confirm="onValueHelpPartSelected"
 		multiSelect="false">
 		<StandardListItem
 			title="{materialNo}"

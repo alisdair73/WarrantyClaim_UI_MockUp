@@ -10,32 +10,30 @@ sap.ui.define([
 	return BaseController.extend("WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController", {
 		
 		onInit: function(){
-			
 			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._updateMCPN.bind(this),this);
 			sap.ui.getCore().getEventBus().subscribe("PWA","Selected",this._updateMCPN.bind(this),this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._updateMCPN.bind(this),this);
 			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
 		},
-				
-		addMCPN: function(){
+		
+		////////////////////////////////
+		//MCPN Handlers	
+		////////////////////////////////
+		onMCPNValueHelpRequest: function(){
 			this._MCPNRequest = true;
-			this._openPartSelectionDialog();
+			this._openPartValueHelpDialog();
 		},
 				
-		addPart: function(event){
-			this._MCPNRequest = false;
-			this._openPartSelectionDialog();
+		onMCPNSuggestionSelected: function(event){
+			this._updateMCPNFromSelection(event.getParameter("selectedRow").getBindingContext().getObject());
 		},
-			
+		
 		onMCPNChanged: function(){
-			
-			this._MCPNRequest = true;
-			
+
 			this.getView().getModel("WarrantyClaim").setProperty("/MCPN/value",
 				this.getView().getModel("WarrantyClaim").getProperty("/MCPN/value").replace(/[^a-zA-Z0-9]/g, "")
 			);
-			
-			
+
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 			var indexOfMCPN = warrantyItems.findIndex(function(item){
 				return item.IsMCPN;
@@ -79,85 +77,111 @@ sap.ui.define([
 			this.logValidationMessage("MCPN");
 			
 		},
+		
+		_updateMCPNFromSelection: function(dataObject){
 			
-		deletePart: function(event) {
+			this.getView().getModel("WarrantyClaim").setProperty("/MCPN/value",dataObject.materialNo);
+			this.getView().getModel("WarrantyClaim").setProperty("/Description",dataObject.description);
+			this.getView().getModel("WarrantyClaim").setProperty("/PartRequested", "S");
+			this.onMCPNChanged(); //Update the Parts Table
+		},
+		
+		////////////////////////////////
+		//Other Parts Handlers	
+		////////////////////////////////
+		onOtherPartValueHelpRequest: function(event){
+			this._MCPNRequest = false;
+			this._OtherPartPath = event.getSource().getBindingContext("WarrantyClaim").getPath();
+			this._openPartValueHelpDialog();
+		},
+			
+		onOtherPartSuggestionSelected: function(event){
+			this._updateOtherPartFromSelection(
+				event.getParameter("selectedRow").getBindingContext().getObject(),
+				event.getSource().getBindingContext("WarrantyClaim").getPath()
+			);
+		},
+		
+		onAddOtherPart: function(event){
+			
+			//Create a blank Other Part row
+			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
 
-			// get the data for the deleted row
+			// add the new part
+			var warrantyItem = Models.createNewWarrantyItem("MAT");
+			warrantyItem.setProperty("/PartRequested", "S");
+			warrantyItems.push(warrantyItem.getProperty("/"));
+	
+			// update the model
+			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);				
+		},
+		
+		onOtherPartDeletePart: function(event) {
+
+			// Get the data for the deleted row
 			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
 			this.getView().getModel("WarrantyClaim").setProperty(path + "/Deleted", true);
-
 			this._applyPartTableFilter();
-		},		
+		},	
 		
-		onValueHelpSearch: function(event) {
-			
-			var searchString = event.getParameter("value");
-			var filters = [];
-			filters.push(new Filter([
-				new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, searchString),
-				new Filter("description", sap.ui.model.FilterOperator.Contains, searchString)
-			], false));
-			event.getSource().getBinding("items").filter(filters);
+		_updateOtherPartFromSelection: function(dataObject, path){
+			var warrantyItem = this.getView().getModel("WarrantyClaim").getProperty(path);
+
+			//Update the Part
+			warrantyItem.PartNumber = dataObject.materialNo;
+			warrantyItem.Description = dataObject.description;
+
+			// update the model
+			this.getView().getModel("WarrantyClaim").setProperty(path, warrantyItem);
+		},
+		
+		////////////////////////////////
+		//Shared Handlers
+		////////////////////////////////
+		onValueHelpPartSearch: function(event) {
+			event.getSource().getBinding("items").filter(this._partSearchFilter(event.getParameter("value")));
 		},
 		
 		onPartSuggest: function(event){
+			event.getSource().getBinding("suggestionRows").filter(this._partSearchFilter(event.getParameter("suggestValue")));
+		},
+		
+		_partSearchFilter: function(searchString){
 			
-			var searchString = event.getParameter("suggestValue");
-			var partsFilter = searchString.replace(/[^a-zA-Z0-9]/g, "");
 			var filters = [];
 			if (searchString) {
+				var partsFilterString = searchString.replace(/[^a-zA-Z0-9]/g, "");
 				filters.push(new Filter([
-					new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, partsFilter),
+					new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, partsFilterString),
 					new Filter("description", sap.ui.model.FilterOperator.Contains, searchString)
 				], false));
 			}
-			event.getSource().getBinding("suggestionRows").filter(filters);
+			return filters;
 		},
-		
-		onPartSelected: function(event){
-
-			var dataObject = null;
-			if (event.getId() === "suggestionItemSelected"){
-				this._MCPNRequest = true;
-				dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
-			} else {
-				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
-			}
 			
+		onValueHelpPartSelected: function(event){
+			var dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
 			if(this._MCPNRequest){
-				this.getView().getModel("WarrantyClaim").setProperty("/MCPN/value",dataObject.materialNo);
-				this.getView().getModel("WarrantyClaim").setProperty("/Description",dataObject.description);
-				this.getView().getModel("WarrantyClaim").setProperty("/PartRequested", "S");
-				this.onMCPNChanged(); //Update the Parts Table
+				this._updateMCPNFromSelection(dataObject);
 			} else {
-				
-				var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
-
-				// add the new part
-				var warrantyItem = Models.createNewWarrantyItem("MAT");
-				warrantyItem.setProperty("/PartNumber", dataObject.materialNo);
-				warrantyItem.setProperty("/Description", dataObject.description);
-				warrantyItem.setProperty("/PartRequested", "S");
-				warrantyItems.push(warrantyItem.getProperty("/"));
-	
-				// update the model
-				this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);	
+				this._updateOtherPartFromSelection(dataObject, this._OtherPartPath);	
 			}
 		},
 		
-		_openPartSelectionDialog: function(){
+		_openPartValueHelpDialog: function(){
+			
 			// Create the dialog if it isn't already
-			if (!this._partsDialog) {
-				this._partsDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.PartValueHelpDialog", this);
-				this.getView().addDependent(this._partsDialog);
+			if (!this._partValueHelpDialog) {
+				this._partValueHelpDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.PartValueHelpDialog", this);
+				this.getView().addDependent(this._partValueHelpDialog);
 			}
 
 			// Display the popup dialog for adding parts
-			this._partsDialog.open();
+			this._partValueHelpDialog.open();
 		},
 		
 		_applyPartTableFilter: function(){
-			
+			//Hide the Deleted rows, and the MCP
 			var filters = [];
 			filters.push(new Filter("Deleted",sap.ui.model.FilterOperator.EQ, false));
 			filters.push(new Filter("IsMCPN",sap.ui.model.FilterOperator.EQ, false));

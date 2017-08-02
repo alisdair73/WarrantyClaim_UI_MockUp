@@ -55,7 +55,7 @@ sap.ui.define([
 					);
 				} else {
 					columnItems.push(
-						new sap.m.Label({"text": "Group " + (i + 1), "design": "Bold"})
+						new sap.m.Label({"text": "Repair Method " + (i + 1), "design": "Bold"})
 					);
 					columnItems.push(
                 		new sap.ui.layout.HorizontalLayout({

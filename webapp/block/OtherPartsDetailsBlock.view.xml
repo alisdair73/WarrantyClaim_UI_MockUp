@@ -22,17 +22,18 @@
 		          id="MCPN" 
 		          required="true"
 		          value="{WarrantyClaim>/MCPN/value}"  
+		          
 		          description="{WarrantyClaim>/Description}"
-		          change="onMCPNChanged"
 		          editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 		          valueState="{= ${WarrantyClaim>/MCPN/ruleResult/valid} ? 'None':'Error'}"
-		          showValueHelp="true"
+		          change="onMCPNChanged"
 		          showSuggestion="true"
 		          filterSuggests="false"
 		          suggest="onPartSuggest"
-		          suggestionItemSelected="onPartSelected"
+		          suggestionItemSelected="onMCPNSuggestionSelected"
 		          suggestionRows="{/ZDPE_C_MATERIALS}"
-		          valueHelpRequest="addMCPN"
+		          showValueHelp="true"
+		          valueHelpRequest="onMCPNValueHelpRequest"
 		        >
 		          <layoutData>
 		            <l:GridData span="L6" />
@@ -79,13 +80,13 @@
 					visible="{= ${WarrantyClaim>/Quantity} > 0 }"
 					required="true"
 					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
-					items="{path:'/PartStatusSet', templateShareable:false}"
+					items="{path:'/PartStatusSet'}"
 					selectedKey="{WarrantyClaim>/PartRequested}"
 				>
 					<core:ListItem 
 						key="{StatusCode}" 
 						text="{Description}" 
-						enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4'}"
+						enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4' || ${StatusCode} === 'S'}"
 					/>
 					<layoutData>
 						<l:GridData span="L4" />
@@ -106,7 +107,7 @@
 				<Button 
 					text="Add parts" 
 					icon="sap-icon://add" 
-					press="addPart" 
+					press="onAddOtherPart" 
 					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 				/>
 			</Toolbar>
@@ -114,19 +115,46 @@
 	    <items>
 	        <ColumnListItem vAlign="Middle">
 	            <cells>
-	            	<Text text="{WarrantyClaim>PartNumber}"/>
-	                <Text text="{WarrantyClaim>Description}"/>
+			        <Input 
+						id="otherPart" 
+						required="true"
+						value="{WarrantyClaim>PartNumber}"  
+						description="{WarrantyClaim>Description}"
+						editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+						change="onOtherPartChanged"
+						fieldWidth="40%"
+						showSuggestion="true"
+						filterSuggests="false"
+						suggest="onPartSuggest"
+						suggestionItemSelected="onOtherPartSuggestionSelected"
+						suggestionRows="{
+							path:'/ZDPE_C_MATERIALS',
+							templateShareable:true
+						}"
+						showValueHelp="true"
+						valueHelpRequest="onOtherPartValueHelpRequest"
+					>
+			          <layoutData>
+			            <l:GridData span="L6" />
+			          </layoutData>
+			          <suggestionColumns>
+			            <Column>
+			              <Text text="Part No." />
+			            </Column>
+			            <Column>
+			              <Text text="Description" />
+			            </Column>
+			          </suggestionColumns>
+			          <suggestionRows>
+			            <ColumnListItem>
+			              <cells>
+			                <Label text="{materialNo}" />
+			                <Label text="{description}" />
+			              </cells>
+			            </ColumnListItem>
+			          </suggestionRows>                 
+			        </Input>	            	
 	                <l:HorizontalLayout>
-	                	<Text 
-	                		text="{
-	                			path: 'WarrantyClaim>Quantity',							
-	                			type: 'sap.ui.model.type.Float',
-								formatOptions: {
-									maxFractionDigits: 0
-								}
-							}" 
-							visible= "{= ${WarrantyClaim>isMCPN} || !${WarrantyClaim>/CanEdit}}"
-						/>
 	                	<Input
 	                		type="Number"
 	                		value="{
@@ -138,25 +166,27 @@
 								}
 							}" 
 							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
-	                		visible="{= !${WarrantyClaim>isMCPN} &amp;&amp; ${WarrantyClaim>/CanEdit}}"
 	            		/>
 	        		</l:HorizontalLayout>
 					<ComboBox
 						width="100%"
 						editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
-						items="{path:'/PartStatusSet', templateShareable:false}"
+						items="{
+							path:'/PartStatusSet',
+							templateShareable:true
+						}"
 						selectedKey="{WarrantyClaim>PartRequested}"
 					>
 						<core:ListItem 
 							key="{StatusCode}" 
 							text="{Description}" 
-							enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4'}"
+							enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4' || ${StatusCode} === 'S'}"
 						/>
 					</ComboBox>	
 	                <l:HorizontalLayout>
 	                	<Button 
 	                		icon="sap-icon://delete" 
-	                		press="deletePart" 
+	                		press="onOtherPartDeletePart" 
 	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>IsMCPN} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 	                	/>
 	                </l:HorizontalLayout>
@@ -166,20 +196,15 @@
 	    <columns>
 	        <Column >
 	            <header>
-	                <Label text="Part No."/>
+	                <Label text="Part"/>
 	            </header>
 	        </Column>
-	        <Column  >
-	            <header>
-	                <Label text="Description"/>
-	            </header>
-	        </Column>
-	        <Column  width="10em">
+	        <Column width="10em">
 	            <header>
 	                <Label text="Qty"/>
 	            </header>
 	        </Column>
-	        <Column >
+	        <Column width="20em">
 	            <header>
 	                <Label text="Part Status"/>
 	            </header>

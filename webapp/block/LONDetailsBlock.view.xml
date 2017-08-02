@@ -32,7 +32,7 @@
 	                			path: 'WarrantyClaim>Quantity',							
 	                			type: 'sap.ui.model.type.Float',
 								formatOptions: {
-									maxFractionDigits: 0
+									maxFractionDigits: 1
 								}
 							}" 
 							visible= "{= !${WarrantyClaim>/CanEdit} || ${WarrantyClaim>/ClaimObjectType} === 'VELO'}"

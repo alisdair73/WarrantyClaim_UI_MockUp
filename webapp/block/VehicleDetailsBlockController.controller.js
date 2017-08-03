@@ -23,7 +23,6 @@ sap.ui.define([
 				this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value").toUpperCase()
 			);
 			
-        	//Add the VIN to the PWA Filter
     		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
 			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
 			
@@ -32,16 +31,19 @@ sap.ui.define([
 		},
 		
 		onExternalObjectNumberSuggest: function(event){
-			
-			//Conditional Here for Serial or VIN
-			
-			var searchString = event.getParameter("suggestValue");
-			var filters = [];
-			if (searchString) {
-				filters.push(new Filter("VIN", sap.ui.model.FilterOperator.StartsWith, searchString));
-			}
-			event.getSource().getBinding("suggestionRows").filter(filters);
+			event.getSource().getBinding("suggestionRows").filter(this._applyExternalObjectNumberFilter(event.getParameter("suggestValue")));
 		},		
+		
+		_applyExternalObjectNumberFilter: function(filterString){
+			
+			var filters = [];
+			if (filterString) {
+						
+				var filterName = this.getView().getModel("WarrantyClaim").getProperty("/ObjectType") === "VELO" ? "VIN" : "SerialNumber";
+				filters.push(new Filter(filterName, sap.ui.model.FilterOperator.StartsWith, filterString));
+			}
+			return filters;
+		},
 		
 		onEngineNumberChanged: function(){
 			WarrantyClaim.validateEngineNumber();
@@ -303,11 +305,6 @@ sap.ui.define([
 		
 		onRecallSelectionClose: function(){
 			this._RecallValueHelpDialog.close();
-		},
-		
-		toUpperCase: function(event){
-    		var value = event.getParameter('newValue');     
-    		this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",value.toUpperCase());
 		},
 		
     	_salesOrgChanged: function(channel, event, data){

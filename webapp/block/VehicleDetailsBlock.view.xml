@@ -25,9 +25,11 @@
 					required="true" 
 					labelFor="ExternalObjectNumber"
 				/>
+				<l:VerticalLayout>
 				<Input 
-					id="ExternalObjectNumber" 
+					id="ExternalObjectNumber_VELO" 
 					value="{WarrantyClaim>ExternalObjectNumber/value}"
+					visible="{= ${WarrantyClaim>/ObjectType} === 'VELO'}"
 					required="true"
 					editable="{WarrantyClaim>CanEdit}"
 					showSuggestion="true"
@@ -56,6 +58,40 @@
 						</ColumnListItem>
 					</suggestionRows>									
 				</Input>
+				<Input 
+					id="ExternalObjectNumber_SERN" 
+					value="{WarrantyClaim>ExternalObjectNumber/value}"
+					required="true"
+					editable="{WarrantyClaim>CanEdit}"
+					visible="{= ${WarrantyClaim>/ObjectType} !== 'VELO'}"
+					showSuggestion="true"
+					suggest="onExternalObjectNumberSuggest"
+					showTableSuggestionValueHelp="false"
+					suggestionItemSelected="onExternalObjectNumberSelection"
+					maxLength="35"
+					change="onExternalObjectNumberChanged"
+					suggestionRows="{/Zwty_c_serial_number}"
+					maxSuggestionWidth="700px"
+					valueState="{= ${WarrantyClaim>ExternalObjectNumber/ruleResult/valid} ? 'None':'Error'}"
+				>
+					<suggestionColumns>
+						<Column>
+							<Text text="Serial Number" />
+						</Column>
+						<Column>
+							<Text text="Description" />
+						</Column>
+					</suggestionColumns>
+					<suggestionRows>
+						<ColumnListItem>
+							<cells>
+								<Label text="{SerialNumber}" />
+								<Label text="{Equipment_Text}" />
+							</cells>
+						</ColumnListItem>
+					</suggestionRows>									
+				</Input>
+				</l:VerticalLayout>
 				
 				<Label id="EngineNumber_label" text="Engine Number" required="true" labelFor="EngineNumber"/>
 				<Input  

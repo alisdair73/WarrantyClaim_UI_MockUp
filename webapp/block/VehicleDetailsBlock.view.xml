@@ -17,27 +17,27 @@
 			adjustLabelSpan="false">
 			<f:content>
 				<core:Title 
-					text="{= ${WarrantyClaim>/ClaimObjectType} === 'VELO' ? 'Vehicle Details':'Product Details'}"
+					text="{= ${WarrantyClaim>/ObjectType} === 'VELO' ? 'Vehicle Details':'Product Details'}"
 				/>
 				<Label 
-					id="VIN_label" 
-					text="{= ${WarrantyClaim>/ClaimObjectType} === 'VELO' ? 'VIN':'Serial Number'}"
+					id="ExternalObjectNumber_label" 
+					text="{= ${WarrantyClaim>/ObjectType} === 'VELO' ? 'VIN':'Serial Number'}"
 					required="true" 
-					labelFor="VIN"
+					labelFor="ExternalObjectNumber"
 				/>
 				<Input 
-					id="VIN" 
-					value="{WarrantyClaim>VIN/value}"
+					id="ExternalObjectNumber" 
+					value="{WarrantyClaim>ExternalObjectNumber/value}"
 					required="true"
 					editable="{WarrantyClaim>CanEdit}"
 					showSuggestion="true"
-					suggest="onVINSuggest"
+					suggest="onExternalObjectNumberSuggest"
 					showTableSuggestionValueHelp="false"
 					maxLength="35"
-					change="onVINChanged"
+					change="onExternalObjectNumberChanged"
 					suggestionRows="{/VINSet}"
 					maxSuggestionWidth="500px"
-					valueState="{= ${WarrantyClaim>VIN/ruleResult/valid} ? 'None':'Error'}"
+					valueState="{= ${WarrantyClaim>ExternalObjectNumber/ruleResult/valid} ? 'None':'Error'}"
 				>
 					<suggestionColumns>
 						<Column>

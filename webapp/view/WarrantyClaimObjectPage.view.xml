@@ -36,12 +36,12 @@
 		<sections>
 			<ObjectPageSection 
 				id="vehicleDetails" 
-				title="{= ${WarrantyClaim>/ClaimObjectType} === 'VELO' ? 'VEHICLE':'PRODUCT'}"
+				title="{= ${WarrantyClaim>/ObjectType} === 'VELO' ? 'VEHICLE':'PRODUCT'}"
 			>
 				<subSections>
 					<ObjectPageSubSection 
 						id="vehicleDetails_sub1" 
-						title="{= ${WarrantyClaim>/ClaimObjectType} === 'VELO' ? 'VEHICLE':'PRODUCT'}"
+						title="{= ${WarrantyClaim>/ObjectType} === 'VELO' ? 'VEHICLE':'PRODUCT'}"
 						mode="Expanded"
 					>
 						<blocks>

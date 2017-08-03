@@ -30,6 +30,7 @@ sap.ui.define([
 	            "BusinessName":"",
 	            "Deleted":false,
 	            "IsMCPN": false,
+	            "IsSubletFixed": false,
 	            "ItemIdentifier":null
 			});
 		}

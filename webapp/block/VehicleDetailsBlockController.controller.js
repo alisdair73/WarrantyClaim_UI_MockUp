@@ -17,21 +17,23 @@ sap.ui.define([
 			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
 		},
 		
-		onVINChanged: function(event){
-			//VIN must be in Upper Case
-			this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",
-				this.getView().getModel("WarrantyClaim").getProperty("/VIN/value").toUpperCase()
+		onExternalObjectNumberChanged: function(event){
+
+			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",
+				this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value").toUpperCase()
 			);
 			
         	//Add the VIN to the PWA Filter
     		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
 			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
 			
-			WarrantyClaim.validateVIN();
-			this.logValidationMessage("VIN");
+			WarrantyClaim.validateExternalObjectNumber();
+			this.logValidationMessage("ExternalObjectNumber");
 		},
 		
-		onVINSuggest: function(event){
+		onExternalObjectNumberSuggest: function(event){
+			
+			//Conditional Here for Serial or VIN
 			
 			var searchString = event.getParameter("suggestValue");
 			var filters = [];
@@ -71,7 +73,7 @@ sap.ui.define([
 			}
 			
 			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber/value",dataObject.PWANumber);
-			this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",dataObject.VIN);
+			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",dataObject.ExternalObjectNumber);
 			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value",dataObject.EngineNumber);
 			this.getView().getModel("WarrantyClaim").setProperty("/DateOfFailure/value",dataObject.DateOfFailure);
 			this.getView().getModel("WarrantyClaim").setProperty("/FailureMeasure/value",dataObject.FailureMeasure);
@@ -173,17 +175,19 @@ sap.ui.define([
 			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber/value",dataObject.ExternalRecallNumber);
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/internalRecallNumber",dataObject.InternalRecallNumber);
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
-
+			
 			//Load the details of the Recall
-			var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN/value");
+			var externalObjectNumber = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
 			var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
+			
+			//NEEDS TO ADDRESS VIN/SERIAL number - Add the Type to the Filter?
 			
 			this.getView().getModel().read(
 				"/RecallItemSet", {
 					context: null,
 					filters: [
 						new Filter("InternalRecallNumber",sap.ui.model.FilterOperator.EQ, internalRecallNumber),
-						new Filter("VIN",sap.ui.model.FilterOperator.EQ, vin)
+						new Filter("ExternalObjectNumber",sap.ui.model.FilterOperator.EQ, externalObjectNumber)
 					],
 					success: this._handleRecallItems.bind(this),
 					error: function() {
@@ -236,8 +240,14 @@ sap.ui.define([
 				var sublet = Models.createNewWarrantyItem("SUBL");
 				sublet.setProperty("/ItemKey", subletItem.subletCode);
 				sublet.setProperty("/Quantity", subletItem.quantity);
+				sublet.setProperty("/IsSubletFixed",true); //Sublets from Recall cannot be changed
 				subletItems.push(sublet.getProperty("/"));
+				
+				if(subletItem.fixedSublet){
+					this.getModel("WarrantyClaim").setProperty("/FixedSublet", true);
+				}
 			});
+			
 			this.getView().getModel("WarrantyClaim").setProperty("/Sublet", subletItems);
 			
 			//Add the MCPN
@@ -297,7 +307,7 @@ sap.ui.define([
 		
 		toUpperCase: function(event){
     		var value = event.getParameter('newValue');     
-    		this.getView().getModel("WarrantyClaim").setProperty("/VIN/value",value.toUpperCase());
+    		this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",value.toUpperCase());
 		},
 		
     	_salesOrgChanged: function(channel, event, data){
@@ -308,14 +318,17 @@ sap.ui.define([
     	
     	_getFilter: function(){
     		
-    	    //Apply VIN and Sales Organisation to PWA/Recall collections
+    	    //Apply External Object, Object Type and Sales Organisation to PWA/Recall collections
         	var filters = [];
 			filters.push(new Filter("SalesOrg", sap.ui.model.FilterOperator.EQ, 
 				this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")));
+				
+			filters.push(new Filter("ObjectType", sap.ui.model.FilterOperator.EQ, 
+				this.getView().getModel("WarrantyClaim").getProperty("/ObjectType")));
 		
-			if(this.getView().getModel("WarrantyClaim").getProperty("/VIN/value") !== ""){
-    			filters.push(new Filter("VIN", sap.ui.model.FilterOperator.EQ, 
-					this.getView().getModel("WarrantyClaim").getProperty("/VIN/value")));
+			if(this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value") !== ""){
+    			filters.push(new Filter("ExternalObjectNumber", sap.ui.model.FilterOperator.EQ, 
+				this.getView().getModel("WarrantyClaim").getProperty("/ClaimObjectNumber/value")));
 			}
 			return filters;
     	},
@@ -348,7 +361,7 @@ sap.ui.define([
     	},
     	
     	_refreshValidationMessages: function(){
-    		this.logValidationMessage("VIN");
+    		this.logValidationMessage("ExternalObjectNumber");
 			this.logValidationMessage("EngineNumber");
 			this.logValidationMessage("DealerContact");
 			this.logValidationMessage("AuthorisationNumber");

@@ -8,7 +8,12 @@
 			<Toolbar>
 				<Title text="Sublet Details" level="H2"/>
 				<ToolbarSpacer/>
-				<Button text="Add Sublet" icon="sap-icon://add" press="addSublet" visible="{WarrantyClaim>/CanEdit}"/>
+				<Button 
+					text="Add Sublet" 
+					icon="sap-icon://add" 
+					press="addSublet" 
+					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>/FixedSublet}}"
+				/>
 			</Toolbar>
 		</headerToolbar>
 	    <items>
@@ -31,11 +36,15 @@
 	                />
 	                <Text text="{WarrantyClaim>Description}"/>
 	                <l:HorizontalLayout>
-	                	<Button icon="sap-icon://edit" press="editSublet" visible="{WarrantyClaim>/CanEdit}"/>
+	                	<Button 
+	                		icon="sap-icon://edit" 
+	                		press="editSublet" 
+	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>IsSubletFixed}}"
+	                	/>
 	                	<Button 
 	                		icon="sap-icon://delete" 
 	                		press="deleteSublet" 
-	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; !${WarrantyClaim>IsSubletFixed}}"
 	                	/>
 	                </l:HorizontalLayout>
 	            </cells>

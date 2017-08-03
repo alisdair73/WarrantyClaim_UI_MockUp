@@ -67,7 +67,7 @@ sap.ui.define([
 			this.getModel("WarrantyClaim").setProperty("/ClaimType",claimType);
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeDescription", claimTypeDescription);
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeGroup", claimTypeGroup);
-			this.getModel("WarrantyClaim").setProperty("/ClaimObjectType", objectType);
+			this.getModel("WarrantyClaim").setProperty("/ObjectType", objectType);
 			
 			this.getModel("WarrantyClaim").setProperty("/StatusDescription",statusDescription);
 			this.getModel("WarrantyClaim").setProperty("/StatusIcon",statusIcon);
@@ -315,7 +315,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "1100000467";
+			//claimNumber = "1100000471";
 			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			

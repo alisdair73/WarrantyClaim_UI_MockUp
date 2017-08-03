@@ -111,7 +111,7 @@
 				labelFor="ServiceAdvsior" 
 				text="Service Advisor" 
 				required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
-				visible="{= ${WarrantyClaim>ClaimObjectType} ==='VELO'}"
+				visible="{= ${WarrantyClaim>ObjectType} ==='VELO'}"
 			/>
 			
 			<Select
@@ -128,7 +128,7 @@
 					]					
 				}"
 				valueState="{= ${WarrantyClaim>ServiceAdvisor/ruleResult/valid} ? 'None':'Error'}"
-				visible="{= ${WarrantyClaim>ClaimObjectType} ==='VELO'}"
+				visible="{= ${WarrantyClaim>ObjectType} ==='VELO'}"
 			>
 				<core:Item key="{EmployeeNumber}" text="{FirstName} {LastName}"  />
 			</Select>

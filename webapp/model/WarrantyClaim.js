@@ -17,7 +17,8 @@ sap.ui.define([
 			this.warrantyClaim = {
 				"ClaimNumber": "",
 				"ClaimType": "",
-				"ClaimObjectType":"",
+				"ObjectType":"",
+				"ExternalObjectNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"ClaimTypeDescription": "",
 				"ClaimTypeGroup": "",
 				"SalesOrganisation":"",
@@ -26,14 +27,10 @@ sap.ui.define([
 				"DealerContact": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"EngineNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"AuthorisationNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
-				"VIN": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
-				
 				"MCPN":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},	//For frontend only - sent to backend via the Parts collection
 				"Description":"",		//For frontend only - sent to backend via the Parts collection
 				"Quantity": "0",		//For frontend only - sent to backend via the Parts collection
 				"PartRequested": "",	//For frontend only - sent to backend via the Parts collection
-				
-				"SerialNumber": "",
 				"RecallNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"RepairOrderNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"TotalCostOfClaim":"0",
@@ -68,6 +65,7 @@ sap.ui.define([
 				"StatusIcon":"",
 				"CanEdit":true,
 				"VersionIdentifier":null,
+				"FixedSublet": false,
 				"Parts": [],
 				"Labour": [],
 				"Sublet":[],
@@ -137,13 +135,13 @@ sap.ui.define([
 			this.warrantyClaim.ClaimNumber = oWarrantyClaim.ClaimNumber;
 			this.warrantyClaim.ClaimType = oWarrantyClaim.ClaimType;
 			this.warrantyClaim.ClaimTypeDescription = oWarrantyClaim.ClaimTypeDescription;
-			this.warrantyClaim.ClaimObjectType = oWarrantyClaim.ClaimObjectType;
+			this.warrantyClaim.ObjectType = oWarrantyClaim.ObjectType;
 			this.warrantyClaim.ClaimTypeGroup = oWarrantyClaim.ClaimTypeGroup;
 			this.warrantyClaim.SalesOrganisation = oWarrantyClaim.SalesOrganisation;
 			this.warrantyClaim.DealerContact.value = oWarrantyClaim.DealerContact;
 			this.warrantyClaim.EngineNumber.value = oWarrantyClaim.EngineNumber;
 			this.warrantyClaim.AuthorisationNumber.value = oWarrantyClaim.AuthorisationNumber;
-			this.warrantyClaim.VIN.value = oWarrantyClaim.VIN;
+			this.warrantyClaim.ExternalObjectNumber.value = oWarrantyClaim.ExternalObjectNumber;
 			this.warrantyClaim.SerialNumber = oWarrantyClaim.SerialNumber;
 			this.warrantyClaim.RecallNumber.value = oWarrantyClaim.RecallNumber;
 			this.warrantyClaim.RepairOrderNumber.value = oWarrantyClaim.RepairOrderNumber;
@@ -182,6 +180,7 @@ sap.ui.define([
 			this.warrantyClaim.StatusIcon = oWarrantyClaim.StatusIcon;
 			this.warrantyClaim.CanEdit = oWarrantyClaim.CanEdit;
 			this.warrantyClaim.VersionIdentifier = oWarrantyClaim.VersionIdentifier;
+			this.warrantyClaim.FixedSublet = oWarrantyClaim.FixedSublet;
 			
 			var oWarrantyClaimItems = oODataModel.getObject(sPath + "/WarrantyClaimItems");
 			if (oWarrantyClaimItems){
@@ -220,12 +219,12 @@ sap.ui.define([
 			};
 			warrantyClaim.ClaimNumber = this.warrantyClaim.ClaimNumber;
 			warrantyClaim.ClaimType = this.warrantyClaim.ClaimType;
-			warrantyClaim.ClaimObjectType = this.warrantyClaim.ClaimObjectType;
+			warrantyClaim.ObjectType = this.warrantyClaim.ObjectType;
 			warrantyClaim.SalesOrganisation = this.warrantyClaim.SalesOrganisation;
 			warrantyClaim.DealerContact = this.warrantyClaim.DealerContact.value;
 			warrantyClaim.EngineNumber = this.warrantyClaim.EngineNumber.value;
 			warrantyClaim.AuthorisationNumber = this.warrantyClaim.AuthorisationNumber.value;
-			warrantyClaim.VIN = this.warrantyClaim.VIN.value;
+			warrantyClaim.ExternalObjectNumber = this.warrantyClaim.ExternalObjectNumber.value;
 			warrantyClaim.SerialNumber = this.warrantyClaim.SerialNumber;
 			warrantyClaim.RecallNumber = this.warrantyClaim.RecallNumber.value;
 			warrantyClaim.RepairOrderNumber = this.warrantyClaim.RepairOrderNumber.value;
@@ -251,6 +250,7 @@ sap.ui.define([
 			warrantyClaim.VersionIdentifier = this.warrantyClaim.VersionIdentifier;
 			warrantyClaim.CurrentVersionNumber = this.warrantyClaim.CurrentVersionNumber;
 			warrantyClaim.CurrentVersionCategory = this.warrantyClaim.CurrentVersionCategory;
+			warrantyClaim.FixedSublet = this.warrantyClaim.FixedSublet;
 			
 			var warrantyClaimItem = null;
 			
@@ -315,9 +315,9 @@ sap.ui.define([
 //		
 //		Validation Rules
 //
-		validateVIN:function(){
-			this.warrantyClaim.VIN.ruleResult = 
-				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.VIN.value); 
+		validateExternalObjectNumber:function(){
+			this.warrantyClaim.ExternalObjectNumber.ruleResult = 
+				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.ExternalObjectNumber.value); 
 		},
 		
 		validateEngineNumber: function(){
@@ -430,7 +430,7 @@ sap.ui.define([
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":
-					if(this.warrantyClaim.ClaimObjectType === "VELO"){ //Fields are hidden for Serial Numbers
+					if(this.warrantyClaim.ObjectType === "VELO"){ //Fields are hidden for Serial Numbers
 						this.warrantyClaim.ServiceAdvisor.ruleResult =
 							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.ServiceAdvisor.value);
 						if(!this.warrantyClaim.ServiceAdvisor.ruleResult.valid){
@@ -563,7 +563,7 @@ sap.ui.define([
 		
 		validateAll: function() {
 
-			this.validateVIN();
+			this.validateExternalObjectNumber();
 			this.validateEngineNumber();
 			this.validateFailureMeasure();
 			this.validateDateOfFailure();
@@ -588,7 +588,7 @@ sap.ui.define([
 		
 		hasFrontendValidationError: function(){
 			
-			if(this.warrantyClaim.VIN.ruleResult.valid &&
+			if(this.warrantyClaim.ExternalObjectNumber.ruleResult.valid &&
 				this.warrantyClaim.EngineNumber.ruleResult.valid &&
 				this.warrantyClaim.FailureMeasure.ruleResult.valid &&
 				this.warrantyClaim.DateOfFailure.ruleResult.valid &&

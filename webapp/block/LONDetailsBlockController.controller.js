@@ -44,7 +44,7 @@ sap.ui.define([
 				new Filter(
 					"VIN",
 					sap.ui.model.FilterOperator.EQ, 
-					this.getView().getModel("WarrantyClaim").getProperty("/VIN/value")
+					this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value")
 			));
 			
 			this.getView().getModel("WarrantyClaim").getProperty("/Parts").forEach(function(part){
@@ -167,7 +167,7 @@ sap.ui.define([
 		
 		loadAdditionalLONCatalog: function(){
 
-        	var vin = this.getView().getModel("WarrantyClaim").getProperty("/VIN/value");
+        	var vin = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
 			var mcpn = this.getView().getModel("WarrantyClaim").getProperty("/Parts/0/PartNumber");
 
 			this.getView().getModel().read(

@@ -22,7 +22,6 @@
 		          id="MCPN" 
 		          required="true"
 		          value="{WarrantyClaim>/MCPN/value}"  
-		          
 		          description="{WarrantyClaim>/Description}"
 		          editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 		          valueState="{= ${WarrantyClaim>/MCPN/ruleResult/valid} ? 'None':'Error'}"
@@ -31,7 +30,10 @@
 		          filterSuggests="false"
 		          suggest="onPartSuggest"
 		          suggestionItemSelected="onMCPNSuggestionSelected"
-		          suggestionRows="{/ZDPE_C_MATERIALS}"
+		          suggestionRows="{
+		        	path:'/ZDPE_C_MATERIALS',
+					templateShareable:false
+		          }"
 		          showValueHelp="true"
 		          valueHelpRequest="onMCPNValueHelpRequest"
 		        >
@@ -116,7 +118,6 @@
 	        <ColumnListItem vAlign="Middle">
 	            <cells>
 			        <Input 
-						id="otherPart" 
 						required="true"
 						value="{WarrantyClaim>PartNumber}"  
 						description="{WarrantyClaim>Description}"
@@ -129,7 +130,7 @@
 						suggestionItemSelected="onOtherPartSuggestionSelected"
 						suggestionRows="{
 							path:'/ZDPE_C_MATERIALS',
-							templateShareable:true
+							templateShareable:false
 						}"
 						showValueHelp="true"
 						valueHelpRequest="onOtherPartValueHelpRequest"

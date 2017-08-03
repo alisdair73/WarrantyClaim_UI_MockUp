@@ -15,8 +15,8 @@
 					text="Add LON" 
 					icon="sap-icon://task" 
 					press="onCheckLON" 
-					enabled="{= ${WarrantyClaim>/Parts/0/PartNumber} !== '' &amp;&amp; ${WarrantyClaim>/VIN} !== ''}"
-					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL' &amp;&amp; ${WarrantyClaim>/ClaimObjectType} === 'VELO'}"
+					enabled="{= ${WarrantyClaim>/Parts/0/PartNumber} !== '' &amp;&amp; ${WarrantyClaim>/ExternalObjectNumber/value} !== ''}"
+					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL' &amp;&amp; ${WarrantyClaim>/ObjectType} === 'VELO'}"
 				/>
 			</Toolbar>
 		</headerToolbar>
@@ -35,7 +35,7 @@
 									maxFractionDigits: 1
 								}
 							}" 
-							visible= "{= !${WarrantyClaim>/CanEdit} || ${WarrantyClaim>/ClaimObjectType} === 'VELO'}"
+							visible= "{= !${WarrantyClaim>/CanEdit} || ${WarrantyClaim>/ObjectType} === 'VELO'}"
 						/>
 	                	<Input
 	                		type="Number"
@@ -48,14 +48,14 @@
 								}
 							}" 
 							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
-	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimObjectType} === 'SERN'}"
+	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ObjectType} === 'SERN'}"
 	            		/>
 	        		</l:HorizontalLayout>	          
 	               
 	                <Button 
 	                	icon="sap-icon://delete" 
 	                	press="deleteLON" 
-	                	visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL' &amp;&amp; ${WarrantyClaim>/ClaimObjectType} === 'VELO'}"
+	                	visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL' &amp;&amp; ${WarrantyClaim>/ObjectType} === 'VELO'}"
 	                />
 	            </cells>
 	        </ColumnListItem>

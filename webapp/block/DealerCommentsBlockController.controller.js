@@ -7,7 +7,6 @@ sap.ui.define([
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.DealerCommentsBlockController", {
 
-	//	valueStateFormatter: valueStateFormatter,
 
 		onInit: function(){
 			
@@ -15,12 +14,10 @@ sap.ui.define([
 				"DefectsL2":[]
 			}) , "DefectCodesHelper");
 			
-			sap.ui.getCore().getEventBus().subscribe("ZDEF1","CatalogLoaded",this._defectCatalogLoaded.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
-		},
-		
-		readDefectCatalog: function(){
-			this.readCatalog("ZDEF1","DefectCodes",2);
+			//sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._loadDefectCatalog.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","LoadCatalogForMaterialDivision",this._loadDefectCatalog.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("DefectCodes","CatalogLoaded",this._defectCatalogLoaded.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
 		},
 		
 		onDefectCodeSelectedL1: function(oEvent){
@@ -38,6 +35,10 @@ sap.ui.define([
 		onDealerCommentsChanged: function(){
 			WarrantyClaim.validateDealerComments();
 			this.logValidationMessage("DealerComments");
+		},
+		
+		_loadDefectCatalog: function(sChannelId, sEventId, oData){
+			this.readDefectCatalog();
 		},
 		
 		_defectCatalogLoaded: function(sChannelId, sEventId, oData){

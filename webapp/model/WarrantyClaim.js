@@ -16,9 +16,13 @@ sap.ui.define([
 		createWarrantyClaimModel: function() {
 			this.warrantyClaim = {
 				"ClaimNumber": "",
+				"PrecedingClaimNumber":"",
 				"ClaimType": "",
 				"ObjectType":"",
 				"ExternalObjectNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				"ExternalObjectDescription":"",
+				"ExternalObjectModelCode":"",
+				"MaterialDivision":"",
 				"ClaimTypeDescription": "",
 				"ClaimTypeGroup": "",
 				"SalesOrganisation":"",
@@ -133,6 +137,7 @@ sap.ui.define([
 			var oWarrantyClaim = oODataModel.getObject(sPath);
 
 			this.warrantyClaim.ClaimNumber = oWarrantyClaim.ClaimNumber;
+			this.warrantyClaim.PrecedingClaimNumber = oWarrantyClaim.PrecedingClaimNumber;
 			this.warrantyClaim.ClaimType = oWarrantyClaim.ClaimType;
 			this.warrantyClaim.ClaimTypeDescription = oWarrantyClaim.ClaimTypeDescription;
 			this.warrantyClaim.ObjectType = oWarrantyClaim.ObjectType;
@@ -142,6 +147,9 @@ sap.ui.define([
 			this.warrantyClaim.EngineNumber.value = oWarrantyClaim.EngineNumber;
 			this.warrantyClaim.AuthorisationNumber.value = oWarrantyClaim.AuthorisationNumber;
 			this.warrantyClaim.ExternalObjectNumber.value = oWarrantyClaim.ExternalObjectNumber;
+			this.warrantyClaim.ExternalObjectDescription = oWarrantyClaim.ExternalObjectDescription;
+			this.warrantyClaim.ExternalObjectModelCode = oWarrantyClaim.ExternalObjectModelCode;
+			this.warrantyClaim.MaterialDivision = oWarrantyClaim.MaterialDivision;
 			this.warrantyClaim.SerialNumber = oWarrantyClaim.SerialNumber;
 			this.warrantyClaim.RecallNumber.value = oWarrantyClaim.RecallNumber;
 			this.warrantyClaim.RepairOrderNumber.value = oWarrantyClaim.RepairOrderNumber;

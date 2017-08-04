@@ -7,8 +7,6 @@ sap.ui.define([
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.CustomerConcernBlockController", {
 		
-	//	valueStateFormatter: valueStateFormatter,
-		
 		onInit: function(){
 			
 			this.setModel(new JSONModel({
@@ -16,12 +14,10 @@ sap.ui.define([
 				"SymptomsL3":[]
 			}) , "SymptomCodesHelper");
 			
-			sap.ui.getCore().getEventBus().subscribe("ZSYM1","CatalogLoaded",this._symptomCatalogLoaded.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
-		},
-		
-		readSymptomCatalog: function(){
-			this.readCatalog("ZSYM1","SymptomCodes",3);
+			//sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._loadSymptomCatalog.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","LoadCatalogForMaterialDivision",this._loadSymptomCatalog.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("SymptomCodes","CatalogLoaded",this._symptomCatalogLoaded.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
 		},
 		
 		onSymptomCodeSelectedL1: function(oEvent){
@@ -53,7 +49,13 @@ sap.ui.define([
 			this.logValidationMessage("SymptomCode");
 		},
 		
+		_loadSymptomCatalog: function(sChannelId, sEventId, oData){
+			this.readSymptomCatalog();
+		},
+		
 		_symptomCatalogLoaded: function(sChannelId, sEventId, oData){
+
+			//A Catalog has been loaded - Set relevant collections
 			if(this.getModel("WarrantyClaim").getProperty("/SymptomCode/value")){
 				var symptomCodeLevels = this.getModel("WarrantyClaim").getProperty("/SymptomCode/value").split("-");
 				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1",symptomCodeLevels[0]);

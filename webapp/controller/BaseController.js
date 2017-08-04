@@ -80,51 +80,116 @@ sap.ui.define([
 			});
 		},
 		
-		readCatalog: function(catalogCode, catalogModelName, expectedLevels){
-			this.getView().getModel().read(
-				"/CatalogSet('" + catalogCode + "')/$value",
-				{
-					success: function(JSONData){
-						
-						var catalog = JSON.parse(JSONData);
-						
-						if(expectedLevels > 1){
-							//Remove any Level 1 entries with no Level 2 defined
-							for(var i=0; i< catalog.length; i++){
-								if (!catalog[i].nodes){
-									catalog.splice(i,1);
-									if( i > 0 ){ i--; }
-								} else {
-									//Remove any Level 2 Entries with no Level 3
-									if( expectedLevels === 3){
-										for(var j=0; j< catalog[i].nodes.length; j++){
-											if (!catalog[i].nodes[j].nodes){
-												catalog[i].nodes.splice(j,1);
-												if( j > 0 ){ j--;}
+		readSymptomCatalog: function(event){
+			
+			var symptomCatalogCode = "";
+			
+			//Determine Symptopm Catalog
+			if(this.getModel("WarrantyClaim").getProperty("/ObjectType") === "VELO"){
+				//Vehicle
+				symptomCatalogCode = "ZSYM1";
+				
+			} else {
+				switch(this.getModel("WarrantyClaim").getProperty("/MaterialDivision")){
+					case "20":
+						symptomCatalogCode = "ZSYM2";
+						break;
+					case "40":
+						symptomCatalogCode = "ZSYM3";
+						break;
+					case "50":
+						symptomCatalogCode = "ZSYM4";
+						break;
+				}
+			}
+			this._readCatalog(symptomCatalogCode,"SymptomCodes",3);
+		},
+		
+		readDefectCatalog: function(){
+
+			var defectCatalogCode = "";
+			
+			//Determine Defect Catalog
+			if(this.getModel("WarrantyClaim").getProperty("/ObjectType") === "VELO"){
+				//Vehicle
+				defectCatalogCode = "ZDEF1";
+				
+			} else {
+				switch(this.getModel("WarrantyClaim").getProperty("/MaterialDivision")){
+					case "20":
+						defectCatalogCode = "ZDEF2";
+						break;
+					case "40":
+						defectCatalogCode = "ZDEF3";
+						break;
+					case "50":
+						defectCatalogCode = "ZDEF4";
+						break;
+				}
+			}
+			this._readCatalog(defectCatalogCode,"DefectCodes",2);
+		},
+		
+		_readCatalog: function(catalogCode, catalogModelName, expectedLevels){
+			
+			if(catalogCode && catalogCode !== ""){
+			
+				this.getView().getModel().read(
+					"/CatalogSet('" + catalogCode + "')/$value",
+					{
+						success: function(JSONData){
+							
+							var catalog = JSON.parse(JSONData);
+							
+							if(expectedLevels > 1){
+								//Remove any Level 1 entries with no Level 2 defined
+								for(var i=0; i< catalog.length; i++){
+									if (!catalog[i].nodes){
+										catalog.splice(i,1);
+										if( i > 0 ){ i--; }
+									} else {
+										//Remove any Level 2 Entries with no Level 3
+										if( expectedLevels === 3){
+											for(var j=0; j< catalog[i].nodes.length; j++){
+												if (!catalog[i].nodes[j].nodes){
+													catalog[i].nodes.splice(j,1);
+													if( j > 0 ){ j--;}
+												}
 											}
-										}
-										if (catalog[i].nodes.length === 0){
-											catalog.splice(i,1);
-											if( i > 0 ){ i--; }
+											if (catalog[i].nodes.length === 0){
+												catalog.splice(i,1);
+												if( i > 0 ){ i--; }
+											}
 										}
 									}
 								}
 							}
+							
+							if(catalog.length === 0){
+								catalog = [{"code": "NODATA", "text": "No catalog data found."}];
+							}
+							
+							var catalogModel = new JSONModel(catalog);
+							this.getView().setModel(catalogModel,catalogModelName);
+							this.getModel("ViewHelper").setProperty("/busy", false);
+							
+							//Event Bus is used to set correct Combo Box binding if Symptom Code is already selected
+							sap.ui.getCore().getEventBus().publish(catalogModelName,"CatalogLoaded");
+							
+						}.bind(this),
+						
+						error: function(error){
+							this.getModel("ViewHelper").setProperty("/busy", false);
 						}
-						
-						var catalogModel = new JSONModel(catalog);
-						this.getView().setModel(catalogModel,catalogModelName);
-						this.getModel("ViewHelper").setProperty("/busy", false);
-						
-						//Event Bus is used to set correct Combo Box binding if Symptom Code is already selected
-						sap.ui.getCore().getEventBus().publish(catalogCode,"CatalogLoaded");
-						
-					}.bind(this),
-					error: function(error){
-						this.getModel("ViewHelper").setProperty("/busy", false);
 					}
-				}
-			);
+				);
+
+			} else {
+				this.getView().setModel(
+					new JSONModel([{"code": "NODATA", "text": "No catalog data found."}]), 
+					catalogModelName
+				);
+			}
 		},
 		
 		//Model Name and Target are optional for reference to helper models 

@@ -315,7 +315,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "1100000471";
+			//claimNumber = "2110000118";
 			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			
@@ -404,15 +404,17 @@ sap.ui.define([
 			
 			//Process the retrieved Warranty
 			WarrantyClaim.updateWarrantyClaimFromOdata(oData);
+			
 			//mMessages...
 			var claimTypeGroup = this.getModel("WarrantyClaim").getProperty("/ClaimTypeGroup");
 			var customerConcernSection = this.getView().byId("customerConcern");
+			
 			if(claimTypeGroup === 'RECALL'){
 				customerConcernSection.setVisible(false);
 			}
 			
-			this.readCatalog("ZSYM1","SymptomCodes");
-			this.readCatalog("ZDEF1","DefectCodes");
+			this.readDefectCatalog();
+			this.readSymptomCatalog();
 			
 			//Alert Subscribers that a Warranty has been loaded
 			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Loaded");
@@ -471,7 +473,7 @@ sap.ui.define([
 			//Run all UI Validation Rules
 			sap.ui.getCore().getMessageManager().removeAllMessages();
 			WarrantyClaim.validateAll();
-			sap.ui.getCore().getEventBus().publish("Validation","Refresh");
+			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Validate");
 			
 			//If there are any Frontend Issues - then don't call Action...
 			if(WarrantyClaim.hasFrontendValidationError()){

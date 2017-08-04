@@ -5,7 +5,7 @@
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
 	    </sap.ui.layout.form:layout>	
 		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer id="CustomerConcernFormContainer" title="Customer Concern" >
+			<sap.ui.layout.form:FormContainer id="CustomerConcernFormContainer">
 				<sap.ui.layout.form:formElements>
 					<sap.ui.layout.form:FormElement id="CustomerConcernElement" >
 						<sap.ui.layout.form:fields>
@@ -15,11 +15,11 @@
 										<l:layoutData>
 											<l:GridData span="L8"/>
 										</l:layoutData>
+										<Label text="Customer Concern" required="true"/>
 										<TextArea 
 											id="CustomerConcern" 
 											rows="10" 
 											cols="120" 
-											placeholder="Enter Details of Customer Concern" 
 											value="{WarrantyClaim>CustomerConcern/value}"
 											editable="{WarrantyClaim>CanEdit}"
 											change="onCustomerConcernChanged"
@@ -43,7 +43,8 @@
 											required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											enabled="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
 											items="{
-												path: 'SymptomCodes>/'
+												path: 'SymptomCodes>/',
+												templateShareable:true
 											}"
 											loadItems="readSymptomCatalog"
 											selectionChange="onSymptomCodeSelectedL1"

@@ -5,7 +5,7 @@
 	    	<sap.ui.layout.form:ResponsiveGridLayout/>
 	    </sap.ui.layout.form:layout>	
 		<sap.ui.layout.form:formContainers>
-			<sap.ui.layout.form:FormContainer id="DealerCommentsFormContainer" title="Dealer Remark" >
+			<sap.ui.layout.form:FormContainer id="DealerCommentsFormContainer">
 				<sap.ui.layout.form:formElements>
 					<sap.ui.layout.form:FormElement id="DealerRemarkElement" >
 						<sap.ui.layout.form:fields>
@@ -15,11 +15,11 @@
 										<l:layoutData>
 											<l:GridData span="L8"/>
 										</l:layoutData>
+										<Label text="Dealer Remark" required="true"/>
 										<TextArea 
 										    id="DealerComments"
 											rows="10" 
 											cols="120" 
-											placeholder="Dealer Comments" 
 											value="{WarrantyClaim>DealerComments/value}"
 											editable="{WarrantyClaim>CanEdit}"	
 											change="onDealerCommentsChanged"

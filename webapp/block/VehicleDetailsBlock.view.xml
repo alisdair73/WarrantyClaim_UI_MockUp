@@ -37,7 +37,7 @@
 					showTableSuggestionValueHelp="false"
 					maxLength="35"
 					change="onExternalObjectNumberChanged"
-					suggestionRows="{/VINSet}"
+					suggestionRows="{/ZWTY_C_VIN}"
 					maxSuggestionWidth="500px"
 					valueState="{= ${WarrantyClaim>ExternalObjectNumber/ruleResult/valid} ? 'None':'Error'}"
 				>
@@ -61,13 +61,15 @@
 				<Input 
 					id="ExternalObjectNumber_SERN" 
 					value="{WarrantyClaim>ExternalObjectNumber/value}"
+					description="{WarrantyClaim>ExternalObjectDescription}"
+					fieldWidth="30%"
 					required="true"
 					editable="{WarrantyClaim>CanEdit}"
 					visible="{= ${WarrantyClaim>/ObjectType} !== 'VELO'}"
 					showSuggestion="true"
 					suggest="onExternalObjectNumberSuggest"
 					showTableSuggestionValueHelp="false"
-					suggestionItemSelected="onExternalObjectNumberSelection"
+					suggestionItemSelected="onExternalObjectNumberSERNSelected"
 					maxLength="35"
 					change="onExternalObjectNumberChanged"
 					suggestionRows="{/Zwty_c_serial_number}"
@@ -79,6 +81,9 @@
 							<Text text="Serial Number" />
 						</Column>
 						<Column>
+							<Text text="Model Code" />
+						</Column>
+						<Column>
 							<Text text="Description" />
 						</Column>
 					</suggestionColumns>
@@ -86,6 +91,7 @@
 						<ColumnListItem>
 							<cells>
 								<Label text="{SerialNumber}" />
+								<Label text="{ModelCode}" />
 								<Label text="{Equipment_Text}" />
 							</cells>
 						</ColumnListItem>
@@ -102,6 +108,19 @@
 					maxLength="10"
 					change="onEngineNumberChanged"
 					valueState="{= ${WarrantyClaim>EngineNumber/ruleResult/valid} ? 'None':'Error'}"
+				/>
+				
+				<Label 
+					id="ModelCode_label" 
+					text="Model Code" 
+					labelFor="ModelCode"
+					visible="{= ${WarrantyClaim>/ObjectType} !== 'VELO'}"
+				/>
+				<Input  
+					id="ModelCode" 
+					value="{WarrantyClaim>ExternalObjectModelCode}" 
+					editable="false"
+					visible="{= ${WarrantyClaim>/ObjectType} !== 'VELO'}"
 				/>
 				
 				<core:Title text="Dealer" />

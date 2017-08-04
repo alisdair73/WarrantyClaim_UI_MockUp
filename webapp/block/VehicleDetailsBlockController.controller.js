@@ -14,7 +14,7 @@ sap.ui.define([
 
 		onInit: function(){
 			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
 		},
 		
 		onExternalObjectNumberChanged: function(event){
@@ -28,6 +28,28 @@ sap.ui.define([
 			
 			WarrantyClaim.validateExternalObjectNumber();
 			this.logValidationMessage("ExternalObjectNumber");
+		},
+		
+		onExternalObjectNumberSERNSelected: function(event){
+			
+			var currentModelCode = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectModelCode");
+			
+			var dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
+			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.Equipment_Text);
+			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectModelCode",dataObject.ModelCode);
+			this.getView().getModel("WarrantyClaim").setProperty("/MaterialDivision",dataObject.MaterialDivision);
+			
+			if(currentModelCode !== dataObject.ModelCode){
+				//Need to update the Catalogs - Reset Data
+				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1","");
+				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2","");
+				this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
+				
+				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1","");
+				this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
+				
+				sap.ui.getCore().getEventBus().publish("WarrantyClaim","LoadCatalogForMaterialDivision");
+			}
 		},
 		
 		onExternalObjectNumberSuggest: function(event){

@@ -8,7 +8,7 @@ sap.ui.define([
 	return BaseController.extend("WarrantyClaim_MockUp.block.ClaimDetailsBlockController", {
 		
 		onInit: function(){
-			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
 		},
 		
 		onFailureMeasureChanged: function(){

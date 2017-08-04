@@ -21,7 +21,9 @@
 				type="Number"
 				required="true"
 				maxLength="10"
-				value="{WarrantyClaim>FailureMeasure/value}"	
+				value="{
+					path: 'WarrantyClaim>FailureMeasure/value'
+				}"	
 				change="onFailureMeasureChanged"
 				valueState="{= ${WarrantyClaim>FailureMeasure/ruleResult/valid} ? 'None':'Error'}"
 				editable="{WarrantyClaim>CanEdit}"
@@ -78,13 +80,13 @@
 			<Input id="DTC3" maxLength="5"
 				placeholder="{= ${WarrantyClaim>CanEdit} ? 'DTC3' : '' }" value="{WarrantyClaim>DTC3}" visible="{= ${WarrantyClaim>MilIndicator} === true }" editable="{WarrantyClaim>CanEdit}"/>
 			
-			<core:Title text="{= ${WarrantyClaim>ClaimObjectType} ==='VELO' ? 'Staff':'' }"/>
+			<core:Title text="{= ${WarrantyClaim>ObjectType} ==='VELO' ? 'Staff':'' }"/>
 			<Label 
 				id="Technician_label" 
 				labelFor="Technician" 
 				text="Technician" 
 				required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"
-				visible="{= ${WarrantyClaim>ClaimObjectType} ==='VELO'}"
+				visible="{= ${WarrantyClaim>ObjectType} ==='VELO'}"
 			/>	
 			
 			<Select
@@ -101,7 +103,7 @@
 					]
 				}"
 				valueState="{= ${WarrantyClaim>Technician/ruleResult/valid} ? 'None':'Error'}"
-				visible="{= ${WarrantyClaim>ClaimObjectType} ==='VELO'}"
+				visible="{= ${WarrantyClaim>ObjectType} ==='VELO'}"
 			>
 				<core:Item key="{EmployeeNumber}" text="{FirstName} {LastName}"  />
 			</Select>

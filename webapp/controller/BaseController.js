@@ -207,6 +207,13 @@ sap.ui.define([
 				//Get the Field Name 
 				var fieldName = this.getView().getModel("i18n").getResourceBundle().getText(fieldId);
 				
+				//External Number requires Object Type for Clarification
+				if(fieldId === "ExternalObjectNumber"){
+					fieldName = this.getView().getModel("i18n").getResourceBundle().getText(
+						fieldId + "_" + this.getView().getModel("WarrantyClaim").getProperty("/ObjectType")
+					);
+				}
+				
 				this._addErrorMessageToMessageManager(
 					"UI_" + fieldId,
 					model,

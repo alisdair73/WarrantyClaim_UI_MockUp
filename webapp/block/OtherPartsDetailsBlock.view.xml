@@ -81,6 +81,7 @@
 					width="100%"
 					visible="{= ${WarrantyClaim>/Quantity} > 0 }"
 					required="true"
+					selectionChange="onMCPNChanged"
 					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 					items="{path:'/PartStatusSet'}"
 					selectedKey="{WarrantyClaim>/PartRequested}"
@@ -130,7 +131,7 @@
 						suggestionItemSelected="onOtherPartSuggestionSelected"
 						suggestionRows="{
 							path:'/ZDPE_C_MATERIALS',
-							templateShareable:false
+							templateShareable:true
 						}"
 						showValueHelp="true"
 						valueHelpRequest="onOtherPartValueHelpRequest"

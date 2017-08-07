@@ -5,7 +5,6 @@
 		title="Select Recall"
 		search="onRecallSelectionSearch"
 		confirm="onRecallSelection"
-		cancel="onRecallSelectionClose"
 		items="{
 			path: '/RecallSet',
 			sorter: { path: 'InternalRecallNumber' }

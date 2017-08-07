@@ -21,7 +21,7 @@
 				/>
 				<Label 
 					id="ExternalObjectNumber_label" 
-					text="{= ${WarrantyClaim>/ObjectType} === 'VELO' ? 'VIN':'Serial Number'}"
+					text="{= ${WarrantyClaim>/ObjectType} === 'VELO' ? 'VIN':'VIN/Serial Number'}"
 					required="true" 
 					labelFor="ExternalObjectNumber"
 				/>
@@ -29,11 +29,14 @@
 				<Input 
 					id="ExternalObjectNumber_VELO" 
 					value="{WarrantyClaim>ExternalObjectNumber/value}"
+					description="{WarrantyClaim>ExternalObjectDescription}"
+					fieldWidth="40%"
 					visible="{= ${WarrantyClaim>/ObjectType} === 'VELO'}"
 					required="true"
 					editable="{WarrantyClaim>CanEdit}"
 					showSuggestion="true"
 					suggest="onExternalObjectNumberSuggest"
+					suggestionItemSelected="onExternalObjectNumberVELOSelected"
 					showTableSuggestionValueHelp="false"
 					maxLength="35"
 					change="onExternalObjectNumberChanged"

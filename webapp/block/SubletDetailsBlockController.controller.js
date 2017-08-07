@@ -10,10 +10,11 @@ sap.ui.define([
 
 		onInit: function(){
 			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applySubletTableFilter.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applySubletTableFilter.bind(this),this);
 		},
 		
     	readSubletCatalog: function(){
-			this.readCatalog("ZSUBL","SubletCodes",1);
+			this._readCatalog("ZSUBL","SubletCodes",1);
 		},
 		
     	addSublet: function(){

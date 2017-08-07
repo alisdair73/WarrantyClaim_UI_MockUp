@@ -5,9 +5,9 @@ sap.ui.define([
 "WarrantyClaim_MockUp/model/models",
 "sap/ui/model/json/JSONModel",
 "WarrantyClaim_MockUp/model/RecallProductGroup",
-"sap/m/MessageToast",
+"sap/m/MessageBox",
 "WarrantyClaim_MockUp/model/WarrantyClaim"
-], function(BaseController, Filter, Models, JSONModel, Recall, MessageToast, WarrantyClaim) {
+], function(BaseController, Filter, Models, JSONModel, Recall, MessageBox, WarrantyClaim) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
@@ -28,6 +28,12 @@ sap.ui.define([
 			
 			WarrantyClaim.validateExternalObjectNumber();
 			this.logValidationMessage("ExternalObjectNumber");
+		},
+		
+		onExternalObjectNumberVELOSelected: function(event){
+
+			var dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
+			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.Description);
 		},
 		
 		onExternalObjectNumberSERNSelected: function(event){
@@ -316,7 +322,14 @@ sap.ui.define([
 
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", recallItems);
 			sap.ui.getCore().getEventBus().publish("Recall","Transferred");
-			MessageToast.show("Recall Items have been transferred to the Warranty.");
+			
+			MessageBox.success(
+				"Recall Items have been transferred to the Warranty.",
+				{
+					id : "successMessageBox",
+					actions : [MessageBox.Action.CLOSE]
+				}	
+			);
 			
 			if (this._recallDialog && this._recallDialog.isOpen()){
 				this._recallDialog.close();
@@ -324,10 +337,6 @@ sap.ui.define([
 				this._recallDialog = null;
 			}
 		},		
-		
-		onRecallSelectionClose: function(){
-			this._RecallValueHelpDialog.close();
-		},
 		
     	_salesOrgChanged: function(channel, event, data){
     		
@@ -339,15 +348,17 @@ sap.ui.define([
     		
     	    //Apply External Object, Object Type and Sales Organisation to PWA/Recall collections
         	var filters = [];
+        	
+        	//REMOVE THIS ONCE RENAMING IS COMPLETE
 			filters.push(new Filter("SalesOrg", sap.ui.model.FilterOperator.EQ, 
 				this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")));
-				
+			
 			filters.push(new Filter("ObjectType", sap.ui.model.FilterOperator.EQ, 
 				this.getView().getModel("WarrantyClaim").getProperty("/ObjectType")));
 		
 			if(this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value") !== ""){
     			filters.push(new Filter("ExternalObjectNumber", sap.ui.model.FilterOperator.EQ, 
-				this.getView().getModel("WarrantyClaim").getProperty("/ClaimObjectNumber/value")));
+				this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value")));
 			}
 			return filters;
     	},

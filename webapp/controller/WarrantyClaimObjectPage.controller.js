@@ -7,11 +7,10 @@ sap.ui.define([
         "WarrantyClaim_MockUp/model/WarrantyClaim",
         "sap/ui/model/Filter",
         "sap/ui/core/format/NumberFormat",
-        "sap/m/MessageStrip",
         "sap/m/MessageBox",
         "WarrantyClaim_MockUp/model/models"
 	], function( jQuery, MessageToast, Fragment, BaseController, JSONModel, WarrantyClaim, Filter, 
-					NumberFormat, MessageStrip, MessageBox, Models) {
+					NumberFormat, MessageBox, Models) {
 	"use strict";
  
  	return BaseController.extend("WarrantyClaim_MockUp.controller.WarrantyClaimObjectPage", {
@@ -226,10 +225,7 @@ sap.ui.define([
 				leadingMessage.message + "\nPlease observe any additional notes provided.",
 				{
 					id : "errorMessageBox",
-					actions : [MessageBox.Action.CLOSE],
-					onClose : function () {
-						//this.navigateToLaunchpad();
-					}
+					actions : [MessageBox.Action.CLOSE]
 				}	
 			);
 			
@@ -248,10 +244,7 @@ sap.ui.define([
 						"An error occurred while processing the Warranty Claim.",
 						{
 							id : "errorMessageBox",
-							actions : [MessageBox.Action.CLOSE],
-							onClose : function () {
-								//this.navigateToLaunchpad();
-							}
+							actions : [MessageBox.Action.CLOSE]
 						}	
 					);
 					
@@ -432,10 +425,6 @@ sap.ui.define([
 			oViewModel.setProperty("/busy", true);
 		},
 		
-		_clearHeaderMessages: function(){
-	//		this.getView().byId("messageArea").destroyContent();
-		},
-		
 		_translateMessageTypes: function(messageType){
 			
 			switch(messageType){
@@ -448,24 +437,6 @@ sap.ui.define([
 				default:
 					return sap.ui.core.MessageType.Success;
 			}
-		},
-		
-		_addMessagesToHeader: function(messages){
-		
-/*			var messageArea = this.getView().byId("messageArea");
-			messageArea.destroyContent();
-			
-			for (var i = 0; i < messages.length; i++) {
-				var messageStrip = new MessageStrip("msgStrip" + i, {
-					text: messages[i].message,
-					showCloseButton: false,
-					showIcon: true,
-					type: this._translateMessageTypes(messages[i].severity)
-				});
-				messageArea.addContent(messageStrip);
-			}
-			var objectLayout = this.getView().byId("WarrantyClaimLayout");
-			objectLayout.scrollToSection(this.getView().byId("vehicleDetails_sub1").getId(), 0, -200);*/
 		},
 		
 		_canExecuteAction: function(){
@@ -481,13 +452,9 @@ sap.ui.define([
 					"Please correct the data validation errors.",
 					{
 						id : "errorMessageBox",
-						actions : [MessageBox.Action.CLOSE],
-						onClose : function () {
-							//this.navigateToLaunchpad();
-						}
+						actions : [MessageBox.Action.CLOSE]
 					}	
 				);
-				//this._addMessagesToHeader([errorMessage]);
 				return false;
 			} else {
 				return true;

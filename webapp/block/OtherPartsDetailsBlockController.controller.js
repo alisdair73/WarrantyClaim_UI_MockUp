@@ -12,8 +12,9 @@ sap.ui.define([
 		onInit: function(){
 			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._updateMCPN.bind(this),this);
 			sap.ui.getCore().getEventBus().subscribe("PWA","Selected",this._updateMCPN.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._updateMCPN.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("Validation","Refresh",this._refreshValidationMessages.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._updateMCPN.bind(this),this);
 		},
 		
 		////////////////////////////////
@@ -47,6 +48,8 @@ sap.ui.define([
 					warrantyItems[indexOfMCPN].PartNumber = this.getView().getModel("WarrantyClaim").getProperty("/MCPN/value");
 					warrantyItems[indexOfMCPN].Description = this.getView().getModel("WarrantyClaim").getProperty("/Description");
 					warrantyItems[indexOfMCPN].Quantity = this.getView().getModel("WarrantyClaim").getProperty("/Quantity");
+					warrantyItems[indexOfMCPN].PartRequested = this.getView().getModel("WarrantyClaim").getProperty("/PartRequested");
+
 				} else {
 					var warrantyItem = Models.createNewWarrantyItem("MAT");
 					warrantyItem.setProperty("/PartNumber", this.getView().getModel("WarrantyClaim").getProperty("/MCPN/value"));

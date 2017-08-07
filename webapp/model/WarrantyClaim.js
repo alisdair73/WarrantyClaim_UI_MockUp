@@ -124,6 +124,12 @@ sap.ui.define([
             if(validateMode){
             	this.warrantyClaim.Labour = this.warrantyClaim.Labour.concat(this.deletedLON);
             	this.deletedLON = [];
+                
+                this.warrantyClaim.Parts = this.warrantyClaim.Parts.concat(this.deletedParts);
+            	this.deletedParts = [];
+            	
+            	this.warrantyClaim.Sublet = this.warrantyClaim.Sublet.concat(this.deletedSublet);
+            	this.deletedSublet = [];
             }
             
             this.resetChanges();
@@ -266,7 +272,17 @@ sap.ui.define([
 					return LONItem.Deleted;
 				}
 			);
-						
+				
+			this.deletedParts = this.warrantyClaim.Parts.filter(function(Part){
+					return Part.Deleted;
+				}
+			);
+			
+			this.deletedSublet = this.warrantyClaim.Sublet.filter(function(SubletItem){
+					return SubletItem.Deleted;
+				}
+			);
+				
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Parts[i];
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
@@ -563,7 +579,6 @@ sap.ui.define([
     		switch(this.warrantyClaim.ClaimTypeGroup){
 				case "RECALL":
 					this.warrantyClaim.NewSerialNumber.ruleResult = 
-//						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.NewSerialNumber.value);
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.NewSerialNumber.value);
 					break;
 			}

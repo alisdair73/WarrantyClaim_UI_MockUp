@@ -90,8 +90,7 @@
 										path: 'AdditionalLONHelper>/RequestedHours',
 										type: 'sap.ui.model.type.Float',
 										formatOptions: {
-											minFractionDigits: 2,
-											maxFractionDigits: 2
+											maxFractionDigits: 1
 										}
 									}" 
 									editable="{= ${AdditionalLONHelper>/OperationCode}.substr(4, 2) === '99'}"

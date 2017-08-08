@@ -12,7 +12,7 @@
 		>
 		<ColumnListItem>
 			<cells>
-				<Text text="{ExternalRecallNumber}" />
+				<Text text="{ExternalRecallNumber}"/>
 				<Text text="{RecallInformation}" />
 				<CheckBox selected="{SerialNumberIsMandatory}" editable="false"/>
 			</cells>

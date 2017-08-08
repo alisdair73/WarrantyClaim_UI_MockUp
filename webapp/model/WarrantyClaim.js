@@ -437,7 +437,7 @@ sap.ui.define([
 				case "NORMAL":
 				case "GOODWILL":
 				case "PARTS":	
-					if(this.warrantyClaim.ClaimObjectType === "VELO"){ //Fields are hidden for Serial Numbers
+					if(this.warrantyClaim.ObjectType === "VELO"){ //Fields are hidden for Serial Numbers
 						this.warrantyClaim.Technician.ruleResult =  
 							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.Technician.value);
 						if(!this.warrantyClaim.Technician.ruleResult.valid){

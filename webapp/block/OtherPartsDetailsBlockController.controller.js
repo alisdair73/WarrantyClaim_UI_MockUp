@@ -158,6 +158,11 @@ sap.ui.define([
 					new Filter("materialNo", sap.ui.model.FilterOperator.StartsWith, partsFilterString),
 					new Filter("description", sap.ui.model.FilterOperator.Contains, searchString)
 				], false));
+				filters.push( new Filter("salesOrg",sap.ui.model.FilterOperator.EQ, 
+					this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")));
+			} else {
+				filters.push( new Filter("salesOrg",sap.ui.model.FilterOperator.EQ, 
+						this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")));
 			}
 			return filters;
 		},
@@ -179,6 +184,12 @@ sap.ui.define([
 				this.getView().addDependent(this._partValueHelpDialog);
 			}
 
+			var filters = [];
+			filters.push(new Filter("salesOrg",sap.ui.model.FilterOperator.EQ, 
+				this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")));
+
+			this._partValueHelpDialog.getBinding("items").filter(filters);
+			
 			// Display the popup dialog for adding parts
 			this._partValueHelpDialog.open();
 		},

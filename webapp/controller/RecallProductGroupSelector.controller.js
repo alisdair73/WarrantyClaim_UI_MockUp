@@ -26,7 +26,7 @@ sap.ui.define([
             		"hAlign": "Left",
             		"width":"10rem",
             		"styleClass": "listHeaderDivider",  
-                	"header" : new sap.m.Label({
+                	"header" : new sap.m.Text({
                 		"text" : "Material Number",
                 		"design": "Bold"
             		})
@@ -37,7 +37,7 @@ sap.ui.define([
             		"hAlign": "Left",
             		"width":"10rem",
             		"styleClass": "cellBorderRight listHeaderDivider",            		
-                	"header" : new sap.m.Label({
+                	"header" : new sap.m.Text({
                 		"text" : "Description",
                 		"design": "Bold"
             		})
@@ -51,11 +51,11 @@ sap.ui.define([
 				
 				if(numberOfColumns === 1){
 					columnItems.push(
-						new sap.m.Label({"text": "Quantity", "design": "Bold"})
+						new sap.m.Text({"text": "Quantity", "design": "Bold"})
 					);
 				} else {
 					columnItems.push(
-						new sap.m.Label({"text": "Repair Method " + (i + 1), "design": "Bold"})
+						new sap.m.Text({"text": "Repair\nMethod " + (i + 1), "design": "Bold", "textAlign":"Center"})
 					);
 					columnItems.push(
                 		new sap.ui.layout.HorizontalLayout({

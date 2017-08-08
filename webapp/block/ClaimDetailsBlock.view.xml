@@ -103,6 +103,7 @@
 					]
 				}"
 				valueState="{= ${WarrantyClaim>Technician/ruleResult/valid} ? 'None':'Error'}"
+				enabled="{WarrantyClaim>CanEdit}"
 				visible="{= ${WarrantyClaim>ObjectType} ==='VELO'}"
 			>
 				<core:Item key="{EmployeeNumber}" text="{FirstName} {LastName}"  />
@@ -130,6 +131,7 @@
 					]					
 				}"
 				valueState="{= ${WarrantyClaim>ServiceAdvisor/ruleResult/valid} ? 'None':'Error'}"
+				enabled="{WarrantyClaim>CanEdit}"
 				visible="{= ${WarrantyClaim>ObjectType} ==='VELO'}"
 			>
 				<core:Item key="{EmployeeNumber}" text="{FirstName} {LastName}"  />

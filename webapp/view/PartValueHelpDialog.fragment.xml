@@ -5,6 +5,7 @@
 		class="sapUiPopupWithPadding"
 		items="{/ZDPE_C_MATERIALS}"
 		search="onValueHelpPartSearch"
+		liveChange="onValueHelpPartSearch"
 		confirm="onValueHelpPartSelected"
 		multiSelect="false">
 		<StandardListItem

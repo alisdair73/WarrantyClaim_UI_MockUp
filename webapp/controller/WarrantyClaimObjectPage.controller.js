@@ -84,6 +84,11 @@ sap.ui.define([
 				this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 			}
 			
+			//Let the App Know that a Sales Org was selected
+			sap.ui.getCore().getEventBus().publish("SalesOrg","Changed",
+				{"SalesOrg":this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation")}
+			);
+			
 			this._claimTypeSelection.close();
 		},
 
@@ -187,20 +192,7 @@ sap.ui.define([
 					context: null,
 					filters: [new Filter("IsAuthorisationType",sap.ui.model.FilterOperator.EQ, false)],
 					success: function(oData) {
-							if (!oData.results.length) {
-								
-								MessageBox.error(
-									"No Claim Types are defined for this Dealer",
-									{
-										id : "errorMessageBox",
-										actions : [MessageBox.Action.CLOSE],
-										onClose : function () {
-											this.navigateToLaunchpad();
-										}
-									}	
-								);
-								
-							} else {
+							if (oData.results.length && oData.results.length > 0) {
 								if (! this._claimTypeSelection) {
 									this._claimTypeSelection = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.ClaimTypeSelection", this);
 									this.getView().setModel(new JSONModel(this._buildSalesOrgList(oData)),"SalesAreas");
@@ -208,10 +200,27 @@ sap.ui.define([
 								}
 								this._claimTypeSelection.open();
 								this._filterClaimType(this.getView().getModel("WarrantyClaim").getProperty("/SalesOrganisation"));
+							} else {
+								this._showWarrantyClaimErrorMessage();
 							}
-						}.bind(this)
-					}
-				);
+						}.bind(this),
+						
+					error: this._showWarrantyClaimErrorMessage
+				}
+			);
+		},
+		
+		_showWarrantyClaimErrorMessage: function(){
+			MessageBox.error(
+				"An error occurred while loading Warranty Claim Types for your Dealership.\nPlease try again later.",
+				{
+					id : "errorMessageBox",
+					actions : [MessageBox.Action.CLOSE],
+					onClose : function () {
+						this.navigateToLaunchpad();
+					}.bind(this)
+				}	
+			);
 		},
 		
 		_onActionSuccess: function(actionName, responseData, response){
@@ -367,7 +376,7 @@ sap.ui.define([
 			sap.ui.getCore().byId("claimTypeList").getBinding("items").filter(filters);	
 			
 			//Notify any subscribers to Sales Organisation Changes
-			sap.ui.getCore().getEventBus().publish("SalesOrg","Changed",{"SalesOrg":salesOrganisation});
+			//sap.ui.getCore().getEventBus().publish("SalesOrg","Changed",{"SalesOrg":salesOrganisation});
 		},
 		
 		_onBindingChange: function(oData) {

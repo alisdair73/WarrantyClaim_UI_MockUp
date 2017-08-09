@@ -23,8 +23,8 @@ sap.ui.define([
 				this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value").toUpperCase()
 			);
 			
-    		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
-			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
+//    		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
+//			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
 			
 			WarrantyClaim.validateExternalObjectNumber();
 			this.logValidationMessage("ExternalObjectNumber");
@@ -34,6 +34,12 @@ sap.ui.define([
 
 			var dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
 			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.Description);
+			
+			this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
+			
+			if(this.getView().getModel("WarrantyClaim").getProperty("/ClaimTypeGroup") === "RECALL"){
+				this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
+			}
 		},
 		
 		onExternalObjectNumberSERNSelected: function(event){
@@ -56,6 +62,9 @@ sap.ui.define([
 				
 				sap.ui.getCore().getEventBus().publish("WarrantyClaim","LoadCatalogForMaterialDivision");
 			}
+			
+			this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
+			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
 		},
 		
 		onExternalObjectNumberSuggest: function(event){
@@ -89,6 +98,24 @@ sap.ui.define([
 		},
 		
 		onRecallNumberChanged: function(){
+			
+			if(this.getView().getModel("WarrantyClaim").getProperty("/RecallNumber/value") === ""){
+
+				var recallItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
+				var subletItems = this.getView().getModel("WarrantyClaim").getProperty("/Sublet");
+				var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
+				
+				this._setDeletedFlagForAllItems(recallItems);
+				this._setDeletedFlagForAllItems(subletItems);
+				this._setDeletedFlagForAllItems(labourItems);
+				
+				this.getView().getModel("WarrantyClaim").setProperty("/Parts",recallItems);
+				this.getView().getModel("WarrantyClaim").setProperty("/Sublet",subletItems);
+				this.getView().getModel("WarrantyClaim").setProperty("/Labour".labourItems);
+				
+				sap.ui.getCore().getEventBus().publish("Recall","Transferred");
+			}
+			
 			WarrantyClaim.validateRecallNumber();
 			this.logValidationMessage("RecallNumber");
 		},
@@ -206,6 +233,9 @@ sap.ui.define([
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/internalRecallNumber",dataObject.InternalRecallNumber);
 			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
 			
+			WarrantyClaim.validateRecallNumber();
+			this.logValidationMessage("RecallNumber");
+			
 			//Load the details of the Recall
 			var externalObjectNumber = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
 			var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
@@ -276,7 +306,7 @@ sap.ui.define([
 				if(subletItem.fixedSublet){
 					this.getModel("WarrantyClaim").setProperty("/FixedSublet", true);
 				}
-			});
+			}.bind(this));
 			
 			this.getView().getModel("WarrantyClaim").setProperty("/Sublet", subletItems);
 			

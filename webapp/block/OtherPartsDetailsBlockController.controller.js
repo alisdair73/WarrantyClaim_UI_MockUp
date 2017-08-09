@@ -204,9 +204,14 @@ sap.ui.define([
 
 		_updateMCPN: function(){
 			
+			this.getView().getModel("WarrantyClaim").setProperty("/MCPN/value","");
+			this.getView().getModel("WarrantyClaim").setProperty("/Quantity",0);	
+			this.getView().getModel("WarrantyClaim").setProperty("/Description","");
+			this.getView().getModel("WarrantyClaim").setProperty("/PartRequested","");
+					
 			this.getView().getModel("WarrantyClaim").getProperty("/Parts").forEach(function(part){
 				
-				if(part.IsMCPN){
+				if(part.IsMCPN && part.Deleted === false ){
 					this.getView().getModel("WarrantyClaim").setProperty("/MCPN/value",part.PartNumber);
 					this.getView().getModel("WarrantyClaim").setProperty("/Quantity",part.Quantity);	
 					this.getView().getModel("WarrantyClaim").setProperty("/Description",part.Description);

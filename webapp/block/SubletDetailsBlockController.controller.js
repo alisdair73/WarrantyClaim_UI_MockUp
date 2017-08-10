@@ -9,8 +9,13 @@ sap.ui.define([
 	return BaseController.extend("WarrantyClaim_MockUp.block.SubletDetailsBlockController", {
 
 		onInit: function(){
-			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applySubletTableFilter.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applySubletTableFilter.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applySubletTableFilter,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applySubletTableFilter,this);
+		},
+		
+		onExit:function(){
+			sap.ui.getCore().getEventBus().unsubscribe("Recall","Transferred",this._applySubletTableFilter,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Saved",this._applySubletTableFilter,this);
 		},
 		
     	readSubletCatalog: function(){

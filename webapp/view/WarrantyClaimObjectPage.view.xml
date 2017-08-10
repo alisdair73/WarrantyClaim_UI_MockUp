@@ -5,12 +5,14 @@
 	<ObjectPageLayout id="WarrantyClaimLayout" enableLazyLoading="false" showFooter="true"
 		showHeaderContent="true" busy="{ViewHelper>/busy}" busyIndicatorDelay="{ViewHelper>/delay}">
 		<headerTitle>
-			<ObjectPageHeader id="warrantyPageHeader"
-							  objectTitle="Warranty Claim"
-							  isObjectIconAlwaysVisible = "true"
-							  headerDesign="Light"
-							  objectImageShape="Square"
-							  objectImageURI="sap-icon://sales-quote"/>
+			<ObjectPageHeader 
+				id="warrantyPageHeader"
+				objectTitle="Warranty Claim"
+				isObjectIconAlwaysVisible = "true"
+				headerDesign="Light"
+				objectImageShape="Square"
+				objectImageURI="sap-icon://sales-quote"
+			/>
 		</headerTitle>		
 		<headerContent>
 			<layout:VerticalLayout>

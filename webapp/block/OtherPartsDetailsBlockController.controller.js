@@ -10,11 +10,19 @@ sap.ui.define([
 	return BaseController.extend("WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController", {
 		
 		onInit: function(){
-			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._updateMCPN.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("PWA","Selected",this._updateMCPN.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._updateMCPN.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._updateMCPN.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._updateMCPN,this);
+			sap.ui.getCore().getEventBus().subscribe("PWA","Selected",this._updateMCPN,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._updateMCPN,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._updateMCPN,this);
+		},
+		
+		onExit:function(){
+			sap.ui.getCore().getEventBus().unsubscribe("Recall","Transferred",this._updateMCPN,this);
+			sap.ui.getCore().getEventBus().unsubscribe("PWA","Selected",this._updateMCPN,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Loaded",this._updateMCPN,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Saved",this._updateMCPN,this);
 		},
 		
 		////////////////////////////////

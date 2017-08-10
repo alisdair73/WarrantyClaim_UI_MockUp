@@ -12,8 +12,8 @@ sap.ui.define([
 		
 		onInit: function(){
 			
-			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applyLONTableFilter.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applyLONTableFilter.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applyLONTableFilter,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applyLONTableFilter,this);
 			
 			this.getView().setModel(new JSONModel({"HasLON":false}) , "LONHelper");
 			
@@ -28,6 +28,11 @@ sap.ui.define([
 				"RequestedHours":"0",
 				"Description":""
 			}) , "AdditionalLONHelper");
+		},
+		
+		onExit:function(){
+			sap.ui.getCore().getEventBus().unsubscribe("Recall","Transferred",this._applyLONTableFilter,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Saved",this._applyLONTableFilter,this);
 		},
 		
 		onCheckLON: function(){

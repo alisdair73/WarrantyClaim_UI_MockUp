@@ -100,28 +100,30 @@ sap.ui.define([
 			this.warrantyClaim.CurrentVersionNumber = jsonModel.CurrentVersionNumber;
 			this.warrantyClaim.CurrentVersionCategory = jsonModel.CurrentVersionCategory;
 			
-			this.warrantyClaim.Parts = [];
-			this.warrantyClaim.Labour = [];
-			this.warrantyClaim.Sublet = [];
-
-            if(jsonModel.WarrantyClaimItems){
-				for (var i = 0; i < jsonModel.WarrantyClaimItems.results.length; i++) {
-					var warrantyClaimItem = jsonModel.WarrantyClaimItems.results[i];
-					switch(warrantyClaimItem.ItemType) {
-    					case "MAT":
-    						this.warrantyClaim.Parts.push(warrantyClaimItem);
-				        	break;
-				    	case "FR":
-				   			this.warrantyClaim.Labour.push(warrantyClaimItem);
-				   			break;
-				   		case "SUBL":
-				   			this.warrantyClaim.Sublet.push(warrantyClaimItem);
-			    			break;
+			if(!validateMode){
+				this.warrantyClaim.Parts = [];
+				this.warrantyClaim.Labour = [];
+				this.warrantyClaim.Sublet = [];
+	
+	            if(jsonModel.WarrantyClaimItems){
+					for (var i = 0; i < jsonModel.WarrantyClaimItems.results.length; i++) {
+						var warrantyClaimItem = jsonModel.WarrantyClaimItems.results[i];
+						switch(warrantyClaimItem.ItemType) {
+	    					case "MAT":
+	    						this.warrantyClaim.Parts.push(warrantyClaimItem);
+					        	break;
+					    	case "FR":
+					   			this.warrantyClaim.Labour.push(warrantyClaimItem);
+					   			break;
+					   		case "SUBL":
+					   			this.warrantyClaim.Sublet.push(warrantyClaimItem);
+				    			break;
+						}
 					}
-				}
-            }
+	            }
+			}
             
-            if(validateMode){
+/*            if(validateMode){
             	this.warrantyClaim.Labour = this.warrantyClaim.Labour.concat(this.deletedLON);
             	this.deletedLON = [];
                 
@@ -130,7 +132,7 @@ sap.ui.define([
             	
             	this.warrantyClaim.Sublet = this.warrantyClaim.Sublet.concat(this.deletedSublet);
             	this.deletedSublet = [];
-            }
+            }*/
             
             this.resetChanges();
 		},

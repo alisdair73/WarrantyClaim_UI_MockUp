@@ -13,15 +13,30 @@ sap.ui.define([
 	return BaseController.extend("WarrantyClaim_MockUp.block.VehicleDetailsBlockController", {
 
 		onInit: function(){
-			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("SalesOrg","Changed",this._salesOrgChanged,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
 		},
 		
-		onExternalObjectNumberChanged: function(event){
+		onExit:function(){
+			sap.ui.getCore().getEventBus().unsubscribe("SalesOrg","Changed",this._salesOrgChanged,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
+		},
+		
+		onExternalObjectNumberChanged: function(){
 
-			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",
-				this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value").toUpperCase()
-			);
+			var externalNumber = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
+			if(externalNumber === ""){
+				this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription","");
+				this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectModelCode","");
+				this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value","");
+				this.getView().getModel("WarrantyClaim").setProperty("/MaterialDivision","");
+				this._resetCatalogFields();
+			} else {
+
+				this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",
+					this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value").toUpperCase()
+				);
+			}
 			
 //    		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
 //			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
@@ -44,15 +59,17 @@ sap.ui.define([
 		
 		onExternalObjectNumberSERNSelected: function(event){
 			
-			var currentModelCode = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectModelCode");
+			var currentMaterialDivision = this.getView().getModel("WarrantyClaim").getProperty("/MaterialDivision");
 			
 			var dataObject = event.getParameter("selectedRow").getBindingContext().getObject();
 			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.Equipment_Text);
 			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectModelCode",dataObject.ModelCode);
 			this.getView().getModel("WarrantyClaim").setProperty("/MaterialDivision",dataObject.MaterialDivision);
 			
-			if(currentModelCode !== dataObject.ModelCode){
-				//Need to update the Catalogs - Reset Data
+			if(currentMaterialDivision !== dataObject.MaterialDivision){
+				
+				this._resetCatalogFields();
+/*				//Need to update the Catalogs - Reset Data
 				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1","");
 				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2","");
 				this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
@@ -60,11 +77,23 @@ sap.ui.define([
 				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1","");
 				this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
 				
-				sap.ui.getCore().getEventBus().publish("WarrantyClaim","LoadCatalogForMaterialDivision");
+				sap.ui.getCore().getEventBus().publish("WarrantyClaim","LoadCatalogForMaterialDivision");*/
 			}
 			
 			this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
 			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
+		},
+		
+		_resetCatalogFields: function(){
+			//Need to update the Catalogs - Reset Data
+			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1","");
+			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2","");
+			this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
+			
+			this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1","");
+			this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
+			
+			sap.ui.getCore().getEventBus().publish("WarrantyClaim","LoadCatalogForMaterialDivision");
 		},
 		
 		onExternalObjectNumberSuggest: function(event){
@@ -135,6 +164,14 @@ sap.ui.define([
 			this.getView().getModel("WarrantyClaim").setProperty("/DateOfFailure/value",dataObject.DateOfFailure);
 			this.getView().getModel("WarrantyClaim").setProperty("/FailureMeasure/value",dataObject.FailureMeasure);
 			this.getView().getModel("WarrantyClaim").setProperty("/CustomerConcern/value",dataObject.CustomerConcern);
+			
+			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.ExternalObjectDescription);
+			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectModelCode",dataObject.ExternalObjectModelCode);
+			this.getView().getModel("WarrantyClaim").setProperty("/MaterialDivision",dataObject.MaterialDivision);
+			
+			WarrantyClaim.validateExternalObjectNumber();
+			this.logValidationMessage("ExternalObjectNumber");
+			this._resetCatalogFields();
 			
 			// Update/Add the MCPN
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");

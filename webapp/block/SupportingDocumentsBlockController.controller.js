@@ -16,9 +16,13 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			});
 			
 			//Set up Event Listener to Upload Files
-			sap.ui.getCore().getEventBus().subscribe("Warranty","Saved",this._uploadAttachmentCollection.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("Warranty","Saved",this._uploadAttachmentCollection,this);
 		},
 
+		onExit:function(){
+			sap.ui.getCore().getEventBus().unsubscribe("Warranty","Saved",this._uploadAttachmentCollection,this);
+		},
+		
 		onUploadComplete: function(oEvent) {
 
 			var fileResponse = JSON.parse( oEvent.getParameter("mParameters").responseRaw );

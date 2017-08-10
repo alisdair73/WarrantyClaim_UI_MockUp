@@ -14,10 +14,15 @@ sap.ui.define([
 				"SymptomsL3":[]
 			}) , "SymptomCodesHelper");
 			
-			//sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._loadSymptomCatalog.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","LoadCatalogForMaterialDivision",this._loadSymptomCatalog.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("SymptomCodes","CatalogLoaded",this._symptomCatalogLoaded.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","LoadCatalogForMaterialDivision",this._loadSymptomCatalog,this);
+			sap.ui.getCore().getEventBus().subscribe("SymptomCodes","CatalogLoaded",this._symptomCatalogLoaded,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
+		},
+		
+		onExit:function(){
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","LoadCatalogForMaterialDivision",this._loadSymptomCatalog,this);
+			sap.ui.getCore().getEventBus().unsubscribe("SymptomCodes","CatalogLoaded",this._symptomCatalogLoaded,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
 		},
 		
 		onSymptomCodeSelectedL1: function(oEvent){

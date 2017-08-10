@@ -14,10 +14,15 @@ sap.ui.define([
 				"DefectsL2":[]
 			}) , "DefectCodesHelper");
 			
-			//sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Loaded",this._loadDefectCatalog.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","LoadCatalogForMaterialDivision",this._loadDefectCatalog.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("DefectCodes","CatalogLoaded",this._defectCatalogLoaded.bind(this),this);
-			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages.bind(this),this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","LoadCatalogForMaterialDivision",this._loadDefectCatalog,this);
+			sap.ui.getCore().getEventBus().subscribe("DefectCodes","CatalogLoaded",this._defectCatalogLoaded,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
+		},
+		
+		onExit:function(){
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","LoadCatalogForMaterialDivision",this._loadDefectCatalog,this);
+			sap.ui.getCore().getEventBus().unsubscribe("DefectCodes","CatalogLoaded",this._defectCatalogLoaded,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
 		},
 		
 		onDefectCodeSelectedL1: function(oEvent){

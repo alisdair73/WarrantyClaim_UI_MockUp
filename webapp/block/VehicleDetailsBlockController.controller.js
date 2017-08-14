@@ -38,9 +38,6 @@ sap.ui.define([
 				);
 			}
 			
-//    		this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
-//			this.getView().byId("RecallNumber").getBinding("suggestionRows").filter(this._getFilter());
-			
 			WarrantyClaim.validateExternalObjectNumber();
 			this.logValidationMessage("ExternalObjectNumber");
 		},
@@ -67,17 +64,7 @@ sap.ui.define([
 			this.getView().getModel("WarrantyClaim").setProperty("/MaterialDivision",dataObject.MaterialDivision);
 			
 			if(currentMaterialDivision !== dataObject.MaterialDivision){
-				
 				this._resetCatalogFields();
-/*				//Need to update the Catalogs - Reset Data
-				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1","");
-				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2","");
-				this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
-				
-				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1","");
-				this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
-				
-				sap.ui.getCore().getEventBus().publish("WarrantyClaim","LoadCatalogForMaterialDivision");*/
 			}
 			
 			this.getView().byId("AuthorisationNumber").getBinding("suggestionRows").filter(this._getFilter());
@@ -266,24 +253,28 @@ sap.ui.define([
 				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
 			}
 
-			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber/value",dataObject.ExternalRecallNumber);
-			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/internalRecallNumber",dataObject.InternalRecallNumber);
-			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
+			// this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber/value",dataObject.ExternalRecallNumber);
+			// this.getView().getModel("WarrantyClaim").setProperty("/RecallValidFrom",dataObject.ValidFrom);
+			// this.getView().getModel("WarrantyClaim").setProperty("/RecallValidTo",dataObject.ValidTo);
+			// this.getView().getModel("ViewHelper").setProperty("/warrantyUI/internalRecallNumber",dataObject.InternalRecallNumber);
+			// this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
 			
-			WarrantyClaim.validateRecallNumber();
-			this.logValidationMessage("RecallNumber");
+			this._selectedRecall = dataObject; //Make available for later
+			
+			// WarrantyClaim.validateRecallNumber();
+			// this.logValidationMessage("RecallNumber");
 			
 			//Load the details of the Recall
+			//var externalObjectNumber = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
+			//var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
+			
 			var externalObjectNumber = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
-			var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
-			
-			//NEEDS TO ADDRESS VIN/SERIAL number - Add the Type to the Filter?
-			
+				
 			this.getView().getModel().read(
 				"/RecallItemSet", {
 					context: null,
 					filters: [
-						new Filter("InternalRecallNumber",sap.ui.model.FilterOperator.EQ, internalRecallNumber),
+						new Filter("InternalRecallNumber",sap.ui.model.FilterOperator.EQ, this._selectedRecall.InternalRecallNumber),
 						new Filter("ExternalObjectNumber",sap.ui.model.FilterOperator.EQ, externalObjectNumber)
 					],
 					success: this._handleRecallItems.bind(this),
@@ -298,6 +289,7 @@ sap.ui.define([
 			this._recallDialog.close();
 			this._recallDialog.destroy(true);
 			this._recallDialog = null;
+			this._selectedRecall = null;
 		},
 		
 		onTransferMaterials  : function(){
@@ -310,6 +302,14 @@ sap.ui.define([
 			this._setDeletedFlagForAllItems(recallItems);
 			this._setDeletedFlagForAllItems(subletItems);
 			this._setDeletedFlagForAllItems(labourItems);
+			
+			this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber/value",this._selectedRecall.ExternalRecallNumber);
+			this.getView().getModel("WarrantyClaim").setProperty("/RecallValidFrom",this._selectedRecall.ValidFrom);
+			this.getView().getModel("WarrantyClaim").setProperty("/RecallValidTo",this._selectedRecall.ValidTo);
+			this.getView().getModel("WarrantyClaim").setProperty("/SerialNumberIsMandatory",this._selectedRecall.SerialNumberIsMandatory);
+			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/internalRecallNumber",this._selectedRecall.InternalRecallNumber);
+			
+			this._selectedRecall = null;
 			
 			var labourItem = Models.createNewWarrantyItem("FR");
 			if(recallGroup.getProperty("/inspect/selected")){
@@ -403,6 +403,10 @@ sap.ui.define([
 				this._recallDialog.destroy(true);
 				this._recallDialog = null;
 			}
+			
+			//Revalidate
+			WarrantyClaim.validateRecallNumber();
+			this.logValidationMessage("RecallNumber");
 		},		
 		
     	_salesOrgChanged: function(channel, event, data){
@@ -432,7 +436,7 @@ sap.ui.define([
     	
     	_handleRecallItems: function(recallItems){
     		
-    		var recall = new Recall(this);
+    		var recall = new Recall();
 			var recallModels = recall.buildRecallItemsModel(recallItems.results); 
 			
 			this.getView().setModel(new JSONModel(recallModels.RecallGroup), "RecallGroup");

@@ -23,6 +23,11 @@
 				<m:ObjectAttribute title="Claim Number" text="{WarrantyClaim>/ClaimNumber}"/>
 				<m:ObjectAttribute title="Claim Type" text="{WarrantyClaim>/ClaimTypeDescription}"/>
 				<m:ObjectAttribute 
+					title="Legacy Claim Number" 
+					text="{WarrantyClaim>/PrecedingClaimNumber}" 
+					visible="{= ${WarrantyClaim>/PrecedingClaimNumber} !== ''      }"
+				/>
+				<m:ObjectAttribute 
 					title="Submitted Date" 
 					text="{	path: 'WarrantyClaim>/SubmittedOn', 
 							type: 'sap.ui.model.type.Date'

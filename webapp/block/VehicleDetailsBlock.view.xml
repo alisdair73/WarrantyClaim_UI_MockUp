@@ -30,7 +30,7 @@
 					id="ExternalObjectNumber_VELO" 
 					value="{WarrantyClaim>ExternalObjectNumber/value}"
 					description="{WarrantyClaim>ExternalObjectDescription}"
-					fieldWidth="40%"
+					fieldWidth="45%"
 					visible="{= ${WarrantyClaim>/ObjectType} === 'VELO'}"
 					required="true"
 					editable="{WarrantyClaim>CanEdit}"

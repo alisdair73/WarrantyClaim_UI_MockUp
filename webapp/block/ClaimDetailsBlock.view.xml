@@ -34,7 +34,7 @@
 				id="DateOfFailure" 
 				required="true"
 				change="onDateOfFailureChanged"
-				displayFormat="medium" 
+				displayFormat="dd/MM/yyyy"
 				dateValue="{WarrantyClaim>DateOfFailure/value}"
 				valueState="{= ${WarrantyClaim>DateOfFailure/ruleResult/valid} ? 'None':'Error'}"
 				editable="{WarrantyClaim>CanEdit}"
@@ -54,7 +54,7 @@
 			<Label id="DateOfRepair_label" text="Date of Repair" required="true" labelFor="DateOfRepair"/>
 			<DatePicker 
 				id="DateOfRepair" 
-				displayFormat="medium" 
+				displayFormat="dd/MM/yyyy"
 				required="true"
 				dateValue="{WarrantyClaim>DateOfRepair/value}" 
 				change="onDateOfRepairChanged"

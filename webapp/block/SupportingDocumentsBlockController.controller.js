@@ -16,7 +16,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			});
 			
 			//Set up Event Listener to Upload Files
-			sap.ui.getCore().getEventBus().subscribe("Warranty","Saved",this._uploadAttachmentCollection,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._uploadAttachmentCollection,this);
 		},
 
 		onExit:function(){

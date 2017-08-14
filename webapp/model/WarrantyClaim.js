@@ -31,11 +31,18 @@ sap.ui.define([
 				"DealerContact": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"EngineNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"AuthorisationNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				
 				"MCPN":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},	//For frontend only - sent to backend via the Parts collection
 				"Description":"",		//For frontend only - sent to backend via the Parts collection
 				"Quantity": "0",		//For frontend only - sent to backend via the Parts collection
 				"PartRequested": "",	//For frontend only - sent to backend via the Parts collection
+				
 				"RecallNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
+				
+				"RecallValidFrom": null,			//For Recall Validation
+				"RecallValidTo": null,				//For Recall Validation
+				"SerialNumberIsMandatory": false,	//For Recall Validation
+				
 				"RepairOrderNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"TotalCostOfClaim":"0",
 				"ClaimCurrency":"AUD",
@@ -100,6 +107,11 @@ sap.ui.define([
 			this.warrantyClaim.CurrentVersionNumber = jsonModel.CurrentVersionNumber;
 			this.warrantyClaim.CurrentVersionCategory = jsonModel.CurrentVersionCategory;
 			
+			this.warrantyClaim.RecallValidFrom = jsonModel.RecallValidFrom; 
+			this.warrantyClaim.RecallValidTo = jsonModel.RecallValidTo;
+			this.warrantyClaim.SerialNumberIsMandatory = jsonModel.RecallSerialNumberIsMandatory;
+			
+			//Only Update Item Information if a DB Update was triggered...
 			if(!validateMode){
 				this.warrantyClaim.Parts = [];
 				this.warrantyClaim.Labour = [];
@@ -160,6 +172,9 @@ sap.ui.define([
 			this.warrantyClaim.MaterialDivision = oWarrantyClaim.MaterialDivision;
 			this.warrantyClaim.SerialNumber = oWarrantyClaim.SerialNumber;
 			this.warrantyClaim.RecallNumber.value = oWarrantyClaim.RecallNumber;
+			this.warrantyClaim.RecallValidFrom = oWarrantyClaim.RecallValidFrom; 
+			this.warrantyClaim.RecallValidTo = oWarrantyClaim.RecallValidTo;
+			this.warrantyClaim.SerialNumberIsMandatory = oWarrantyClaim.RecallSerialNumberIsMandatory;
 			this.warrantyClaim.RepairOrderNumber.value = oWarrantyClaim.RepairOrderNumber;
 			this.warrantyClaim.TotalCostOfClaim = oWarrantyClaim.TotalCostOfClaim;
 			this.warrantyClaim.ClaimCurrency = oWarrantyClaim.ClaimCurrency;
@@ -288,7 +303,7 @@ sap.ui.define([
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Parts[i];
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
-				warrantyClaimItem.Description = "";
+				//warrantyClaimItem.Description = "";
 				
 				//Don't send deleted items that aren't persisted
 				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
@@ -300,7 +315,7 @@ sap.ui.define([
 			for (i = 0; i < this.warrantyClaim.Labour.length; i++) {
 				warrantyClaimItem = this.warrantyClaim.Labour[i];
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
-				warrantyClaimItem.Description = "";
+				//warrantyClaimItem.Description = "";
 				
 				//Don't send deleted items that aren't persisted
 				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
@@ -313,7 +328,7 @@ sap.ui.define([
 				warrantyClaimItem = this.warrantyClaim.Sublet[i];
 				delete warrantyClaimItem.path;
 				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
-				warrantyClaimItem.Description = "";
+				//warrantyClaimItem.Description = "";
 				
 				//Don't send deleted items that aren't persisted
 				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
@@ -561,6 +576,17 @@ sap.ui.define([
 				case "RECALL":
 					this.warrantyClaim.RecallNumber.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.RecallNumber.value);
+						
+					if(this.warrantyClaim.ServiceAdvisor.ruleResult.valid){
+						if(this.warrantyClaim.DateOfFailure.value){
+							//Check the Recall is valid for the Failure Date
+							this.warrantyClaim.RecallNumber.ruleResult = Rule.failureDateIsInRecallValidity(
+								this.warrantyClaim.DateOfFailure.value,
+								this.warrantyClaim.RecallValidFrom,
+								this.warrantyClaim.RecallValidTo
+							);
+						}
+					}
 					break;
 			}
 		},
@@ -569,9 +595,10 @@ sap.ui.define([
 			
     		switch(this.warrantyClaim.ClaimTypeGroup){
 				case "RECALL":
-					this.warrantyClaim.OldSerialNumber.ruleResult = 
-//						Rule.validateSerialNumbersArePopulated(this.warrantyClaim.OldSerialNumber.value);
-						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.OldSerialNumber.value);
+					if(this.warrantyClaim.SerialNumberIsMandatory){
+						this.warrantyClaim.OldSerialNumber.ruleResult = 
+							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.OldSerialNumber.value);
+					}
 					break;
 			}
 		},
@@ -580,8 +607,10 @@ sap.ui.define([
 			
     		switch(this.warrantyClaim.ClaimTypeGroup){
 				case "RECALL":
-					this.warrantyClaim.NewSerialNumber.ruleResult = 
-						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.NewSerialNumber.value);
+					if(this.warrantyClaim.SerialNumberIsMandatory){
+						this.warrantyClaim.NewSerialNumber.ruleResult = 
+							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.NewSerialNumber.value);
+					}
 					break;
 			}
 		},

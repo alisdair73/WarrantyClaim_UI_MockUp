@@ -32,7 +32,6 @@ sap.ui.define([
 					"symptomCodeL2": "",
 					"defectCodeL1": "",
 					"internalRecallNumber":"",
-					"serialNumberIsMandatory": false,
 					"hasBeenValidated": false
 				}
 			});
@@ -317,7 +316,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "2110000203";
+			//claimNumber = "300000000441";
 			//claimNumber = "2016110393";
 			//claimNumber = "100000000567"; //MOCK Record
 			

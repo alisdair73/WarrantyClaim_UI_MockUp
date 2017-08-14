@@ -2,6 +2,22 @@ sap.ui.define([], function() {
 	"use strict";
 
 	return {
+		
+		failureDateIsInRecallValidity: function(failureDate, recallValidFromDate, recallValidToDate){
+			
+			var validated = true;
+			
+			var dateOfFailure = new Date(failureDate.getFullYear(),failureDate.getMonth(), failureDate.getDate());
+			var dateRecallValidFrom = new Date(recallValidFromDate.getFullYear(),recallValidFromDate.getMonth(), recallValidFromDate.getDate());
+			var dateRecallValidTo = new Date(recallValidToDate.getFullYear(),recallValidToDate.getMonth(), recallValidToDate.getDate());
+			
+			if (dateOfFailure.valueOf() < dateRecallValidFrom.valueOf() || dateOfFailure.valueOf() > dateRecallValidTo.valueOf()){
+				validated = false;
+			}
+			
+			return {"valid": validated, "errorTextID":"RecallNotValidForFailureDate"};
+			
+		},
 
 		validateFailureDate: function(failureDate,repairDate) {
 			

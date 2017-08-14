@@ -341,13 +341,7 @@ sap.ui.define([
 		_applyLONTableFilter: function(){
 			
 			var filters = [];
-
-			filters.push(
-				new Filter(
-					"Deleted",
-					sap.ui.model.FilterOperator.EQ, 
-					false
-			));
+			filters.push(new Filter("Deleted",sap.ui.model.FilterOperator.EQ,false));
 			this.getView().byId("LONTable").getBinding("items").filter(filters);
 		}
 	});

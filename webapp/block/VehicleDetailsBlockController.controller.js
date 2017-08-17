@@ -150,7 +150,7 @@ sap.ui.define([
 			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value",dataObject.EngineNumber);
 			this.getView().getModel("WarrantyClaim").setProperty("/DateOfFailure/value",dataObject.DateOfFailure);
 			this.getView().getModel("WarrantyClaim").setProperty("/FailureMeasure/value",dataObject.FailureMeasure);
-			this.getView().getModel("WarrantyClaim").setProperty("/CustomerConcern/value",dataObject.CustomerConcern);
+			this.getView().getModel("WarrantyClaim").setProperty("/CustomerConcern/value",dataObject.CustomerConcern);	
 			
 			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.ExternalObjectDescription);
 			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectModelCode",dataObject.ExternalObjectModelCode);
@@ -191,10 +191,16 @@ sap.ui.define([
 			
 			var PWASearch = event.getParameter("suggestValue");
 			var filters = this._getFilter();
+			
+			filters.push(new Filter("PWATypeGroup", sap.ui.model.FilterOperator.EQ, 
+				this.getView().getModel("WarrantyClaim").getProperty("/ClaimTypeGroup")
+			));
+			
 			if (PWASearch) {
 				filters.push(new Filter("PWANumber", sap.ui.model.FilterOperator.StartsWith, PWASearch));
 			}
 			event.getSource().getBinding("suggestionRows").filter(filters);
+			
 		},
 		
 		onRecallSuggest: function(event){
@@ -212,7 +218,12 @@ sap.ui.define([
 				this._PWAValueHelpDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.PriorWorkApprovalSelection", this);
 				this.getView().addDependent(this._PWAValueHelpDialog);
 			}
-			sap.ui.getCore().byId("PWASelectionList").getBinding("items").filter(this._getFilter());
+			
+			var filters = this._getFilter();
+			filters.push(new Filter("PWATypeGroup", sap.ui.model.FilterOperator.EQ, 
+				this.getView().getModel("WarrantyClaim").getProperty("/ClaimTypeGroup")
+			));
+			sap.ui.getCore().byId("PWASelectionList").getBinding("items").filter(filters);
 			
 			// Display the popup dialog for adding parts
 			this._PWAValueHelpDialog.open();

@@ -91,7 +91,7 @@ sap.ui.define([
 						
 						switch(recallItem.FRTType){
 							case "IN":
-								this._recallGroup.inspect.displayText = recallItem.ItemKeyDescription;
+								this._recallGroup.inspect.displayText = "Inspect: " + recallItem.ItemKeyDescription;
 								this._recallGroup.inspect.selected = true;
 								this._recallGroup.inspect.visible = true;
 								this._recallGroup.inspect.LON = recallItem.ItemKey;
@@ -100,8 +100,9 @@ sap.ui.define([
 								
 							case "RP":
 							case "RE":
-								this._recallGroup.replace.displayText = recallItem.ItemKeyDescription;
+								this._recallGroup.replace.displayText = "Replacement: " + recallItem.ItemKeyDescription;
 								this._recallGroup.replace.visible = true;
+								this._recallGroup.replace.selected = !this._recallGroup.inspect.selected;
 								this._recallGroup.replace.LON = recallItem.ItemKey;
 								this._recallGroup.replace.quantity = recallItem.Quantity;
 								break;

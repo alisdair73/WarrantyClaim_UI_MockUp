@@ -14,7 +14,7 @@
 		<ColumnListItem>
 			<cells>
 				<Text text="{PWANumber}" />
-				<Text text="{OwnerName}" />
+				<Text text="{OwnerTitle} {OwnerGivenName} {OwnerSurname}" />
 				<Text text="{ExternalObjectNumber}" />
 				<Text text="{EngineNumber}" />
 			</cells>

@@ -58,7 +58,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			
     		oEvent.getParameters().addHeaderParameter(new sap.m.UploadCollectionParameter({
                 name: "slug",
-                value: oEvent.getParameter("fileName")
+                value: this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber") + "|" + oEvent.getParameter("fileName")
             }));
             
     		oEvent.getParameters().addHeaderParameter(new sap.m.UploadCollectionParameter({

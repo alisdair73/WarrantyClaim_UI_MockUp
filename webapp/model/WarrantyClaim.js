@@ -554,8 +554,10 @@ sap.ui.define([
 			
 			switch(this.warrantyClaim.ClaimTypeGroup){
 				case "PARTS":
-					this.warrantyClaim.PartsInstallKm.ruleResult = 
-						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.PartsInstallKm.value);
+					if(this.warrantyClaim.ObjectType === "VELO"){ //Not Mandatory for MPE
+						this.warrantyClaim.PartsInstallKm.ruleResult = 
+							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.PartsInstallKm.value);
+					}
 					break;
 			}
 		},

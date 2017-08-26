@@ -263,22 +263,8 @@ sap.ui.define([
 			} else {
 				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
 			}
-
-			// this.getView().getModel("WarrantyClaim").setProperty("/RecallNumber/value",dataObject.ExternalRecallNumber);
-			// this.getView().getModel("WarrantyClaim").setProperty("/RecallValidFrom",dataObject.ValidFrom);
-			// this.getView().getModel("WarrantyClaim").setProperty("/RecallValidTo",dataObject.ValidTo);
-			// this.getView().getModel("ViewHelper").setProperty("/warrantyUI/internalRecallNumber",dataObject.InternalRecallNumber);
-			// this.getView().getModel("ViewHelper").setProperty("/warrantyUI/serialNumberIsMandatory",dataObject.SerialNumberIsMandatory);
 			
 			this._selectedRecall = dataObject; //Make available for later
-			
-			// WarrantyClaim.validateRecallNumber();
-			// this.logValidationMessage("RecallNumber");
-			
-			//Load the details of the Recall
-			//var externalObjectNumber = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
-			//var internalRecallNumber = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/internalRecallNumber");
-			
 			var externalObjectNumber = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
 				
 			this.getView().getModel().read(
@@ -399,7 +385,7 @@ sap.ui.define([
 			});
 
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", recallItems);
-			sap.ui.getCore().getEventBus().publish("Recall","Transferred");
+			sap.ui.getCore().getEventBus().publish("WarrantyClaim","RecallApplied");
 			
 			MessageBox.success(
 				"Recall Items have been transferred to the Warranty.",

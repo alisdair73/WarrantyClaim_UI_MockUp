@@ -72,8 +72,8 @@ sap.ui.define([
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 			
-			//Provide a Default LON for SERN
-			if(objectType === "SERN"){
+			//Provide a Default LON for SERN (not in Parts case)
+			if(objectType === "SERN" && claimTypeGroup !== "PARTS"){
 				var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
 				var newLONItem = Models.createNewWarrantyItem("FR");   
 				newLONItem.setProperty("/ItemKey","100001");
@@ -135,7 +135,21 @@ sap.ui.define([
 				this._messagePopover = sap.ui.xmlfragment( "WarrantyClaim_MockUp.view.Messages" );
 				this.getView().addDependent(this._messagePopover );
 			}
-			this._messagePopover.openBy(event.getSource());
+			
+			if(event){
+				this._messagePopover.openBy(event.getSource());
+			} else {
+				this._messagePopover.openBy(this.getView().byId("messagePopup"));
+			}
+		},
+		
+		openMessagesDialog: function(){
+			
+			if (!this._messagePopoverDialog)  {
+				this._messagePopoverDialog = sap.ui.xmlfragment( "WarrantyClaim_MockUp.view.MessagesDialog" );
+				this.getView().addDependent(this._messagePopoverDialog );
+			}
+			this._messagePopoverDialog.open();
 		},
 		
 		companyCodeSelected:function(event){
@@ -229,11 +243,28 @@ sap.ui.define([
 			if(actionName === "ValidateWarranty"){
 				this.getModel("ViewHelper").setProperty("/warrantyUI/hasBeenValidated", true);
 			}
+			
+			var warningMessages = leadingMessage.details.filter(function(message){
+				return message.severity === "warning";
+			});
+			
+			var messageBoxText = "";
+			if(warningMessages.length > 0){
+				messageBoxText = leadingMessage.message + "\n" + "Please review Warning messages before submitting claim.";
+			} else {
+				messageBoxText = leadingMessage.message + "\n" + "Please observe any additional notes provided.";
+			}
+			
 			MessageBox.success(
-				leadingMessage.message + "\nPlease observe any additional notes provided.",
+				messageBoxText,
 				{
 					id : "errorMessageBox",
-					actions : [MessageBox.Action.CLOSE]
+					actions : [MessageBox.Action.CLOSE],
+					onClose: function() { 
+						if(warningMessages.length > 0){
+							this.openMessages(); 
+						}
+					}.bind(this)
 				}	
 			);
 			
@@ -461,7 +492,7 @@ sap.ui.define([
 					{
 						id : "errorMessageBox",
 						actions : [MessageBox.Action.CLOSE]
-					}	
+					}
 				);
 				return false;
 			} else {

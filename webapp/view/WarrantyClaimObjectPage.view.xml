@@ -142,6 +142,7 @@
 		<footer>
 			<m:OverflowToolbar>
 				<m:Button 
+				    id="messagePopup"
 					icon="sap-icon://message-popup" 
 					visible="{= ${message>/length} &gt; 0}"
 					text="{message>/length}" 

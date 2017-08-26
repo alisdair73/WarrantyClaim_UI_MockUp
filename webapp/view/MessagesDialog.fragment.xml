@@ -1,0 +1,19 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog title="Messages">
+		<content>
+			<MessagePopover 
+				initiallyExpanded="true"
+				items="{message>/}"
+			>
+				 <items>
+					<MessagePopoverItem 
+						title="{message>message}" 
+						description="{message>description}" 
+						type="{message>type}"
+						subtitle="{message>additionalText}"
+					/>
+				</items>
+			</MessagePopover>
+		</content>
+	</Dialog>
+</core:FragmentDefinition>

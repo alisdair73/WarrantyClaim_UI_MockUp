@@ -221,9 +221,9 @@
 				/>
 				<Label 
 					id="PartsInstallKM_label"
-					text="Part Install KM" 
+					text="Part Install KM/Hrs" 
 					labelFor="PartsInstallKM" 
-					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp; ${WarrantyClaim>ObjectType} === 'VELO' }"
 				/>
 				<Input 
 					id="PartsInstallKM" 
@@ -259,6 +259,7 @@
 				/>				
 				<CheckBox 
 					selected="{WarrantyClaim>/PartsInstalledByDealer}"
+					select="onInstalledByDealer"
 					editable="{WarrantyClaim>/CanEdit}" 
 					visible="{= ${WarrantyClaim>/ClaimTypeGroup} === 'PARTS' }"
 				/>

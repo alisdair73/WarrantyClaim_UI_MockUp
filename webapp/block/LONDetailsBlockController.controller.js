@@ -12,7 +12,8 @@ sap.ui.define([
 		
 		onInit: function(){
 			
-			sap.ui.getCore().getEventBus().subscribe("Recall","Transferred",this._applyLONTableFilter,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","RecallApplied",this._applyLONTableFilter,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","LONModified",this._applyLONTableFilter,this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applyLONTableFilter,this);
 			
 			this.getView().setModel(new JSONModel({"HasLON":false}) , "LONHelper");
@@ -31,7 +32,8 @@ sap.ui.define([
 		},
 		
 		onExit:function(){
-			sap.ui.getCore().getEventBus().unsubscribe("Recall","Transferred",this._applyLONTableFilter,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","RecallApplied",this._applyLONTableFilter,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","LONModified",this._applyLONTableFilter,this);
 			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Saved",this._applyLONTableFilter,this);
 		},
 		
@@ -289,8 +291,7 @@ sap.ui.define([
 					//If this is a "Straight Time" LON then copy addition description to Dealer Comments section 				
 					
 					var now = new Date();
-	                var displayDateTime = now.getDate() + "/" + now.getMonth()+ "/" + now.getFullYear() + 
-	                	' ' + now.getHours() + ":" + now.getMinutes();
+	            	var displayDateTime = now.toLocaleDateString() + ' ' + now.toLocaleTimeString(); 	
 					
 					var additionalLONComments = displayDateTime + ": Additional LON " + 
 						this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode") + ", " +

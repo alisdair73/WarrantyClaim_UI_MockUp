@@ -148,7 +148,9 @@
 					</suggestionItems>										
 				</Input>
 	
-				<core:Title text="Authorisation"/>
+				<core:Title 
+					text="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ? 'Authorisation':''}"
+				/>
 				<Label 
 				    id="AuthorisationNumber_label"
 					text="PWA Number" 

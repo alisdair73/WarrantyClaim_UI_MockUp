@@ -1,8 +1,9 @@
 sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/Filter",
-	"WarrantyClaim_MockUp/model/WarrantyClaim"
-], function(BaseController,Filter, WarrantyClaim) {
+	"WarrantyClaim_MockUp/model/WarrantyClaim",
+	"WarrantyClaim_MockUp/model/models"
+], function(BaseController,Filter, WarrantyClaim, Models) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.ClaimDetailsBlockController", {
@@ -69,6 +70,32 @@ sap.ui.define([
 			WarrantyClaim.validateOriginalInvoiceNumber();
 			this.logValidationMessage("OriginalInvoiceNumber");
 		},
+		
+		onInstalledByDealer:function(){
+			
+			if(this.getView().getModel("WarrantyClaim").getProperty("/ObjectType") === "SERN"){
+				
+				var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
+				
+				if(this.getView().getModel("WarrantyClaim").getProperty("/PartsInstalledByDealer")){
+					var newLONItem = Models.createNewWarrantyItem("FR");   
+					newLONItem.setProperty("/ItemKey","100001");
+					newLONItem.setProperty("/Description","Labour Hours");
+					newLONItem.setProperty("/Quantity",0);
+					labourItems.push(newLONItem.getProperty("/"));
+					this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
+				} else {
+					//Clear the LON
+					labourItems.forEach(function(item){
+						item.Deleted = true;
+					});
+					sap.ui.getCore().getEventBus().publish("WarrantyClaim","LONModified");
+				}
+			}
+		},
+		
+
+			
 		
 		 _refreshValidationMessages: function(){
 			this.logValidationMessage("FailureMeasure");

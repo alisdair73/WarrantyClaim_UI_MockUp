@@ -142,8 +142,9 @@ sap.ui.define([
 				return false;
 			} else {
 				
-				//LON list can contain only 1 Six Digit and 1 7 Digit LON
+				//LON list can contain only 1 Six Digit 
 				//Any 6 Digit LON finishing in 99 (Streight Time) can be ignored
+				//as multiple 
 				if(candidateLONCode.length > 5){
 					switch(candidateLONCode.length){
 						case 6:
@@ -158,14 +159,15 @@ sap.ui.define([
 								}
 							}
 							break;
-						case 7:
+					//Multiple 7 digit LONS are allowed now
+/*						case 7:
 							var sevenDigitLON = labourItems.find(function(lon){
 								return lon.ItemKey.length === 7 && !lon.Deleted;
 							});
 							if(sevenDigitLON){
 								return false;
 							}
-							break;
+							break;*/
 					}
 				}
 			}

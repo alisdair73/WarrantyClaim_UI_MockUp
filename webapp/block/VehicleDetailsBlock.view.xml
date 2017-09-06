@@ -149,14 +149,25 @@
 				</Input>
 	
 				<core:Title 
-					text="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ? 'Authorisation':''}"
+					text="{= 
+						${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || 
+						${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL'||
+						( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
+						${WarrantyClaim>ObjectType} !== 'VELO' ) 
+						? 'Authorisation':''}"
 				/>
 				<Label 
 				    id="AuthorisationNumber_label"
 					text="PWA Number" 
 					labelFor="PWA" 
-					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
-					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ||
+								( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
+								  ${WarrantyClaim>ObjectType} !== 'VELO' ) }"
+								  
+					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || 
+								${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ||
+								( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
+								  ${WarrantyClaim>ObjectType} !== 'VELO' ) }"
 				/>
 				<Input 
 					id="AuthorisationNumber" 
@@ -172,7 +183,10 @@
 					suggestionItemSelected="onPWASelection"
 					maxSuggestionWidth="500px"
 					suggestionRows="{/PriorWorkApprovalSet}"
-					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' }"
+					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || 
+								${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ||
+								( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
+								  ${WarrantyClaim>ObjectType} !== 'VELO' )}"
 				>
 					<suggestionColumns>
 						<Column>

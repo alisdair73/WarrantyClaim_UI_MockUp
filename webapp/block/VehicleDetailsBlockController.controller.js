@@ -314,20 +314,30 @@ sap.ui.define([
 				labourItem.setProperty("/ItemKey", recallGroup.getProperty("/inspect/LON"));
 				labourItem.setProperty("/Description", recallGroup.getProperty("/inspect/displayText"));
 				labourItem.setProperty("/Quantity", recallGroup.getProperty("/inspect/quantity"));
-			} else {
+			
+				labourItems.push(labourItem.getProperty("/"));
+				this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
+			
+				sap.ui.getCore().getEventBus().publish("WarrantyClaim","RecallApplied");
+				this._recallDialog.close();
+				
+				return; //Only Inspection to be performed...
+			} 
+			
+			if(recallGroup.getProperty("/replace/selected")){
 				//Replace/Repair
 				labourItem.setProperty("/ItemKey", recallGroup.getProperty("/replace/LON"));
 				labourItem.setProperty("/Description", recallGroup.getProperty("/replace/displayText"));
 				labourItem.setProperty("/Quantity", recallGroup.getProperty("/replace/quantity"));
+				labourItems.push(labourItem.getProperty("/"));
+				this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
 			}
-			labourItems.push(labourItem.getProperty("/"));
-			this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
 			
-			if(recallGroup.getProperty("/inspect/selected")){
-				sap.ui.getCore().getEventBus().publish("Recall","Transferred");
-				this._recallDialog.close();
-				return; //Only Inspection to be performed...
-			}
+			// if(recallGroup.getProperty("/inspect/selected")){
+			// 	sap.ui.getCore().getEventBus().publish("Recall","Transferred");
+			// 	this._recallDialog.close();
+			// 	return; //Only Inspection to be performed...
+			// }
 				
 			//Add the Sublet Items
 			recallGroup.getProperty("/subletItems").forEach(function(subletItem){

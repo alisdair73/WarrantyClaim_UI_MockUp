@@ -22,7 +22,14 @@
 				required="true"
 				maxLength="10"
 				value="{
-					path: 'WarrantyClaim>FailureMeasure/value'
+					path: 'WarrantyClaim>FailureMeasure/value',
+					type: 'sap.ui.model.type.Float',
+					formatOptions: {
+						maxFractionDigits: 0,
+    					groupingEnabled: false,
+    					groupingSeparator: ',',
+    					decimalSeparator: '.'								
+					}
 				}"	
 				change="onFailureMeasureChanged"
 				valueState="{= ${WarrantyClaim>FailureMeasure/ruleResult/valid} ? 'None':'Error'}"
@@ -231,7 +238,7 @@
 					value="{WarrantyClaim>PartsInstallKm/value}"
 					editable="{WarrantyClaim>CanEdit}" 
 					maxLength="6"
-					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp; ${WarrantyClaim>ObjectType} === 'VELO' }"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 					change="onPartsInstallKmChanged"
 					valueState="{= ${WarrantyClaim>PartsInstallKm/ruleResult/valid} ? 'None':'Error'}"

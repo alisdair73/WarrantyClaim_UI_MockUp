@@ -15,7 +15,7 @@
 										<l:layoutData>
 											<l:GridData span="L8"/>
 										</l:layoutData>
-										<Label text="Customer Concern" required="true"/>
+										<Label text="Customer Concern" required="{= ${WarrantyClaim>ClaimTypeGroup} !== 'RECALL' }"/>
 										<TextArea 
 											id="CustomerConcern" 
 											rows="10" 

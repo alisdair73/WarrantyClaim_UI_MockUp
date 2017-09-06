@@ -2,13 +2,20 @@ sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"sap/ui/model/Filter",
 	"WarrantyClaim_MockUp/model/WarrantyClaim",
-	"WarrantyClaim_MockUp/model/models"
-], function(BaseController,Filter, WarrantyClaim, Models) {
+	"WarrantyClaim_MockUp/model/models",
+	"sap/ui/core/format/NumberFormat"
+], function(BaseController,Filter, WarrantyClaim, Models, NumberFormatter) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.ClaimDetailsBlockController", {
 		
 		onInit: function(){
+			
+			this._measureFormatter = sap.ui.core.format.NumberFormat.getFloatInstance({
+				maxFractionDigits: 0,
+				groupingEnabled: false
+			});
+			
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
 		},
 		
@@ -17,6 +24,11 @@ sap.ui.define([
 		},
 		
 		onFailureMeasureChanged: function(){
+			
+			this.getView().getModel("WarrantyClaim").setProperty("/FailureMeasure/value",
+				this._measureFormatter.format(this.getView().getModel("WarrantyClaim").getProperty("/FailureMeasure/value"))
+			);
+
 			WarrantyClaim.validateFailureMeasure();
 			this.logValidationMessage("FailureMeasure");
 		},

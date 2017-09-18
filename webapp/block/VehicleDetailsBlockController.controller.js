@@ -145,12 +145,15 @@ sap.ui.define([
 				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
 			}
 			
+			var currentMaterialDivision = this.getView().getModel("WarrantyClaim").getProperty("/MaterialDivision");
+			
 			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber/value",dataObject.PWANumber);
 			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",dataObject.ExternalObjectNumber);
 			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value",dataObject.EngineNumber);
 			this.getView().getModel("WarrantyClaim").setProperty("/DateOfFailure/value",dataObject.DateOfFailure);
 			this.getView().getModel("WarrantyClaim").setProperty("/FailureMeasure/value",dataObject.FailureMeasure);
 			this.getView().getModel("WarrantyClaim").setProperty("/CustomerConcern/value",dataObject.CustomerConcern);	
+			this.getView().getModel("WarrantyClaim").setProperty("/DealerComments/value",dataObject.DealerComment);
 			
 			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.ExternalObjectDescription);
 			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectModelCode",dataObject.ExternalObjectModelCode);
@@ -158,7 +161,10 @@ sap.ui.define([
 			
 			WarrantyClaim.validateExternalObjectNumber();
 			this.logValidationMessage("ExternalObjectNumber");
-			this._resetCatalogFields();
+			
+			if(this.getView().getModel("WarrantyClaim").getProperty("/ObjectType") === "SERN" && currentMaterialDivision !== dataObject.MaterialDivision){
+				this._resetCatalogFields();
+			}
 			
 			// Update/Add the MCPN
 			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
@@ -210,6 +216,14 @@ sap.ui.define([
 			if (recallSearch) {
 				filters.push(new Filter("ExternalRecallNumber", sap.ui.model.FilterOperator.StartsWith, recallSearch));
 			}
+			
+			WarrantyClaim.validateDateOfFailure();
+			
+			var dateOfFailure = this.getView().getModel("WarrantyClaim").getProperty("/DateOfFailure/value");
+			if (dateOfFailure){
+				filters.push(new Filter("ValidAt", sap.ui.model.FilterOperator.EQ, dateOfFailure));
+			}
+			
 			event.getSource().getBinding("suggestionRows").filter(filters);
 		},
 		
@@ -234,7 +248,16 @@ sap.ui.define([
 				this._RecallValueHelpDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.RecallSelection", this);
 				this.getView().addDependent(this._RecallValueHelpDialog);
 			}
-			sap.ui.getCore().byId("RecallSelectionList").getBinding("items").filter(this._getFilter());
+			
+			var filters = this._getFilter();
+			
+			WarrantyClaim.validateDateOfFailure();
+			var dateOfFailure = this.getView().getModel("WarrantyClaim").getProperty("/DateOfFailure/value");
+			if (dateOfFailure){
+				filters.push(new Filter("ValidAt", sap.ui.model.FilterOperator.EQ, dateOfFailure));
+			}
+			
+			sap.ui.getCore().byId("RecallSelectionList").getBinding("items").filter(filters);
 			
 			// Display the popup dialog for adding parts
 			this._RecallValueHelpDialog.open();

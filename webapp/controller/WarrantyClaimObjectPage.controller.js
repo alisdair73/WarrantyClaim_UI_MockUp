@@ -59,6 +59,7 @@ sap.ui.define([
 			var claimTypeGroup = oEvent.getParameter("listItem").getBindingContext().getObject().Group;
 			var objectType = oEvent.getParameter("listItem").getBindingContext().getObject().ClaimObjectType;
 			
+			var status = oEvent.getParameter("listItem").getBindingContext().getObject().InitialStatus;
 			var statusDescription = oEvent.getParameter("listItem").getBindingContext().getObject().InitialStatusDescription;
 			var statusIcon = oEvent.getParameter("listItem").getBindingContext().getObject().InitialStatusIcon;
 			
@@ -67,6 +68,7 @@ sap.ui.define([
 			this.getModel("WarrantyClaim").setProperty("/ClaimTypeGroup", claimTypeGroup);
 			this.getModel("WarrantyClaim").setProperty("/ObjectType", objectType);
 			
+			this.getModel("WarrantyClaim").setProperty("/ProcessingStatus",status);
 			this.getModel("WarrantyClaim").setProperty("/StatusDescription",statusDescription);
 			this.getModel("WarrantyClaim").setProperty("/StatusIcon",statusIcon);
 			
@@ -239,38 +241,56 @@ sap.ui.define([
 		_onActionSuccess: function(actionName, responseData, response){
 			
 			var leadingMessage = JSON.parse(response.headers['sap-message']);
+			var isValid = false;
 			
-			if(actionName === "ValidateWarranty"){
-				this.getModel("ViewHelper").setProperty("/warrantyUI/hasBeenValidated", true);
-			}
-			
-			var warningMessages = leadingMessage.details.filter(function(message){
-				return message.severity === "warning";
+			var errorMessages = leadingMessage.details.filter(function(message){
+				return message.severity === "error";
 			});
 			
-			var messageBoxText = "";
-			if(warningMessages.length > 0){
-				messageBoxText = leadingMessage.message + "\n" + "Please review Warning messages before submitting claim.";
+			if(errorMessages.length > 0){
+				
+				MessageBox.error(
+					leadingMessage.message,
+					{
+						actions : [MessageBox.Action.CLOSE],
+						onClose: function(){ this.openMessages(); }.bind(this)
+					}	
+				);
+				
 			} else {
-				messageBoxText = leadingMessage.message + "\n" + "Please observe any additional notes provided.";
-			}
 			
-			MessageBox.success(
-				messageBoxText,
-				{
-					id : "errorMessageBox",
-					actions : [MessageBox.Action.CLOSE],
-					onClose: function() { 
-						if(warningMessages.length > 0){
-							this.openMessages(); 
-						}
-					}.bind(this)
-				}	
-			);
+				isValid = true;
+
+				var warningMessages = leadingMessage.details.filter(function(message){
+					return message.severity === "warning";
+				});
+				
+				if(warningMessages.length > 0){
+					MessageBox.warning(
+						leadingMessage.message + "\n" + "Please review Warning messages before submitting claim.",
+						{
+							actions : [MessageBox.Action.CLOSE],
+							onClose: function(){ this.openMessages(); }.bind(this)
+						}	
+					);
+					
+				} else {
+					MessageBox.success(
+						leadingMessage.message + "\n" + "Please observe any additional notes provided.",
+						{
+							actions : [MessageBox.Action.CLOSE]
+						}	
+					);
+				}
+			}
 			
 			WarrantyClaim.updateWarrantyClaimFromJSONModel(responseData, actionName === "ValidateWarranty");
 		
 			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Saved");
+			
+			if(actionName === "ValidateWarranty"){
+				this.getModel("ViewHelper").setProperty("/UI/hasBeenValidated", isValid);
+			}
 			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
 		
@@ -347,7 +367,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "1300000139";
+			//claimNumber = "200000000587";
 			//claimNumber = "1210000035";
 			//claimNumber = "100000000567"; //MOCK Record
 			

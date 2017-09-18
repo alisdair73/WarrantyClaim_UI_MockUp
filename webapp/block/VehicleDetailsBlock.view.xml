@@ -147,69 +147,23 @@
 						<core:ListItem key="{EmployeeNumber}" text="{FirstName} {LastName}" />
 					</suggestionItems>										
 				</Input>
-	
-				<core:Title 
-					text="{= 
-						${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || 
-						${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL'||
-						( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
-						${WarrantyClaim>ObjectType} !== 'VELO' ) 
-						? 'Authorisation':''}"
-				/>
-				<Label 
-				    id="AuthorisationNumber_label"
-					text="PWA Number" 
-					labelFor="PWA" 
-					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ||
-								( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
-								  ${WarrantyClaim>ObjectType} !== 'VELO' ) }"
-								  
-					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || 
-								${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ||
-								( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
-								  ${WarrantyClaim>ObjectType} !== 'VELO' ) }"
-				/>
-				<Input 
-					id="AuthorisationNumber" 
-					value="{WarrantyClaim>AuthorisationNumber/value}"	
-					editable="{WarrantyClaim>CanEdit}"
-					showValueHelp="true" 
-					maxLength="12"
-					change="onAuthorisationNumberChanged"
-					valueState="{= ${WarrantyClaim>AuthorisationNumber/ruleResult/valid} ? 'None':'Error'}"
-					valueHelpRequest="onPWAValueHelpRequest"
-					showSuggestion="true"
-					suggest="onPWASuggest"
-					suggestionItemSelected="onPWASelection"
-					maxSuggestionWidth="500px"
-					suggestionRows="{/PriorWorkApprovalSet}"
-					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || 
-								${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ||
-								( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
-								  ${WarrantyClaim>ObjectType} !== 'VELO' )}"
-				>
-					<suggestionColumns>
-						<Column>
-							<Text text="PWA Number" />
-						</Column>
-						<Column>
-							<Text text="VIN" />
-						</Column>
-						<Column>
-							<Text text="Engine Number" />
-						</Column>
-					</suggestionColumns>
-					<suggestionRows>
-						<ColumnListItem>
-							<cells>
-								<Label text="{PWANumber}" />
-								<Label text="{VIN}" />
-								<Label text="{EngineNumber}" />
-							</cells>
-						</ColumnListItem>
-					</suggestionRows>
-				</Input>
-				
+			</f:content>
+		</f:SimpleForm>
+		<f:SimpleForm 
+			id="RecallForm" 
+			objectBindings="{WarrantyClaim>/}"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanL="4"
+			labelSpanM="12"
+			emptySpanL="0"
+			emptySpanM="0"
+			columnsL="2"
+			columnsM="2"
+			class="editableForm"
+			visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
+			adjustLabelSpan="false">
+			<f:content>
 				<core:Title text="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL' ? 'Recall' : '' }"/>
 				<Label 
 					id="RecallNumber_label"
@@ -220,7 +174,6 @@
 				/>
 				<Input 
 					id="RecallNumber" 
-					visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 					value="{WarrantyClaim>RecallNumber/value}"
 					change="onRecallNumberChanged"
@@ -255,8 +208,83 @@
 							</cells>
 						</ColumnListItem>
 					</suggestionRows>
-				</Input>	
+				</Input>
+				<core:Title text="" />
 			</f:content>
 		</f:SimpleForm>
+		<f:SimpleForm 
+			id="AuthorisationForm" 
+			objectBindings="{WarrantyClaim>/}"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanL="4"
+			labelSpanM="12"
+			emptySpanL="0"
+			emptySpanM="0"
+			columnsL="2"
+			columnsM="2"
+			class="editableForm"
+			visible="{= ${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || 
+								${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ||
+								( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
+								  ${WarrantyClaim>ObjectType} !== 'VELO' ) }"
+			adjustLabelSpan="false">
+			<f:content>
+				<core:Title 
+					text="{= 
+						${WarrantyClaim>ClaimTypeGroup} === 'NORMAL' || 
+						${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL'||
+						( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
+						${WarrantyClaim>ObjectType} !== 'VELO' ) 
+						? 'Authorisation':''}"
+				/>
+				<Label 
+				    id="AuthorisationNumber_label"
+					text="PWA Number" 
+					labelFor="PWA" 
+					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'GOODWILL' ||
+								( ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp;
+								  ${WarrantyClaim>ObjectType} !== 'VELO' ) }"
+				/>
+				<Input 
+					id="AuthorisationNumber" 
+					value="{WarrantyClaim>AuthorisationNumber/value}"	
+					editable="{WarrantyClaim>CanEdit}"
+					showValueHelp="true" 
+					maxLength="12"
+					change="onAuthorisationNumberChanged"
+					valueState="{= ${WarrantyClaim>AuthorisationNumber/ruleResult/valid} ? 'None':'Error'}"
+					valueHelpRequest="onPWAValueHelpRequest"
+					showSuggestion="true"
+					suggest="onPWASuggest"
+					suggestionItemSelected="onPWASelection"
+					maxSuggestionWidth="500px"
+					suggestionRows="{/PriorWorkApprovalSet}"
+				>
+					<suggestionColumns>
+						<Column>
+							<Text text="PWA Number" />
+						</Column>
+						<Column>
+							<Text text="VIN" />
+						</Column>
+						<Column>
+							<Text text="Engine Number" />
+						</Column>
+					</suggestionColumns>
+					<suggestionRows>
+						<ColumnListItem>
+							<cells>
+								<Label text="{PWANumber}" />
+								<Label text="{VIN}" />
+								<Label text="{EngineNumber}" />
+							</cells>
+						</ColumnListItem>
+					</suggestionRows>
+				</Input>
+				<core:Title text="" />
+			</f:content>
+		</f:SimpleForm>
+
 	</VBox>
 </mvc:View>

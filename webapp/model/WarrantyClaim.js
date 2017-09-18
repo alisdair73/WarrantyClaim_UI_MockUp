@@ -72,6 +72,7 @@ sap.ui.define([
 				"TotalLabour":"0",
 				"TotalHandling":"0",
 				"TotalGST":"0",
+				"ProcessingStatus":"",
 				"StatusDescription":"",
 				"StatusIcon":"",
 				"CanEdit":true,
@@ -100,6 +101,7 @@ sap.ui.define([
 			this.warrantyClaim.TotalHandling = jsonModel.TotalHandling;
 			this.warrantyClaim.TotalGST = jsonModel.TotalGST;
 			this.warrantyClaim.TotalCostOfClaim = jsonModel.TotalCostOfClaim;
+			this.warrantyClaim.ProcessingStatus = jsonModel.ProcessingStatus;
 			this.warrantyClaim.StatusDescription = jsonModel.StatusDescription;
 			this.warrantyClaim.StatusIcon = jsonModel.StatusIcon;
 			this.warrantyClaim.CanEdit = jsonModel.CanEdit;
@@ -207,6 +209,7 @@ sap.ui.define([
 			this.warrantyClaim.TotalLabour = oWarrantyClaim.TotalLabour;
 			this.warrantyClaim.TotalHandling = oWarrantyClaim.TotalHandling;
 			this.warrantyClaim.TotalGST = oWarrantyClaim.TotalGST;
+			this.warrantyClaim.ProcessingStatus = oWarrantyClaim.ProcessingStatus;
 			this.warrantyClaim.StatusDescription = oWarrantyClaim.StatusDescription;
 			this.warrantyClaim.StatusIcon = oWarrantyClaim.StatusIcon;
 			this.warrantyClaim.CanEdit = oWarrantyClaim.CanEdit;

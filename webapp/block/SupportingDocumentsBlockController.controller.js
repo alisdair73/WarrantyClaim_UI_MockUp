@@ -50,8 +50,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		
 		onUploadTerminated: function() {
 		
-/*			var sFileName = oEvent.getParameter("fileName");
-			var oRequestHeaders = oEvent.getParameters().getHeaderParameter();*/
+//			var sFileName = oEvent.getParameter("fileName");
+//			var oRequestHeaders = oEvent.getParameters().getHeaderParameter();
 		},
 		
 		onBeforeUploadStarts: function(oEvent){

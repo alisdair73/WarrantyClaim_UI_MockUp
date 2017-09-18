@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<TableSelectDialog 
 	    id="RecallSelectionList"
-		noDataText="No Recalls found."
+		noDataText="No Recalls found. VIN and Date of Failure must be entered first."
 		title="Select Recall"
 		search="onRecallSelectionSearch"
 		confirm="onRecallSelection"

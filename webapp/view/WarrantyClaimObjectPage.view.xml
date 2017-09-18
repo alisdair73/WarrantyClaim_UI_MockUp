@@ -111,7 +111,14 @@
 					</ObjectPageSubSection>
 				</subSections>
 			</ObjectPageSection>
-			<ObjectPageSection id="hondaAssessmentResults" title="RESULTS" visible="{= ${WarrantyClaim>/CurrentVersionNumber} !== '0001'}">
+			<ObjectPageSection 
+				id="hondaAssessmentResults" 
+				title="RESULTS" 
+				visible="{= ${WarrantyClaim>/ProcessingStatus} !== '0001' &amp;&amp;
+				            !( ${WarrantyClaim>/ProcessingStatus} === '0002' &amp;&amp;
+				              ${WarrantyClaim>/CurrentVersionNumber} === '0002' )
+				}"
+			>
 				<subSections>
 					<ObjectPageSubSection id="hondaAssessmentResults_sub1" title="RESULTS" mode="Expanded">
 						<blocks>

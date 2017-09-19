@@ -289,7 +289,7 @@ sap.ui.define([
 			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Saved");
 			
 			if(actionName === "ValidateWarranty"){
-				this.getModel("ViewHelper").setProperty("/UI/hasBeenValidated", isValid);
+				this.getModel("ViewHelper").setProperty("/warrantyUI/hasBeenValidated", isValid);
 			}
 			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
@@ -367,7 +367,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "200000000587";
+			//claimNumber = "1110000217";
 			//claimNumber = "1210000035";
 			//claimNumber = "100000000567"; //MOCK Record
 			

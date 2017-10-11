@@ -33,7 +33,7 @@
 					fieldWidth="45%"
 					visible="{= ${WarrantyClaim>/ObjectType} === 'VELO'}"
 					required="true"
-					editable="{WarrantyClaim>CanEdit}"
+					editable="{= ${WarrantyClaim>CanEdit} &amp;&amp; ${WarrantyClaim>/ProcessingStatus} === 'X001'}"
 					showSuggestion="true"
 					suggest="onExternalObjectNumberSuggest"
 					suggestionItemSelected="onExternalObjectNumberVELOSelected"
@@ -106,7 +106,7 @@
 				<Input  
 					id="EngineNumber" 
 					value="{WarrantyClaim>EngineNumber/value}" 
-					editable="{WarrantyClaim>CanEdit}" 
+					editable="{= ${WarrantyClaim>CanEdit} &amp;&amp; ${WarrantyClaim>/ProcessingStatus} === 'X001'}" 
 					required="true"
 					maxLength="10"
 					change="onEngineNumberChanged"

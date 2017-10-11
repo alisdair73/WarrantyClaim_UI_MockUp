@@ -25,7 +25,7 @@
 				<m:ObjectAttribute 
 					title="Legacy Claim Number" 
 					text="{WarrantyClaim>/PrecedingClaimNumber}" 
-					visible="{= ${WarrantyClaim>/PrecedingClaimNumber} !== ''      }"
+					visible="{= ${WarrantyClaim>/PrecedingClaimNumber} !== ''}"
 				/>
 				<m:ObjectAttribute 
 					title="Submitted Date" 
@@ -114,10 +114,16 @@
 			<ObjectPageSection 
 				id="hondaAssessmentResults" 
 				title="RESULTS" 
-				visible="{= ${WarrantyClaim>/ProcessingStatus} !== '0001' &amp;&amp;
-				            !( ${WarrantyClaim>/ProcessingStatus} === '0002' &amp;&amp;
-				              ${WarrantyClaim>/CurrentVersionNumber} === '0002' )
-				}"
+				visible="{= ${WarrantyClaim>/ProcessingStatus} !== 'X001' &amp;&amp; 
+							${WarrantyClaim>/ProcessingStatus} !== 'X002' &amp;&amp;
+							${WarrantyClaim>/ProcessingStatus} !== 'X012' &amp;&amp;
+							${WarrantyClaim>/ProcessingStatus} !== 'X015' &amp;&amp;
+							${WarrantyClaim>/ProcessingStatus} !== 'Y001' &amp;&amp;
+							${WarrantyClaim>/ProcessingStatus} !== 'Y003' &amp;&amp;
+							${WarrantyClaim>/ProcessingStatus} !== 'Y009' &amp;&amp;
+							${WarrantyClaim>/ProcessingStatus} !== 'Y016' &amp;&amp;
+							${WarrantyClaim>/ProcessingStatus} !== 'Y017' &amp;&amp;
+							${WarrantyClaim>/ProcessingStatus} !== 'Y018' }"							
 			>
 				<subSections>
 					<ObjectPageSubSection id="hondaAssessmentResults_sub1" title="RESULTS" mode="Expanded">
@@ -156,6 +162,13 @@
 					type="Emphasized" 
 					press="openMessages"/>
 				<m:ToolbarSpacer/>
+				<m:Button 
+					text="New Claim" 
+					press="onNewClaim" 
+					visible="{= ${WarrantyClaim>/StatusDescription} === 'In Progress'}"
+				/>
+				<m:Button text="Duplicate Claim" press="onDuplicateClaim" 
+					visible="{= ${WarrantyClaim>/ProcessingStatus} === 'X006'}"/>
 				<m:Button text="Save Draft" press="onDraft" visible="{WarrantyClaim>/CanEdit}"/>
 				<m:Button text="Cancel" press="onCancel"/>
 				<m:Button text="Validate" press="onValidate" visible="{WarrantyClaim>/CanEdit}"/>

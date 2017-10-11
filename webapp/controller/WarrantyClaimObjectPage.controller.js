@@ -98,6 +98,47 @@ sap.ui.define([
 			this._claimTypeSelection.close();
 		},
 		
+		onNewClaim: function(){
+			this.navigateToApp("#DealerWarrantyClaim-create");
+		},
+		
+		onDuplicateClaim: function(){
+			//Reset the Status based on the Claim Type
+			var claimType = this.getView().getModel("WarrantyClaim").getProperty("/ClaimType");
+			
+			this.getOwnerComponent().getModel().read(
+				"/ClaimTypeSet", {
+					context: null,
+					filters: [new Filter("Code",sap.ui.model.FilterOperator.EQ, claimType)],
+					success: function(oData) {
+						if (oData.results.length && oData.results.length > 0) {
+
+							this.getModel("ViewHelper").setProperty("/readOnly", false);
+							
+							this.getView().getModel("WarrantyClaim").setProperty("/ClaimNumber","");
+							this.getView().getModel("WarrantyClaim").setProperty("/SubmittedOn",null);
+							this.getView().getModel("WarrantyClaim").setProperty("/CurrentVersionNumber","0001");
+							this.getView().getModel("WarrantyClaim").setProperty("/CurrentVersionCategory","IC");
+							this.getView().getModel("WarrantyClaim").setProperty("/CanEdit",true);
+							this.getView().getModel("WarrantyClaim").setProperty("/VersionIdentifier",null);
+							
+							this.getModel("WarrantyClaim").setProperty("/ProcessingStatus",oData.results[0].InitialStatus);
+							this.getModel("WarrantyClaim").setProperty("/StatusDescription",oData.results[0].InitialStatusDescription);
+
+							sap.ui.getCore().getMessageManager().removeAllMessages();
+							
+							MessageBox.success("Claim Duplicated.");
+							
+						} else {
+							this._showWarrantyClaimErrorMessage();
+						}
+					}.bind(this),
+					error: this._showWarrantyClaimErrorMessage
+				}
+			);
+			
+		},
+		
 		onDraft: function(){
 			this._doWarrantyAction("SaveWarranty");
 		},
@@ -367,7 +408,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "1110000217";
+			//claimNumber = "1100000073";
 			//claimNumber = "1210000035";
 			//claimNumber = "100000000567"; //MOCK Record
 			

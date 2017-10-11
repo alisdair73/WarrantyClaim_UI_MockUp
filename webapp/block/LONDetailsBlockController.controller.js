@@ -97,11 +97,12 @@ sap.ui.define([
 				var bindingPath = sap.ui.getCore().byId("LONCatalog").getSelectedItems()[i].getBindingContext().getPath();
 				var selectedLON = sap.ui.getCore().byId("LONCatalog").getModel().getProperty(bindingPath);
 				
-				if(this._isOkToAddLON(selectedLON.LONCode)){
+				if(this._isOkToAddLON(selectedLON.LONCode,true)){
 					var newLONItem = Models.createNewWarrantyItem("FR");   
 					newLONItem.setProperty("/ItemKey",selectedLON.LONCode);
 					newLONItem.setProperty("/Description",selectedLON.Description);
 					newLONItem.setProperty("/Quantity",selectedLON.Hours);
+					newLONItem.setProperty("/IsLONCatalogItem",true);
 					labourItems.push(newLONItem.getProperty("/"));
 				} else {
 					displayLONRules = true;
@@ -120,7 +121,8 @@ sap.ui.define([
 			MessageBox.warning(
 				"Some LON Codes were not added.\n" +
 				"Assigned LON Codes cannot contain duplicates, and a\n" +
-				"Claim can only have one 6 digit and one 7 digit LON Code.",
+				"Claim can only have one 6 digit LON Code from the LON Catalog.\n" +
+				"Multiple 6 Digit Additional LON Codes are allowed.",
 				{
 					id : "LONMessageBox",
 					title: "Add LON",
@@ -129,7 +131,7 @@ sap.ui.define([
 			);
 		},
 		
-		_isOkToAddLON:function(candidateLONCode){
+		_isOkToAddLON:function(candidateLONCode, isLONCatalog){
 			
 			var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
 			
@@ -142,10 +144,10 @@ sap.ui.define([
 				return false;
 			} else {
 				
-				//LON list can contain only 1 Six Digit 
+				//LON list can contain only 1 Six Digit LON from the main catalog
 				//Any 6 Digit LON finishing in 99 (Streight Time) can be ignored
 				//as multiple 
-				if(candidateLONCode.length > 5){
+				if(candidateLONCode.length > 5 && isLONCatalog) {
 					switch(candidateLONCode.length){
 						case 6:
 							if(candidateLONCode.slice(4,6) !== "99"){
@@ -283,7 +285,7 @@ sap.ui.define([
 			var newLONItem = Models.createNewWarrantyItem("FR");   
 			var newLONCode = this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode");
 			
-			if(this._isOkToAddLON(newLONCode)){
+			if(this._isOkToAddLON(newLONCode,false)){
 			
 				newLONItem.setProperty("/ItemKey",newLONCode);
 				newLONItem.setProperty("/Quantity",this.getView().getModel("AdditionalLONHelper").getProperty("/RequestedHours"));

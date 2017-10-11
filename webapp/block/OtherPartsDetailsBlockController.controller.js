@@ -84,6 +84,18 @@ sap.ui.define([
 			//Make sure the MCPN is hidden in the List
 			this._applyPartTableFilter();
 			
+			//Delete any VIN/MCPN depenedent LON codes
+			if(this.getView().getModel("WarrantyClaim").getProperty("/ObjectType") === "VELO" ){
+				var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");	
+    			labourItems.forEach(function(item){
+    				if(item.ItemKey.slice(4,6) !== "99"){
+    					item.Deleted = true;	
+    				}
+				});
+				this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
+				sap.ui.getCore().getEventBus().publish("WarrantyClaim","LONModified");
+			}
+			
 			WarrantyClaim.validateMainCausalPartNumber();
 			this.logValidationMessage("MCPN");
 			

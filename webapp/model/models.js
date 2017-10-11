@@ -31,6 +31,7 @@ sap.ui.define([
 	            "Deleted":false,
 	            "IsMCPN": false,
 	            "IsSubletFixed": false,
+	            "IsLONCatalogItem": false,
 	            "ItemIdentifier":null
 			});
 		}

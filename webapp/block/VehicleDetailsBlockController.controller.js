@@ -22,7 +22,7 @@ sap.ui.define([
 			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
 		},
 		
-		onExternalObjectNumberChanged: function(){
+		onExternalObjectNumberChanged: function(event){
 
 			var externalNumber = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
 			if(externalNumber === ""){
@@ -38,6 +38,18 @@ sap.ui.define([
 				);
 			}
 			
+			//Delete any VIN/MCPN dependent LON codes
+			if(this.getView().getModel("WarrantyClaim").getProperty("/ObjectType") === "VELO" ){
+				var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");	
+    			labourItems.forEach(function(item){
+    				if(item.ItemKey.slice(4,6) !== "99"){
+    					item.Deleted = true;	
+    				}
+				});
+				this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
+				sap.ui.getCore().getEventBus().publish("WarrantyClaim","LONModified");
+			}
+    	
 			WarrantyClaim.validateExternalObjectNumber();
 			this.logValidationMessage("ExternalObjectNumber");
 		},

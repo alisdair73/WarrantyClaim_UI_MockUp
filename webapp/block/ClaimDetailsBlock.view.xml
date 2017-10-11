@@ -33,7 +33,7 @@
 				}"	
 				change="onFailureMeasureChanged"
 				valueState="{= ${WarrantyClaim>FailureMeasure/ruleResult/valid} ? 'None':'Error'}"
-				editable="{WarrantyClaim>CanEdit}"
+				editable="{= ${WarrantyClaim>CanEdit} &amp;&amp; ${WarrantyClaim>/ProcessingStatus} === 'X001'}"
 			/>
 			
 			<Label id="DateOfFailure_label" text="Date of Failure" required="true" labelFor="DateOfFailure"/>
@@ -44,7 +44,7 @@
 				displayFormat="dd/MM/yyyy"
 				dateValue="{WarrantyClaim>DateOfFailure/value}"
 				valueState="{= ${WarrantyClaim>DateOfFailure/ruleResult/valid} ? 'None':'Error'}"
-				editable="{WarrantyClaim>CanEdit}"
+				editable="{= ${WarrantyClaim>CanEdit} &amp;&amp; ${WarrantyClaim>/ProcessingStatus} === 'X001'}"
 			/>
 			
 			<core:Title text="Repair Details"/>

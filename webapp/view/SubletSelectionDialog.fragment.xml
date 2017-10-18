@@ -5,10 +5,11 @@
 		    	<sap.ui.layout.form:formContainers>
 		        	<sap.ui.layout.form:FormContainer title="Title">
 		            	<sap.ui.layout.form:formElements>
-		                	<sap.ui.layout.form:FormElement label="Sublet">
+		                	<sap.ui.layout.form:FormElement>
 		                    	<sap.ui.layout.form:fields>
+		                    		<Label id="SubletCode_label" text="Sublet" required="true" labelFor="SubletCode"/>
 									<ComboBox
-										id="subletCode"
+										id="SubletCode"
 										required="true"
 										width="100%"
 										editable="{WarrantyClaim>CanEdit}"
@@ -16,29 +17,48 @@
 											path: 'SubletCodes>/'
 										}"
 										loadItems="readSubletCatalog"
-										selectedKey="{SubletItem>ItemKey}">
+										selectedKey="{SubletItem>ItemKey}"
+										valueState="{= ${subletInvalid>/subletCode} ? 'Error':'None'}"
+										valueStateText="Sublet Code is a mandatory field."
+										change="onSubletChanged"
+									>
 										<core:ListItem key="{SubletCodes>code}" text="{SubletCodes>text}"/>
 									</ComboBox>										
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
-		                	<sap.ui.layout.form:FormElement label="Invoice">
+		                	<sap.ui.layout.form:FormElement>
 		                    	<sap.ui.layout.form:fields>
-		                        	<Input width="100%" id="Invoice" value="{SubletItem>Invoice}"/>
+		                    		<Label id="Invoice_label" text="Invoice" required="true" labelFor="Invoice"/>
+		                        	<Input 
+		                        		width="100%" id="Invoice" value="{SubletItem>Invoice}" 
+		                        		valueState="{= ${subletInvalid>/invoice} ? 'Error':'None'}"
+		                        		valueStateText="Invoice is a mandatory field."
+		                        		change="onSubletChanged"
+		                        	/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
-		                	<sap.ui.layout.form:FormElement label="Business Name">
+		                	<sap.ui.layout.form:FormElement>
 		                    	<sap.ui.layout.form:fields>
-		                        	<Input width="100%" id="BusinessName" value="{SubletItem>BusinessName}"/>
+		                    		<Label id="BusinessName_label" text="Business Name" required="true" labelFor="BusinessName"/>
+		                        	<Input 
+		                        		width="100%" 
+		                        		id="BusinessName" 
+		                        		value="{SubletItem>BusinessName}"
+		                        		valueState="{= ${subletInvalid>/businessName} ? 'Error':'None'}"
+		                        		valueStateText="Business Name is a mandatory field."
+		                        		change="onSubletChanged"
+		                        	/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>
-		                	<sap.ui.layout.form:FormElement label="Cost (Pre GST)">
+		                	<sap.ui.layout.form:FormElement>
 		                    	<sap.ui.layout.form:fields>
+		                    		<Label id="Quantity_label" text="Cost (Pre GST)" required="true" labelFor="Quantity"/>
 		                        	<Input 
 		                        		width="100%" 
 		                        		id="Quantity" 
 										value="{
     										parts: [
-        										{path: 'SubletItem>Quantity'}, 
+        										{path: 'SubletItem>Quantity/value'}, 
         										{path: 'WarrantyClaim>ClaimCurrency'}
     										],
     										type: 'sap.ui.model.type.Currency',
@@ -46,6 +66,9 @@
         										showMeasure: true
 											 }
 										}"
+										valueState="{= ${subletInvalid>/quantity} ? 'Error':'None'}"
+										valueStateText="Quantity must be > $0."
+										change="onSubletChanged"
 		                        	/>
 		                    	</sap.ui.layout.form:fields>
 		                	</sap.ui.layout.form:FormElement>

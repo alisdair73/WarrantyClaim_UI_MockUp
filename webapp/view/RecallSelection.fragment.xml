@@ -4,6 +4,7 @@
 		noDataText="No Recalls found. VIN and Date of Failure must be entered first."
 		title="Select Recall"
 		search="onRecallSelectionSearch"
+		liveChange="onRecallSelectionSearch"
 		confirm="onRecallSelection"
 		items="{
 			path: '/RecallSet',

@@ -141,7 +141,7 @@ sap.ui.define([
 				this.getView().getModel("WarrantyClaim").setProperty("/Sublet",subletItems);
 				this.getView().getModel("WarrantyClaim").setProperty("/Labour".labourItems);
 				
-				sap.ui.getCore().getEventBus().publish("Recall","Transferred");
+				sap.ui.getCore().getEventBus().publish("WarrantyClaim","RecallApplied");
 			}
 			
 			WarrantyClaim.validateRecallNumber();
@@ -188,12 +188,12 @@ sap.ui.define([
 			if(warrantyItems[indexOfMCPN]){
 				warrantyItems[indexOfMCPN].PartNumber = dataObject.MCPN;
 				warrantyItems[indexOfMCPN].Description = dataObject.MCPNDescription;
-				warrantyItems[indexOfMCPN].Quantity = 0;
+				warrantyItems[indexOfMCPN].Quantity.value = 0;
 			} else {
 				var warrantyItem = Models.createNewWarrantyItem("MAT");
 				warrantyItem.setProperty("/PartNumber", dataObject.MCPN);
 				warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
-				warrantyItem.setProperty("/Quantity", 0);
+				warrantyItem.setProperty("/Quantity/value", 0);
 				warrantyItem.setProperty("/IsMCPN",true);
 				warrantyItems.push(warrantyItem.getProperty("/"));
 			}
@@ -283,10 +283,14 @@ sap.ui.define([
         },
         
         onRecallSelectionSearch: function(event){
+        	
         	var searchValue = event.getParameter("value");
-			var filters = [];
-			filters.push(new Filter("ExternalRecallNumber",sap.ui.model.FilterOperator.Contains, searchValue));
-			filters.push(new Filter("RecallInformation",sap.ui.model.FilterOperator.Contains, searchValue));
+			var filters = this._getFilter();
+			
+			if (searchValue) {
+				filters.push(new Filter("ExternalRecallNumber", sap.ui.model.FilterOperator.StartsWith, searchValue ));
+			}
+				
 			event.getSource().getBinding("items").filter(filters);  
         },
         
@@ -348,10 +352,19 @@ sap.ui.define([
 				//Inspect
 				labourItem.setProperty("/ItemKey", recallGroup.getProperty("/inspect/LON"));
 				labourItem.setProperty("/Description", recallGroup.getProperty("/inspect/displayText"));
-				labourItem.setProperty("/Quantity", recallGroup.getProperty("/inspect/quantity"));
+				labourItem.setProperty("/Quantity/value", recallGroup.getProperty("/inspect/quantity"));
 			
 				labourItems.push(labourItem.getProperty("/"));
 				this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
+			
+				//Also add MCPN
+				var MCPNInspect = Models.createNewWarrantyItem("MAT");
+				MCPNInspect.setProperty("/PartNumber", recallGroup.getProperty("/MCP/materialNumber"));
+				MCPNInspect.setProperty("/Description", recallGroup.getProperty("/MCP/materialDescription"));
+				MCPNInspect.setProperty("/Quantity/value",recallGroup.getProperty("/MCP/quantity"));
+				MCPNInspect.setProperty("/PartRequested", "S");
+				MCPNInspect.setProperty("/IsMCPN", true);
+				recallItems.push(MCPNInspect.getProperty("/"));
 			
 				sap.ui.getCore().getEventBus().publish("WarrantyClaim","RecallApplied");
 				this._recallDialog.close();
@@ -363,7 +376,7 @@ sap.ui.define([
 				//Replace/Repair
 				labourItem.setProperty("/ItemKey", recallGroup.getProperty("/replace/LON"));
 				labourItem.setProperty("/Description", recallGroup.getProperty("/replace/displayText"));
-				labourItem.setProperty("/Quantity", recallGroup.getProperty("/replace/quantity"));
+				labourItem.setProperty("/Quantity/value", recallGroup.getProperty("/replace/quantity"));
 				labourItems.push(labourItem.getProperty("/"));
 				this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
 			}
@@ -378,7 +391,7 @@ sap.ui.define([
 			recallGroup.getProperty("/subletItems").forEach(function(subletItem){
 				var sublet = Models.createNewWarrantyItem("SUBL");
 				sublet.setProperty("/ItemKey", subletItem.subletCode);
-				sublet.setProperty("/Quantity", subletItem.quantity);
+				sublet.setProperty("/Quantity/value", subletItem.quantity);
 				sublet.setProperty("/IsSubletFixed",true); //Sublets from Recall cannot be changed
 				subletItems.push(sublet.getProperty("/"));
 				
@@ -387,13 +400,18 @@ sap.ui.define([
 				}
 			}.bind(this));
 			
+			//If there are no Sublet Items in the Recall, the Sublet is also fixed...
+			if(subletItems.length === 0){
+				this.getModel("WarrantyClaim").setProperty("/FixedSublet", true);
+			}
+			
 			this.getView().getModel("WarrantyClaim").setProperty("/Sublet", subletItems);
 			
 			//Add the MCPN
 			var MCPN = Models.createNewWarrantyItem("MAT");
 			MCPN.setProperty("/PartNumber", recallGroup.getProperty("/MCP/materialNumber"));
 			MCPN.setProperty("/Description", recallGroup.getProperty("/MCP/materialDescription"));
-			MCPN.setProperty("/Quantity",recallGroup.getProperty("/MCP/quantity"));
+			MCPN.setProperty("/Quantity/value",recallGroup.getProperty("/MCP/quantity"));
 			MCPN.setProperty("/PartRequested", "S");
 			MCPN.setProperty("/IsMCPN", true);
 			recallItems.push(MCPN.getProperty("/"));
@@ -417,12 +435,16 @@ sap.ui.define([
 				if(selectedGroup.isRadioButton || selectedGroup.isStepInput){
 					if(selectedGroup.isRadioButton){
 						if(selectedGroup.radioButton.selected){
-							recallItem.setProperty("/Quantity", 1);
+							recallItem.setProperty("/Quantity/value", 1);
 						} else {
 							return;
 						}
 					} else {
-						recallItem.setProperty("/Quantity", selectedGroup.stepInput.quantity);
+						if (selectedGroup.stepInput.quantity > 0){
+							recallItem.setProperty("/Quantity/value", selectedGroup.stepInput.quantity);
+						} else {
+							return;
+						}
 					}
 					recallItem.setProperty("/IsMCPN", false);
 					recallItems.push(recallItem.getProperty("/"));
@@ -484,17 +506,17 @@ sap.ui.define([
 			this.getView().setModel(new JSONModel(recallModels.RecallGroup), "RecallGroup");
 			this.getView().setModel(new JSONModel(recallModels.RecallItems), "RecallItems");
 			
-			if (recallModels.RecallGroup.maxGroups > 1){
+//			if (recallModels.RecallGroup.maxGroups > 1){
 //          	Need to open Group Selection Popup
     			if (!this._recallDialog) {
 					this._recallDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.fragment.RecallProductGroupSelector", this);
 					this.getView().addDependent(this._recallDialog);
 				}
 				this._recallDialog.open();
-			} else {
-				//Only one option - automatically transfer data
-				this.onTransferMaterials();
-			}
+//			} else {
+//				//Only one option - automatically transfer data
+//				this.onTransferMaterials();
+//			}
     	},
     	
     	_setDeletedFlagForAllItems: function(items){

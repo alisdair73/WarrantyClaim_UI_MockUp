@@ -122,6 +122,12 @@ sap.ui.define([
 	            if(jsonModel.WarrantyClaimItems){
 					for (var i = 0; i < jsonModel.WarrantyClaimItems.results.length; i++) {
 						var warrantyClaimItem = jsonModel.WarrantyClaimItems.results[i];
+						
+						//Adjust Quantity
+						warrantyClaimItem.Quantity = { "value": jsonModel.WarrantyClaimItems.results[i].Quantity, 
+													   "ruleResult":{"valid": true, "errorTextID":""}
+						};
+						
 						switch(warrantyClaimItem.ItemType) {
 	    					case "MAT":
 	    						this.warrantyClaim.Parts.push(warrantyClaimItem);
@@ -220,6 +226,13 @@ sap.ui.define([
 			if (oWarrantyClaimItems){
 				for (var i = 0; i < oWarrantyClaimItems.length; i++) {
 					var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
+					
+					//Adjust Quantity
+					oWarrantyClaimItem.Quantity = { 
+						"value": oODataModel.getObject("/" + oWarrantyClaimItems[i]).Quantity, 
+						"ruleResult":{"valid": true, "errorTextID":""}
+					};
+						
 					switch(oWarrantyClaimItem.ItemType) {
     					case "MAT":
     						this.warrantyClaim.Parts.push(oWarrantyClaimItem);
@@ -286,8 +299,6 @@ sap.ui.define([
 			warrantyClaim.CurrentVersionCategory = this.warrantyClaim.CurrentVersionCategory;
 			warrantyClaim.FixedSublet = this.warrantyClaim.FixedSublet;
 			
-			var warrantyClaimItem = null;
-			
 			this.deletedLON = this.warrantyClaim.Labour.filter(function(LONItem){
 					return LONItem.Deleted;
 				}
@@ -304,40 +315,44 @@ sap.ui.define([
 			);
 				
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
-				warrantyClaimItem = this.warrantyClaim.Parts[i];
-				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
+				
+				var part = JSON.parse(JSON.stringify(this.warrantyClaim.Parts[i]));
+				part.Quantity = this.warrantyClaim.Parts[i].Quantity.value.toString();
 				//warrantyClaimItem.Description = "";
 				
 				//Don't send deleted items that aren't persisted
-				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
+				if(part.Deleted === true && !part.ItemIdentifier){
 				  continue;
 				}
-				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
+				warrantyClaim.WarrantyClaimItems.push(part);
 			}
 
 			for (i = 0; i < this.warrantyClaim.Labour.length; i++) {
-				warrantyClaimItem = this.warrantyClaim.Labour[i];
-				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
+
+				var labour = JSON.parse(JSON.stringify(this.warrantyClaim.Labour[i]));
+				labour.Quantity = this.warrantyClaim.Labour[i].Quantity.value.toString();
 				//warrantyClaimItem.Description = "";
 				
 				//Don't send deleted items that aren't persisted
-				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
+				if(labour.Deleted === true && !labour.ItemIdentifier){
 				  continue;
 				}
-				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
+				warrantyClaim.WarrantyClaimItems.push(labour);
 			}
 			
 			for (i = 0; i < this.warrantyClaim.Sublet.length; i++) {
-				warrantyClaimItem = this.warrantyClaim.Sublet[i];
-				delete warrantyClaimItem.path;
-				warrantyClaimItem.Quantity = warrantyClaimItem.Quantity.toString();
+
+				var sublet = JSON.parse(JSON.stringify(this.warrantyClaim.Sublet[i]));
+				
+				delete sublet.path;
+				sublet.Quantity = this.warrantyClaim.Sublet[i].Quantity.value.toString();
 				//warrantyClaimItem.Description = "";
 				
 				//Don't send deleted items that aren't persisted
-				if(warrantyClaimItem.Deleted === true && !warrantyClaimItem.ItemIdentifier){
+				if(sublet.Deleted === true && !sublet.ItemIdentifier){
 				  continue;
 				}
-				warrantyClaim.WarrantyClaimItems.push(warrantyClaimItem);
+				warrantyClaim.WarrantyClaimItems.push(sublet);
 			}
 			
 			for (i = 0; i < this.warrantyClaim.Attachments.length; i++) {
@@ -433,6 +448,13 @@ sap.ui.define([
 			
 			this.warrantyClaim.MCPN.ruleResult = 
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.MCPN.value);
+		},
+		
+		validateOtherPartQuantity: function(part){
+			
+		//	var part = this.warrantyClaim.Parts[partIndex];
+			part.Quantity.ruleResult = Rule.validateQuantityIsGreaterThanZero(part.Quantity.value);
+			
 		},
 		
 //			
@@ -643,6 +665,22 @@ sap.ui.define([
 			this.validateOldSerialNumber();
 			this.validateNewSerialNumber();
 			this.validateMainCausalPartNumber();
+			
+			this.warrantyClaim.Parts.forEach(function(part){
+				if(!part.IsMCPN){
+					this.validateOtherPartQuantity(part);	
+				}
+			}.bind(this));
+			
+		},
+		
+		hasPartsError:function(){
+			
+			var partsWithError = this.warrantyClaim.Parts.filter(function(part){
+				return !part.Quantity.ruleResult.valid;
+			});
+			
+			return partsWithError.length > 0;
 		},
 		
 		hasFrontendValidationError: function(){
@@ -667,7 +705,7 @@ sap.ui.define([
 				this.warrantyClaim.RecallNumber.ruleResult.valid &&
 				this.warrantyClaim.OldSerialNumber.ruleResult.valid && 
 				this.warrantyClaim.NewSerialNumber.ruleResult.valid &&
-				this.warrantyClaim.MCPN.ruleResult.valid){
+				this.warrantyClaim.MCPN.ruleResult.valid && !this.hasPartsError()){
 				
 				return false;		
 			} 

@@ -23,7 +23,7 @@ sap.ui.define([
 				"ItemNo":"",
 				"PartNumber":"",
 				"ItemKey":"",
-	            "Quantity": "0",
+	            "Quantity": { "value":"0", "ruleResult":{"valid": true, "errorTextID":""}},
 	            "PartRequested":"",
 	            "Description":"",
 	            "Invoice":"",

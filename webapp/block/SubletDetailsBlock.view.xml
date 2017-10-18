@@ -25,7 +25,7 @@
 	                <Text 
 	                	text="{
     						parts: [
-        						{path: 'WarrantyClaim>Quantity'}, 
+        						{path: 'WarrantyClaim>Quantity/value'}, 
         						{path: 'WarrantyClaim>ClaimCurrency'}
     						],
     						type: 'sap.ui.model.type.Currency',

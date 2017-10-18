@@ -94,6 +94,11 @@ sap.ui.define([], function() {
 			return {"valid": validated, "errorTextID":"mandatoryField"};
 		},
 
+		validateQuantityIsGreaterThanZero: function(quantity){
+			
+			return {"valid": quantity > 0 ? true:false, "errorTextID":"otherPartQuantity"};
+		},
+
 		validateSerialNumbersArePopulated: function(fieldValue){
 
 /*			if(view.getModel("ViewHelper").getProperty("/warrantyUI/serialNumberIsMandatory")){

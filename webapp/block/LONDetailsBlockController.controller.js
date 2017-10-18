@@ -101,7 +101,7 @@ sap.ui.define([
 					var newLONItem = Models.createNewWarrantyItem("FR");   
 					newLONItem.setProperty("/ItemKey",selectedLON.LONCode);
 					newLONItem.setProperty("/Description",selectedLON.Description);
-					newLONItem.setProperty("/Quantity",selectedLON.Hours);
+					newLONItem.setProperty("/Quantity/value",selectedLON.Hours);
 					newLONItem.setProperty("/IsLONCatalogItem",true);
 					labourItems.push(newLONItem.getProperty("/"));
 				} else {
@@ -288,7 +288,7 @@ sap.ui.define([
 			if(this._isOkToAddLON(newLONCode,false)){
 			
 				newLONItem.setProperty("/ItemKey",newLONCode);
-				newLONItem.setProperty("/Quantity",this.getView().getModel("AdditionalLONHelper").getProperty("/RequestedHours"));
+				newLONItem.setProperty("/Quantity/value",this.getView().getModel("AdditionalLONHelper").getProperty("/RequestedHours"));
 				newLONItem.setProperty("/Description",this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCodeDescription"));
 				
 				if (this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode").substr(4,2) === "99"){

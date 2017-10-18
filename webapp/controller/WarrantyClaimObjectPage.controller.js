@@ -80,7 +80,7 @@ sap.ui.define([
 				var newLONItem = Models.createNewWarrantyItem("FR");   
 				newLONItem.setProperty("/ItemKey","100001");
 				newLONItem.setProperty("/Description","Labour Hours");
-				newLONItem.setProperty("/Quantity",0);
+				newLONItem.setProperty("/Quantity/value",0);
 				labourItems.push(newLONItem.getProperty("/"));
 				this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 			}
@@ -408,7 +408,7 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "1100000073";
+			//claimNumber = "2110000314";
 			//claimNumber = "1210000035";
 			//claimNumber = "100000000567"; //MOCK Record
 			

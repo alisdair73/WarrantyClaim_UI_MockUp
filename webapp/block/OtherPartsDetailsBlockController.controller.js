@@ -55,7 +55,7 @@ sap.ui.define([
 				if(warrantyItems[indexOfMCPN]){
 					warrantyItems[indexOfMCPN].PartNumber = this.getView().getModel("WarrantyClaim").getProperty("/MCPN/value");
 					warrantyItems[indexOfMCPN].Description = this.getView().getModel("WarrantyClaim").getProperty("/Description");
-					warrantyItems[indexOfMCPN].Quantity = this.getView().getModel("WarrantyClaim").getProperty("/Quantity");
+					warrantyItems[indexOfMCPN].Quantity.value = this.getView().getModel("WarrantyClaim").getProperty("/Quantity");
 					warrantyItems[indexOfMCPN].PartRequested = this.getView().getModel("WarrantyClaim").getProperty("/PartRequested");
 
 				} else {
@@ -63,7 +63,7 @@ sap.ui.define([
 					warrantyItem.setProperty("/PartNumber", this.getView().getModel("WarrantyClaim").getProperty("/MCPN/value"));
 					warrantyItem.setProperty("/Description", this.getView().getModel("WarrantyClaim").getProperty("/Description"));
 					warrantyItem.setProperty("/PartRequested", this.getView().getModel("WarrantyClaim").getProperty("/PartRequested"));
-					warrantyItem.setProperty("/Quantity", this.getView().getModel("WarrantyClaim").getProperty("/Quantity"));
+					warrantyItem.setProperty("/Quantity/value", this.getView().getModel("WarrantyClaim").getProperty("/Quantity"));
 					warrantyItem.setProperty("/IsMCPN",true);
 					warrantyItems.push(warrantyItem.getProperty("/"));
 				}
@@ -74,7 +74,7 @@ sap.ui.define([
 				if(warrantyItems[indexOfMCPN]){
 					warrantyItems[indexOfMCPN].PartNumber = "";
 					warrantyItems[indexOfMCPN].Description = "";
-					warrantyItems[indexOfMCPN].Quantity = 0;
+					warrantyItems[indexOfMCPN].Quantity.value = 0;
 				}
 			}
 			
@@ -146,6 +146,15 @@ sap.ui.define([
 			this.getView().getModel("WarrantyClaim").setProperty(path + "/Deleted", true);
 			this._applyPartTableFilter();
 		},	
+		
+		onOtherPartQuantityChanged: function(event){
+				
+			var oDataPath = event.getSource().getParent().getBindingContext("WarrantyClaim").getPath();
+			var part = this.getView().getModel("WarrantyClaim").getProperty(oDataPath);	
+				
+			WarrantyClaim.validateOtherPartQuantity(part);
+			this.logValidationMessage("Quantity" + oDataPath,"WarrantyClaim",oDataPath + "/Quantity");		
+		},
 		
 		_updateOtherPartFromSelection: function(dataObject, path){
 			var warrantyItem = this.getView().getModel("WarrantyClaim").getProperty(path);
@@ -234,7 +243,7 @@ sap.ui.define([
 				
 				if(part.IsMCPN && part.Deleted === false ){
 					this.getView().getModel("WarrantyClaim").setProperty("/MCPN/value",part.PartNumber);
-					this.getView().getModel("WarrantyClaim").setProperty("/Quantity",part.Quantity);	
+					this.getView().getModel("WarrantyClaim").setProperty("/Quantity",part.Quantity.value);	
 					this.getView().getModel("WarrantyClaim").setProperty("/Description",part.Description);
 					this.getView().getModel("WarrantyClaim").setProperty("/PartRequested",part.PartRequested);
 				}
@@ -246,6 +255,11 @@ sap.ui.define([
 		
 		_refreshValidationMessages: function(){
 			this.logValidationMessage("MCPN");
+			
+			this.getView().getModel("WarrantyClaim").getProperty("/Parts").forEach(function(part,index){
+				var oDataPath = "/Parts/" + index;
+				this.logValidationMessage("Quantity" + oDataPath,"WarrantyClaim",oDataPath + "/Quantity");
+			}.bind(this));
 		}
 	});
 

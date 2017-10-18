@@ -2,13 +2,23 @@ sap.ui.define([
 	"WarrantyClaim_MockUp/controller/BaseController",
 	"WarrantyClaim_MockUp/model/models",
 	"sap/ui/model/json/JSONModel",
-	"sap/ui/model/Filter"
-], function(BaseController, Models, JSONModel, Filter) {
+	"sap/ui/model/Filter",
+	"sap/m/MessageBox"
+], function(BaseController, Models, JSONModel, Filter, MessageBox) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.SubletDetailsBlockController", {
 
 		onInit: function(){
+			
+			var subletInvalid = new JSONModel({
+				"subletCode": false,
+				"quantity": false,
+				"businessName": false,
+				"invoice": false
+			});
+			this.setModel(subletInvalid, "subletInvalid");
+				
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","RecallApplied",this._applySubletTableFilter,this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applySubletTableFilter,this);
 		},
@@ -34,6 +44,12 @@ sap.ui.define([
             var subletItem = Models.createNewWarrantyItem("SUBL");   
             this.getView().setModel(subletItem, "SubletItem");
             
+            //Reset the Validation
+            this.getView().getModel("subletInvalid").setProperty("/subletCode",false);
+			this.getView().getModel("subletInvalid").setProperty("/quantity",false);
+			this.getView().getModel("subletInvalid").setProperty("/businessName",false);
+			this.getView().getModel("subletInvalid").setProperty("/invoice",false);
+			
 			// Display the popup dialog for adding parts
 			this._subletDialog.open();
     	},
@@ -67,6 +83,30 @@ sap.ui.define([
     	handleOK: function(){
     	
     		var sublet = this.getView().getModel("SubletItem");
+    		
+    		//Validate the Sublet - all fields are mandatory
+    		var SubletCode = sublet.getProperty("/ItemKey");
+    		var Quantity = sublet.getProperty("/Quantity/value");
+    		var Invoice = sublet.getProperty("/Invoice");
+    		var BusinessName = sublet.getProperty("/BusinessName");
+    		
+    		if(SubletCode === "" || Quantity === "0" || Invoice === "" || BusinessName === ""){
+    			MessageBox.error(
+					"All Sublet fields are required. Pre GST Cost must be > $0.",
+					{
+						id : "errorMessageBox",
+						actions : [MessageBox.Action.CLOSE]
+					}
+				);
+				
+				this.getView().getModel("subletInvalid").setProperty("/subletCode",SubletCode === "");
+				this.getView().getModel("subletInvalid").setProperty("/quantity",Quantity <= 0 );
+				this.getView().getModel("subletInvalid").setProperty("/businessName",BusinessName === "");
+				this.getView().getModel("subletInvalid").setProperty("/invoice",Invoice === "");
+				
+    			return;
+    		}
+    		
 			var sublets = this.getView().getModel("WarrantyClaim").getProperty("/Sublet");
 
             if(sublet.getProperty("/path")){
@@ -83,6 +123,24 @@ sap.ui.define([
     	
     	handleClose: function(){
     		this._subletDialog.close();
+    	},
+    	
+    	onSubletChanged:function(event){
+   
+    		switch(event.getSource().sId){
+    			case "SubletCode":
+    				this.getView().getModel("subletInvalid").setProperty("/subletCode",event.getSource().getValue() === "");
+    				break;
+    			case "Invoice":
+    				this.getView().getModel("subletInvalid").setProperty("/invoice",event.getSource().getValue() === "");
+    				break;
+    			case "BusinessName":
+    				this.getView().getModel("subletInvalid").setProperty("/businessName",event.getSource().getValue() === "");
+    				break;
+    			case "Quantity":
+    				this.getView().getModel("subletInvalid").setProperty("/quantity",event.getSource().getValue() <= 0);
+    				break;
+    		}
     	},
     	
 		_applySubletTableFilter: function(){

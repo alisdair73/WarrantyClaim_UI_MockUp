@@ -89,7 +89,7 @@
 					<core:ListItem 
 						key="{StatusCode}" 
 						text="{Description}" 
-						enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4' || ${StatusCode} === 'S'}"
+						enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4' }"
 					/>
 					<layoutData>
 						<l:GridData span="L4" />
@@ -160,7 +160,7 @@
 	                	<Input
 	                		type="Number"
 	                		value="{
-								path: 'WarrantyClaim>Quantity',
+								path: 'WarrantyClaim>Quantity/value',
 								type: 'sap.ui.model.type.Float',
 								formatOptions: {
 									maxFractionDigits: 0,
@@ -168,6 +168,7 @@
 								}
 							}" 
 							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
+							change="onOtherPartQuantityChanged"
 	            		/>
 	        		</l:HorizontalLayout>
 					<ComboBox
@@ -182,7 +183,7 @@
 						<core:ListItem 
 							key="{StatusCode}" 
 							text="{Description}" 
-							enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4' || ${StatusCode} === 'S'}"
+							enabled="{= ${StatusCode} === '2' || ${StatusCode} === '3' || ${StatusCode} === '4' }"
 						/>
 					</ComboBox>	
 	                <l:HorizontalLayout>

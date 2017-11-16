@@ -120,10 +120,10 @@
 	            <cells>
 			        <Input 
 						required="true"
-						value="{WarrantyClaim>PartNumber}"  
+						value="{WarrantyClaim>PartNumber/value}"  
 						description="{WarrantyClaim>Description}"
 						editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
-						change="onOtherPartChanged"
+						change="onOtherPartPartNumberChanged"
 						fieldWidth="40%"
 						showSuggestion="true"
 						filterSuggests="false"
@@ -134,6 +134,7 @@
 							templateShareable:true
 						}"
 						showValueHelp="true"
+						valueState="{= ${WarrantyClaim>PartNumber/ruleResult/valid} ? 'None':'Error'}"
 						valueHelpRequest="onOtherPartValueHelpRequest"
 					>
 			          <layoutData>
@@ -167,6 +168,7 @@
 									groupingEnabled: false
 								}
 							}" 
+							valueState="{= ${WarrantyClaim>Quantity/ruleResult/valid} ? 'None':'Error'}"
 							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 							change="onOtherPartQuantityChanged"
 	            		/>

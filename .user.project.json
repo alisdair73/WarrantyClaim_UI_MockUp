@@ -1,6 +1,40 @@
 {
   "run": [
     {
+      "filePath": "/webapp/CurrentUI5_Index.html",
+      "previewMode": 1,
+      "dataMode": 1,
+      "workspace": "withoutWorkspace",
+      "ui5ActiveVersion": null,
+      "ui5VerSource": null,
+      "isDefaultVersion": 0,
+      "urlParameters": [],
+      "hashParameter": "",
+      "backendSystem": [],
+      "_metadata": {
+        "id": 3504337,
+        "runnerId": "webapprunner",
+        "displayName": "Current UI5 from CDN",
+        "lastRunTimeStamp": 1510796282305
+      }
+    },
+    {
+      "filePath": "/webapp/test/integration/opaTests.qunit.html",
+      "previewMode": 1,
+      "dataMode": 1,
+      "ui5ActiveVersion": null,
+      "ui5VerSource": null,
+      "workspace": "withoutWorkspace",
+      "urlParameters": [],
+      "backendSystem": [],
+      "_metadata": {
+        "runnerId": "qunitrunner",
+        "id": 9337831,
+        "displayName": "Run opaTests.qunit.html",
+        "lastRunTimeStamp": 1509668676382
+      }
+    },
+    {
       "filePath": "/webapp/Component.js",
       "previewMode": 1,
       "dataMode": 1,
@@ -16,11 +50,11 @@
         "id": 648048,
         "runnerId": "fiorirunner",
         "displayName": "Run Component.js",
-        "lastRunTimeStamp": 1508324382324
+        "lastRunTimeStamp": 1509083738390
       }
     },
     {
-      "filePath": "/webapp/CurrentUI5_Index.html",
+      "filePath": "/webapp/test/indexOPA.html",
       "previewMode": 1,
       "dataMode": 1,
       "workspace": "withoutWorkspace",
@@ -31,10 +65,29 @@
       "hashParameter": "",
       "backendSystem": [],
       "_metadata": {
-        "id": 3504337,
         "runnerId": "webapprunner",
-        "displayName": "Current UI5 from CDN",
-        "lastRunTimeStamp": 1501805851322
+        "id": 6769649,
+        "displayName": "Run indexOPA.html",
+        "lastRunTimeStamp": 1509083174752
+      }
+    },
+    {
+      "filePath": "/webapp/index.html",
+      "previewMode": 1,
+      "dataMode": 1,
+      "workspace": "withoutWorkspace",
+      "ui5ActiveVersion": null,
+      "ui5VerSource": null,
+      "isDefaultVersion": 0,
+      "urlParameters": [],
+      "hashParameter": "",
+      "backendSystem": [],
+      "urlParametersNotNeeded": false,
+      "_metadata": {
+        "runnerId": "webapprunner",
+        "id": 5055859,
+        "displayName": "Run index.html",
+        "lastRunTimeStamp": 1509081932825
       }
     },
     {
@@ -54,25 +107,6 @@
         "runnerId": "fiorirunner",
         "displayName": "Run Mock Data",
         "lastRunTimeStamp": 1497500102770
-      }
-    },
-    {
-      "filePath": "/webapp/index.html",
-      "previewMode": 1,
-      "dataMode": 1,
-      "workspace": "withoutWorkspace",
-      "ui5ActiveVersion": null,
-      "ui5VerSource": null,
-      "isDefaultVersion": 0,
-      "urlParameters": [],
-      "hashParameter": "",
-      "backendSystem": [],
-      "urlParametersNotNeeded": false,
-      "_metadata": {
-        "runnerId": "webapprunner",
-        "id": 5055859,
-        "displayName": "Run index.html",
-        "lastRunTimeStamp": 1490342524213
       }
     },
     {

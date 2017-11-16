@@ -3,8 +3,9 @@ sap.ui.define([
 	"sap/ui/Device",
 	"WarrantyClaim_MockUp/model/models",
 	"sap/ui/model/json/JSONModel",
-	"WarrantyClaim_MockUp/model/WarrantyClaim"
-], function(UIComponent, Device, models, JSONModel, WarrantyClaim) {
+	"WarrantyClaim_MockUp/model/WarrantyClaim",
+	"WarrantyClaim_MockUp/controller/ErrorHandler"
+], function(UIComponent, Device, models, JSONModel, WarrantyClaim, ErrorHandler) {
 	"use strict";
 
 	return UIComponent.extend("WarrantyClaim_MockUp.Component", {
@@ -19,6 +20,9 @@ sap.ui.define([
 		 * @override
 		 */
 		init: function() {
+			
+			//Register the Error Handler
+			this._oErrorHandler = new ErrorHandler(this);
 			
 			// call the base component's init function
 			UIComponent.prototype.init.apply(this, arguments);

@@ -9,41 +9,77 @@
 				<sap.ui.layout.form:formElements>
 					<sap.ui.layout.form:FormElement>
 						<sap.ui.layout.form:fields>
-							<UploadCollection
-								id="warrantyAttachmentCollection"
-								uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('Attachment')/Attachments"
-								multiple="false"
-								instantUpload="false"
-								showSeparators="All"
-								fileDeleted="onFileDeleted"
-								uploadEnabled="{WarrantyClaim>CanEdit}"
-								uploadComplete="onUploadComplete"
-								beforeUploadStarts="onBeforeUploadStarts"
-								uploadTerminated="onUploadTerminated"
-								filenameLengthExceed="onFileSizeExceed"
-								change="onChange"
-								maximumFileSize="25"
-								noDataText="No Attachments"
-								items="{path : 'WarrantyClaim>/Attachments'}"
-								mode="SingleSelectMaster">
-								<toolbar>
-									<OverflowToolbar>
-										<Title id="attachmentTitle"/>
-										<ToolbarSpacer/>
-										<UploadCollectionToolbarPlaceholder/>
-									</OverflowToolbar>
-								</toolbar>
-								<items>
-									<UploadCollectionItem
-										documentId="{WarrantyClaim>DocumentID}"
-										fileName="{WarrantyClaim>FileName}"
-										mimeType="{WarrantyClaim>MimeType}"
-										url="{WarrantyClaim>URL}"
-										visibleEdit="false"
-										visibleDelete="{WarrantyClaim>/CanEdit}">
-									</UploadCollectionItem>
-								</items>
-							</UploadCollection>			
+							<l:VerticalLayout>
+								<UploadCollection
+									id="warrantyAttachmentCollectionCreate"
+									uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('Attachment')/Attachments"
+									multiple="false"
+									visible="{= ${WarrantyClaim>ClaimNumber} === ''}"
+									instantUpload="false"
+									showSeparators="All"
+									uploadEnabled="{WarrantyClaim>CanEdit}"
+									uploadComplete="onUploadComplete"
+									beforeUploadStarts="onBeforeUploadStarts"
+									filenameLengthExceed="onFileSizeExceed"
+									change="onChange"
+									maximumFileSize="25"
+									noDataText="No Attachments"
+									items="{path : 'WarrantyClaim>/Attachments'}"
+									mode="SingleSelectMaster">
+									<toolbar>
+										<OverflowToolbar>
+											<Title id="attachmentTitleCreate"/>
+											<ToolbarSpacer/>
+											<UploadCollectionToolbarPlaceholder/>
+										</OverflowToolbar>
+									</toolbar>
+									<items>
+										<UploadCollectionItem
+											documentId="{WarrantyClaim>DocumentID}"
+											fileName="{WarrantyClaim>FileName}"
+											mimeType="{WarrantyClaim>MimeType}"
+											url="{WarrantyClaim>URL}"
+											visibleEdit="false"
+											visibleDelete="{WarrantyClaim>/CanEdit}">
+										</UploadCollectionItem>
+									</items>
+								</UploadCollection>	
+								<UploadCollection
+									id="warrantyAttachmentCollectionMaintain"
+									uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('Attachment')/Attachments"
+									multiple="false"
+									instantUpload="true"
+									showSeparators="All"
+									visible="{= ${WarrantyClaim>ClaimNumber} !== ''}"
+									fileDeleted="onFileDeleted"
+									uploadEnabled="{WarrantyClaim>CanEdit}"
+									uploadComplete="onUploadComplete"
+									beforeUploadStarts="onBeforeUploadStarts"
+									filenameLengthExceed="onFileSizeExceed"
+									change="onChange"
+									maximumFileSize="25"
+									noDataText="No Attachments"
+									items="{path : 'WarrantyClaim>/Attachments'}"
+									mode="SingleSelectMaster">
+									<toolbar>
+										<OverflowToolbar>
+											<Title id="attachmentTitleMaintain"/>
+											<ToolbarSpacer/>
+											<UploadCollectionToolbarPlaceholder/>
+										</OverflowToolbar>
+									</toolbar>
+									<items>
+										<UploadCollectionItem
+											documentId="{WarrantyClaim>DocumentID}"
+											fileName="{WarrantyClaim>FileName}"
+											mimeType="{WarrantyClaim>MimeType}"
+											url="{WarrantyClaim>URL}"
+											visibleEdit="false"
+											visibleDelete="{WarrantyClaim>/CanEdit}">
+										</UploadCollectionItem>
+									</items>
+								</UploadCollection>	
+							</l:VerticalLayout>							
 						</sap.ui.layout.form:fields>
 					</sap.ui.layout.form:FormElement>
 				</sap.ui.layout.form:formElements>

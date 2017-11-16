@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>OPA Tests for Warranty Claim</title>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<meta charset="utf-8">
+
+	<script id="sap-ui-bootstrap"
+			src="../../../../resources/sap-ui-core.js"
+			
+			data-sap-ui-resourceroots='{
+				"WarrantyClaim_MockUp.app": "../indexOPA",
+				"WarrantyClaim_MockUp.test": "../"
+			}'
+			
+			data-sap-ui-frameOptions='deny'>
+	</script>
+
+	<script>
+		jQuery.sap.require("WarrantyClaim_MockUp.test.integration.AllJourneys");
+	</script>
+
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+</body>
+</html>

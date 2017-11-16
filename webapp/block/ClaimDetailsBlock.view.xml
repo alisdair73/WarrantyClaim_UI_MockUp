@@ -235,7 +235,16 @@
 				<Input 
 					id="PartsInstallKM" 
 					type="Number"
-					value="{WarrantyClaim>PartsInstallKm/value}"
+					value="{
+						path: 'WarrantyClaim>PartsInstallKm/value',
+						type: 'sap.ui.model.type.Float',
+						formatOptions: {
+							maxFractionDigits: 0,
+	    					groupingEnabled: false,
+	    					groupingSeparator: ',',
+	    					decimalSeparator: '.'								
+						}
+					}"	
 					editable="{WarrantyClaim>CanEdit}" 
 					maxLength="6"
 					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' &amp;&amp; ${WarrantyClaim>ObjectType} === 'VELO' }"
@@ -262,7 +271,6 @@
 				/>	
 				<Label 
 					text="Installed By Dealer?" 
-					required="{= ${WarrantyClaim>ClaimTypeGroup} === 'PARTS' }"
 				/>				
 				<CheckBox 
 					selected="{WarrantyClaim>/PartsInstalledByDealer}"

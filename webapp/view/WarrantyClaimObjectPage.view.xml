@@ -7,7 +7,7 @@
 		<headerTitle>
 			<ObjectPageHeader 
 				id="warrantyPageHeader"
-				objectTitle="Warranty Claim"
+				objectTitle="Warranty Claim {= ${WarrantyClaim>/ClaimNumber}}"
 				isObjectIconAlwaysVisible = "true"
 				headerDesign="Light"
 				objectImageShape="Square"

@@ -141,6 +141,8 @@ sap.ui.define([
 				this.getView().getModel("WarrantyClaim").setProperty("/Sublet",subletItems);
 				this.getView().getModel("WarrantyClaim").setProperty("/Labour".labourItems);
 				
+				this.getView().getModel("WarrantyClaim").setProperty("/SerialNumberIsMandatory",false);
+				
 				sap.ui.getCore().getEventBus().publish("WarrantyClaim","RecallApplied");
 			}
 			
@@ -186,12 +188,12 @@ sap.ui.define([
 			
 			//Are we adding or Modifying the MCPN
 			if(warrantyItems[indexOfMCPN]){
-				warrantyItems[indexOfMCPN].PartNumber = dataObject.MCPN;
+				warrantyItems[indexOfMCPN].PartNumber.value = dataObject.MCPN;
 				warrantyItems[indexOfMCPN].Description = dataObject.MCPNDescription;
 				warrantyItems[indexOfMCPN].Quantity.value = 0;
 			} else {
 				var warrantyItem = Models.createNewWarrantyItem("MAT");
-				warrantyItem.setProperty("/PartNumber", dataObject.MCPN);
+				warrantyItem.setProperty("/PartNumber/value", dataObject.MCPN);
 				warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
 				warrantyItem.setProperty("/Quantity/value", 0);
 				warrantyItem.setProperty("/IsMCPN",true);
@@ -359,13 +361,16 @@ sap.ui.define([
 			
 				//Also add MCPN
 				var MCPNInspect = Models.createNewWarrantyItem("MAT");
-				MCPNInspect.setProperty("/PartNumber", recallGroup.getProperty("/MCP/materialNumber"));
+				MCPNInspect.setProperty("/PartNumber/value", recallGroup.getProperty("/MCP/materialNumber"));
 				MCPNInspect.setProperty("/Description", recallGroup.getProperty("/MCP/materialDescription"));
 				MCPNInspect.setProperty("/Quantity/value",recallGroup.getProperty("/MCP/quantity"));
 				MCPNInspect.setProperty("/PartRequested", "S");
 				MCPNInspect.setProperty("/IsMCPN", true);
 				recallItems.push(MCPNInspect.getProperty("/"));
 			
+				//Sublet is always fixed for Inspect
+				this.getModel("WarrantyClaim").setProperty("/FixedSublet", true);
+				
 				sap.ui.getCore().getEventBus().publish("WarrantyClaim","RecallApplied");
 				this._recallDialog.close();
 				
@@ -381,12 +386,6 @@ sap.ui.define([
 				this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
 			}
 			
-			// if(recallGroup.getProperty("/inspect/selected")){
-			// 	sap.ui.getCore().getEventBus().publish("Recall","Transferred");
-			// 	this._recallDialog.close();
-			// 	return; //Only Inspection to be performed...
-			// }
-				
 			//Add the Sublet Items
 			recallGroup.getProperty("/subletItems").forEach(function(subletItem){
 				var sublet = Models.createNewWarrantyItem("SUBL");
@@ -409,7 +408,7 @@ sap.ui.define([
 			
 			//Add the MCPN
 			var MCPN = Models.createNewWarrantyItem("MAT");
-			MCPN.setProperty("/PartNumber", recallGroup.getProperty("/MCP/materialNumber"));
+			MCPN.setProperty("/PartNumber/value", recallGroup.getProperty("/MCP/materialNumber"));
 			MCPN.setProperty("/Description", recallGroup.getProperty("/MCP/materialDescription"));
 			MCPN.setProperty("/Quantity/value",recallGroup.getProperty("/MCP/quantity"));
 			MCPN.setProperty("/PartRequested", "S");
@@ -426,7 +425,7 @@ sap.ui.define([
 			
 				// add the new part
 				var recallItem = Models.createNewWarrantyItem("MAT");
-				recallItem.setProperty("/PartNumber", materialToTransfer.materialNumber);
+				recallItem.setProperty("/PartNumber/value", materialToTransfer.materialNumber);
 				recallItem.setProperty("/Description", materialToTransfer.materialDescription);
 				recallItem.setProperty("/PartRequested", "S");
 				

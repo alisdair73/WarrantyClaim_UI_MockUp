@@ -21,7 +21,7 @@ sap.ui.define([
 				"ClaimNumber":"",
 				"ItemType":itemType,
 				"ItemNo":"",
-				"PartNumber":"",
+				"PartNumber":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"ItemKey":"",
 	            "Quantity": { "value":"0", "ruleResult":{"valid": true, "errorTextID":""}},
 	            "PartRequested":"",

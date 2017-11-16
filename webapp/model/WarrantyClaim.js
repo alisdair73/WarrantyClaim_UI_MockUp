@@ -123,7 +123,11 @@ sap.ui.define([
 					for (var i = 0; i < jsonModel.WarrantyClaimItems.results.length; i++) {
 						var warrantyClaimItem = jsonModel.WarrantyClaimItems.results[i];
 						
-						//Adjust Quantity
+						//Adjust Quantity and PartNumber
+						warrantyClaimItem.PartNumber = { "value": jsonModel.WarrantyClaimItems.results[i].PartNumber, 
+													   "ruleResult":{"valid": true, "errorTextID":""}
+						};						
+						
 						warrantyClaimItem.Quantity = { "value": jsonModel.WarrantyClaimItems.results[i].Quantity, 
 													   "ruleResult":{"valid": true, "errorTextID":""}
 						};
@@ -141,19 +145,18 @@ sap.ui.define([
 						}
 					}
 	            }
+	            
+	            this.warrantyClaim.Attachments = [];
+	            if(jsonModel.Attachments){
+					for (var j = 0; j < jsonModel.Attachments.results.length; j++) {
+						var attachment = jsonModel.Attachments.results[j];
+						attachment.URL = 
+							"/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('" + 
+							this.warrantyClaim.ClaimNumber + "')/Attachments('" + attachment.DocumentID + "')/$value";
+						this.warrantyClaim.Attachments.push(attachment);
+					}
+	            }
 			}
-            
-/*            if(validateMode){
-            	this.warrantyClaim.Labour = this.warrantyClaim.Labour.concat(this.deletedLON);
-            	this.deletedLON = [];
-                
-                this.warrantyClaim.Parts = this.warrantyClaim.Parts.concat(this.deletedParts);
-            	this.deletedParts = [];
-            	
-            	this.warrantyClaim.Sublet = this.warrantyClaim.Sublet.concat(this.deletedSublet);
-            	this.deletedSublet = [];
-            }*/
-            
             this.resetChanges();
 		},
 		
@@ -163,6 +166,10 @@ sap.ui.define([
 			var oODataModel = oSource.getModel();
 			var sPath = oSource.getPath();
 			var oWarrantyClaim = oODataModel.getObject(sPath);
+
+			if(!oWarrantyClaim){
+				return;
+			}
 
 			this.warrantyClaim.ClaimNumber = oWarrantyClaim.ClaimNumber;
 			this.warrantyClaim.PrecedingClaimNumber = oWarrantyClaim.PrecedingClaimNumber;
@@ -226,6 +233,12 @@ sap.ui.define([
 			if (oWarrantyClaimItems){
 				for (var i = 0; i < oWarrantyClaimItems.length; i++) {
 					var oWarrantyClaimItem = oODataModel.getObject("/" + oWarrantyClaimItems[i]);
+					
+					//Adjust Part Number
+					oWarrantyClaimItem.PartNumber = { 
+						"value": oODataModel.getObject("/" + oWarrantyClaimItems[i]).PartNumber, 
+						"ruleResult":{"valid": true, "errorTextID":""}
+					};					
 					
 					//Adjust Quantity
 					oWarrantyClaimItem.Quantity = { 
@@ -316,9 +329,9 @@ sap.ui.define([
 				
 			for (var i = 0; i < this.warrantyClaim.Parts.length; i++) {
 				
-				var part = JSON.parse(JSON.stringify(this.warrantyClaim.Parts[i]));
+				var part = JSON.parse(JSON.stringify(this.warrantyClaim.Parts[i])); //Deep Copy
 				part.Quantity = this.warrantyClaim.Parts[i].Quantity.value.toString();
-				//warrantyClaimItem.Description = "";
+				part.PartNumber = this.warrantyClaim.Parts[i].PartNumber.value.toString();
 				
 				//Don't send deleted items that aren't persisted
 				if(part.Deleted === true && !part.ItemIdentifier){
@@ -331,7 +344,7 @@ sap.ui.define([
 
 				var labour = JSON.parse(JSON.stringify(this.warrantyClaim.Labour[i]));
 				labour.Quantity = this.warrantyClaim.Labour[i].Quantity.value.toString();
-				//warrantyClaimItem.Description = "";
+				labour.PartNumber = "";
 				
 				//Don't send deleted items that aren't persisted
 				if(labour.Deleted === true && !labour.ItemIdentifier){
@@ -346,7 +359,7 @@ sap.ui.define([
 				
 				delete sublet.path;
 				sublet.Quantity = this.warrantyClaim.Sublet[i].Quantity.value.toString();
-				//warrantyClaimItem.Description = "";
+				sublet.PartNumber = "";
 				
 				//Don't send deleted items that aren't persisted
 				if(sublet.Deleted === true && !sublet.ItemIdentifier){
@@ -355,11 +368,16 @@ sap.ui.define([
 				warrantyClaim.WarrantyClaimItems.push(sublet);
 			}
 			
-			for (i = 0; i < this.warrantyClaim.Attachments.length; i++) {
-				var attachment = this.warrantyClaim.Attachments[i];
-				delete attachment.__metadata;
-				delete attachment.URL;
-				warrantyClaim.Attachments.push(attachment);
+			if(this.warrantyClaim.Attachments){
+				for (i = 0; i < this.warrantyClaim.Attachments.length; i++) {
+					var attachment = {
+						"DocumentID": this.warrantyClaim.Attachments[i].DocumentID,
+		    			"MimeType": this.warrantyClaim.Attachments[i].MimeType,
+		    			"FileName": this.warrantyClaim.Attachments[i].FileName,
+		    			"Deleted": this.warrantyClaim.Attachments[i].Deleted
+					};
+					warrantyClaim.Attachments.push(attachment);
+				}
 			}
 			
 			return warrantyClaim;
@@ -450,9 +468,28 @@ sap.ui.define([
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.MCPN.value);
 		},
 		
+		validateOtherPartPartNumber: function(part){
+			part.PartNumber.ruleResult = Rule.validateRequiredFieldIsPopulated(part.PartNumber.value);
+			if(part.PartNumber.ruleResult.valid){
+				if(part.PartNumber.value !== this.warrantyClaim.MCPN.value){
+					var partsWithThisPartNumber = this.warrantyClaim.Parts.filter(function(candidatePart){
+						return candidatePart.PartNumber.value === part.PartNumber.value &&
+								!candidatePart.isMCPN && !candidatePart.Deleted;
+					});
+					
+					if(partsWithThisPartNumber.length > 1){
+						part.PartNumber.ruleResult = {"valid": false, "errorTextID":"otherPartDuplicate"};
+					}
+				} else {
+					part.PartNumber.ruleResult = {"valid": false, "errorTextID":"otherPartMCPNDuplicate"};
+				}
+			} else {
+				part.PartNumber.ruleResult.errorTextID = "otherPartPartNumber";
+			}
+		},
+		
 		validateOtherPartQuantity: function(part){
 			
-		//	var part = this.warrantyClaim.Parts[partIndex];
 			part.Quantity.ruleResult = Rule.validateQuantityIsGreaterThanZero(part.Quantity.value);
 			
 		},
@@ -625,6 +662,8 @@ sap.ui.define([
 					if(this.warrantyClaim.SerialNumberIsMandatory){
 						this.warrantyClaim.OldSerialNumber.ruleResult = 
 							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.OldSerialNumber.value);
+					} else {
+						this.warrantyClaim.OldSerialNumber.ruleResult = {"valid": true, "errorTextID":""};
 					}
 					break;
 			}
@@ -637,6 +676,8 @@ sap.ui.define([
 					if(this.warrantyClaim.SerialNumberIsMandatory){
 						this.warrantyClaim.NewSerialNumber.ruleResult = 
 							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.NewSerialNumber.value);
+					} else {
+						this.warrantyClaim.NewSerialNumber.ruleResult = {"valid": true, "errorTextID":""};
 					}
 					break;
 			}
@@ -665,19 +706,24 @@ sap.ui.define([
 			this.validateOldSerialNumber();
 			this.validateNewSerialNumber();
 			this.validateMainCausalPartNumber();
+			this.validateParts();
+
 			
+		},
+		
+		validateParts: function(){
 			this.warrantyClaim.Parts.forEach(function(part){
-				if(!part.IsMCPN){
+				if(!part.IsMCPN && !part.Deleted){
+					this.validateOtherPartPartNumber(part);
 					this.validateOtherPartQuantity(part);	
 				}
 			}.bind(this));
-			
 		},
 		
 		hasPartsError:function(){
 			
 			var partsWithError = this.warrantyClaim.Parts.filter(function(part){
-				return !part.Quantity.ruleResult.valid;
+				return !(part.Quantity.ruleResult.valid && part.PartNumber.ruleResult.valid ) && !part.Deleted;
 			});
 			
 			return partsWithError.length > 0;

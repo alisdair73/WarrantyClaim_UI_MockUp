@@ -74,6 +74,10 @@ sap.ui.define([
 		},  
 
 		onPartsInstallKmChanged: function(){
+			this.getView().getModel("WarrantyClaim").setProperty("/PartsInstallKm/value",
+				this._measureFormatter.format(this.getView().getModel("WarrantyClaim").getProperty("/PartsInstallKm/value"))
+			);			
+			
 			WarrantyClaim.validatePartsInstallKm();
 			this.logValidationMessage("PartsInstallKm");	
 		},
@@ -105,9 +109,6 @@ sap.ui.define([
 				}
 			}
 		},
-		
-
-			
 		
 		 _refreshValidationMessages: function(){
 			this.logValidationMessage("FailureMeasure");

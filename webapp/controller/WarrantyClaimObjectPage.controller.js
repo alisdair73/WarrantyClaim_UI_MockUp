@@ -340,14 +340,6 @@ sap.ui.define([
 			switch(error.statusCode){
 				case "400":
 
-					MessageBox.error(
-						"An error occurred while processing the Warranty Claim.",
-						{
-							id : "errorMessageBox",
-							actions : [MessageBox.Action.CLOSE]
-						}	
-					);
-					
 					//REMOVE THE DUPLICATED LEAD MESSAGE - "SY/530"
 					var registeredMessages = sap.ui.getCore().getMessageManager().getMessageModel().getData().filter(
 		  				function(registeredMessage){
@@ -361,6 +353,14 @@ sap.ui.define([
 					//////////////
 					break;
 			}
+
+			MessageBox.error(
+				"An error occurred while processing the Warranty Claim.",
+				{
+					id : "errorMessageBox",
+					actions : [MessageBox.Action.CLOSE]
+				}	
+			);
 			
 			this.getModel("ViewHelper").setProperty("/busy", false);
 		},
@@ -408,9 +408,8 @@ sap.ui.define([
 			}
 			
 			//Testing
-			//claimNumber = "2110000314";
-			//claimNumber = "1210000035";
-			//claimNumber = "100000000567"; //MOCK Record
+			//claimNumber = "1110000384"; //BATTERY CLAIM TEST
+			//claimNumber = "2130000001";
 			
 			var entityPath = "";
 			if (claimNumber){

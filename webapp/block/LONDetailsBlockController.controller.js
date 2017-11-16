@@ -57,7 +57,7 @@ sap.ui.define([
 			this.getView().getModel("WarrantyClaim").getProperty("/Parts").forEach(function(part){
 				if(part.IsMCPN){
 					filters.push(
-						new Filter("MCPN", sap.ui.model.FilterOperator.EQ, part.PartNumber)
+						new Filter("MCPN", sap.ui.model.FilterOperator.EQ, part.PartNumber.value)
 					);
 				}
 			});
@@ -179,24 +179,30 @@ sap.ui.define([
 		loadAdditionalLONCatalog: function(){
 
         	var vin = this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value");
-			var mcpn = this.getView().getModel("WarrantyClaim").getProperty("/Parts/0/PartNumber");
-
-			this.getView().getModel().read(
-				"/AdditionalLONSet(VIN='" + vin + "',MCPN='" + mcpn + "')/$value",
-				{
-					success: function(JSONData){
-						var additionalLON = JSON.parse(JSONData);
-						this.getView().setModel(new JSONModel(additionalLON.Catalog[0].nodes),"AdditionalLON");
-						this.getView().setModel(new JSONModel(additionalLON.Catalog[1].nodes),"OperationTypes");
-						this.getView().setModel(new JSONModel(additionalLON.LONCodes.LON_CODES),"OperationCodes");
-						this.getView().getModel("ViewHelper").setProperty("/busy", false);
-						
-					}.bind(this),
-					error: function(error){
-						this.getView().getModel("ViewHelper").setProperty("/busy", false);
+        	
+        	var mcpn = this.getView().getModel("WarrantyClaim").getProperty("/Parts").filter(function(part){
+				return part.IsMCPN;
+			});
+			
+			if(mcpn[0]){
+			
+				this.getView().getModel().read(
+					"/AdditionalLONSet(VIN='" + vin + "',MCPN='" + mcpn[0].value + "')/$value",
+					{
+						success: function(JSONData){
+							var additionalLON = JSON.parse(JSONData);
+							this.getView().setModel(new JSONModel(additionalLON.Catalog[0].nodes),"AdditionalLON");
+							this.getView().setModel(new JSONModel(additionalLON.Catalog[1].nodes),"OperationTypes");
+							this.getView().setModel(new JSONModel(additionalLON.LONCodes.LON_CODES),"OperationCodes");
+							this.getView().getModel("ViewHelper").setProperty("/busy", false);
+							
+						}.bind(this),
+						error: function(error){
+							this.getView().getModel("ViewHelper").setProperty("/busy", false);
+						}
 					}
-				}
-			);
+				);
+			}
 		},
 		
 		onAssemblySelected: function(oEvent){

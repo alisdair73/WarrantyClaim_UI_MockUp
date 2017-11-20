@@ -159,52 +159,56 @@ sap.ui.define([
 				dataObject = event.getParameter("selectedItem").getBindingContext().getObject();
 			}
 			
-			var currentMaterialDivision = this.getView().getModel("WarrantyClaim").getProperty("/MaterialDivision");
-			
 			this.getView().getModel("WarrantyClaim").setProperty("/AuthorisationNumber/value",dataObject.PWANumber);
-			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",dataObject.ExternalObjectNumber);
-			this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value",dataObject.EngineNumber);
-			this.getView().getModel("WarrantyClaim").setProperty("/DateOfFailure/value",dataObject.DateOfFailure);
-			this.getView().getModel("WarrantyClaim").setProperty("/FailureMeasure/value",dataObject.FailureMeasure);
-			this.getView().getModel("WarrantyClaim").setProperty("/CustomerConcern/value",dataObject.CustomerConcern);	
-			this.getView().getModel("WarrantyClaim").setProperty("/DealerComments/value",dataObject.DealerComment);
 			
-			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.ExternalObjectDescription);
-			this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectModelCode",dataObject.ExternalObjectModelCode);
-			this.getView().getModel("WarrantyClaim").setProperty("/MaterialDivision",dataObject.MaterialDivision);
-			
-			WarrantyClaim.validateExternalObjectNumber();
-			this.logValidationMessage("ExternalObjectNumber");
-			
-			if(this.getView().getModel("WarrantyClaim").getProperty("/ObjectType") === "SERN" && currentMaterialDivision !== dataObject.MaterialDivision){
-				this._resetCatalogFields();
+			//Only allow the update of related fields when in initial Draft state
+			if(this.getModel("WarrantyClaim").getProperty("/ProcessingStatus") === 'X001'){
+				
+				this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectNumber/value",dataObject.ExternalObjectNumber);
+				this.getView().getModel("WarrantyClaim").setProperty("/EngineNumber/value",dataObject.EngineNumber);
+				this.getView().getModel("WarrantyClaim").setProperty("/DateOfFailure/value",dataObject.DateOfFailure);
+				this.getView().getModel("WarrantyClaim").setProperty("/FailureMeasure/value",dataObject.FailureMeasure);
+				this.getView().getModel("WarrantyClaim").setProperty("/CustomerConcern/value",dataObject.CustomerConcern);	
+				this.getView().getModel("WarrantyClaim").setProperty("/DealerComments/value",dataObject.DealerComment);
+				
+				this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectDescription",dataObject.ExternalObjectDescription);
+				this.getView().getModel("WarrantyClaim").setProperty("/ExternalObjectModelCode",dataObject.ExternalObjectModelCode);
+				this.getView().getModel("WarrantyClaim").setProperty("/MaterialDivision",dataObject.MaterialDivision);
+				
+				WarrantyClaim.validateExternalObjectNumber();
+				this.logValidationMessage("ExternalObjectNumber");
+				
+				var currentMaterialDivision = this.getView().getModel("WarrantyClaim").getProperty("/MaterialDivision");
+				if(this.getView().getModel("WarrantyClaim").getProperty("/ObjectType") === "SERN" && currentMaterialDivision !== dataObject.MaterialDivision){
+					this._resetCatalogFields();
+				}
+				
+				// Update/Add the MCPN
+				var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
+				var indexOfMCPN = warrantyItems.findIndex(function(item){
+					return item.IsMCPN;
+				});
+				
+				//Are we adding or Modifying the MCPN
+				if(warrantyItems[indexOfMCPN]){
+					warrantyItems[indexOfMCPN].PartNumber.value = dataObject.MCPN;
+					warrantyItems[indexOfMCPN].Description = dataObject.MCPNDescription;
+					warrantyItems[indexOfMCPN].Quantity.value = 0;
+				} else {
+					var warrantyItem = Models.createNewWarrantyItem("MAT");
+					warrantyItem.setProperty("/PartNumber/value", dataObject.MCPN);
+					warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
+					warrantyItem.setProperty("/Quantity/value", 0);
+					warrantyItem.setProperty("/IsMCPN",true);
+					warrantyItems.push(warrantyItem.getProperty("/"));
+				}
+				
+				// update the model
+				this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
+				
+				//Let interested controller know
+				sap.ui.getCore().getEventBus().publish("PWA","Selected");
 			}
-			
-			// Update/Add the MCPN
-			var warrantyItems = this.getView().getModel("WarrantyClaim").getProperty("/Parts");
-			var indexOfMCPN = warrantyItems.findIndex(function(item){
-				return item.IsMCPN;
-			});
-			
-			//Are we adding or Modifying the MCPN
-			if(warrantyItems[indexOfMCPN]){
-				warrantyItems[indexOfMCPN].PartNumber.value = dataObject.MCPN;
-				warrantyItems[indexOfMCPN].Description = dataObject.MCPNDescription;
-				warrantyItems[indexOfMCPN].Quantity.value = 0;
-			} else {
-				var warrantyItem = Models.createNewWarrantyItem("MAT");
-				warrantyItem.setProperty("/PartNumber/value", dataObject.MCPN);
-				warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
-				warrantyItem.setProperty("/Quantity/value", 0);
-				warrantyItem.setProperty("/IsMCPN",true);
-				warrantyItems.push(warrantyItem.getProperty("/"));
-			}
-			
-			// update the model
-			this.getView().getModel("WarrantyClaim").setProperty("/Parts", warrantyItems);
-			
-			//Let interested controller know
-			sap.ui.getCore().getEventBus().publish("PWA","Selected");
 		},
 
 		onPWASuggest: function(event){
@@ -213,7 +217,7 @@ sap.ui.define([
 			var filters = this._getFilter();
 			
 			filters.push(new Filter("PWATypeGroup", sap.ui.model.FilterOperator.EQ, 
-				this.getView().getModel("WarrantyClaim").getProperty("/ClaimTypeGroup")
+				this.getView().getModel("WarrantyClaim").getProperty("/ClaimTypeGroup") === 'GOODWILL' ? 'GOODWILL':'NORMAL'
 			));
 			
 			if (PWASearch) {

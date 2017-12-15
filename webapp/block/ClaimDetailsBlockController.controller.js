@@ -59,11 +59,21 @@ sap.ui.define([
 		},
 
 		onOldSerialNumberChanged: function(){
+			
+			this.getView().getModel("WarrantyClaim").setProperty("/OldSerialNumber/value",
+				this.getView().getModel("WarrantyClaim").getProperty("/OldSerialNumber/value").toUpperCase()
+			);
+			
 			WarrantyClaim.validateOldSerialNumber();
 			this.logValidationMessage("OldSerialNumber");	
 		},
 
 		onNewSerialNumberChanged: function(){
+			
+			this.getView().getModel("WarrantyClaim").setProperty("/NewSerialNumber/value",
+				this.getView().getModel("WarrantyClaim").getProperty("/NewSerialNumber/value").toUpperCase()
+			);				
+			
 			WarrantyClaim.validateNewSerialNumber();
 			this.logValidationMessage("NewSerialNumber");
 		},

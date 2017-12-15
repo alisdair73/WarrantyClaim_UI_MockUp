@@ -52,7 +52,7 @@ sap.ui.define([
 			if(this.getView().getModel("WarrantyClaim").getProperty("/MCPN/value") !== ""){
 				
 				//Manage the Case when part is typed in directly
-				if(event && event.getSource().getSuggestionRows()){
+				if(event && event.getSource().data("checkSuggestions") && event.getSource().getSuggestionRows()){
 
 			  		var suggestionMatched = false;
 			    	event.getSource().getSuggestionRows().forEach(function(suggestion){
@@ -69,6 +69,12 @@ sap.ui.define([
 				    if(!suggestionMatched){
 				    	this.getView().getModel("WarrantyClaim").setProperty("/Description","");
 				    }
+				}
+				
+				//Default the Parts Requested if Blank
+				if(this.getView().getModel("WarrantyClaim").getProperty("/PartRequested") === "" ||
+				   this.getView().getModel("WarrantyClaim").getProperty("/Quantity") === 0){
+					this.getView().getModel("WarrantyClaim").setProperty("/PartRequested", "S");
 				}
 				
 				//Are we adding or Modifying the MCPN
@@ -88,13 +94,16 @@ sap.ui.define([
 					warrantyItems.push(warrantyItem.getProperty("/"));
 				}
 			} else {
+				
 				this.getView().getModel("WarrantyClaim").setProperty("/Description","");
 				this.getView().getModel("WarrantyClaim").setProperty("/Quantity",0);
+				this.getView().getModel("WarrantyClaim").setProperty("/PartRequested","");
 
 				if(warrantyItems[indexOfMCPN]){
 					warrantyItems[indexOfMCPN].PartNumber.value = "";
 					warrantyItems[indexOfMCPN].Description = "";
 					warrantyItems[indexOfMCPN].Quantity.value = 0;
+					warrantyItems[indexOfMCPN].PartRequested = "";
 				}
 			}
 			

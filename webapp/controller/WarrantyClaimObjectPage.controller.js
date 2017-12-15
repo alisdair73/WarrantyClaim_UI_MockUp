@@ -77,10 +77,7 @@ sap.ui.define([
 			//Provide a Default LON for SERN (not in Parts case)
 			if(objectType === "SERN" && claimTypeGroup !== "PARTS"){
 				var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
-				var newLONItem = Models.createNewWarrantyItem("FR");   
-				newLONItem.setProperty("/ItemKey","100001");
-				newLONItem.setProperty("/Description","Labour Hours");
-				newLONItem.setProperty("/Quantity/value",0);
+				var newLONItem = Models.defaultMPELabourItem();   
 				labourItems.push(newLONItem.getProperty("/"));
 				this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 			}
@@ -306,9 +303,10 @@ sap.ui.define([
 					return message.severity === "warning";
 				});
 				
-				if(warningMessages.length > 0){
+				if(warningMessages.length > 0 && actionName !== "SubmitWarranty"){
+					
 					MessageBox.warning(
-						leadingMessage.message + "\n" + "Please review Warning messages before submitting claim.",
+						leadingMessage.message + "\n" + "Please review the Warning messages before submitting claim.",
 						{
 							actions : [MessageBox.Action.CLOSE],
 							onClose: function(){ this.openMessages(); }.bind(this)
@@ -317,9 +315,17 @@ sap.ui.define([
 					
 				} else {
 					MessageBox.success(
-						leadingMessage.message + "\n" + "Please observe any additional notes provided.",
+						leadingMessage.message 
+							+ ( actionName === "SubmitWarranty" ? "" : "\nPlease observe any additional notes provided." ),
 						{
-							actions : [MessageBox.Action.CLOSE]
+							actions : [MessageBox.Action.CLOSE],
+							onClose: function(){
+								if(actionName === "SubmitWarranty"){
+									this.navigateToApp("#DealerWarrantyClaim-create?DealerWarrantyClaim=" + 
+										this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber","")
+									);
+								}
+							}.bind(this)
 						}	
 					);
 				}
@@ -409,7 +415,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = "1110000384"; //BATTERY CLAIM TEST
-			//claimNumber = "2130000001";
+			//claimNumber = "1110000498";
 			
 			var entityPath = "";
 			if (claimNumber){

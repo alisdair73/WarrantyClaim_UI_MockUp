@@ -106,12 +106,14 @@
 					path: '/EmployeeSet',
 					sorter: { path: 'LastName' },
 					filters : [
-						{ path : 'Relationship', operator : 'EQ', value1 : 'Technician'}
+						{ path : 'Relationship', operator : 'EQ', value1 : 'Technician'},
+						{ path : 'Relationship', operator : 'EQ', value1 : 'Service Advisor'}
 					]
 				}"
 				valueState="{= ${WarrantyClaim>Technician/ruleResult/valid} ? 'None':'Error'}"
 				enabled="{WarrantyClaim>CanEdit}"
 				visible="{= ${WarrantyClaim>ObjectType} ==='VELO'}"
+				
 			>
 				<core:Item key="{EmployeeNumber}" text="{FirstName} {LastName}"  />
 			</Select>
@@ -134,6 +136,7 @@
 					path: '/EmployeeSet',
 					sorter: { path: 'LastName' },
 					filters : [
+						{ path : 'Relationship', operator : 'EQ', value1 : 'Technician'},
 						{ path : 'Relationship', operator : 'EQ', value1 : 'Service Advisor'}
 					]					
 				}"
@@ -171,7 +174,7 @@
 					id="OldSerialNumber" 
 					placeholder="Old Serial Number" 
 					maxLength="18"
-					value="{WarrantyClaim>OldSerialNumber/value}" 
+					value="{WarrantyClaim>OldSerialNumber/value}"
 					editable="{WarrantyClaim>CanEdit}" 
 					enabled="{= ${WarrantyClaim>ClaimTypeGroup} === 'RECALL'}"
 					change="onOldSerialNumberChanged"

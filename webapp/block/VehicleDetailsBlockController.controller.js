@@ -194,11 +194,13 @@ sap.ui.define([
 					warrantyItems[indexOfMCPN].PartNumber.value = dataObject.MCPN;
 					warrantyItems[indexOfMCPN].Description = dataObject.MCPNDescription;
 					warrantyItems[indexOfMCPN].Quantity.value = 0;
+					warrantyItems[indexOfMCPN].PartRequested = "S";
 				} else {
 					var warrantyItem = Models.createNewWarrantyItem("MAT");
 					warrantyItem.setProperty("/PartNumber/value", dataObject.MCPN);
 					warrantyItem.setProperty("/Description", dataObject.MCPNDescription);
 					warrantyItem.setProperty("/Quantity/value", 0);
+					warrantyItem.setProperty("/PartRequested", "S");
 					warrantyItem.setProperty("/IsMCPN",true);
 					warrantyItems.push(warrantyItem.getProperty("/"));
 				}

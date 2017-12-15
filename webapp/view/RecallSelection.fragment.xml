@@ -15,7 +15,6 @@
 			<cells>
 				<Text text="{ExternalRecallNumber}"/>
 				<Text text="{RecallInformation}" />
-				<CheckBox selected="{SerialNumberIsMandatory}" editable="false"/>
 				<DatePicker 
 					displayFormat="dd/MM/yyyy"
 					dateValue="{ValidFrom}"
@@ -37,11 +36,6 @@
 			<Column>
 				<header>
 					<Text text="Details" />
-				</header>
-			</Column>
-			<Column>
-				<header>
-					<Text text="Serial # Required" />
 				</header>
 			</Column>
 			<Column>

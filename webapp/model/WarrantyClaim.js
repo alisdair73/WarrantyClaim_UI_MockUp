@@ -280,6 +280,7 @@ sap.ui.define([
 			warrantyClaim.ClaimNumber = this.warrantyClaim.ClaimNumber;
 			warrantyClaim.ClaimType = this.warrantyClaim.ClaimType;
 			warrantyClaim.ObjectType = this.warrantyClaim.ObjectType;
+			warrantyClaim.ProcessingStatus = this.warrantyClaim.ProcessingStatus;
 			warrantyClaim.SalesOrganisation = this.warrantyClaim.SalesOrganisation;
 			warrantyClaim.DealerContact = this.warrantyClaim.DealerContact.value;
 			warrantyClaim.EngineNumber = this.warrantyClaim.EngineNumber.value;

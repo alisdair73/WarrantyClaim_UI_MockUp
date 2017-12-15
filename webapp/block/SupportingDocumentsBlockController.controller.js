@@ -1,8 +1,9 @@
 sap.ui.define(["sap/ui/core/mvc/Controller",
 "sap/m/MessageToast",
 "sap/ui/model/Filter",
-"sap/m/UploadCollectionParameter"
-], function(Controller, MessageToast, Filter, UploadCollectionParameter) {
+"sap/m/UploadCollectionParameter",
+"sap/ui/model/json/JSONModel"
+], function(Controller, MessageToast, Filter, UploadCollectionParameter,JSONModel) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.SupportingDocumentsBlockController", {
@@ -17,13 +18,68 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			
 			//Set up Event Listener to Upload Files
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._uploadAttachmentCollection,this);
+			
+			this.getView().setModel(new JSONModel({ "busy":false, "attachmentMode":"create", "attachments":[]}), "AttachmentHelper");
+			this._attachmentCreateCount = 0;
+			this._attachmentCreateRemaining = 0;
 		},
 
 		onExit:function(){
 			sap.ui.getCore().getEventBus().unsubscribe("Warranty","Saved",this._uploadAttachmentCollection,this);
 		},
-		
+	
 		onUploadComplete: function(oEvent) {
+			
+			var fileResponse = JSON.parse( oEvent.getParameter("mParameters").responseRaw );
+			var ClaimNumber = this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber");
+		    var attachment = {
+		    	"DocumentID": fileResponse.d.DocumentID,
+		    	"Content":"",
+		    	"Deleted": false,
+		    	"MimeType": fileResponse.d.MimeType,
+		    	"FileName": fileResponse.d.FileName,
+		    	"URL": "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('" + ClaimNumber + "')/Attachments('" + fileResponse.d.DocumentID + "')/$value"
+		    };
+			    
+			if(this.getView().getModel("AttachmentHelper").getProperty("/attachmentMode") === 'create'){
+				
+	        	var createdAttachments = this.getView().getModel("AttachmentHelper").getProperty("/attachments");
+				createdAttachments.push(attachment);
+				this.getView().getModel("AttachmentHelper").setProperty("/attachments", createdAttachments); 				
+				
+				if (this._attachmentCreateRemaining > 1) {
+	                this._attachmentCreateRemaining -= 1;
+	            } else {
+					this.getView().getModel("AttachmentHelper").setProperty("/busy",false);
+					this.getView().getModel("AttachmentHelper").setProperty("/attachmentMode","maintain");
+					this._attachmentCreateRemaining = 0;
+					
+					this.getView().getModel("WarrantyClaim").setProperty("/Attachments", createdAttachments);
+	            }
+	            
+	            MessageToast.show("Attachment " + 
+	            	( this._attachmentCreateCount - this._attachmentCreateRemaining ) +
+	            	" of " + this._attachmentCreateCount + " loaded."
+	        	);
+	        
+			} else {
+				
+				var uploadCollection = oEvent.getSource();
+			    for (var i = 0; i < uploadCollection.getItems().length; i++) {
+				  	if (uploadCollection.getItems()[i].getFileName() === fileResponse.d.FileName) {
+				  		uploadCollection.removeItem(uploadCollection.getItems()[i]);
+				  		break;
+				  	}
+				}
+				
+				var attachments = this.getView().getModel("WarrantyClaim").getProperty("/Attachments");
+				attachments.push(attachment);
+				this.getView().getModel("WarrantyClaim").setProperty("/Attachments", attachments);            
+			}
+		},
+	
+		
+/*		onUploadComplete: function(oEvent) {
 
 			var fileResponse = JSON.parse( oEvent.getParameter("mParameters").responseRaw );
 			var ClaimNumber = this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber");
@@ -47,7 +103,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			
 		    attachments.push(attachment);
 		    this.getView().getModel("WarrantyClaim").setProperty("/Attachments", attachments);
-		},
+		},*/
 		
 		onBeforeUploadStarts: function(oEvent){
 			
@@ -89,7 +145,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		},		
 		
 		onFileSizeExceed : function(oEvent) {
-			MessageToast.show("The maximum allowed size for file attachments is 10MB.");
+			MessageToast.show("The maximum allowed size for file attachments is 25MB.");
 		},
 
 		_refreshAfterDelete: function(documentId){
@@ -111,9 +167,18 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			//Start the File Upload
 			var attachmentCollection = this.getView().byId("warrantyAttachmentCollectionCreate");
 			if(attachmentCollection){
-				attachmentCollection.upload();
+				
+				this._attachmentCreateCount = attachmentCollection.getItems().length;
+				this._attachmentCreateRemaining = this._attachmentCreateCount;
+				if (this._attachmentCreateCount > 0){
+					this.getView().getModel("AttachmentHelper").setProperty("/busy",true);
+					attachmentCollection.upload();
+				} else {
+					this.getView().getModel("AttachmentHelper").setProperty("/attachmentMode","maintain");
+				}
 			}
 		}
+
 	});
 
 });

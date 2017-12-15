@@ -30,7 +30,9 @@
 		                    	<sap.ui.layout.form:fields>
 		                    		<Label id="Invoice_label" text="Invoice" required="true" labelFor="Invoice"/>
 		                        	<Input 
-		                        		width="100%" id="Invoice" value="{SubletItem>Invoice}" 
+		                        		width="100%" id="Invoice" 
+		                        		maxLength="18"
+		                        		value="{SubletItem>Invoice}" 
 		                        		valueState="{= ${subletInvalid>/invoice} ? 'Error':'None'}"
 		                        		valueStateText="Invoice is a mandatory field."
 		                        		change="onSubletChanged"
@@ -43,6 +45,7 @@
 		                        	<Input 
 		                        		width="100%" 
 		                        		id="BusinessName" 
+		                        		maxLength="18"
 		                        		value="{SubletItem>BusinessName}"
 		                        		valueState="{= ${subletInvalid>/businessName} ? 'Error':'None'}"
 		                        		valueStateText="Business Name is a mandatory field."

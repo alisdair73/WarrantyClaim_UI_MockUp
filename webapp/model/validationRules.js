@@ -7,13 +7,13 @@ sap.ui.define([], function() {
 			
 			var validated = true;
 			
-			var dateOfFailure = new Date(failureDate.getFullYear(),failureDate.getMonth(), failureDate.getDate());
+/*			var dateOfFailure = new Date(failureDate.getFullYear(),failureDate.getMonth(), failureDate.getDate());
 			var dateRecallValidFrom = new Date(recallValidFromDate.getFullYear(),recallValidFromDate.getMonth(), recallValidFromDate.getDate());
 			var dateRecallValidTo = new Date(recallValidToDate.getFullYear(),recallValidToDate.getMonth(), recallValidToDate.getDate());
 			
 			if (dateOfFailure.valueOf() < dateRecallValidFrom.valueOf() || dateOfFailure.valueOf() > dateRecallValidTo.valueOf()){
 				validated = false;
-			}
+			}*/
 			
 			return {"valid": validated, "errorTextID":"RecallNotValidForFailureDate"};
 			
@@ -32,7 +32,7 @@ sap.ui.define([], function() {
 					validated = false;
 				}
 			}
-			return {"valid": validated, "errorTextID":"DateOfFailure"};
+			return {"valid": validated, "errorTextID":"DateOfFailureInvalid"};
 		},
 		
 		validateRepairDate: function(repairDate, failureDate) {
@@ -48,7 +48,7 @@ sap.ui.define([], function() {
 					validated = false;
 				}
 			}
-			return {"valid": validated, "errorTextID":"DateOfRepair"};
+			return {"valid": validated, "errorTextID":"DateOfRepairInvalid"};
 		},
 		
 //		Failure KM - Must be between 0 and 1000000

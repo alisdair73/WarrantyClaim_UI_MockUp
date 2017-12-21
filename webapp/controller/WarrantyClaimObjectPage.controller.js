@@ -32,7 +32,9 @@ sap.ui.define([
 					"symptomCodeL2": "",
 					"defectCodeL1": "",
 					"internalRecallNumber":"",
-					"hasBeenValidated": false
+					"hasBeenValidated": false,
+					"attachmentMode":"create",
+					"docTypes":["AVI","DAT","DOC","DOCX","DPF","DTC","GIF","JPEG","JPG","M4V","MOV","MP4","PDF","PNG","PPT","PPTX","XLS","XLSX"]
 				}
 			});
 			this.setModel(oViewModel, "ViewHelper");
@@ -338,7 +340,7 @@ sap.ui.define([
 			if(actionName === "ValidateWarranty"){
 				this.getModel("ViewHelper").setProperty("/warrantyUI/hasBeenValidated", isValid);
 			}
-			this.getModel("ViewHelper").setProperty("/busy", false);
+			//this.getModel("ViewHelper").setProperty("/busy", false);
 		},
 		
 		_onActionError: function(error){
@@ -415,7 +417,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = "1110000384"; //BATTERY CLAIM TEST
-			//claimNumber = "1110000498";
+			//claimNumber = "1110000577";
 			
 			var entityPath = "";
 			if (claimNumber){
@@ -513,6 +515,9 @@ sap.ui.define([
 			
 			this.readDefectCatalog();
 			this.readSymptomCatalog();
+			
+			//Set the Attachment Control Mode
+			this.getView().getModel("ViewHelper").setProperty("/warrantyUI/attachmentMode","maintain");
 			
 			//Alert Subscribers that a Warranty has been loaded
 			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Loaded");

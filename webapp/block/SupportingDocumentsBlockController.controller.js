@@ -2,8 +2,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 "sap/m/MessageToast",
 "sap/ui/model/Filter",
 "sap/m/UploadCollectionParameter",
-"sap/ui/model/json/JSONModel"
-], function(Controller, MessageToast, Filter, UploadCollectionParameter,JSONModel) {
+"sap/ui/model/json/JSONModel",
+"sap/m/MessageBox"
+], function(Controller, MessageToast, Filter, UploadCollectionParameter,JSONModel,MessageBox) {
 	"use strict";
 
 	return Controller.extend("WarrantyClaim_MockUp.block.SupportingDocumentsBlockController", {
@@ -19,7 +20,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			//Set up Event Listener to Upload Files
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._uploadAttachmentCollection,this);
 			
-			this.getView().setModel(new JSONModel({ "busy":false, "attachmentMode":"create", "attachments":[]}), "AttachmentHelper");
+			this.getView().setModel(new JSONModel({ "attachments":[]}), "AttachmentHelper");
 			this._attachmentCreateCount = 0;
 			this._attachmentCreateRemaining = 0;
 		},
@@ -41,7 +42,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		    	"URL": "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('" + ClaimNumber + "')/Attachments('" + fileResponse.d.DocumentID + "')/$value"
 		    };
 			    
-			if(this.getView().getModel("AttachmentHelper").getProperty("/attachmentMode") === 'create'){
+			if(this.getView().getModel("ViewHelper").getProperty("/warrantyUI/attachmentMode") === 'create'){
 				
 	        	var createdAttachments = this.getView().getModel("AttachmentHelper").getProperty("/attachments");
 				createdAttachments.push(attachment);
@@ -50,9 +51,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 				if (this._attachmentCreateRemaining > 1) {
 	                this._attachmentCreateRemaining -= 1;
 	            } else {
-					this.getView().getModel("AttachmentHelper").setProperty("/busy",false);
-					this.getView().getModel("AttachmentHelper").setProperty("/attachmentMode","maintain");
+	            	this.getView().getModel("ViewHelper").setProperty("/busy", false);
+					this.getView().getModel("ViewHelper").setProperty("/warrantyUI/attachmentMode","maintain");
+					
 					this._attachmentCreateRemaining = 0;
+					oEvent.getSource().unbindItems(); //The Create Collection is no longer needed
 					
 					this.getView().getModel("WarrantyClaim").setProperty("/Attachments", createdAttachments);
 	            }
@@ -64,13 +67,13 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 	        
 			} else {
 				
-				var uploadCollection = oEvent.getSource();
+/*				var uploadCollection = oEvent.getSource();
 			    for (var i = 0; i < uploadCollection.getItems().length; i++) {
 				  	if (uploadCollection.getItems()[i].getFileName() === fileResponse.d.FileName) {
 				  		uploadCollection.removeItem(uploadCollection.getItems()[i]);
 				  		break;
 				  	}
-				}
+				}*/
 				
 				var attachments = this.getView().getModel("WarrantyClaim").getProperty("/Attachments");
 				attachments.push(attachment);
@@ -78,33 +81,6 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			}
 		},
 	
-		
-/*		onUploadComplete: function(oEvent) {
-
-			var fileResponse = JSON.parse( oEvent.getParameter("mParameters").responseRaw );
-			var ClaimNumber = this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber");
-			var attachments = this.getView().getModel("WarrantyClaim").getProperty("/Attachments");
-		    var attachment = {
-		    	"DocumentID": fileResponse.d.DocumentID,
-		    	"Content": "",
-		    	"Deleted": false,
-		    	"MimeType": fileResponse.d.MimeType,
-		    	"FileName": fileResponse.d.FileName,
-		    	"URL": "/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('" + ClaimNumber + "')/Attachments('" + fileResponse.d.DocumentID + "')/$value"
-		    };
-
-			var uploadCollection = oEvent.getSource();
-		    for (var i = 0; i < uploadCollection.getItems().length; i++) {
-			  	if (uploadCollection.getItems()[i].getFileName() === fileResponse.d.FileName) {
-			  		uploadCollection.removeItem(uploadCollection.getItems()[i]);
-			  		break;
-			  	}
-			}
-			
-		    attachments.push(attachment);
-		    this.getView().getModel("WarrantyClaim").setProperty("/Attachments", attachments);
-		},*/
-		
 		onBeforeUploadStarts: function(oEvent){
 			
     		oEvent.getParameters().addHeaderParameter(new sap.m.UploadCollectionParameter({
@@ -148,6 +124,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 			MessageToast.show("The maximum allowed size for file attachments is 25MB.");
 		},
 
+		onFileTypeMismatch: function(event){
+			var docTypes = this.getView().getModel("ViewHelper").getProperty("/warrantyUI/docTypes");
+			MessageBox.error("The following Doc Types can be uploaded: \n" + docTypes.join());
+		},
+		
 		_refreshAfterDelete: function(documentId){
 			MessageToast.show("File deleted");
             			
@@ -165,20 +146,28 @@ sap.ui.define(["sap/ui/core/mvc/Controller",
 		
 		_uploadAttachmentCollection: function(){
 			//Start the File Upload
-			var attachmentCollection = this.getView().byId("warrantyAttachmentCollectionCreate");
-			if(attachmentCollection){
+			if (this.getView().getModel("ViewHelper").getProperty("/warrantyUI/attachmentMode") === "create"){
 				
-				this._attachmentCreateCount = attachmentCollection.getItems().length;
-				this._attachmentCreateRemaining = this._attachmentCreateCount;
-				if (this._attachmentCreateCount > 0){
-					this.getView().getModel("AttachmentHelper").setProperty("/busy",true);
-					attachmentCollection.upload();
-				} else {
-					this.getView().getModel("AttachmentHelper").setProperty("/attachmentMode","maintain");
+				var attachmentCollection = this.getView().byId("warrantyAttachmentCollectionCreate");
+				if(attachmentCollection){
+					
+					this._attachmentCreateCount = attachmentCollection.getItems().length;
+					this._attachmentCreateRemaining = this._attachmentCreateCount;
+					if (this._attachmentCreateCount > 0){
+						MessageToast.show("Attachments uploading");
+						this.getView().getModel("ViewHelper").setProperty("/busy", true);
+						attachmentCollection.upload();
+					} else {
+						//Nothing to do - switch mode
+						this.getView().getModel("ViewHelper").setProperty("/busy", false);
+						this.getView().getModel("ViewHelper").setProperty("/warrantyUI/attachmentMode","maintain");
+						attachmentCollection.unbindItems(); //The Create Collection is no longer needed
+					}
 				}
+			} else {
+				this.getView().getModel("ViewHelper").setProperty("/busy", false);
 			}
 		}
-
 	});
 
 });

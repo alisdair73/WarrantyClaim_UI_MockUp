@@ -14,7 +14,7 @@
 									id="warrantyAttachmentCollectionCreate"
 									uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('Attachment')/Attachments"
 									multiple="false"
-									visible="{= ${AttachmentHelper>/attachmentMode} === 'create'}"
+									visible="{= ${ViewHelper>/warrantyUI/attachmentMode} === 'create'}"
 									instantUpload="false"
 									showSeparators="All"
 									uploadEnabled="{WarrantyClaim>CanEdit}"
@@ -23,13 +23,18 @@
 									fileSizeExceed="onFileSizeExceed"
 									change="onChange"
 									maximumFileSize="25"
-									busy="{= ${AttachmentHelper>/busy}}"
 									noDataText="No Attachments"
-									items="{path : 'WarrantyClaim>/Attachments'}"
-									mode="SingleSelectMaster">
+									items="{path : 'WarrantyClaim>Attachments'}"
+									mode="SingleSelectMaster"
+									fileType="{ViewHelper>/warrantyUI/docTypes}"
+									typeMissmatch="onFileTypeMismatch"
+								>               
 									<toolbar>
 										<OverflowToolbar>
-											<Title id="attachmentTitleCreate"/>
+											<Title 
+												id="attachmentTitleCreate"
+												text="{i18n>allowedFileTypes}"
+											/>
 											<ToolbarSpacer/>
 											<UploadCollectionToolbarPlaceholder/>
 										</OverflowToolbar>
@@ -51,7 +56,7 @@
 									multiple="false"
 									instantUpload="true"
 									showSeparators="All"
-									visible="{= ${AttachmentHelper>/attachmentMode} === 'maintain'}"
+									visible="{= ${ViewHelper>/warrantyUI/attachmentMode} === 'maintain'}"
 									fileDeleted="onFileDeleted"
 									uploadEnabled="{WarrantyClaim>CanEdit}"
 									uploadComplete="onUploadComplete"
@@ -60,11 +65,17 @@
 									change="onChange"
 									maximumFileSize="25"
 									noDataText="No Attachments"
-									items="{path : 'WarrantyClaim>/Attachments'}"
-									mode="SingleSelectMaster">
+									items="{path : 'WarrantyClaim>Attachments'}"
+									mode="SingleSelectMaster"
+									fileType="{ViewHelper>/warrantyUI/docTypes}"
+									typeMissmatch="onFileTypeMismatch"
+								>
 									<toolbar>
 										<OverflowToolbar>
-											<Title id="attachmentTitleMaintain"/>
+											<Title 
+												id="attachmentTitleMaintain"
+												text="{i18n>allowedFileTypes}"
+											/>
 											<ToolbarSpacer/>
 											<UploadCollectionToolbarPlaceholder/>
 										</OverflowToolbar>

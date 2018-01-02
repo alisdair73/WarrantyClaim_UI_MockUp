@@ -33,7 +33,7 @@ sap.ui.define([
 					"defectCodeL1": "",
 					"internalRecallNumber":"",
 					"hasBeenValidated": false,
-					"attachmentMode":"create",
+					//"attachmentMode":"maintain", //NEW APPROACH
 					"docTypes":["AVI","DAT","DOC","DOCX","DPF","DTC","GIF","JPEG","JPG","M4V","MOV","MP4","PDF","PNG","PPT","PPTX","XLS","XLSX"]
 				}
 			});
@@ -98,7 +98,23 @@ sap.ui.define([
 		},
 		
 		onNewClaim: function(){
+			
 			this.navigateToApp("#DealerWarrantyClaim-create");
+			
+/*			if (this.getOwnerComponent().getComponentData() &&
+				this.getOwnerComponent().getComponentData().startupParameters.DealerWarrantyClaim){
+				
+				this.navigateToApp("#DealerWarrantyClaim-create");
+			} else {
+				
+				this.setModel(WarrantyClaim.createWarrantyClaimModel(),"WarrantyClaim");
+				
+				this.getModel("ViewHelper").setProperty("/readOnly", false);
+				sap.ui.getCore().getMessageManager().removeAllMessages();
+				this._claimTypeSelection.destroy(true);
+				this._claimTypeSelection = null;
+				this._onCreateWarrantyMatched();
+			}*/
 		},
 		
 		onDuplicateClaim: function(){
@@ -334,13 +350,14 @@ sap.ui.define([
 			}
 			
 			WarrantyClaim.updateWarrantyClaimFromJSONModel(responseData, actionName === "ValidateWarranty");
-		
-			sap.ui.getCore().getEventBus().publish("WarrantyClaim","Saved");
+			this.getModel("ViewHelper").setProperty("/busy", false);
 			
 			if(actionName === "ValidateWarranty"){
 				this.getModel("ViewHelper").setProperty("/warrantyUI/hasBeenValidated", isValid);
-			}
-			//this.getModel("ViewHelper").setProperty("/busy", false);
+			} 
+			//else {
+			//	sap.ui.getCore().getEventBus().publish("WarrantyClaim","Saved");		
+			//}
 		},
 		
 		_onActionError: function(error){

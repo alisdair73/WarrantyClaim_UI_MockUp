@@ -9,89 +9,47 @@
 				<sap.ui.layout.form:formElements>
 					<sap.ui.layout.form:FormElement>
 						<sap.ui.layout.form:fields>
-							<l:VerticalLayout>
-								<UploadCollection
-									id="warrantyAttachmentCollectionCreate"
-									uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('Attachment')/Attachments"
-									multiple="false"
-									visible="{= ${ViewHelper>/warrantyUI/attachmentMode} === 'create'}"
-									instantUpload="false"
-									showSeparators="All"
-									uploadEnabled="{WarrantyClaim>CanEdit}"
-									uploadComplete="onUploadComplete"
-									beforeUploadStarts="onBeforeUploadStarts"
-									fileSizeExceed="onFileSizeExceed"
-									change="onChange"
-									maximumFileSize="25"
-									noDataText="No Attachments"
-									items="{path : 'WarrantyClaim>Attachments'}"
-									mode="SingleSelectMaster"
-									fileType="{ViewHelper>/warrantyUI/docTypes}"
-									typeMissmatch="onFileTypeMismatch"
-								>               
-									<toolbar>
-										<OverflowToolbar>
-											<Title 
-												id="attachmentTitleCreate"
-												text="{i18n>allowedFileTypes}"
-											/>
-											<ToolbarSpacer/>
-											<UploadCollectionToolbarPlaceholder/>
-										</OverflowToolbar>
-									</toolbar>
-									<items>
-										<UploadCollectionItem
-											documentId="{WarrantyClaim>DocumentID}"
-											fileName="{WarrantyClaim>FileName}"
-											mimeType="{WarrantyClaim>MimeType}"
-											url="{WarrantyClaim>URL}"
-											visibleEdit="false"
-											visibleDelete="{WarrantyClaim>/CanEdit}">
-										</UploadCollectionItem>
-									</items>
-								</UploadCollection>	
-								<UploadCollection
-									id="warrantyAttachmentCollectionMaintain"
-									uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('Attachment')/Attachments"
-									multiple="false"
-									instantUpload="true"
-									showSeparators="All"
-									visible="{= ${ViewHelper>/warrantyUI/attachmentMode} === 'maintain'}"
-									fileDeleted="onFileDeleted"
-									uploadEnabled="{WarrantyClaim>CanEdit}"
-									uploadComplete="onUploadComplete"
-									beforeUploadStarts="onBeforeUploadStarts"
-									fileSizeExceed="onFileSizeExceed"
-									change="onChange"
-									maximumFileSize="25"
-									noDataText="No Attachments"
-									items="{path : 'WarrantyClaim>Attachments'}"
-									mode="SingleSelectMaster"
-									fileType="{ViewHelper>/warrantyUI/docTypes}"
-									typeMissmatch="onFileTypeMismatch"
-								>
-									<toolbar>
-										<OverflowToolbar>
-											<Title 
-												id="attachmentTitleMaintain"
-												text="{i18n>allowedFileTypes}"
-											/>
-											<ToolbarSpacer/>
-											<UploadCollectionToolbarPlaceholder/>
-										</OverflowToolbar>
-									</toolbar>
-									<items>
-										<UploadCollectionItem
-											documentId="{WarrantyClaim>DocumentID}"
-											fileName="{WarrantyClaim>FileName}"
-											mimeType="{WarrantyClaim>MimeType}"
-											url="{WarrantyClaim>URL}"
-											visibleEdit="false"
-											visibleDelete="{WarrantyClaim>/CanEdit}">
-										</UploadCollectionItem>
-									</items>
-								</UploadCollection>	
-							</l:VerticalLayout>							
+							<UploadCollection
+								id="warrantyAttachmentCollection"
+								uploadUrl="/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/WarrantyClaimSet('Attachment')/Attachments"
+								multiple="false"
+								instantUpload="true"
+								showSeparators="All"
+								visible="true"
+								fileDeleted="onFileDeleted"
+								uploadEnabled="{WarrantyClaim>CanEdit}"
+								uploadComplete="onUploadComplete"
+								beforeUploadStarts="onBeforeUploadStarts"
+								fileSizeExceed="onFileSizeExceed"
+								change="onChange"
+								maximumFileSize="25"
+								noDataText="No Attachments"
+								items="{path : 'WarrantyClaim>Attachments'}"
+								mode="SingleSelectMaster"
+								fileType="{ViewHelper>/warrantyUI/docTypes}"
+								typeMissmatch="onFileTypeMismatch"
+							>
+								<toolbar>
+									<OverflowToolbar>
+										<Title 
+											id="attachmentTitle"
+											text="{i18n>allowedFileTypes}"
+										/>
+										<ToolbarSpacer/>
+										<UploadCollectionToolbarPlaceholder/>
+									</OverflowToolbar>
+								</toolbar>
+								<items>
+									<UploadCollectionItem
+										documentId="{WarrantyClaim>DocumentID}"
+										fileName="{WarrantyClaim>FileName}"
+										mimeType="{WarrantyClaim>MimeType}"
+										url="{WarrantyClaim>URL}"
+										visibleEdit="false"
+										visibleDelete="{WarrantyClaim>/CanEdit}">
+									</UploadCollectionItem>
+								</items>
+							</UploadCollection>	
 						</sap.ui.layout.form:fields>
 					</sap.ui.layout.form:FormElement>
 				</sap.ui.layout.form:formElements>

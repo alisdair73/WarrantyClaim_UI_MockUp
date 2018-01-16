@@ -59,29 +59,30 @@
 		            </ColumnListItem>
 		          </suggestionRows>                 
 		        </Input>
-				<Label text="Quantity" required="true" labelFor="MCPNQuantity"/>
+				<Label text="Quantity" required="true" labelFor="Quantity"/>
 				<Input 
-					id="MCPNQuantity" 
+					id="Quantity" 
 					type="Number"
 					required="true"
 					change="onMCPNChanged"
 					value="{
-						path: 'WarrantyClaim>/Quantity',
+						path: 'WarrantyClaim>/Quantity/value',
 						type: 'sap.ui.model.type.Float',
 						formatOptions: {
 							maxFractionDigits: 0
 						}
 					}"
+					valueState="{= ${WarrantyClaim>/Quantity/ruleResult/valid} ? 'None':'Error'}"
 					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 				>
 					<layoutData>
 						<l:GridData span="L2" />
 					</layoutData>
 				</Input>
-				<Label text="Part Status" labelFor="PartStatus" visible="{= ${WarrantyClaim>/Quantity} > 0 }" required="true"/>
+				<Label text="Part Status" labelFor="PartStatus" visible="{= ${WarrantyClaim>/Quantity/value} > 0 }" required="true"/>
 				<ComboBox
 					width="100%"
-					visible="{= ${WarrantyClaim>/Quantity} > 0 }"
+					visible="{= ${WarrantyClaim>/Quantity/value} > 0 }"
 					required="true"
 					selectionChange="onMCPNChanged"
 					editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"

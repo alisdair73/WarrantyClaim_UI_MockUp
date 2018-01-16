@@ -29,6 +29,16 @@ sap.ui.define([
 				"RequestedHours":"0",
 				"Description":""
 			}) , "AdditionalLONHelper");
+			
+			var LONInvalid = new JSONModel({
+				"Assembly": false,
+				"SubAssembly": false,
+				"OperationType": false,
+				"OperationCode": false,
+				"RequestedHours": false,
+				"Description": false
+			});
+			this.setModel(LONInvalid, "LONInvalid");
 		},
 		
 		onExit:function(){
@@ -187,7 +197,7 @@ sap.ui.define([
 			if(mcpn[0]){
 			
 				this.getView().getModel().read(
-					"/AdditionalLONSet(VIN='" + vin + "',MCPN='" + mcpn[0].value + "')/$value",
+					"/AdditionalLONSet(VIN='" + vin + "',MCPN='" + mcpn[0].PartNumber.value + "')/$value",
 					{
 						success: function(JSONData){
 							var additionalLON = JSON.parse(JSONData);
@@ -285,8 +295,53 @@ sap.ui.define([
 			this.getView().getModel("AdditionalLONHelper").setProperty("/OperationCodes",validLONCodes);
 		},
 		
+		onAdditionalLONChanged:function(event){
+   
+    		switch(event.getSource().sId){
+    			case "assembly":
+    				this.getView().getModel("LONInvalid").setProperty("/Assembly",event.getSource().getValue() === "");
+    				break;
+    			case "subAssembly":
+    				this.getView().getModel("LONInvalid").setProperty("/SubAssembly",event.getSource().getValue() === "");
+    				break;
+    			case "operationType":
+    				this.getView().getModel("LONInvalid").setProperty("/OperationType",event.getSource().getValue() === "");
+    				break;
+    			case "operationCode":
+    				this.getView().getModel("LONInvalid").setProperty("/OperationCode",event.getSource().getValue() === "");
+    				break;
+    			case "requestedHours":
+    				this.getView().getModel("LONInvalid").setProperty("/RequestedHours",event.getSource().getValue() <= 0);
+    				break;
+    		}
+    	},
+    	
 		onAddAdditionalLON: function(){
 			
+			//Do some Field Validation First
+			var assembly = this.getView().getModel("AdditionalLONHelper").getProperty("/Assembly");
+			var subAssembly = this.getView().getModel("AdditionalLONHelper").getProperty("/SubAssembly");
+			var operationType = this.getView().getModel("AdditionalLONHelper").getProperty("/OperationType");
+			var operationCode = this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode");
+			var requestedHours = this.getView().getModel("AdditionalLONHelper").getProperty("/RequestedHours");
+//			var description = this.getView().getModel("AdditionalLONHelper").getProperty("/Description");
+			
+			if(assembly === "" || subAssembly === "" || operationType === "" || operationCode === "" || requestedHours <= 0 ){
+    			MessageBox.error(
+					"Please fill all mandatory fields. Requested Hours must be > 0.0.",
+					{ actions : [MessageBox.Action.CLOSE] }
+				);
+				
+				this.getView().getModel("LONInvalid").setProperty("/Assembly",assembly === "");
+				this.getView().getModel("LONInvalid").setProperty("/SubAssembly",subAssembly === "");
+				this.getView().getModel("LONInvalid").setProperty("/OperationType",operationType === "");
+				this.getView().getModel("LONInvalid").setProperty("/OperationCode",operationCode === "");
+				this.getView().getModel("LONInvalid").setProperty("/RequestedHours",requestedHours <= 0);
+		//		this.getView().getModel("LONInvalid").setProperty("/Description",description === "");
+				
+    			return;
+    		}
+
 			var labourItems = this.getView().getModel("WarrantyClaim").getProperty("/Labour");
 			var newLONItem = Models.createNewWarrantyItem("FR");   
 			var newLONCode = this.getView().getModel("AdditionalLONHelper").getProperty("/OperationCode");

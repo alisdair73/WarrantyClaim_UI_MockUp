@@ -217,16 +217,13 @@ sap.ui.define([
 			
 			var PWASearch = event.getParameter("suggestValue");
 			var filters = this._getFilter();
-			
-			filters.push(new Filter("PWATypeGroup", sap.ui.model.FilterOperator.EQ, 
-				this.getView().getModel("WarrantyClaim").getProperty("/ClaimTypeGroup") === 'GOODWILL' ? 'GOODWILL':'NORMAL'
-			));
+			filters = filters.concat( this._getPWAFilter());
 			
 			if (PWASearch) {
 				filters.push(new Filter("PWANumber", sap.ui.model.FilterOperator.StartsWith, PWASearch));
 			}
+		
 			event.getSource().getBinding("suggestionRows").filter(filters);
-			
 		},
 		
 		onRecallSuggest: function(event){
@@ -254,9 +251,8 @@ sap.ui.define([
 			}
 			
 			var filters = this._getFilter();
-			filters.push(new Filter("PWATypeGroup", sap.ui.model.FilterOperator.EQ, 
-				this.getView().getModel("WarrantyClaim").getProperty("/ClaimTypeGroup")
-			));
+			filters = filters.concat( this._getPWAFilter());
+
 			sap.ui.getCore().byId("PWASelectionList").getBinding("items").filter(filters);
 			
 			// Display the popup dialog for adding parts
@@ -285,8 +281,11 @@ sap.ui.define([
 		
         onPWASelectionSearch: function(event){
         	var searchValue = event.getParameter("value");
-			var filters = [];
+			var filters = this._getFilter();
+			filters = filters.concat( this._getPWAFilter());
+			
 			filters.push(new Filter("PWANumber",sap.ui.model.FilterOperator.Contains, searchValue));
+
 			event.getSource().getBinding("items").filter(filters);
         },
         
@@ -501,6 +500,21 @@ sap.ui.define([
 				this.getView().getModel("WarrantyClaim").getProperty("/ExternalObjectNumber/value")));
 			}
 			return filters;
+    	},
+    	
+    	_getPWAFilter: function(){
+    		var filters = [];
+    		
+    		filters.push(new Filter("PWATypeGroup", sap.ui.model.FilterOperator.EQ, 
+				this.getView().getModel("WarrantyClaim").getProperty("/ClaimTypeGroup") === 'GOODWILL' ? 'GOODWILL':'NORMAL'
+			));
+
+			//Use Preceeding PWA Number to pass current Claim No - Use to Filter out used PWAs
+			filters.push(new Filter("PrecedingPWANumber", sap.ui.model.FilterOperator.EQ, 
+				this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber")
+			));
+    		
+    		return filters;
     	},
     	
     	_handleRecallItems: function(recallItems){

@@ -90,7 +90,7 @@ sap.ui.define([
     		var Invoice = sublet.getProperty("/Invoice");
     		var BusinessName = sublet.getProperty("/BusinessName");
     		
-    		if(SubletCode === "" || Quantity === "0" || Invoice === "" || BusinessName === ""){
+    		if(SubletCode === "" || Quantity <= 0 || Invoice === "" || BusinessName === ""){
     			MessageBox.error(
 					"All Sublet fields are required. Pre GST Cost must be > $0.",
 					{

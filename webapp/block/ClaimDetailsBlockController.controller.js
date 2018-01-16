@@ -107,7 +107,7 @@ sap.ui.define([
 					var newLONItem = Models.createNewWarrantyItem("FR");   
 					newLONItem.setProperty("/ItemKey","100001");
 					newLONItem.setProperty("/Description","Labour Hours");
-					newLONItem.setProperty("/Quantity",0);
+					newLONItem.setProperty("/Quantity/value",0);
 					labourItems.push(newLONItem.getProperty("/"));
 					this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 				} else {

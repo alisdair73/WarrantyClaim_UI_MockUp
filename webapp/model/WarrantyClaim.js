@@ -32,10 +32,10 @@ sap.ui.define([
 				"EngineNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				"AuthorisationNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				
-				"MCPN":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},	//For frontend only - sent to backend via the Parts collection
-				"Description":"",		//For frontend only - sent to backend via the Parts collection
-				"Quantity": "0",		//For frontend only - sent to backend via the Parts collection
-				"PartRequested": "",	//For frontend only - sent to backend via the Parts collection
+				"MCPN":{ "value":"", "ruleResult":{"valid": true, "errorTextID":""}},			//For frontend only - sent to backend via the Parts collection
+				"Description":"",																//For frontend only - sent to backend via the Parts collection
+				"Quantity": { "value":0, "ruleResult":{"valid": true, "errorTextID":""}},		//For frontend only - sent to backend via the Parts collection
+				"PartRequested": "",															//For frontend only - sent to backend via the Parts collection
 				
 				"RecallNumber": { "value":"", "ruleResult":{"valid": true, "errorTextID":""}},
 				
@@ -469,6 +469,12 @@ sap.ui.define([
 				Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.MCPN.value);
 		},
 		
+		validateMainCausalPartNumberQuantity: function(){
+			
+			this.warrantyClaim.Quantity.ruleResult = 
+				Rule.validateQuantityIsNotNegative(this.warrantyClaim.Quantity.value);                            
+		},
+		
 		validateOtherPartPartNumber: function(part){
 			part.PartNumber.ruleResult = Rule.validateRequiredFieldIsPopulated(part.PartNumber.value);
 			if(part.PartNumber.ruleResult.valid){
@@ -600,6 +606,12 @@ sap.ui.define([
 					this.warrantyClaim.AuthorisationNumber.ruleResult = 
 						Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.AuthorisationNumber.value);
 					break;
+				case "PARTS":
+					if(this.warrantyClaim.ObjectType !== "VELO"){ //Not Mandatory for AUH
+						this.warrantyClaim.AuthorisationNumber.ruleResult = 
+							Rule.validateRequiredFieldIsPopulated(this.warrantyClaim.AuthorisationNumber.value);
+					}
+					break;
 			}
 		},
 			
@@ -707,9 +719,8 @@ sap.ui.define([
 			this.validateOldSerialNumber();
 			this.validateNewSerialNumber();
 			this.validateMainCausalPartNumber();
+			this.validateMainCausalPartNumberQuantity();
 			this.validateParts();
-
-			
 		},
 		
 		validateParts: function(){
@@ -752,7 +763,9 @@ sap.ui.define([
 				this.warrantyClaim.RecallNumber.ruleResult.valid &&
 				this.warrantyClaim.OldSerialNumber.ruleResult.valid && 
 				this.warrantyClaim.NewSerialNumber.ruleResult.valid &&
-				this.warrantyClaim.MCPN.ruleResult.valid && !this.hasPartsError()){
+				this.warrantyClaim.MCPN.ruleResult.valid && 
+				this.warrantyClaim.Quantity.ruleResult.valid &&
+				!this.hasPartsError()){
 				
 				return false;		
 			} 

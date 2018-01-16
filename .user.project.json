@@ -1,6 +1,25 @@
 {
   "run": [
     {
+      "filePath": "/webapp/index.html",
+      "previewMode": 1,
+      "dataMode": 1,
+      "workspace": "withoutWorkspace",
+      "ui5ActiveVersion": null,
+      "ui5VerSource": null,
+      "isDefaultVersion": 0,
+      "urlParameters": [],
+      "hashParameter": "",
+      "backendSystem": [],
+      "urlParametersNotNeeded": false,
+      "_metadata": {
+        "runnerId": "webapprunner",
+        "id": 5055859,
+        "displayName": "Run index.html",
+        "lastRunTimeStamp": 1516078336428
+      }
+    },
+    {
       "filePath": "/webapp/CurrentUI5_Index.html",
       "previewMode": 1,
       "dataMode": 1,
@@ -15,7 +34,7 @@
         "id": 3504337,
         "runnerId": "webapprunner",
         "displayName": "Current UI5 from CDN",
-        "lastRunTimeStamp": 1514889876090
+        "lastRunTimeStamp": 1515071485587
       }
     },
     {
@@ -69,25 +88,6 @@
         "id": 6769649,
         "displayName": "Run indexOPA.html",
         "lastRunTimeStamp": 1509083174752
-      }
-    },
-    {
-      "filePath": "/webapp/index.html",
-      "previewMode": 1,
-      "dataMode": 1,
-      "workspace": "withoutWorkspace",
-      "ui5ActiveVersion": null,
-      "ui5VerSource": null,
-      "isDefaultVersion": 0,
-      "urlParameters": [],
-      "hashParameter": "",
-      "backendSystem": [],
-      "urlParametersNotNeeded": false,
-      "_metadata": {
-        "runnerId": "webapprunner",
-        "id": 5055859,
-        "displayName": "Run index.html",
-        "lastRunTimeStamp": 1509081932825
       }
     },
     {

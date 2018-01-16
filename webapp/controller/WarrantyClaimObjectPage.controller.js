@@ -434,7 +434,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = "1110000384"; //BATTERY CLAIM TEST
-			//claimNumber = "1110000577";
+			//claimNumber = "1110000695";
 			
 			var entityPath = "";
 			if (claimNumber){

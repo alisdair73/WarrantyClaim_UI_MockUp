@@ -98,6 +98,11 @@ sap.ui.define([], function() {
 			
 			return {"valid": quantity > 0 ? true:false, "errorTextID":"otherPartQuantity"};
 		},
+		
+		validateQuantityIsNotNegative: function(quantity){
+			
+			return {"valid": quantity >= 0 ? true:false, "errorTextID":"negativeQuantity"};
+		},
 
 		validateSerialNumbersArePopulated: function(fieldValue){
 

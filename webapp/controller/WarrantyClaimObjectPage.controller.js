@@ -117,6 +117,12 @@ sap.ui.define([
 			}*/
 		},
 		
+		onPrintTag: function(){
+			var claimNumber = this.getView().getModel("WarrantyClaim").getProperty("/ClaimNumber");
+			sap.m.URLHelper.redirect("/sap/opu/odata/sap/ZWTY_WARRANTY_CLAIMS_SRV/DocumentSet(DocumentNumber='" +
+            	+ claimNumber + "',DocumentType='ZPTA',LogResult=false)/$value", true);
+		},
+		
 		onDuplicateClaim: function(){
 			//Reset the Status based on the Claim Type
 			var claimType = this.getView().getModel("WarrantyClaim").getProperty("/ClaimType");

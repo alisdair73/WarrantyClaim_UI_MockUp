@@ -179,6 +179,7 @@
 					type="Emphasized" 
 					visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${ViewHelper>/warrantyUI/hasBeenValidated}}"
 				/>
+				<m:Button text="Print TAG" press="onPrintTag" visible="{= ${WarrantyClaim>/ProcessingStatus} !== 'X001'}"/>
 			</m:OverflowToolbar>
 		</footer>
     </ObjectPageLayout>

@@ -111,7 +111,7 @@ sap.ui.define([
 			
 			this.warrantyClaim.RecallValidFrom = jsonModel.RecallValidFrom; 
 			this.warrantyClaim.RecallValidTo = jsonModel.RecallValidTo;
-			this.warrantyClaim.SerialNumberIsMandatory = jsonModel.RecallSerialNumberIsMandatory;
+			this.warrantyClaim.SerialNumberIsMandatory = jsonModel.RecallIsSerialNoMandatory;
 			
 			//Only Update Item Information if a DB Update was triggered...
 			if(!validateMode){
@@ -189,7 +189,7 @@ sap.ui.define([
 			this.warrantyClaim.RecallNumber.value = oWarrantyClaim.RecallNumber;
 			this.warrantyClaim.RecallValidFrom = oWarrantyClaim.RecallValidFrom; 
 			this.warrantyClaim.RecallValidTo = oWarrantyClaim.RecallValidTo;
-			this.warrantyClaim.SerialNumberIsMandatory = oWarrantyClaim.RecallSerialNumberIsMandatory;
+			this.warrantyClaim.SerialNumberIsMandatory = oWarrantyClaim.RecallIsSerialNoMandatory;
 			this.warrantyClaim.RepairOrderNumber.value = oWarrantyClaim.RepairOrderNumber;
 			this.warrantyClaim.TotalCostOfClaim = oWarrantyClaim.TotalCostOfClaim;
 			this.warrantyClaim.ClaimCurrency = oWarrantyClaim.ClaimCurrency;
@@ -472,7 +472,7 @@ sap.ui.define([
 		validateMainCausalPartNumberQuantity: function(){
 			
 			this.warrantyClaim.Quantity.ruleResult = 
-				Rule.validateQuantityIsNotNegative(this.warrantyClaim.Quantity.value);                            
+				Rule.validateQuantityIsNotNegative(this.warrantyClaim.Quantity.value,"negativeQuantity");                            
 		},
 		
 		validateOtherPartPartNumber: function(part){
@@ -496,10 +496,14 @@ sap.ui.define([
 		},
 		
 		validateOtherPartQuantity: function(part){
-			
-			part.Quantity.ruleResult = Rule.validateQuantityIsGreaterThanZero(part.Quantity.value);
-			
+			part.Quantity.ruleResult = Rule.validateQuantityIsGreaterThanZero(part.Quantity.value, "otherPartQuantity");
 		},
+		
+		validateMPELONQuantity: function(LON){
+			if(this.warrantyClaim.ObjectType === "SERN"){ 
+				LON.Quantity.ruleResult = Rule.validateQuantityIsNotNegative(LON.Quantity.value,"MPELONQuantity");
+			}
+		},		
 		
 //			
 //          Below rules vary based on Claim Type 			
@@ -721,6 +725,7 @@ sap.ui.define([
 			this.validateMainCausalPartNumber();
 			this.validateMainCausalPartNumberQuantity();
 			this.validateParts();
+			this.validateLONs();
 		},
 		
 		validateParts: function(){
@@ -728,6 +733,14 @@ sap.ui.define([
 				if(!part.IsMCPN && !part.Deleted){
 					this.validateOtherPartPartNumber(part);
 					this.validateOtherPartQuantity(part);	
+				}
+			}.bind(this));
+		},
+		
+		validateLONs: function(){
+			this.warrantyClaim.Labour.forEach(function(LON){
+				if(!LON.Deleted){
+					this.validateMPELONQuantity(LON);	
 				}
 			}.bind(this));
 		},
@@ -740,6 +753,15 @@ sap.ui.define([
 			
 			return partsWithError.length > 0;
 		},
+		
+		hasMPELONError:function(){
+			
+			var LONsWithError = this.warrantyClaim.Labour.filter(function(LON){
+				return !LON.Quantity.ruleResult.valid && !LON.Deleted;
+			});
+			
+			return LONsWithError.length > 0;
+		},		
 		
 		hasFrontendValidationError: function(){
 			
@@ -765,7 +787,7 @@ sap.ui.define([
 				this.warrantyClaim.NewSerialNumber.ruleResult.valid &&
 				this.warrantyClaim.MCPN.ruleResult.valid && 
 				this.warrantyClaim.Quantity.ruleResult.valid &&
-				!this.hasPartsError()){
+				!this.hasPartsError() && !this.hasMPELONError()) {
 				
 				return false;		
 			} 

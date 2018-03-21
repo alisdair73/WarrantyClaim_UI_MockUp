@@ -4,8 +4,10 @@ sap.ui.define([
 	"WarrantyClaim_MockUp/model/models",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageToast",
-	"sap/m/MessageBox"
-], function(BaseController, Filter, Models, JSONModel, MessageToast, MessageBox) {
+	"sap/m/MessageBox",
+	"sap/ui/core/format/NumberFormat",
+	"WarrantyClaim_MockUp/model/WarrantyClaim"
+], function(BaseController, Filter, Models, JSONModel, MessageToast, MessageBox, NumberFormat,WarrantyClaim) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.LONDetailsBlockController", {
@@ -15,6 +17,7 @@ sap.ui.define([
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","RecallApplied",this._applyLONTableFilter,this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","LONModified",this._applyLONTableFilter,this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Saved",this._applyLONTableFilter,this);
+			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
 			
 			this.getView().setModel(new JSONModel({"HasLON":false}) , "LONHelper");
 			
@@ -39,12 +42,19 @@ sap.ui.define([
 				"Description": false
 			});
 			this.setModel(LONInvalid, "LONInvalid");
+			
+			this._hoursFormatter = NumberFormat.getFloatInstance({
+				maxFractionDigits: 1,
+				groupingEnabled: false,
+            	decimalSeparator: '.'
+			});			
 		},
 		
 		onExit:function(){
 			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","RecallApplied",this._applyLONTableFilter,this);
 			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","LONModified",this._applyLONTableFilter,this);
 			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Saved",this._applyLONTableFilter,this);
+			sap.ui.getCore().getEventBus().unsubscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
 		},
 		
 		onCheckLON: function(){
@@ -295,6 +305,19 @@ sap.ui.define([
 			this.getView().getModel("AdditionalLONHelper").setProperty("/OperationCodes",validLONCodes);
 		},
 		
+		onLONChanged:function(event){
+			//Ensure MPE entered LON is kept to 1DP
+			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
+			
+			this.getView().getModel("WarrantyClaim").setProperty( path + "/Quantity/value",
+				this._hoursFormatter.format(this.getView().getModel("WarrantyClaim").getProperty(path + "/Quantity/value")) 
+			);
+			
+			var LON = this.getView().getModel("WarrantyClaim").getProperty(path);	
+			WarrantyClaim.validateMPELONQuantity(LON);
+			this.logValidationMessage("Quantity" + path,"WarrantyClaim",path + "/Quantity");			
+		},
+		
 		onAdditionalLONChanged:function(event){
    
     		switch(event.getSource().sId){
@@ -311,7 +334,13 @@ sap.ui.define([
     				this.getView().getModel("LONInvalid").setProperty("/OperationCode",event.getSource().getValue() === "");
     				break;
     			case "requestedHours":
-    				this.getView().getModel("LONInvalid").setProperty("/RequestedHours",event.getSource().getValue() <= 0);
+    				//LON Hours is 1DP only
+    				this.getView().getModel("AdditionalLONHelper").setProperty("/RequestedHours",
+						this._hoursFormatter.format(this.getView().getModel("AdditionalLONHelper").getProperty("/RequestedHours")) 
+					);
+    				
+    				this.getView().getModel("LONInvalid").setProperty("/RequestedHours",
+    					this.getView().getModel("AdditionalLONHelper").getProperty("/RequestedHours") <= 0);
     				break;
     		}
     	},
@@ -409,7 +438,18 @@ sap.ui.define([
 			var filters = [];
 			filters.push(new Filter("Deleted",sap.ui.model.FilterOperator.EQ,false));
 			this.getView().byId("LONTable").getBinding("items").filter(filters);
-		}
+		},
+		
+		_refreshValidationMessages: function(){
+
+			this.getView().getModel("WarrantyClaim").getProperty("/Labour").forEach(function(LON,index){
+				
+				if(!LON.Deleted){
+					var oDataPath = "/Labour/" + index;
+					this.logValidationMessage("Quantity" + oDataPath,"WarrantyClaim",oDataPath + "/Quantity");
+				}
+			}.bind(this));
+		}		
 	});
 
 });

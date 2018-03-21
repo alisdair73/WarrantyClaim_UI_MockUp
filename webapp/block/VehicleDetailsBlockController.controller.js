@@ -139,7 +139,7 @@ sap.ui.define([
 				
 				this.getView().getModel("WarrantyClaim").setProperty("/Parts",recallItems);
 				this.getView().getModel("WarrantyClaim").setProperty("/Sublet",subletItems);
-				this.getView().getModel("WarrantyClaim").setProperty("/Labour".labourItems);
+				this.getView().getModel("WarrantyClaim").setProperty("/Labour",labourItems);
 				
 				this.getView().getModel("WarrantyClaim").setProperty("/SerialNumberIsMandatory",false);
 				
@@ -368,7 +368,7 @@ sap.ui.define([
 				var MCPNInspect = Models.createNewWarrantyItem("MAT");
 				MCPNInspect.setProperty("/PartNumber/value", recallGroup.getProperty("/MCP/materialNumber"));
 				MCPNInspect.setProperty("/Description", recallGroup.getProperty("/MCP/materialDescription"));
-				MCPNInspect.setProperty("/Quantity/value",recallGroup.getProperty("/MCP/quantity"));
+				MCPNInspect.setProperty("/Quantity/value",0);
 				MCPNInspect.setProperty("/PartRequested", "S");
 				MCPNInspect.setProperty("/IsMCPN", true);
 				recallItems.push(MCPNInspect.getProperty("/"));

@@ -3,13 +3,19 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"WarrantyClaim_MockUp/model/models",
 	"sap/ui/model/json/JSONModel",
-	"WarrantyClaim_MockUp/model/WarrantyClaim"
-], function(BaseController, Filter, Models, JSONModel, WarrantyClaim) {
+	"WarrantyClaim_MockUp/model/WarrantyClaim",
+	"sap/ui/core/format/NumberFormat"
+], function(BaseController, Filter, Models, JSONModel, WarrantyClaim,NumberFormat) {
 	"use strict";
 
 	return BaseController.extend("WarrantyClaim_MockUp.block.OtherPartsDetailsBlockController", {
 		
 		onInit: function(){
+			
+			this._quantityFormatter = NumberFormat.getFloatInstance({
+				maxFractionDigits: 0
+			});	
+			
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","RecallApplied",this._updateMCPN,this);
 			sap.ui.getCore().getEventBus().subscribe("PWA","Selected",this._updateMCPN,this);
 			sap.ui.getCore().getEventBus().subscribe("WarrantyClaim","Validate",this._refreshValidationMessages,this);
@@ -71,6 +77,11 @@ sap.ui.define([
 				    }
 				}
 				
+				//Apply Zero DP rule
+				this.getView().getModel("WarrantyClaim").setProperty("/Quantity/value",
+					this._quantityFormatter.format(this.getView().getModel("WarrantyClaim").getProperty("/Quantity/value")) 
+				);
+			
 				//Default the Parts Requested if Blank
 				if(this.getView().getModel("WarrantyClaim").getProperty("/PartRequested") === "" ||
 				   this.getView().getModel("WarrantyClaim").getProperty("/Quantity/value") === 0){
@@ -219,8 +230,13 @@ sap.ui.define([
 		onOtherPartQuantityChanged: function(event){
 				
 			var oDataPath = event.getSource().getParent().getBindingContext("WarrantyClaim").getPath();
+			
+			//Set to Zero DP	
+			this.getView().getModel("WarrantyClaim").setProperty( oDataPath + "/Quantity/value" ,
+				this._quantityFormatter.format(this.getView().getModel("WarrantyClaim").getProperty(oDataPath + "/Quantity/value")) 
+			);
+		
 			var part = this.getView().getModel("WarrantyClaim").getProperty(oDataPath);	
-				
 			WarrantyClaim.validateOtherPartQuantity(part);
 			this.logValidationMessage("Quantity" + oDataPath,"WarrantyClaim",oDataPath + "/Quantity");		
 		},

@@ -94,14 +94,14 @@ sap.ui.define([], function() {
 			return {"valid": validated, "errorTextID":"mandatoryField"};
 		},
 
-		validateQuantityIsGreaterThanZero: function(quantity){
+		validateQuantityIsGreaterThanZero: function(quantity, errorID){
 			
-			return {"valid": quantity > 0 ? true:false, "errorTextID":"otherPartQuantity"};
+			return {"valid": quantity > 0 ? true:false, "errorTextID":errorID};
 		},
 		
-		validateQuantityIsNotNegative: function(quantity){
+		validateQuantityIsNotNegative: function(quantity, errorID){
 			
-			return {"valid": quantity >= 0 ? true:false, "errorTextID":"negativeQuantity"};
+			return {"valid": quantity >= 0 ? true:false, "errorTextID":errorID};
 		},
 
 		validateSerialNumbersArePopulated: function(fieldValue){

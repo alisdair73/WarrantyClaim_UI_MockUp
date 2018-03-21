@@ -49,6 +49,7 @@
 							}" 
 							editable="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ClaimTypeGroup} !== 'RECALL'}"
 	                		visible="{= ${WarrantyClaim>/CanEdit} &amp;&amp; ${WarrantyClaim>/ObjectType} === 'SERN'}"
+	                		change="onLONChanged"
 	            		/>
 	        		</l:HorizontalLayout>	          
 	               

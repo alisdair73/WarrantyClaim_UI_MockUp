@@ -103,7 +103,7 @@ sap.ui.define([
 						symptomCatalogCode = "ZSYM3";
 						break;
 					case "50":
-						symptomCatalogCode = "ZSYM4";
+						symptomCatalogCode = "ZSYM3";
 						break;
 				}
 			}
@@ -128,7 +128,7 @@ sap.ui.define([
 						defectCatalogCode = "ZDEF3";
 						break;
 					case "50":
-						defectCatalogCode = "ZDEF4";
+						defectCatalogCode = "ZDEF3";
 						break;
 				}
 			}

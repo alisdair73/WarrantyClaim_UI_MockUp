@@ -60,15 +60,23 @@ sap.ui.define([
 			var path = event.getSource().getBindingContext("WarrantyClaim").getPath();
 			var itemIndex = path.split("/")[2];
 			
-			var sublet = new JSONModel(sublets[itemIndex]);
-			sublet.setProperty("/path",path);
+			// Deep copy
+			var sublet = jQuery.extend(true, {}, sublets[itemIndex]);
+			sublet.path = path;
 			
-            this.getView().setModel(sublet, "SubletItem");
+            this.getView().setModel(new JSONModel(sublet), "SubletItem");
             
         	if (!this._subletDialog) {
 				this._subletDialog = sap.ui.xmlfragment("WarrantyClaim_MockUp.view.SubletSelectionDialog", this);
 				this.getView().addDependent(this._subletDialog);
 			}
+			
+			//Reset the Validation Rules
+			this.getView().getModel("subletInvalid").setProperty("/subletCode",false);
+    		this.getView().getModel("subletInvalid").setProperty("/invoice",false);
+    		this.getView().getModel("subletInvalid").setProperty("/businessName",false);
+    		this.getView().getModel("subletInvalid").setProperty("/quantity",false);
+			
 			this._subletDialog.open();
     	},
     	

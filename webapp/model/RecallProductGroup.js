@@ -1,117 +1,98 @@
 sap.ui.define([
-    "sap/ui/base/Object",
-    "sap/ui/model/json/JSONModel",
-    "sap/ui/model/Filter"
-], function(BaseObject, JSONModel, Filter) {
+    "sap/ui/base/Object"
+], function(BaseObject) {
   "use strict";
   
   return BaseObject.extend("WarrantyClaim_MockUp.model.RecallProductGroup", {
     
     	constructor: function() {
-    		
-    		this._recallGroup = {
-				"inspect":{"selected":false, "displayText":"", "visible":false, "LON":"", "quantity":""},
-				"replace":{"selected":false, "displayText":"", "visible":false, "LON":"", "quantity":""},
-				"MCP":{"materialNumber":"","materialDescription":"","quantity":0},
-				"maxGroups":0,
-				"subletItems":[],
-				"selectedGroup": []
+			this._recall = {
+				"labourTypes":[]
+			//	"subletItems":[]
 			};
-			this._groupParts = [];
     	},
       
-		_applyReplacementSelectionRuleForMaterial: function(rule){
+    	buildRecallModel: function(recallItems){
 			
-			var groups = rule.split("-");
-			var recallGroups = [];
-
-	        groups.forEach(function(group, index){
-	        	
-	        	var recallGroup = {	
-					"isRadioButton": false,
-					"isStepInput": false,
-					"stepInput": {"minValue": 0, "maxValue": 0, "quantity":0},
-					"radioButton": {"selected": false, "group":""}
-				};
-				
-	          var materialConfig = group.split(".");
-	          var inGroup = materialConfig[0];
-	          var subgroup = materialConfig[1];
-	          var optional = materialConfig[2];
-	          var quantity = materialConfig[3];
-	          
-	          if(inGroup !== "0"){
-	          	if(subgroup === "A"){
-	          		//Entry Field
-	          		var minValue = 0;
-	          		if(optional !== "O"){
-	          			minValue = 1;
-	          		}
-	          		
-	          		var maxValue = minValue;
-	          		if(quantity.indexOf("*") === -1){
-	          			maxValue = parseInt(quantity);
-	          		} else {
-	          			maxValue = parseInt(quantity.substring(0, quantity.indexOf("*")));	          		
-	          			minValue = maxValue;
-	          		}
-	          		//Create the Step Input with Min and Max
-	          		recallGroup.isStepInput = true;
-	          		recallGroup.stepInput.minValue = minValue;
-	          		recallGroup.stepInput.maxValue = maxValue;
-	          		
-	          	} else {
-	          		recallGroup.isRadioButton = true;
-	          		recallGroup.radioButton.group = "G" + index + subgroup;
-	          	}
-	          }
-	          
-	          recallGroups.push(recallGroup);
-	        }.bind(this));
-			return recallGroups;
-		},
-		
-		buildRecallItemsModel: function(recallItems){
+			//Build List of Labour Types
+			recallItems.forEach(function(recallItem){
+				if(recallItem.ItemType === "FR"){
+					this._recall.labourTypes.push({
+						"labourType": recallItem.FRTType,
+						"displayText": recallItem.ItemKeyDescription,
+						"tabIcon":recallItem.FRTIcon,
+						"tabText":recallItem.FRTDescription,
+						"selected": this._recall.labourTypes.length === 0 ? true:false,
+						"LONCode": recallItem.ItemKey,
+						"quantity": recallItem.Quantity,
+						"replacementMethodCount":0,
+						"MCPN":{},
+						"selectionRule":recallItem.ReplacementSelectionRule,
+						"sublet":[],
+						"parts":[]
+					});
+				}
+			}.bind(this));
 			
-//          MCPN
-			recallItems.forEach(
-  				function(recallItem){
-					if(recallItem.ItemType === 'MAT' && recallItem.IsMcpn){
-						this._recallGroup.MCP.materialNumber = recallItem.PartNumber;
-						this._recallGroup.MCP.materialDescription = recallItem.Description;
-						this._recallGroup.MCP.quantity = recallItem.Quantity;
-					}
-				}.bind(this)
-			);
+			//Get the MCPN and Parts for the Labour Type
+			this._recall.labourTypes.forEach(function(labourType){
 			
-//			Labour
-			recallItems.forEach(
-  				function(recallItem, index){
-					if(recallItem.ItemType === "FR"){
+				var labourTypeGroups = labourType.selectionRule.split("-");
+				var partsKeyList = [];
+				var subletKeyList = [];
+			
+				labourTypeGroups.forEach(function(labourTypeGroup, index){
+					//Is this group included
+					if(labourTypeGroup.substr(0, 1) === "1"){
+						//Check for any matching Materials and MCPNs
+						recallItems.forEach(function(recallItem){
+							
+							switch (recallItem.ItemType) {
+								case "MAT":
+									var partGroups = recallItem.ReplacementSelectionRule.split("-");
+									if(partGroups[index].substr(0, 1) === "1"){
+										if(recallItem.IsMcpn){
+											labourType.MCPN.materialNumber = recallItem.PartNumber;
+											labourType.MCPN.materialDescription = recallItem.Description;
+											labourType.MCPN.quantity = recallItem.Quantity;
+										} else {
+											if (partsKeyList.indexOf(recallItem.PartNumber) === -1){
+												labourType.parts.push({
+													"materialNumber": recallItem.PartNumber,
+													"materialDescription": recallItem.Description,
+													"quantity": recallItem.Quantity,
+													"selectionRule":recallItem.ReplacementSelectionRule
+												});
+												partsKeyList.push(recallItem.PartNumber);
+											}
+										}
+									}
+									break;
+									
+								case "SUBL":
+									var subletGroups = recallItem.ReplacementSelectionRule.split("-");
+									if(subletGroups[index].substr(0, 1) === "1"){
+										//This Sublet is included
+										if (subletKeyList.indexOf(recallItem.ItemKey) === -1){
+											labourType.sublet.push({
+												"subletCode": recallItem.ItemKey,
+												"quantity": recallItem.Quantity,
+												"fixedSublet": recallItem.IsSubletFixed,
+												"selectionRule": recallItem.ReplacementSelectionRule
+											});
+											subletKeyList.push(recallItem.ItemKey);
+										}
+									}
+								break;
+							}
+						});
 						
-						switch(recallItem.FRTType){
-							case "IN":
-								this._recallGroup.inspect.displayText = "Inspect: " + recallItem.ItemKeyDescription;
-								this._recallGroup.inspect.selected = true;
-								this._recallGroup.inspect.visible = true;
-								this._recallGroup.inspect.LON = recallItem.ItemKey;
-								this._recallGroup.inspect.quantity = recallItem.Quantity;
-								break;
-								
-							case "RP":
-							case "RE":
-								this._recallGroup.replace.displayText = "Replacement: " + recallItem.ItemKeyDescription;
-								this._recallGroup.replace.visible = true;
-								this._recallGroup.replace.selected = !this._recallGroup.inspect.selected;
-								this._recallGroup.replace.LON = recallItem.ItemKey;
-								this._recallGroup.replace.quantity = recallItem.Quantity;
-								break;
-						}
+						labourType.replacementMethodCount += 1;
 					}
-				}.bind(this)
-			);
+				});
+			});
 			
-//			Sublet
+/*//			Sublet
 			recallItems.forEach(
   				function(recallItem){
 					if(recallItem.ItemType === 'SUBL'){
@@ -120,48 +101,12 @@ sap.ui.define([
 							"quantity": recallItem.Quantity,
 							"fixedSublet": recallItem.IsSubletFixed
 						};
-						this._recallGroup.subletItems.push(sublet);
+						this._recall.subletItems.push(sublet);
 					}
 				}.bind(this)
-			);
+			);*/
 			
-			//Recall Parts (for all groups)
-			var parts = recallItems.filter(
-  				function(recallItem){
-					return recallItem.ItemType === 'MAT' && !recallItem.IsMcpn;
-				}
-			);
-			
-			if(parts.length > 0){
-				parts.forEach(function(part, index){
-					
-					var groupPart = {
-						"materialNumber": part.PartNumber,
-						"materialDescription": part.Description,
-						"groups":[]
-					};	
-					
-					if(part.ReplacementSelectionRule === ""){
-
-						groupPart.groups.push({	
-							"isRadioButton": false,
-							"isStepInput": true,
-							"stepInput": {"minValue": part.Quantity, "maxValue": part.Quantity, "quantity":part.Quantity}
-						});
-						
-					} else {
-						groupPart.groups = this._applyReplacementSelectionRuleForMaterial(part.ReplacementSelectionRule);
-					}
-					this._recallGroup.maxGroups = Math.max(this._recallGroup.maxGroups, groupPart.groups.length);
-					this._groupParts.push(groupPart);
-				}.bind(this));
-			}
-			
-			for(var i=0;i<this._recallGroup.maxGroups;i++){
-				this._recallGroup.selectedGroup.push( i === 0 );
-			}
-		
-			return {"RecallGroup": this._recallGroup, "RecallItems":this._groupParts};
+			return {"Recall": this._recall};
 		}
     });
 });

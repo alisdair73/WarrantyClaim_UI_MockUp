@@ -1,33 +1,35 @@
 <mvc:View xmlns:html="http://www.w3.org/1999/xhtml" 
-id="recallViewTest"
+	id="recallViewTest"
 	xmlns="sap.m" 
 	xmlns:core="sap.ui.core" 
 	xmlns:l="sap.ui.layout" 
 	xmlns:mvc="sap.ui.core.mvc"
 	controllerName="WarrantyClaim_MockUp.controller.RecallProductGroupSelector"
 >
-	<RadioButtonGroup columns="1" width="100%" class="sapUiMediumMarginBottom">
-		<RadioButton selected="{RecallGroup>/inspect/selected}" text="{RecallGroup>/inspect/displayText}" groupName="Labour" visible="{RecallGroup>/inspect/visible}"/>
-		<RadioButton selected="{RecallGroup>/replace/selected}" text="{RecallGroup>/replace/displayText}" groupName="Labour" visible="{RecallGroup>/replace/visible}"/>
-	</RadioButtonGroup>
-	<Table 
-		id="recallItems"
-		items="{RecallItems>/groupParts}" 
-		showOverlay="{RecallGroup>/inspect/selected}"
+	<IconTabBar
+	  items="{Recall>/labourTypes}"
+	  select="onLabourTypeSelected"
+	  expandable="false"
 	>
-		<columns>
-    		<Column hAlign="Left" styleClass="cellBorderRight" width="11rem">
-    			<header>
-	            	<Label text="DUMMY"/>
-	            </header>
-	        </Column>
-		</columns>	
 		<items>
-			<ColumnListItem>
-				<cells>
-	        		<Text text="DUMMY"/>
-	        	</cells>
-	        </ColumnListItem>        
-	    </items>
-	</Table>
+			<IconTabFilter
+				icon="{Recall>tabIcon}"
+				iconColor="Neutral"
+				count="{Recall>replacementMethodCount}"
+				text="{Recall>tabText}"
+				key="{Recall>labourType}" 
+			/>
+		</items>
+		<content>
+			<Table id="recallItems">
+				<headerToolbar>
+					<Toolbar>
+						<content>
+							<Title text="{RecallMethodHelper>/labourTypeText}" level="H3"/>
+						</content>
+					</Toolbar>
+				</headerToolbar>
+			</Table>
+		</content>
+	</IconTabBar>
 </mvc:View>

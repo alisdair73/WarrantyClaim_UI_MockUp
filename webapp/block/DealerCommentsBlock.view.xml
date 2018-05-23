@@ -45,7 +45,8 @@
 											items="{DefectCodes>/}"
 											loadItems="readDefectCatalog"
 											selectionChange="onDefectCodeSelectedL1"
-											selectedKey="{ViewHelper>/warrantyUI/defectCodeL1}"
+											selectedKey="{ViewHelper>/warrantyUI/defectCodeL1/value}"
+											valueState="{= ${ViewHelper>/warrantyUI/defectCodeL1/ruleResult/valid} ? 'None':'Error'}"
 										>
 											<core:ListItem key="{DefectCodes>code}" text="{DefectCodes>text}"/>
 										</ComboBox>	

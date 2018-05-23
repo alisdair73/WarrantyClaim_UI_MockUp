@@ -26,10 +26,19 @@ sap.ui.define([
 		},
 		
 		onDefectCodeSelectedL1: function(oEvent){
-			this._updateL2Defects(oEvent.getParameter("selectedItem").mProperties.key);
+			if(oEvent.getParameter("selectedItem")){
+				this._updateL2Defects(oEvent.getParameter("selectedItem").mProperties.key);
+				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1/ruleResult/valid",true);
+			} else {
+				this.getModel("DefectCodesHelper").setProperty("/DefectsL2",[]);
+				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1/ruleResult/valid",false);
+			}
+			
 			this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
 			WarrantyClaim.validateDefectCode();
 			this.logValidationMessage("DefectCode");
+				
+			this.logValidationMessage("defectCodeL1","ViewHelper","/warrantyUI/defectCodeL1");
 		},		
 		
 		onDefectCodeChanged: function(){
@@ -49,8 +58,8 @@ sap.ui.define([
 		_defectCatalogLoaded: function(sChannelId, sEventId, oData){
 			if(this.getModel("WarrantyClaim").getProperty("/DefectCode/value")){
 				var defectCodeLevels = this.getModel("WarrantyClaim").getProperty("/DefectCode/value").split("-");
-				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1",defectCodeLevels[0]);
-				this._updateL2Defects(this.getModel("ViewHelper").getProperty("/warrantyUI/defectCodeL1"));
+				this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1/value",defectCodeLevels[0]);
+				this._updateL2Defects(this.getModel("ViewHelper").getProperty("/warrantyUI/defectCodeL1/value"));
 			}
 		},
 		
@@ -67,6 +76,12 @@ sap.ui.define([
 		},
 		
     	_refreshValidationMessages: function(){
+    		
+    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/defectCodeL1/value") === ""){
+    			this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1/ruleResult/valid",false);
+    		}
+    		
+    		this.logValidationMessage("defectCodeL1","ViewHelper","/warrantyUI/defectCodeL1");
 			this.logValidationMessage("DefectCode");
 			this.logValidationMessage("DealerComments");
     	}

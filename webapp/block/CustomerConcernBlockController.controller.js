@@ -26,22 +26,41 @@ sap.ui.define([
 		},
 		
 		onSymptomCodeSelectedL1: function(oEvent){
-			this._updateL2Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
+			
+			if(oEvent.getParameter("selectedItem")){
+				this._updateL2Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
+				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1/ruleResult/valid",true);
+			} else {
+				this.getModel("SymptomCodesHelper").setProperty("/SymptomsL2",[]);
+			    this.getModel("SymptomCodesHelper").setProperty("/SymptomsL3",[]);
+				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1/ruleResult/valid",false);	
+			}
 			
 			this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
 			WarrantyClaim.validateSymptomCode();
 			this.logValidationMessage("SymptomCode");
 			
-			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2","");
+			this.logValidationMessage("symptomCodeL1","ViewHelper","/warrantyUI/symptomCodeL1");
+			
+			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/value","");
+			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/ruleResult/valid",false);
+			this.logValidationMessage("symptomCodeL2","ViewHelper","/warrantyUI/symptomCodeL2");
 		},
 		
+		
 		onSymptomCodeSelectedL2: function(oEvent){
-			this._updateL3Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
-			
+			if(oEvent.getParameter("selectedItem")){
+				this._updateL3Symptoms(oEvent.getParameter("selectedItem").mProperties.key);
+				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/ruleResult/valid",true);
+			} else {
+				this.getModel("SymptomCodesHelper").setProperty("/SymptomsL3",[]);
+				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/ruleResult/valid",false);
+			}
 			this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
 			WarrantyClaim.validateSymptomCode();
 			this.logValidationMessage("SymptomCode");
 			
+			this.logValidationMessage("symptomCodeL2","ViewHelper","/warrantyUI/symptomCodeL2");
 		},
 		
 		onCustomerConcernChanged: function() {
@@ -63,10 +82,10 @@ sap.ui.define([
 			//A Catalog has been loaded - Set relevant collections
 			if(this.getModel("WarrantyClaim").getProperty("/SymptomCode/value")){
 				var symptomCodeLevels = this.getModel("WarrantyClaim").getProperty("/SymptomCode/value").split("-");
-				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1",symptomCodeLevels[0]);
-				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2",symptomCodeLevels[0] + '-' + symptomCodeLevels[1]);
-				this._updateL2Symptoms(this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL1"));
-				this._updateL3Symptoms(this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL2"));
+				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1/value",symptomCodeLevels[0]);
+				this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/value",symptomCodeLevels[0] + '-' + symptomCodeLevels[1]);
+				this._updateL2Symptoms(this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL1/value"));
+				this._updateL3Symptoms(this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL2/value"));
 			}
 		},
 
@@ -96,6 +115,17 @@ sap.ui.define([
 		},
 		
     	_refreshValidationMessages: function(){
+    		
+    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL1/value") === ""){
+    			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1/ruleResult/valid",false);
+    		}
+
+    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL2/value") === ""){
+    			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/ruleResult/valid",false);
+    		}
+    		
+			this.logValidationMessage("symptomCodeL1","ViewHelper","/warrantyUI/symptomCodeL1");
+			this.logValidationMessage("symptomCodeL2","ViewHelper","/warrantyUI/symptomCodeL2");    		
 			this.logValidationMessage("SymptomCode");
 			this.logValidationMessage("CustomerConcern");
     	}

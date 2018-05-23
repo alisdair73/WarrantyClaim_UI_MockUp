@@ -85,11 +85,11 @@ sap.ui.define([
 		
 		_resetCatalogFields: function(){
 			//Need to update the Catalogs - Reset Data
-			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1","");
-			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2","");
+			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1/value","");
+			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/value","");
 			this.getModel("WarrantyClaim").setProperty("/SymptomCode/value","");
 			
-			this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1","");
+			this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1/value","");
 			this.getModel("WarrantyClaim").setProperty("/DefectCode/value","");
 			
 			sap.ui.getCore().getEventBus().publish("WarrantyClaim","LoadCatalogForMaterialDivision");

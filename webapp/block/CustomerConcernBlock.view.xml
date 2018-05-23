@@ -48,7 +48,8 @@
 											}"
 											loadItems="readSymptomCatalog"
 											selectionChange="onSymptomCodeSelectedL1"
-											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL1}"
+											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL1/value}"
+											valueState="{= ${ViewHelper>/warrantyUI/symptomCodeL1/ruleResult/valid} ? 'None':'Error'}"
 										>
 											<core:ListItem key="{SymptomCodes>code}" text="{SymptomCodes>text}"/>
 										</ComboBox>	
@@ -68,7 +69,8 @@
 												path: 'SymptomCodesHelper>/SymptomsL2'
 											}"
 											selectionChange="onSymptomCodeSelectedL2"
-											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL2}"
+											selectedKey="{ViewHelper>/warrantyUI/symptomCodeL2/value}"
+											valueState="{= ${ViewHelper>/warrantyUI/symptomCodeL2/ruleResult/valid} ? 'None':'Error'}"
 										>
 											<core:ListItem key="{SymptomCodesHelper>code}" text="{SymptomCodesHelper>text}"/>
 										</ComboBox>	

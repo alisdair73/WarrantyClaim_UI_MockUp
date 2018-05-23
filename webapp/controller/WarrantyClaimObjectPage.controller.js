@@ -17,6 +17,7 @@ sap.ui.define([
 		
 		onInit: function() {
 
+			sap.ui.getCore().getMessageManager().removeAllMessages();
 			this.getView().setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
 			var oViewModel = new JSONModel({
 				"busy": false,
@@ -28,9 +29,9 @@ sap.ui.define([
 					"dealerName":"",
 					"dealerDescription":"",
 					"subletCodeDescription":"",
-					"symptomCodeL1": "",
-					"symptomCodeL2": "",
-					"defectCodeL1": "",
+					"symptomCodeL1": { "value":"", "ruleResult":{"valid": true, "errorTextID":"mandatoryField"}},
+					"symptomCodeL2": { "value":"", "ruleResult":{"valid": true, "errorTextID":"mandatoryField"}},
+					"defectCodeL1":  { "value":"", "ruleResult":{"valid": true, "errorTextID":"mandatoryField"}},
 					"internalRecallNumber":"",
 					"hasBeenValidated": false,
 					//"attachmentMode":"maintain", //NEW APPROACH
@@ -440,7 +441,7 @@ sap.ui.define([
 			
 			//Testing
 			//claimNumber = "1110000384"; //BATTERY CLAIM TEST
-			//claimNumber = "1110000695";
+			//claimNumber = "1110000978";
 			
 			var entityPath = "";
 			if (claimNumber){

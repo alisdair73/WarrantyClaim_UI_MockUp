@@ -14,11 +14,13 @@ sap.ui.define([
       
     	buildRecallModel: function(recallItems){
 			
+			//Will need to work out what to do with multiple FR of the same labour items...
+			
 			//Build List of Labour Types
-			recallItems.forEach(function(recallItem){
+			recallItems.forEach(function(recallItem,index){
 				if(recallItem.ItemType === "FR"){
 					this._recall.labourTypes.push({
-						"labourType": recallItem.FRTType,
+						"labourType": recallItem.FRTType + index, //Make sure each TAB is unique
 						"displayText": recallItem.ItemKeyDescription,
 						"tabIcon":recallItem.FRTIcon,
 						"tabText":recallItem.FRTDescription,
@@ -27,7 +29,7 @@ sap.ui.define([
 						"quantity": recallItem.Quantity,
 						"replacementMethodCount":0,
 						"MCPN":{},
-						"selectionRule":recallItem.ReplacementSelectionRule,
+						"selectionRule":recallItem.ReplacementSelectionRule, //The first part of x.x.x.x determines which items are part of this Labour Group
 						"sublet":[],
 						"parts":[]
 					});
@@ -42,7 +44,7 @@ sap.ui.define([
 				var subletKeyList = [];
 			
 				labourTypeGroups.forEach(function(labourTypeGroup, index){
-					//Is this group included
+					//Is this group included - eg for IN/RE/RP what Materials/MCPN are to be associated.
 					if(labourTypeGroup.substr(0, 1) === "1"){
 						//Check for any matching Materials and MCPNs
 						recallItems.forEach(function(recallItem){
@@ -54,7 +56,7 @@ sap.ui.define([
 										if(recallItem.IsMcpn){
 											labourType.MCPN.materialNumber = recallItem.PartNumber;
 											labourType.MCPN.materialDescription = recallItem.Description;
-											labourType.MCPN.quantity = recallItem.Quantity;
+											labourType.MCPN.quantity = labourType.labourType === "IN" ? 0:recallItem.Quantity;
 										} else {
 											if (partsKeyList.indexOf(recallItem.PartNumber) === -1){
 												labourType.parts.push({

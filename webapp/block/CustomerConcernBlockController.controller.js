@@ -116,12 +116,18 @@ sap.ui.define([
 		
     	_refreshValidationMessages: function(){
     		
-    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL1/value") === ""){
-    			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1/ruleResult/valid",false);
-    		}
-
-    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL2/value") === ""){
-    			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/ruleResult/valid",false);
+    		switch(this.getModel("WarrantyClaim").getProperty("/ClaimTypeGroup")){
+				case "NORMAL":
+				case "GOODWILL":
+				case "PARTS":
+					
+		    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL1/value") === ""){
+		    			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL1/ruleResult/valid",false);
+		    		}
+		
+		    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/symptomCodeL2/value") === ""){
+		    			this.getModel("ViewHelper").setProperty("/warrantyUI/symptomCodeL2/ruleResult/valid",false);
+		    		}
     		}
     		
 			this.logValidationMessage("symptomCodeL1","ViewHelper","/warrantyUI/symptomCodeL1");

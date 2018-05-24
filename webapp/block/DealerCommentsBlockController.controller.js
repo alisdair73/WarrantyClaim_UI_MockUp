@@ -77,8 +77,13 @@ sap.ui.define([
 		
     	_refreshValidationMessages: function(){
     		
-    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/defectCodeL1/value") === ""){
-    			this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1/ruleResult/valid",false);
+    		switch(this.getModel("WarrantyClaim").getProperty("/ClaimTypeGroup")){
+				case "NORMAL":
+				case "GOODWILL":
+				case "PARTS":
+		    		if (this.getModel("ViewHelper").getProperty("/warrantyUI/defectCodeL1/value") === ""){
+		    			this.getModel("ViewHelper").setProperty("/warrantyUI/defectCodeL1/ruleResult/valid",false);
+		    		}
     		}
     		
     		this.logValidationMessage("defectCodeL1","ViewHelper","/warrantyUI/defectCodeL1");

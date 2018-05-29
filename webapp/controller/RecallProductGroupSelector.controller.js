@@ -32,12 +32,17 @@ sap.ui.define([
 				}
 				
 				var recallItems = [];
-				recallItems.push({
-					"materialNumber":labourType.MCPN.materialNumber,
-					"materialDescription":labourType.MCPN.materialDescription,
-					"isMCPN":true,
-					"MCPNIcon":"sap-icon://accept",
-					"quantity":labourType.MCPN.quantity
+				labourType.MCPN.forEach(function(MCPN){
+					recallItems.push({
+						"materialNumber":MCPN.materialNumber,
+						"materialDescription":MCPN.materialDescription,
+						"isMCPN":true,
+						"MCPNIcon":"sap-icon://accept",
+						"quantity":MCPN.quantity,
+						"selectionRule":MCPN.selectionRule,
+						"isSelected": [],
+						"selectedQuantity":0
+					});
 				});
 				
 				labourType.parts.forEach(function(part){

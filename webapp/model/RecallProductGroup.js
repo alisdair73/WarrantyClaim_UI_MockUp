@@ -28,7 +28,7 @@ sap.ui.define([
 						"LONCode": recallItem.ItemKey,
 						"quantity": recallItem.Quantity,
 						"replacementMethodCount":0,
-						"MCPN":{},
+						"MCPN":[],
 						"selectionRule":recallItem.ReplacementSelectionRule, //The first part of x.x.x.x determines which items are part of this Labour Group
 						"sublet":[],
 						"parts":[]
@@ -42,6 +42,7 @@ sap.ui.define([
 				var labourTypeGroups = labourType.selectionRule.split("-");
 				var partsKeyList = [];
 				var subletKeyList = [];
+				var MCPNKeyList = [];
 			
 				labourTypeGroups.forEach(function(labourTypeGroup, index){
 					//Is this group included - eg for IN/RE/RP what Materials/MCPN are to be associated.
@@ -54,9 +55,15 @@ sap.ui.define([
 									var partGroups = recallItem.ReplacementSelectionRule.split("-");
 									if(partGroups[index].substr(0, 1) === "1"){
 										if(recallItem.IsMcpn){
-											labourType.MCPN.materialNumber = recallItem.PartNumber;
-											labourType.MCPN.materialDescription = recallItem.Description;
-											labourType.MCPN.quantity = labourType.labourType === "IN" ? 0:recallItem.Quantity;
+											if (MCPNKeyList.indexOf(recallItem.PartNumber) === -1){
+												labourType.MCPN.push({
+													"materialNumber": recallItem.PartNumber,
+													"materialDescription": recallItem.Description,
+												    "quantity": recallItem.Quantity,
+												    "selectionRule":recallItem.ReplacementSelectionRule
+												});
+												MCPNKeyList.push(recallItem.PartNumber);
+											}
 										} else {
 											if (partsKeyList.indexOf(recallItem.PartNumber) === -1){
 												labourType.parts.push({
@@ -93,20 +100,6 @@ sap.ui.define([
 					}
 				});
 			});
-			
-/*//			Sublet
-			recallItems.forEach(
-  				function(recallItem){
-					if(recallItem.ItemType === 'SUBL'){
-						var sublet = {	
-							"subletCode": recallItem.ItemKey,
-							"quantity": recallItem.Quantity,
-							"fixedSublet": recallItem.IsSubletFixed
-						};
-						this._recall.subletItems.push(sublet);
-					}
-				}.bind(this)
-			);*/
 			
 			return {"Recall": this._recall};
 		}

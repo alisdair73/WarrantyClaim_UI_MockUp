@@ -41,7 +41,7 @@ sap.ui.define([
 						"quantity":MCPN.quantity,
 						"selectionRule":MCPN.selectionRule,
 						"isSelected": [],
-						"selectedQuantity":0
+						"selectedQuantity":[]
 					});
 				});
 				
@@ -51,7 +51,7 @@ sap.ui.define([
 						"materialDescription": part.materialDescription,
 						"quantity": part.quantity,
 						"isSelected": [],
-						"selectedQuantity":0,
+						"selectedQuantity":[],
 						"selectionRule":part.selectionRule,
 						"isMCPN":false,
 						"MCPNIcon":""
@@ -134,7 +134,7 @@ sap.ui.define([
 				//"labourTypeSublet":
 			}),"RecallMethodHelper");
 				
-			if(labourType.parts.length > 0){ //No Parts so No Replacement Methods
+//			if(labourType.parts.length > 0){ //No Parts so No Replacement Methods
 				for(var i=0; i<labourType.replacementMethodCount; i++){
 				
 					var columnItems = [];
@@ -162,7 +162,7 @@ sap.ui.define([
 					);
 				} 
 				//this.getView().getModel("RecallMethodHelper").setProperty("/selectedMethod",selectedMethod);
-			}
+//			}
 			
 			recallItemsTable.bindItems({
 				"path":"RecallItems>/", 
@@ -182,7 +182,7 @@ sap.ui.define([
 			var labourTypeSelectionRule = this.getView().getModel("RecallMethodHelper").getProperty("/labourTypeSelectionRule");
 			var labourTypeMethods = labourTypeSelectionRule.split("-");
 			
-			if(!oContext.getProperty(oContext.sPath).isMCPN){
+//			if(!oContext.getProperty(oContext.sPath).isMCPN){
 				
 				var methods = oContext.getProperty(oContext.sPath).selectionRule.split("-");
 				var methodIndex = 0;
@@ -212,12 +212,12 @@ sap.ui.define([
 				          			minValue = maxValue;
 				          		}
 				          		
-				          		oContext.getProperty(oContext.sPath).selectedQuantity = maxValue;
+				          		oContext.getProperty(oContext.sPath).selectedQuantity.push(maxValue);
 				          		oContext.getProperty(oContext.sPath).isSelected[methodIndex] = true;
 								if(minValue === maxValue){
 									tableCells.push(
 										new sap.m.Input({
-											"value":"{RecallItems>selectedQuantity}", 
+											"value":"{RecallItems>/selectedQuantity/" + methodIndex + "}", 
 											"enabled":"{= ${RecallMethodHelper>/selectedMethod/" + methodIndex + "}}",
 											"editable": false,
 											"textAlign":"Center"
@@ -228,7 +228,7 @@ sap.ui.define([
 										new sap.m.StepInput({
 											"min":minValue,
 											"max":maxValue,
-											"value":"{RecallItems>selectedQuantity}",
+											"value":"{RecallItems>/selectedQuantity/" + methodIndex + "}",
 											"editable":"{RecallMethodHelper>/selectedMethod/" + methodIndex + "}",
 											"enabled":"{RecallMethodHelper>/selectedMethod/" + methodIndex + "}"
 										})
@@ -244,7 +244,7 @@ sap.ui.define([
 				          		} else {
 				          			oContext.getProperty(oContext.sPath).isSelected[methodIndex] = false;
 				          		}
-				          		oContext.getProperty(oContext.sPath).selectedQuantity = oContext.getProperty(oContext.sPath).quantity;
+				          		oContext.getProperty(oContext.sPath).selectedQuantity.push(oContext.getProperty(oContext.sPath).quantity);
 				          		
 				    			tableCells.push(
 									new sap.ui.layout.HorizontalLayout({
@@ -265,7 +265,7 @@ sap.ui.define([
 						methodIndex += 1;
 					}
 				}.bind(this));
-			}
+//			}
 
 			return new sap.m.ColumnListItem({"cells" : tableCells});
 		}

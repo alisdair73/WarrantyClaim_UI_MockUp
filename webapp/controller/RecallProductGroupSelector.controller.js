@@ -214,10 +214,11 @@ sap.ui.define([
 				          		
 				          		oContext.getProperty(oContext.sPath).selectedQuantity.push(maxValue);
 				          		oContext.getProperty(oContext.sPath).isSelected[methodIndex] = true;
+				          		
 								if(minValue === maxValue){
 									tableCells.push(
 										new sap.m.Input({
-											"value":"{RecallItems>/selectedQuantity/" + methodIndex + "}", 
+											"value":"{RecallItems>selectedQuantity/" + methodIndex + "}", 
 											"enabled":"{= ${RecallMethodHelper>/selectedMethod/" + methodIndex + "}}",
 											"editable": false,
 											"textAlign":"Center"
@@ -228,7 +229,7 @@ sap.ui.define([
 										new sap.m.StepInput({
 											"min":minValue,
 											"max":maxValue,
-											"value":"{RecallItems>/selectedQuantity/" + methodIndex + "}",
+											"value":"{RecallItems>selectedQuantity/" + methodIndex + "}",
 											"editable":"{RecallMethodHelper>/selectedMethod/" + methodIndex + "}",
 											"enabled":"{RecallMethodHelper>/selectedMethod/" + methodIndex + "}"
 										})

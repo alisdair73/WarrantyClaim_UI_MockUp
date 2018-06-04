@@ -87,7 +87,8 @@ sap.ui.define([
 												"subletCode": recallItem.ItemKey,
 												"quantity": recallItem.Quantity,
 												"fixedSublet": recallItem.IsSubletFixed,
-												"selectionRule": recallItem.ReplacementSelectionRule
+												"selectionRule": recallItem.ReplacementSelectionRule,
+												"description": recallItem.ItemKeyDescription
 											});
 											subletKeyList.push(recallItem.ItemKey);
 										}

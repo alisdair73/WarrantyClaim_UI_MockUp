@@ -364,14 +364,14 @@ sap.ui.define([
 			labourItems.push(labourItem.getProperty("/"));
 			this.getView().getModel("WarrantyClaim").setProperty("/Labour", labourItems);
 			
-			//Add the MCPN
+/*			//Add the MCPN
 			var MCPN = Models.createNewWarrantyItem("MAT");
 			MCPN.setProperty("/PartNumber/value", recallView.getModel("RecallMethodHelper").getProperty("/labourTypeMCPN/materialNumber"));
 			MCPN.setProperty("/Description", recallView.getModel("RecallMethodHelper").getProperty("/labourTypeMCPN/materialDescription"));
 			MCPN.setProperty("/Quantity/value",recallView.getModel("RecallMethodHelper").getProperty("/labourTypeMCPN/quantity"));
 			MCPN.setProperty("/PartRequested", "S");
 			MCPN.setProperty("/IsMCPN", true);
-			recallParts.push(MCPN.getProperty("/"));
+			recallParts.push(MCPN.getProperty("/"));*/
 			
 			recallView.getModel("RecallMethodHelper").getProperty("/selectedMethod").forEach(function(selectedMethod,index){
 				
@@ -381,29 +381,47 @@ sap.ui.define([
 				
 				var recallItemsForLabourType = recallView.getModel("RecallItems").getProperty("/");
 				recallItemsForLabourType.forEach(function(recallItem){
-					if(!recallItem.isMCPN && recallItem.isSelected[index]){
-						//This Material needs to be returned to the Claim
-					 	var recallPart = Models.createNewWarrantyItem("MAT");
-			 			recallPart.setProperty("/PartNumber/value", recallItem.materialNumber);
-			 			recallPart.setProperty("/Description", recallItem.materialDescription);
-			 			recallPart.setProperty("/PartRequested", "S");
-			 			recallPart.setProperty("/Quantity/value", recallItem.selectedQuantity);
-			  			recallPart.setProperty("/IsMCPN", false);
-			  			recallParts.push(recallPart.getProperty("/"));
+//					if(!recallItem.isMCPN && recallItem.isSelected[index]){
+					
+					if(recallItem.isSelected[index]){
+						
+		//				if(recallItem.isMCPN){
+							//This Material needs to be returned to the Claim
+						 	var recallPart = Models.createNewWarrantyItem("MAT");
+				 			recallPart.setProperty("/PartNumber/value", recallItem.materialNumber);
+				 			recallPart.setProperty("/Description", recallItem.materialDescription);
+				 			recallPart.setProperty("/PartRequested", "S");
+				 			recallPart.setProperty("/Quantity/value", recallItem.selectedQuantity[index]);
+				  			recallPart.setProperty("/IsMCPN", recallItem.isMCPN);
+				  			recallParts.push(recallPart.getProperty("/"));
+						// } else {
+						// 	//Add the MCPN
+						// 	var MCPN = Models.createNewWarrantyItem("MAT");
+						// 	MCPN.setProperty("/PartNumber/value", recallView.getModel("RecallMethodHelper").getProperty("/labourTypeMCPN/materialNumber"));
+						// 	MCPN.setProperty("/Description", recallView.getModel("RecallMethodHelper").getProperty("/labourTypeMCPN/materialDescription"));
+						// 	MCPN.setProperty("/Quantity/value",recallView.getModel("RecallMethodHelper").getProperty("/labourTypeMCPN/quantity"));
+						// 	MCPN.setProperty("/PartRequested", "S");
+						// 	MCPN.setProperty("/IsMCPN", true);
+						// 	recallParts.push(MCPN.getProperty("/"));
+						// }
 					}
 				});
 				
 				//Sublet
-	//			recallView.getModel("RecallMethodHelper").getProperty("/labourTypeSublet").forEach(function(sublet,index){
-	//				if
-	//			}	
-				
-				
-				
-			});
-			
-			
-			
+				recallView.getModel("RecallMethodHelper").getProperty("/labourTypeSublet").forEach(function(sublet){
+					var subletItem = Models.createNewWarrantyItem("SUBL");
+					subletItem.setProperty("/ItemKey", sublet.subletCode);
+					subletItem.setProperty("/Quantity/value", sublet.quantity);
+					subletItem.setProperty("/Description", sublet.description);
+					subletItem.setProperty("/IsSubletFixed",true); //Sublets from Recall cannot be changed
+					subletItems.push(subletItem.getProperty("/"));
+					
+					if(sublet.fixedSublet){
+						this.getView().getModel("WarrantyClaim").setProperty("/FixedSublet", true);
+					}
+				}.bind(this));	
+			}.bind(this));
+
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", recallParts);
 			
 			

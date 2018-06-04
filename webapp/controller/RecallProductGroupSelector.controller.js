@@ -130,11 +130,11 @@ sap.ui.define([
 				"labourTypeText":labourType.displayText,
 				"labourLONCode":labourType.LONCode,
 				"labourQuantity":labourType.quantity,
-				"labourTypeMCPN":labourType.MCPN
-				//"labourTypeSublet":
+//				"labourTypeMCPN":labourType.MCPN
+				"labourTypeSublet":labourType.sublet
 			}),"RecallMethodHelper");
 				
-//			if(labourType.parts.length > 0){ //No Parts so No Replacement Methods
+			if(labourType.parts.length > 0 || labourType.MCPN.length > 0 ){ //No Parts so No Replacement Methods
 				for(var i=0; i<labourType.replacementMethodCount; i++){
 				
 					var columnItems = [];
@@ -162,7 +162,7 @@ sap.ui.define([
 					);
 				} 
 				//this.getView().getModel("RecallMethodHelper").setProperty("/selectedMethod",selectedMethod);
-//			}
+			}
 			
 			recallItemsTable.bindItems({
 				"path":"RecallItems>/", 
@@ -188,6 +188,7 @@ sap.ui.define([
 				var methodIndex = 0;
 				
 				methods.forEach(function(method,index){
+					
 					//Is this method included?
 					if(labourTypeMethods[index].substr(0, 1) === "1"){
 						if(method.substr(0, 1) === "1"){

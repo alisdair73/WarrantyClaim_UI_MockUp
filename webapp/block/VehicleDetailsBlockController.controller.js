@@ -373,6 +373,9 @@ sap.ui.define([
 			MCPN.setProperty("/IsMCPN", true);
 			recallParts.push(MCPN.getProperty("/"));*/
 			
+			var claimHasSublet = false;
+			var claimHasFixedSublet = false;
+			
 			recallView.getModel("RecallMethodHelper").getProperty("/selectedMethod").forEach(function(selectedMethod,index){
 				
 				if(!selectedMethod){
@@ -384,7 +387,6 @@ sap.ui.define([
 //					if(!recallItem.isMCPN && recallItem.isSelected[index]){
 					
 					if(recallItem.isSelected[index]){
-						
 		//				if(recallItem.isMCPN){
 							//This Material needs to be returned to the Claim
 						 	var recallPart = Models.createNewWarrantyItem("MAT");
@@ -408,20 +410,42 @@ sap.ui.define([
 				});
 				
 				//Sublet
-				recallView.getModel("RecallMethodHelper").getProperty("/labourTypeSublet").forEach(function(sublet){
-					var subletItem = Models.createNewWarrantyItem("SUBL");
-					subletItem.setProperty("/ItemKey", sublet.subletCode);
-					subletItem.setProperty("/Quantity/value", sublet.quantity);
-					subletItem.setProperty("/Description", sublet.description);
-					subletItem.setProperty("/IsSubletFixed",true); //Sublets from Recall cannot be changed
-					subletItems.push(subletItem.getProperty("/"));
-					
-					if(sublet.fixedSublet){
-						this.getView().getModel("WarrantyClaim").setProperty("/FixedSublet", true);
-					}
-				}.bind(this));	
+				
+				var labourTypeSelectionRule = recallView.getModel("RecallMethodHelper").getProperty("/labourTypeSelectionRule");
+				var labourTypeSelectionGroups = labourTypeSelectionRule.split("-");
+				var labourCounter = 0;
+				
+				labourTypeSelectionGroups.forEach(function(labourTypeSelectionGroup, labourIndex){
+					if(labourTypeSelectionGroup.substr(0, 1) === "1"){
+						if(labourCounter === index){
+							//Are there any sublets in this position?
+							
+							recallView.getModel("RecallMethodHelper").getProperty("/labourTypeSublet").forEach(function(sublet){
+								
+								var subletSelectionGroups = sublet.selectionRule.split("-");
+								if(subletSelectionGroups[labourIndex].substr(0, 1) === "1"){
+										
+									var subletItem = Models.createNewWarrantyItem("SUBL");
+									subletItem.setProperty("/ItemKey", sublet.subletCode);
+									subletItem.setProperty("/Quantity/value", sublet.quantity);
+									subletItem.setProperty("/Description", sublet.description);
+									subletItem.setProperty("/IsSubletFixed",true); //Sublets from Recall cannot be changed
+									subletItems.push(subletItem.getProperty("/"));
+									
+									claimHasSublet = true;
+									
+									if(sublet.fixedSublet){
+										claimHasFixedSublet = true;
+									}
+								}
+							}.bind(this));
+						}
+						labourCounter = labourCounter + 1;
+					}	
+				}.bind(this));
 			}.bind(this));
 
+			this.getView().getModel("WarrantyClaim").setProperty("/FixedSublet", claimHasSublet ? claimHasFixedSublet : true);
 			this.getView().getModel("WarrantyClaim").setProperty("/Parts", recallParts);
 			
 			

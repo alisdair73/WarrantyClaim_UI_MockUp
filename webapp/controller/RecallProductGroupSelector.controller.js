@@ -58,17 +58,18 @@ sap.ui.define([
 					});
 				});
 
-				this.getView().setModel(new JSONModel(recallItems),"RecallItems");
+			//	this.getView().setModel(new JSONModel(recallItems),"RecallItems");
 				this._radioButtonGroups = [];
-				this._buildColumnList(labourType);
+				this._buildColumnList(labourType, recallItems);
 				
 			}.bind(this));
 		},
 		
-		_buildColumnList: function(labourType){
+		_buildColumnList: function(labourType, RecallItems){
 
 			var recallItemsTable = this.getView().byId("recallItems");
 			recallItemsTable.removeAllColumns();
+			recallItemsTable.unbindItems();
 			
             recallItemsTable.addColumn(
 				new sap.m.Column({
@@ -164,6 +165,7 @@ sap.ui.define([
 				//this.getView().getModel("RecallMethodHelper").setProperty("/selectedMethod",selectedMethod);
 			}
 			
+			this.getView().setModel(new JSONModel(RecallItems),"RecallItems");
 			recallItemsTable.bindItems({
 				"path":"RecallItems>/", 
 				"factory": this._tableCellFactory.bind(this)
@@ -262,6 +264,7 @@ sap.ui.define([
 				          	}
 						} else {
 							oContext.getProperty(oContext.sPath).isSelected[methodIndex] = false;
+							oContext.getProperty(oContext.sPath).selectedQuantity.push(0);
 							tableCells.push(new sap.m.Text({"text":""}));
 						}
 						methodIndex += 1;
